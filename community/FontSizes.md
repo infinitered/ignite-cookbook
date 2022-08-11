@@ -1,7 +1,8 @@
 ---
 title: Accessiblity Font Sizes
 description: Dealing With Accessibility Font Sizes in React Native
-hide_table_of_contents: false
+tags:
+  - Accessibility
 ---
 
 # Dealing With Accessibility Font Sizes in React Native

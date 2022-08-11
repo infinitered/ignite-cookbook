@@ -2,6 +2,7 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 
 const lightCodeTheme = require('prism-react-renderer/themes/github');
+const npm2yarn = require('@docusaurus/remark-plugin-npm2yarn');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
@@ -26,6 +27,23 @@ const config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      /** @type {import('@docusaurus/plugin-content-docs').Options} */
+      ({
+        id: 'community',
+        path: 'community',
+        routeBasePath: 'community',
+        sidebarPath: require.resolve('./sidebarsCommunity.js'),
+        remarkPlugins: [npm2yarn],
+        editCurrentVersion: true,
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+      }),
+    ],
+  ],
   presets: [
     [
       'classic',
@@ -33,6 +51,9 @@ const config = {
       ({
         docs: {
           // routeBasePath: '/',
+          path: 'docs',
+          showLastUpdateAuthor: true,
+          showLastUpdateTime: true,
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
@@ -60,6 +81,12 @@ const config = {
             docId: 'intro',
             position: 'left',
             label: 'Recipes',
+          },
+          {
+            to: 'community/intro',
+            label: 'Community',
+            position: 'left',
+            activeBaseRegex: `/community/`,
           },
           {
             href: 'https://github.com/infinitered/ignite',

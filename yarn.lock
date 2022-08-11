@@ -1329,6 +1329,21 @@
     react-helmet-async "*"
     react-loadable "npm:@docusaurus/react-loadable@5.5.2"
 
+"@docusaurus/plugin-client-redirects@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@docusaurus/plugin-client-redirects/-/plugin-client-redirects-2.0.1.tgz#3b00cd0a816fe85e6c505651f28b59fff723ac67"
+  integrity sha512-A/giM3MIRRyUmxNzLb/jWvmRf0NtPYX4bV04njAnziAdPo4dqT4dZF2Hvy0uUSaF/SXPGLUjrZWWpzTl5mTJtQ==
+  dependencies:
+    "@docusaurus/core" "2.0.1"
+    "@docusaurus/logger" "2.0.1"
+    "@docusaurus/utils" "2.0.1"
+    "@docusaurus/utils-common" "2.0.1"
+    "@docusaurus/utils-validation" "2.0.1"
+    eta "^1.12.3"
+    fs-extra "^10.1.0"
+    lodash "^4.17.21"
+    tslib "^2.4.0"
+
 "@docusaurus/plugin-content-blog@2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@docusaurus/plugin-content-blog/-/plugin-content-blog-2.0.1.tgz#a37065e18ffd26e022ffb16a21ff28199140729e"
@@ -1351,7 +1366,7 @@
     utility-types "^3.10.0"
     webpack "^5.73.0"
 
-"@docusaurus/plugin-content-docs@2.0.1":
+"@docusaurus/plugin-content-docs@2.0.1", "@docusaurus/plugin-content-docs@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@docusaurus/plugin-content-docs/-/plugin-content-docs-2.0.1.tgz#4059591b4bff617e744e856ca680674b27c0b98a"
   integrity sha512-2qeBWRy1EjgnXdwAO6/csDIS1UVNmhmtk/bQ2s9jqjpwM8YVgZ8QVdkxFAMWXgZWDQdwWwdP1rnmoEelE4HknQ==
@@ -1459,6 +1474,15 @@
   dependencies:
     "@types/react" "*"
     prop-types "^15.6.2"
+
+"@docusaurus/remark-plugin-npm2yarn@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@docusaurus/remark-plugin-npm2yarn/-/remark-plugin-npm2yarn-2.0.1.tgz#9d49181e1711d8564e0304fc5b3cae21c47fc180"
+  integrity sha512-qTFTb4UG2gO1WcCmrRkE9ipGqzH+KTKicJbOxTNVNMcLne6qwiBPUiBg6UfqaMEho0aILyn+Vh1FFBONkEnAtg==
+  dependencies:
+    npm-to-yarn "^1.0.1"
+    tslib "^2.4.0"
+    unist-util-visit "^2.0.3"
 
 "@docusaurus/theme-classic@2.0.1":
   version "2.0.1"
@@ -5131,6 +5155,11 @@ npm-run-path@^4.0.1:
   integrity sha512-S48WzZW777zhNIrn7gxOlISNAqi9ZC/uQFnRdbeIHhZhCA6UqpkOT8T1G7BvfdgP4Er8gF4sUbaS0i7QvIfCWw==
   dependencies:
     path-key "^3.0.0"
+
+npm-to-yarn@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/npm-to-yarn/-/npm-to-yarn-1.0.1.tgz#6cdb95114c4ff0be50a7a2381d4d16131a5f52df"
+  integrity sha512-bp8T8oNMfLW+N/fE0itFfSu7RReytwhqNd9skbkfHfzGYC+5CCdzS2HnaXz6JiG4AlK2eA0qlT6NJN1SoFvcWQ==
 
 nprogress@^0.2.0:
   version "0.2.0"
