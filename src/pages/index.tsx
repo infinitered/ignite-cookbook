@@ -7,6 +7,8 @@ import HomepageFeatures from '@site/src/components/HomepageFeatures';
 
 import styles from './index.module.css';
 
+// TO-DO: Clean this up once we get some copy for the front page
+
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
   return (
