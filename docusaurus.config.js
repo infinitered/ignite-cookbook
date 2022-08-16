@@ -7,8 +7,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Ignite Cookbook',
-  tagline: 'Cooking up some cool recipes for Ignite',
+  title: 'React Native Cookbook',
+  tagline: 'Cooking up some cool recipes for React Native',
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
@@ -28,22 +28,23 @@ const config = {
     locales: ['en'],
   },
 
-  plugins: [
-    [
-      '@docusaurus/plugin-content-docs',
-      /** @type {import('@docusaurus/plugin-content-docs').Options} */
-      ({
-        id: 'community',
-        path: 'community',
-        routeBasePath: 'community',
-        sidebarPath: require.resolve('./sidebarsCommunity.js'),
-        remarkPlugins: [npm2yarn],
-        editCurrentVersion: true,
-        showLastUpdateAuthor: true,
-        showLastUpdateTime: true,
-      }),
-    ],
-  ],
+  // Leaving this hear for setting up a multi-doc instance for a community hub
+  // plugins: [
+  //   [
+  //     '@docusaurus/plugin-content-docs',
+  //     /** @type {import('@docusaurus/plugin-content-docs').Options} */
+  //     ({
+  //       id: 'community',
+  //       path: 'community',
+  //       routeBasePath: 'community',
+  //       sidebarPath: require.resolve('./sidebarsCommunity.js'),
+  //       remarkPlugins: [npm2yarn],
+  //       editCurrentVersion: true,
+  //       showLastUpdateAuthor: true,
+  //       showLastUpdateTime: true,
+  //     }),
+  //   ],
+  // ],
   presets: [
     [
       'classic',
@@ -55,8 +56,6 @@ const config = {
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
         },
         blog: false,
         theme: {
@@ -70,9 +69,9 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'Ignite Cookbook',
+        title: 'React Native Cookbook',
         logo: {
-          alt: 'Ignite Cookbook Logo',
+          alt: 'React Native Cookbook Logo',
           src: 'img/ignite.png',
         },
         items: [
@@ -81,12 +80,6 @@ const config = {
             docId: 'intro',
             position: 'left',
             label: 'Recipes',
-          },
-          {
-            to: 'community/intro',
-            label: 'Community',
-            position: 'left',
-            activeBaseRegex: `/community/`,
           },
           {
             href: 'https://github.com/infinitered/ignite',

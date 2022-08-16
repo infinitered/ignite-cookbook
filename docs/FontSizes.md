@@ -3,6 +3,8 @@ title: Accessiblity Font Sizes
 description: Dealing With Accessibility Font Sizes in React Native
 tags:
   - Accessibility
+last_update:
+  author: Mark Rickert
 ---
 
 # Dealing With Accessibility Font Sizes in React Native
@@ -11,16 +13,16 @@ Modern phones have a lot of accessibility options. Users can make the font size 
 
 You'll have to modify this for your own needs but this should get you most of the way there. Having a shared common Text component that you use will help a lot instead of using Text imported from react-native in your components. Less places to use these hooks.
 
-```
-import * as React from 'react';
-import { View, TextProps, PixelRatio, AppState } from 'react-native';
-import { MaterialTopTabNavigationOptions } from '@react-navigation/material-top-tabs';
-import { StackNavigationOptions } from '@react-navigation/stack';
-import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
-import { DrawerNavigationOptions } from '@react-navigation/drawer';
-import { useStores } from '@gasbuddyapp/state';
-import { useThemeProperties } from '@gasbuddyapp/shared-assets';
-import { Text } from './Text';
+```jsx
+import * as React from "react";
+import { View, TextProps, PixelRatio, AppState } from "react-native";
+import { MaterialTopTabNavigationOptions } from "@react-navigation/material-top-tabs";
+import { StackNavigationOptions } from "@react-navigation/stack";
+import { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
+import { DrawerNavigationOptions } from "@react-navigation/drawer";
+import { useStores } from "@gasbuddyapp/state";
+import { useThemeProperties } from "@gasbuddyapp/shared-assets";
+import { Text } from "./Text";
 
 // These constants determine mow much bigger the font size should get based on the user's
 // accessibility settings. Even if they turn the dial all the way to 11, we will only ever
@@ -49,73 +51,80 @@ export const useFontScaling = (): Partial<TextProps> => {
 };
 
 // Returns fontScaling props for Navigator components
-export const useNavigatorFontScalingScreenOptions = (): Partial<StackNavigationOptions> => {
-  const { preferenceStore } = useStores();
-
-  const fontScaling: Partial<StackNavigationOptions> = React.useMemo(() => {
-    const afs = preferenceStore?.allowFontScaling || false;
-    return {
-      headerBackAllowFontScaling: afs,
-      headerTitleAllowFontScaling: afs,
-    };
-  }, [preferenceStore?.allowFontScaling]);
-
-  return fontScaling;
-};
-
-// Returns fontScaling props for Top Tab Navigator components
-export const useTopTabNavigatorFontScalingScreenOptions =
-  (): Partial<MaterialTopTabNavigationOptions> => {
+export const useNavigatorFontScalingScreenOptions =
+  (): Partial<StackNavigationOptions> => {
     const { preferenceStore } = useStores();
 
-    const fontScaling: Partial<MaterialTopTabNavigationOptions> = React.useMemo(() => {
+    const fontScaling: Partial<StackNavigationOptions> = React.useMemo(() => {
       const afs = preferenceStore?.allowFontScaling || false;
       return {
-        tabBarAllowFontScaling: afs,
+        headerBackAllowFontScaling: afs,
+        headerTitleAllowFontScaling: afs,
       };
     }, [preferenceStore?.allowFontScaling]);
 
     return fontScaling;
   };
 
+// Returns fontScaling props for Top Tab Navigator components
+export const useTopTabNavigatorFontScalingScreenOptions =
+  (): Partial<MaterialTopTabNavigationOptions> => {
+    const { preferenceStore } = useStores();
+
+    const fontScaling: Partial<MaterialTopTabNavigationOptions> =
+      React.useMemo(() => {
+        const afs = preferenceStore?.allowFontScaling || false;
+        return {
+          tabBarAllowFontScaling: afs,
+        };
+      }, [preferenceStore?.allowFontScaling]);
+
+    return fontScaling;
+  };
+
 // Returns fontScaling props for Tab Navigator components
-export const useTabNavigatorFontScalingScreenOptions = (): Partial<BottomTabNavigationOptions> => {
-  const { preferenceStore } = useStores();
+export const useTabNavigatorFontScalingScreenOptions =
+  (): Partial<BottomTabNavigationOptions> => {
+    const { preferenceStore } = useStores();
 
-  const fontScaling: Partial<BottomTabNavigationOptions> = React.useMemo(() => {
-    const afs = preferenceStore?.allowFontScaling || false;
-    return {
-      tabBarAllowFontScaling: afs,
-      headerTitleAllowFontScaling: afs,
-    };
-  }, [preferenceStore?.allowFontScaling]);
+    const fontScaling: Partial<BottomTabNavigationOptions> =
+      React.useMemo(() => {
+        const afs = preferenceStore?.allowFontScaling || false;
+        return {
+          tabBarAllowFontScaling: afs,
+          headerTitleAllowFontScaling: afs,
+        };
+      }, [preferenceStore?.allowFontScaling]);
 
-  return fontScaling;
-};
+    return fontScaling;
+  };
 
 // Returns fontScaling props for Tab Navigator components
-export const useDrawerNavigatorFontScalingScreenOptions = (): Partial<DrawerNavigationOptions> => {
-  const { preferenceStore } = useStores();
+export const useDrawerNavigatorFontScalingScreenOptions =
+  (): Partial<DrawerNavigationOptions> => {
+    const { preferenceStore } = useStores();
 
-  const fontScaling: Partial<DrawerNavigationOptions> = React.useMemo(() => {
-    const afs = preferenceStore?.allowFontScaling || false;
-    return {
-      drawerAllowFontScaling: afs,
-      headerTitleAllowFontScaling: afs,
-    };
-  }, [preferenceStore?.allowFontScaling]);
+    const fontScaling: Partial<DrawerNavigationOptions> = React.useMemo(() => {
+      const afs = preferenceStore?.allowFontScaling || false;
+      return {
+        drawerAllowFontScaling: afs,
+        headerTitleAllowFontScaling: afs,
+      };
+    }, [preferenceStore?.allowFontScaling]);
 
-  return fontScaling;
-};
+    return fontScaling;
+  };
 
 // Use this handy __DEV__ mode only component to figure out what the font size is actually doing.
 export const DevFontSize = () => {
   const theme = useThemeProperties();
   const { preferenceStore } = useStores();
-  const [appStateVisible, setAppStateVisible] = React.useState(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = React.useState(
+    AppState.currentState
+  );
 
   React.useEffect(() => {
-    const subscription = AppState.addEventListener('change', (nextAppState) => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
       setAppStateVisible(nextAppState);
     });
 
@@ -126,7 +135,10 @@ export const DevFontSize = () => {
   // so that we can reload the font size when the app switches back from user settings.
   const fontSize = React.useMemo(() => {
     if (preferenceStore?.allowFontScaling || false) {
-      return Math.min(Math.max(PixelRatio.getFontScale(), MIN_FONT_SCALE), MAX_FONT_SCALE);
+      return Math.min(
+        Math.max(PixelRatio.getFontScale(), MIN_FONT_SCALE),
+        MAX_FONT_SCALE
+      );
     } else {
       return 1.0;
     }
@@ -141,12 +153,16 @@ export const DevFontSize = () => {
       borderColor: theme.primaryText,
       borderWidth: 1,
     }),
-    [theme],
+    [theme]
   );
   return __DEV__ ? (
     <View style={devStyle}>
-      <Text>User Font Setting: {Math.trunc(PixelRatio.getFontScale() * 100) / 100}</Text>
-      <Text>Currently limiting ratio to: {Math.trunc(fontSize * 100) / 100}</Text>
+      <Text>
+        User Font Setting: {Math.trunc(PixelRatio.getFontScale() * 100) / 100}
+      </Text>
+      <Text>
+        Currently limiting ratio to: {Math.trunc(fontSize * 100) / 100}
+      </Text>
     </View>
   ) : null;
 };
