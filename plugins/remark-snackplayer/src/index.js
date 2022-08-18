@@ -18,6 +18,7 @@ const processNode = (node, parent) => {
   return new Promise(async (resolve, reject) => {
     try {
       const params = parseParams(node.meta);
+      console.log(params)
 
       // Gather necessary Params
       const name = params.name ? decodeURIComponent(params.name) : 'Example';
