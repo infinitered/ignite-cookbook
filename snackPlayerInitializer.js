@@ -2,10 +2,11 @@
 import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
 
 export default (() => {
+    
   if (!ExecutionEnvironment.canUseDOM) {
     return null;
   }
-
+  
   const updateSnacksTheme = () => {
     const theme = document.querySelector('html').dataset.theme;
     document.querySelectorAll('.snack-player').forEach(snack => {
