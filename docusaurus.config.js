@@ -1,12 +1,22 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
+const path = require('path')
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const npm2yarn = require('@docusaurus/remark-plugin-npm2yarn');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const snackPlayer = require(path.resolve(__dirname, 'plugins', 'remark-snackplayer'));
+
+const commonDocsOptions = {
+  breadcrumbs: false,
+  showLastUpdateAuthor: true,
+  showLastUpdateTime: true,
+  remarkPlugins: [snackPlayer],
+};
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
+  clientModules: [require.resolve('./snackPlayerInitializer.js')],
   title: 'React Native Cookbook',
   tagline: 'Cooking up some cool recipes for React Native',
   url: 'https://your-docusaurus-test-site.com',
@@ -14,6 +24,9 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
+  scripts: [
+    {src: 'https://snack.expo.dev/embed.js', defer: true},
+  ],
 
   organizationName: 'infinitered', // Usually your GitHub org/user name.
   projectName: 'cookbook', // Usually your repo name.
@@ -47,15 +60,15 @@ const config = {
       ({
         docs: {
           path: 'docs',
-          showLastUpdateAuthor: true,
-          showLastUpdateTime: true,
           sidebarPath: require.resolve('./sidebars.js'),
+          ...commonDocsOptions
         },
         blog: false,
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
       }),
+      
     ],
   ],
 
