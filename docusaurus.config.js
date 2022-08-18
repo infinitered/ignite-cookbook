@@ -18,6 +18,13 @@ const config = {
   organizationName: 'infinitered', // Usually your GitHub org/user name.
   projectName: 'cookbook', // Usually your repo name.
 
+  scripts: [
+    {
+      src: 'https://app.happyreact.com/widget/reactions.js',
+      defer: true,
+    },
+  ],
+
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
