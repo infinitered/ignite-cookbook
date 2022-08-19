@@ -16,7 +16,6 @@ const commonDocsOptions = {
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  clientModules: [require.resolve('./snackPlayerInitializer.js')],
   title: 'React Native Cookbook',
   tagline: 'Cooking up some cool recipes for React Native',
   url: 'https://your-docusaurus-test-site.com',
