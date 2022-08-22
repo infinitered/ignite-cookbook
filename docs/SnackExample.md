@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'navy',
     alignItems: 'center',
     justifyContent: 'center',
+    marginVertical: 20
   },
   text: {
     fontSize: 80,
