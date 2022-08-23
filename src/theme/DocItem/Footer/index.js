@@ -44,7 +44,7 @@ function EditMetaRow({
 }
 export default function DocItemFooter() {
   const {metadata} = useDoc();
-  const {editUrl, lastUpdatedAt, formattedLastUpdatedAt, lastUpdatedBy, tags} =
+  const {editUrl, lastUpdatedAt, formattedLastUpdatedAt, lastUpdatedBy, tags, unversionedId} =
     metadata;
   const canDisplayTagsRow = tags.length > 0;
   const canDisplayEditMetaRow = !!(editUrl || lastUpdatedAt || lastUpdatedBy);
@@ -54,7 +54,7 @@ export default function DocItemFooter() {
   }
   return (
     <>
-      <Feedback resource={"4ab1ef36-87f3-4637-8c37-a80473d7505a"} />
+      <Feedback resource={unversionedId} />
       <footer
         className={clsx(ThemeClassNames.docs.docFooter, 'docusaurus-mt-lg')}>
         {canDisplayTagsRow && <TagsRow tags={tags} />}

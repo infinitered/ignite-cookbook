@@ -3,11 +3,11 @@ import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
 import styles from './styles.module.css';
 
 const VotedYes = () => {
-  return <span>Thanks for your feedback. We are glad you like it :)</span>;
+  return <span>Thanks for your feedback! We hope this recipe has been helpful.</span>;
 };
 
 const VotedNo = () => {
-  return <span>Thanks for your feedback. We will try to improve :(</span>;
+  return <span>Thanks for your feedback. We will update this recipe as soon as we can.</span>;
 };
 
 export default function Feedback({ resource }) {
@@ -29,11 +29,11 @@ export default function Feedback({ resource }) {
 
   return (
     <div className={styles.root}>
-      <h3 className={styles.title}>Was this page helpful?</h3>
+      <h3 className={styles.title}>Is this page still up to date? Did it work for you?</h3>
       {!isReacted ? (
         <div
           className={styles.widget}
-          data-hr-token="316e1fbe-76cf-431a-90e5-5ee7072a8289"
+          data-hr-token="4ab1ef36-87f3-4637-8c37-a80473d7505a"
           data-hr-resource={resource}
           data-hr-styles={JSON.stringify({
             container: styles.container,

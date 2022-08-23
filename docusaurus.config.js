@@ -9,7 +9,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
   title: 'React Native Cookbook',
   tagline: 'Cooking up some cool recipes for React Native',
-  url: 'https://your-docusaurus-test-site.com',
+  url: 'https://ignitecookbook.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
