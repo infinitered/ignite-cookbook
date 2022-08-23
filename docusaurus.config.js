@@ -7,8 +7,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'React Native Cookbook',
-  tagline: 'Cooking up some cool recipes for React Native',
+  title: 'Ignite Cookbook for React Native',
+  tagline: 'Cooking up some cool recipes in Ignite for React Native!',
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',

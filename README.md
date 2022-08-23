@@ -1,4 +1,4 @@
-# React Native Cookbook for Ignite
+# Ignite Cookbook for React Native
 
 This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
 
