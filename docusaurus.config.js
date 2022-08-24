@@ -23,7 +23,7 @@ const config = {
     locales: ['en'],
   },
 
-  // Leaving this hear for setting up a multi-doc instance for a community hub
+  // Leaving this here for setting up a multi-doc instance for a community hub
   // plugins: [
   //   [
   //     '@docusaurus/plugin-content-docs',
@@ -63,7 +63,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'React Native Cookbook',
+        title: 'Ignite Cookbook for React Native',
         logo: {
           alt: 'React Native Cookbook Logo',
           src: 'img/ignite.png',
@@ -125,7 +125,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Infinite Red. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Infinite Red, Inc. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,
