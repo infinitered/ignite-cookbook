@@ -7,9 +7,9 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'React Native Cookbook',
-  tagline: 'Cooking up some cool recipes for React Native',
-  url: 'https://ignitecookbook.com',
+  title: 'Ignite Cookbook for React Native',
+  tagline: 'Cooking up some cool recipes in Ignite for React Native!',
+  url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -30,7 +30,7 @@ const config = {
     locales: ['en'],
   },
 
-  // Leaving this hear for setting up a multi-doc instance for a community hub
+  // Leaving this here for setting up a multi-doc instance for a community hub
   // plugins: [
   //   [
   //     '@docusaurus/plugin-content-docs',
@@ -70,7 +70,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'React Native Cookbook',
+        title: 'Ignite Cookbook for React Native',
         logo: {
           alt: 'React Native Cookbook Logo',
           src: 'img/ignite.png',
@@ -132,12 +132,36 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Infinite Red. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Infinite Red, Inc. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
       },
+      // TO-DO: Once our repo is open source, we can fill out an application for Algolia DocSearch and get free search usage : https://docsearch.algolia.com/apply/
+      // algolia: {
+      //   // The application ID provided by Algolia
+      //   appId: 'YOUR_APP_ID',
+  
+      //   // Public API key: it is safe to commit it
+      //   apiKey: 'YOUR_SEARCH_API_KEY',
+  
+      //   indexName: 'YOUR_INDEX_NAME',
+  
+      //   // Optional: see doc section below
+      //   contextualSearch: true,
+  
+      //   // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
+      //   externalUrlRegex: 'external\\.com|domain\\.com',
+  
+      //   // Optional: Algolia search parameters
+      //   searchParameters: {},
+  
+      //   // Optional: path for search page that enabled by default (`false` to disable it)
+      //   searchPagePath: 'search',
+  
+      //   //... other Algolia params
+      // },
     }),
 };
 
