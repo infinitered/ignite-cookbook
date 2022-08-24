@@ -33,7 +33,7 @@ export default function Home(): JSX.Element {
   return (
     <Layout
       title={`Hello from the ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      description="Cooking up some greate Ignite Recipes for React Native.">
       <HomepageHeader />
       <main>
         <HomepageFeatures />
