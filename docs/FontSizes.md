@@ -20,8 +20,8 @@ import { MaterialTopTabNavigationOptions } from "@react-navigation/material-top-
 import { StackNavigationOptions } from "@react-navigation/stack";
 import { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 import { DrawerNavigationOptions } from "@react-navigation/drawer";
-import { useStores } from "@gasbuddyapp/state";
-import { useThemeProperties } from "@gasbuddyapp/shared-assets";
+import { useStores } from "@pizzaapp/state";
+import { useThemeProperties } from "@pizzaapp/shared-assets";
 import { Text } from "./Text";
 
 // These constants determine mow much bigger the font size should get based on the user's
