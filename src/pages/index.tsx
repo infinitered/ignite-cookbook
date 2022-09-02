@@ -9,18 +9,23 @@ import styles from './index.module.css';
 
 // TO-DO: Clean this up once we get some copy for the front page
 
+
+const title = "Proven Recipes for your React Native apps";
+const description = "Starting from scratch doesn’t always make sense. That’s why we made the Ignite Cookbook for React Native – an easy way for developers to browse and share code snippets (or “recipes”) that actually work. "
+
+
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
-        <h1 className="hero__title">{siteConfig.title}</h1>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
+        <h1 className="hero__title">{title}</h1>
+        <p className="hero__subtitle">{description}</p>
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
             to="/docs/intro">
-            Get me to the Recipes   🍳
+            Let's get cookin'   🍳
           </Link>
         </div>
       </div>

@@ -10,32 +10,36 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Easy to Use',
+    title: 'Spin Up Your App In Record Time',
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Stop reinventing the wheel on every project. Use the Ignite CLI to get your app started.
+        Then, hop over to the Ignite Cookbook for React Native to browse for things like libraries in “cookie cutter” templates that work for almost any project. 
+        It’s the fastest way to get a React Native app off the ground. 
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'Find Quality Code When You Need It',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        The popular forum sites are great for finding code until you realize it’s based on an old version of React Native. 
+        Ignite Cookbook is a place for recipes that work as of the time they’re published – meaning, it worked when it was posted. 
+        And if it ever goes out of date, we’ll make sure the community knows on what version it was last working.
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'Backed By A Community of React Native Experts',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        The Ignite Cookbook isn’t just a random group of code snippets. 
+        It’s a curated collection of usable code samples that the Infinite Red team’s used in their own React Native projects.
+        Having worked with some of the biggest clients in the tech industry, we know a thing or two about keeping our code to a high standard.
+        You can code confidently! 
       </>
     ),
   },
@@ -47,7 +51,7 @@ function Feature({title, Svg, description}: FeatureItem) {
       <div className="text--center">
         <Svg className={styles.featureSvg} role="img" />
       </div>
-      <div className="text--center padding-horiz--md">
+      <div className="text--left padding-horiz--md">
         <h3>{title}</h3>
         <p>{description}</p>
       </div>
