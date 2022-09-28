@@ -1,0 +1,51 @@
+# Add component tests to `npx ignite-cli generate component`
+
+Did you know that Ignite automatically generates files for you? And that you can customize those generators?
+
+Here is how to automatically generate components and tests for them using `@testing-library/react-native`
+
+## Setup `@testing-library/react-native`
+
+Follow along with the offical [React Native Testing Library](https://reactnativetesting.io/component/setup) docs for how to add it to an Ignite project
+
+## Component Generators
+
+There are a variety of generators, but today we are going to focus on `npx ignite-cli generate component`
+
+Ignite will look in the `ignite/templates/*` directory for what templates to run on each command.
+
+By default, Ignite provides a `ignite/templates/component/NAME.tsx.ejs` template for creating a component file.
+
+- We use ejs and frontmatter to write our templates, you can read more about syntax [in the Ignite docs](https://github.com/infinitered/ignite/blob/master/docs/Generator-Templates.md).
+- `NAME` in `ignite/templates/component/NAME.tsx.ejs` is replaced with the first argument passed to our generator. So `npx ignite-cli generate component Profile` would create `app/components/Profile.tsx`
+
+## Customizing Component Generators
+
+Add the following file to `ignite/templates/component/NAME.spec.tsx.ejs`
+
+```
+---
+destinationDir: app/components/specs
+---
+// https://reactnativetesting.io/component/testing/
+
+import React from "react"
+import { fireEvent, render, screen } from "@testing-library/react-native"
+import { <%= props.pascalCaseName %> } from "../<%= props.pascalCaseName %>"
+
+describe("<%= props.pascalCaseName %>", () => {
+  it("renders", () => {
+    render(<<%= props.pascalCaseName %> />)
+    expect(screen.getByText("Hello")).toBeTruthy()
+  })
+})
+```
+
+Now, when we run `npx ignite-cli generate component Profile`, it will create both `app/components/Profile.tsx` _and_ `app/components/specs/Checkbox.spec.tsx`
+
+- `ignite/templates/component/NAME.spec.tsx.ejs`
+- `ignite/templates/component/NAME.tsx.ejs`
+
+## Testing
+
+Now, all we need to do is run `yarn test`! If everything was set up properly, you should have a new suite of passing tests! 
