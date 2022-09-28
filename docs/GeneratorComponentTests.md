@@ -41,7 +41,7 @@ describe("<%= props.pascalCaseName %>", () => {
 })
 ```
 
-Now, when we run `npx ignite-cli generate component Profile`, it will create both `app/components/Profile.tsx` _and_ `app/components/specs/Checkbox.spec.tsx`
+Now, when we run `npx ignite-cli generate component Profile`, it will create both `app/components/Profile.tsx` _and_ `app/components/specs/Profile.spec.tsx`
 
 - `ignite/templates/component/NAME.spec.tsx.ejs`
 - `ignite/templates/component/NAME.tsx.ejs`
