@@ -6,7 +6,7 @@ Here is how to automatically generate components and tests for them using `@test
 
 ## Setup `@testing-library/react-native`
 
-Follow along with the offical [React Native Testing Library](https://reactnativetesting.io/component/setup) docs for how to add it to an Ignite project
+First, we will want to add `@testing-library/react-native` to our Ignite project. [Josh Justice has an excellent setup guide to follow along at reactnativetesting.io](https://reactnativetesting.io/component/setup)
 
 ## Component Generators
 
