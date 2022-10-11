@@ -1,10 +1,21 @@
 <p align="center">
   <img src="./static/img/ignite.png" alt="Ignite Logo" width="200" />
-  <h2 align="center">Ignite Cookbook for React Native</h2>
+  <a  href="https://infinitered.github.io/cookbook/">
+    <h2 align="center">Ignite Cookbook for React Native</h2>
+  </a>
   <h3 align="center">Proven Recipes for your React Native apps</h3>
+
+  <p align="center">
+    <img src="https://media.giphy.com/media/zGeomrzPgNP3y/giphy.gif">
+  </p>
+    <h4 align="center">Starting from scratch doesn’t always make sense. That’s why we made the Ignite Cookbook for React Native – an easy way for developers to browse and share code snippets (or “recipes”) that actually work.</h4>
 </p>
 
-## Starting from scratch doesn’t always make sense. That’s why we made the Ignite Cookbook for React Native – an easy way for developers to browse and share code snippets (or “recipes”) that actually work.
+<br>
+
+---
+
+<br>
 
 ### What's the Ignite Cookbook for React Native all about?
 
