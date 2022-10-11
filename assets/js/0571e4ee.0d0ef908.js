@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkignite_cookbook=self.webpackChunkignite_cookbook||[]).push([[143],{5745:e=>{e.exports=JSON.parse('{"name":"docusaurus-plugin-content-pages","id":"default"}')}}]);
