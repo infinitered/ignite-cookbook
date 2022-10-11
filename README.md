@@ -1,6 +1,6 @@
 <p align="center">
   <img src="./static/img/ignite.png" alt="Ignite Logo" width="200" />
-  <a  href="https://infinitered.github.io/cookbook/">
+  <a  href="https://infinitered.github.io/ignite-cookbook/">
     <h2 align="center">Ignite Cookbook for React Native</h2>
   </a>
   <h3 align="center">Proven Recipes for your React Native apps</h3>
@@ -33,9 +33,9 @@
 
 ### Some of the recipes you'll find in the Ignite Cookbook:
 
-- [Staying With Expo](https://infinitered.github.io/cookbook/StayingWithExpo)
-- [Pristine Expo Project](https://infinitered.github.io/cookbook/PristineExpoProject)
-- [Add Component Tests to Component Generator](https://infinitered.github.io/cookbook/GenerateComponentTests)
-- [Using Screen Readers](https://infinitered.github.io/cookbook/UsingScreenReaders)
-- [CircleCI CD Setup](https://infinitered.github.io/cookbook/CircleCIRNSetup)
+- [Staying With Expo](https://infinitered.github.io/ignite-cookbook/StayingWithExpo)
+- [Pristine Expo Project](https://infinitered.github.io/ignite-cookbook/PristineExpoProject)
+- [Add Component Tests to Component Generator](https://infinitered.github.io/ignite-cookbook/GenerateComponentTests)
+- [Using Screen Readers](https://infinitered.github.io/ignite-cookbook/UsingScreenReaders)
+- [CircleCI CD Setup](https://infinitered.github.io/ignite-cookbook/CircleCIRNSetup)
 - And Many More!!
