@@ -17,7 +17,6 @@ Note: there is some experimental information about using Github Actions at the e
 1. Write Tests
 
 - If the project already has tests, great. If not, write some.
-- They better pass! Tests are important because you don't want to be deploying broken code.
 - See [this](https://github.com/infinitered/ChainReactApp2019) for an example of how Infinite Red typically sets up tests for a React Native app.
 
 ### CircleCI Setup
@@ -154,14 +153,14 @@ XCODE_PROJECT    = "#{PROJECT}.xcodeproj"
 4. If you prefer, you can also do these steps as separate fastlane commands, just make sure to include a `- run:` entry for each one in `config.yml`.
 
 **Setting up CircleCI to Run Fastlane**
-Check out [this blog](https://medium.com/@odedre/circle-ci-v2-react-native-project-build-release-setup-ce4ef31209d0) for lots of helpful tips.
+Check out [this blog post](https://medium.com/@odedre/circle-ci-v2-react-native-project-build-release-setup-ce4ef31209d0) for lots of helpful tips.
 
 1. Make sure CircleCI has all the credentials to run your fastlane scripts:
    - Go into the Settings screen for your project on CircleCI
    - Under "Build Settings", click on "Environment Variables" ([https://circleci.com/gh/YOUR_ORG/YOURPROJECT/edit#env-vars](https://circleci.com/gh/YOUR_ORG/YOURPROJECT/edit#env-vars))
    - Click "Add Variable"
    - Set `FASTLANE_USER` to the email address of your your Apple App Store Connect / Dev Portal user.
-   - Do this for all of the variables listed [here](https://github.com/fastlane/docs/blob/950c6f42231d86b5187d2cfdcab2a6c81d0f61dc/docs/best-practices/continuous-integration.md#environment-variables-to-set) **Note**: If your dev portal user does not have 2-Factor Auth turned on, you DO NOT need to set FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD. Including this variabe when your account does need it will result in errors during TestFlight upload. You can find more info from the Fastlane Docs, and from the CircleCI codesigning docs
+   - Do this for all of the variables listed [here](https://github.com/fastlane/docs/blob/950c6f42231d86b5187d2cfdcab2a6c81d0f61dc/docs/best-practices/continuous-integration.md#environment-variables-to-set) **Note**: If your dev portal user does not have 2-Factor Auth turned on, you DO NOT need to set FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD. Including this variable when your account does need it will result in errors during TestFlight upload. You can find more info from the Fastlane Docs, and from the CircleCI codesigning docs
 2. Add `GITHUB_TOKEN` to env vars on CircleCI ([https://circleci.com/gh/YOUR_ORG/YOURPROJECT/edit#env-vars](https://circleci.com/gh/YOUR_ORG/YOURPROJECT/edit#env-vars)). Y
 
 - If you need to make a new `GITHUB_TOKEN`, go to [https://github.com/settings/tokens/new](https://github.com/settings/tokens/new) and create a new one with `repo` access.
@@ -213,7 +212,7 @@ jobs:
           fingerprints: — “SSH_FINGERPRINT_HERE”
       - run:
           name: Git configuration
-          command: git config user.email "ci@infinite.red" && git config user.name "CircleCI"
+          command: git config user.email "ci@your.domain" && git config user.name "CircleCI"
       - run:
           name: Set upstream branch
           command: git branch --set-upstream-to origin ${CIRCLE_BRANCH}
