@@ -23,7 +23,7 @@ The guid is fairly generic and redundant in some cases if you already have a suf
 
 _1 - Fork React-Native And Clone_
 
-This step is simple. Go to [Github](https://github.com/facebook/react-native) and fork react-native. Pull the forked code down to your system.
+Go to [Github](https://github.com/facebook/react-native) and fork react-native. Pull the forked code down to your system.
 
 > Note: The official instructions tell you to clone react-native into your project's `node_modules`. Don't do this. Just pull it down into your favorite development directory.
 
@@ -34,7 +34,7 @@ If you are following this guide, you are most likely trying to patch react-nativ
 
 _3 - Install Dependencies_
 
-Just type `yarn`. Easy.
+Just type `yarn`.
 
 _4 - Configure the SDK_
 

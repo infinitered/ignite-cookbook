@@ -57,4 +57,4 @@ Now, when we run `npx ignite-cli generate component Profile`, it will create bot
 
 ## Testing
 
-Now, all we need to do is run `yarn test`! If everything was set up properly, you should have a new suite of passing tests! 
+Now, all we need to do is run `yarn test`! If everything was set up properly, you should have a new suite of passing tests!

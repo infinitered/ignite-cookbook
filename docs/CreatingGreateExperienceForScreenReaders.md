@@ -33,7 +33,7 @@ Infinite scroll causes two main problems for screen readers: 1) there's no clear
 **Toast, Dialog, or Modal**
 Depending on the implementation used, these elements may not "announce" when they pop in. Evaluate solution for this before going with a library.
 
-### RN-spedific issues
+### RN-specific issues
 
 **Test links nested in text with formatting**
 Text links nested in other text elements aren't accessible. If you need to implement that design, there are a few options:
