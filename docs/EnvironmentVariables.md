@@ -1,8 +1,9 @@
 ---
 title: Environment Variables
-description: A quick look at what's needed for Docusaurus
+description: A universal way to set up environment variables for bare and Expo projects
 tags:
   - Guide
+  - Environment Variables
 last_update:
   author: Frank Calise
 ---
