@@ -1,102 +1,21 @@
-# Ignite Cookbook for React Native
+<p align="center">
+  <img src="./static/img/ignite.png" alt="Ignite Logo" width="200" />
+  <h2 align="center">Ignite Cookbook for React Native</h2>
+  <h3 align="center">Proven Recipes for your React Native apps</h3>
+</p>
 
-This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
+## Starting from scratch doesn’t always make sense. That’s why we made the Ignite Cookbook for React Native – an easy way for developers to browse and share code snippets (or “recipes”) that actually work.
 
-### Installation
+### What's the Ignite Cookbook for React Native all about?
 
-```
-$ yarn
-```
+**Spin Up Your App In Record Time**
 
-### Local Development
+> Stop reinventing the wheel on every project. Use the Ignite CLI to get your app started. Then, hop over to the Ignite Cookbook for React Native to browse for things like libraries in “cookie cutter” templates that work for almost any project. It’s the fastest way to get a React Native app off the ground.
 
-```
-$ yarn start
-```
+**Find Quality Code When You Need It**
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+> The popular forum sites are great for finding code until you realize it’s based on an old version of React Native. Ignite Cookbook is a place for recipes that work as of the time they’re published – meaning, it worked when it was posted. And if it ever goes out of date, we’ll make sure the community knows on what version it was last working.
 
-### Build
+**Backed By A Community Of React Native Experts**
 
-```
-$ yarn build
-```
-
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
-### Deployment
-
-Using SSH:
-
-```
-$ USE_SSH=true yarn deploy
-```
-
-Not using SSH:
-
-```
-$ GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
-
-### Recipe Template
-
-When creating a recipe there are a few needed elements for Docusaurus:
-
-```markdown
----
-title: Recipe Template
-description: A quick look at what's needed for Docusaurus
-tags:
-  - Guide
-  - Intro
-last_update:
-  author: Your Name Here
----
-```
-
-Every recipe needs this metadata at the top of the file for Docusaurus to title, tag, and give author credit appropriately.
-
-````markdown
-## Section Titles Are Great
-
-Sections help break up the recipe into more cohesive thoughts and help others follow along.
-
-For step-by-step examples, lists are great:
-
-1. Readers can do this step.
-2. Then this one when they're done with the first.
-3. And this is the last step before they're done.
-
-Using **Bold** and _Italic_ Fonts are also helpful ways to create emphasis within your recipe.
-
-> Block Quotes help others know when you're highlighting something, or attributing an idea to someone else.
-> They're also great for footnotes to sections.
-
-Whenever you create a Code Block, be sure to label it with the language like so:
-
-```jsx
-import * as React from "react";
-import { Text, View } from "react-native";
-
-export default ExampleCodeBlock = () => (
-  <View>
-    <Text>This is a great example code block.</Text>
-  </View>
-);
-```
-
-To use a SnackPlayer for the code block you simply note that it's a SnackPlayer and provide some props for the player:
-
-```SnackPlayer name=Hello%20World&description=This%20is%20a%20description&dependencies=react-native-reanimated&platform=ios
-
-import * as React from "react";
-import { Text, View } from "react-native";
-
-export default ExampleCodeBlock = () => (
-  <View>
-    <Text>This is a great example code block.</Text>
-  </View>
-```
-````
+> The Ignite Cookbook isn’t just a random group of code snippets. It’s a curated collection of usable code samples that the Infinite Red team’s used in their own React Native projects. Having worked with some of the biggest clients in the tech industry, we know a thing or two about keeping our code to a high standard. You can code confidently!
