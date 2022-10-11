@@ -9,8 +9,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
   title: 'Ignite Cookbook for React Native',
   tagline: 'Cooking up some cool recipes in Ignite for React Native!',
-  url: 'https://your-docusaurus-test-site.com',
-  baseUrl: '/',
+  url: 'https://infinitered.github.io',
+  baseUrl: '/cookbook/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
