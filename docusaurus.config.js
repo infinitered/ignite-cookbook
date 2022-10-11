@@ -10,13 +10,13 @@ const config = {
   title: 'Ignite Cookbook for React Native',
   tagline: 'Cooking up some cool recipes in Ignite for React Native!',
   url: 'https://infinitered.github.io',
-  baseUrl: '/cookbook/',
+  baseUrl: '/ignite-cookbook/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
 
   organizationName: 'infinitered', // Usually your GitHub org/user name.
-  projectName: 'cookbook', // Usually your repo name.
+  projectName: 'ignite-cookbook', // Usually your repo name.
 
   i18n: {
     defaultLocale: 'en',
