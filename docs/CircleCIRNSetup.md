@@ -41,7 +41,7 @@ Note: there is some experimental information about using Github Actions at the e
 1. Create a folder in the project root named `.circleci`.
 2. Create a file inside that folder named `config.yml`
 3. Use the below template in that file.
-4. If needed, see [configuration docs](https://circleci.com/docs/2.0/config-intro/#section=configuration) for additional configuration options. (_Here is a complete [config.yml](https://github.com/infinitered/open-source/blob/master/config.example.yml) with CI and CD steps completed_)
+4. If needed, see [configuration docs](https://circleci.com/docs/2.0/config-intro/#section=configuration) for additional configuration options. (_Here is a complete [config.yml](https://github.com/YOUR_ORG/open-source/blob/master/config.example.yml) with CI and CD steps completed_)
 
 ```yaml
 defaults: &defaults
@@ -158,15 +158,15 @@ Check out [this blog](https://medium.com/@odedre/circle-ci-v2-react-native-proje
 
 1. Make sure CircleCI has all the credentials to run your fastlane scripts:
    - Go into the Settings screen for your project on CircleCI
-   - Under "Build Settings", click on "Environment Variables" ([https://circleci.com/gh/infinitered/YOURPROJECT/edit#env-vars](https://circleci.com/gh/infinitered/YOURPROJECT/edit#env-vars))
+   - Under "Build Settings", click on "Environment Variables" ([https://circleci.com/gh/YOUR_ORG/YOURPROJECT/edit#env-vars](https://circleci.com/gh/YOUR_ORG/YOURPROJECT/edit#env-vars))
    - Click "Add Variable"
    - Set `FASTLANE_USER` to the email address of your your Apple App Store Connect / Dev Portal user.
    - Do this for all of the variables listed [here](https://github.com/fastlane/docs/blob/950c6f42231d86b5187d2cfdcab2a6c81d0f61dc/docs/best-practices/continuous-integration.md#environment-variables-to-set) **Note**: If your dev portal user does not have 2-Factor Auth turned on, you DO NOT need to set FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD. Including this variabe when your account does need it will result in errors during TestFlight upload. You can find more info from the Fastlane Docs, and from the CircleCI codesigning docs
-2. Add `GITHUB_TOKEN` to env vars on CircleCI ([https://circleci.com/gh/infinitered/YOURPROJECT/edit#env-vars](https://circleci.com/gh/infinitered/YOURPROJECT/edit#env-vars)). You should be able to find these in our team 1password under `CircleCI CI/CD Semantic Release Tokens`.
+2. Add `GITHUB_TOKEN` to env vars on CircleCI ([https://circleci.com/gh/YOUR_ORG/YOURPROJECT/edit#env-vars](https://circleci.com/gh/YOUR_ORG/YOURPROJECT/edit#env-vars)). Y
 
 - If you need to make a new `GITHUB_TOKEN`, go to [https://github.com/settings/tokens/new](https://github.com/settings/tokens/new) and create a new one with `repo` access.
 
-3. Add the `Circle CI` Github team to your repo (https://github.com/YOURORGANIZATION/YOURPROJECT/settings/collaboration) with write access.
+3. Add the `Circle CI` Github team to your repo (https://github.com/YOUR_ORG/YOURPROJECT/settings/collaboration) with write access.
 4. Add the `Circle CI` Github team as a read-only collaborator to the private match certificates repo.
 5. Log in to GitHub/CircleCI as the CI user. Then in CircleCI, go to Project Settings > Checkout SSH keys (https://circleci.com/gh/YOURORGANIZATION/YOURPROJECT/edit#checkout) and add a new user key. This will allow CircleCI to clone the certs repo in order to sign your app.
 6. Go to Project Settings > Checkout SSH Keys and add a new deploy key. You will copy the fingerprint and paste into the `config.yml` example below in the `add_ssh_keys` section (there should be `"`s around it)
