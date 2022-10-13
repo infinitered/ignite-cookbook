@@ -18,7 +18,7 @@ A recipe is a collection of steps that you can follow to accomplish a common tas
 
 ## Who is this for?
 
-This is for anyone who wants to learn more about Ignite, and how to use it to build their own apps. You don't need to be an expert in React Native or Ignite to follow along. If you're new to Ignite, we recommend you start with the [new docs page to explore the boilerplate](https://github.com/infinitered/ignite/tree/master/docs/).
+This is for anyone who wants to extend their Ignite-based React Native app with additional functionality, and how to use it to build their own apps. You don't need to be an expert in React Native or Ignite to follow along. If you're new to Ignite, we recommend you start with the [new docs page to explore the boilerplate](https://github.com/infinitered/ignite/tree/master/docs/). You can also use these patterns if you're not using Ignite, as in the end Ignite is just React Native!
 
 ## How can I trust these recipes?
 
