@@ -22,7 +22,7 @@ This is for anyone who wants to extend their Ignite-based React Native app with 
 
 ## Are these recipes tested and up-to-date?
 
-All recipes are written by the Ignite team, and are reviewed by the community. If you find a recipe that is out of date, or doesn't work, please [open an issue](https://github.com/infinitered/ignite-cookbook/issues). It's our goal to keep these recipes up to date and working, so we appreciate your help!
+All recipes are written or reviewed by the Ignite team, and are also reviewed by the community. If you find a recipe that is out of date, or doesn't work, please [open an issue](https://github.com/infinitered/ignite-cookbook/issues). It's our goal to keep these recipes up to date and working, so we appreciate your help!
 
 ## Backed by the Ignite Team & Community
 
