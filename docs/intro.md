@@ -10,7 +10,7 @@ last_update:
 
 # Welcome to the Ignite Cookbook!
 
-This is a collection of recipes for common patterns that don't quite belong in the Ignite boilerplate. We'll be adding to this over time, so be sure to check back often!
+This is a collection of recipes for common patterns that we use sometimes at Infinite Red or in the Ignite community but don't quite belong in the Ignite boilerplate directly. We'll be adding to this over time, so be sure to check back often!
 
 ## What is a Recipe?
 
