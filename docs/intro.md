@@ -1,47 +1,29 @@
 ---
 sidebar_position: 1
+title: Intro to Recipes
+description: Welcome to the Ignite Cookbook! This is a collection of recipes for common patterns in Ignite projects.
+tags:
+  - Intro
+last_update:
+  author: Dan Edwards
 ---
 
-# CookBook Intro
+# Welcome to the Ignite Cookbook!
 
-Let's discover **Docusaurus in less than 5 minutes**.
+This is a collection of recipes for common patterns that we use sometimes at Infinite Red or in the Ignite community but don't quite belong in the Ignite boilerplate directly. We'll be adding to this over time, so be sure to check back often!
 
-## Getting Started
+## What is a Recipe?
 
-Get started by **creating a new site**.
+A recipe is a collection of steps that you can follow to accomplish a common task or pattern in your Ignite project. Recipes are written to be as simple as possible, and are meant to be a starting point for you to build upon. You can use them as-is, or you can use them as a reference to help you create your own solutions.
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+## Who is this for?
 
-### What you'll need
+This is for anyone who wants to extend their Ignite-based React Native app with additional functionality, and how to use it to build their own apps. You don't need to be an expert in React Native or Ignite to follow along. If you're new to Ignite, we recommend you start with the [new docs page to explore the boilerplate](https://github.com/infinitered/ignite/tree/master/docs/). You can also use these patterns if you're not using Ignite, as in the end Ignite is just React Native!
 
-- [Node.js](https://nodejs.org/en/download/) version 16.14 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+## Are these recipes tested and up-to-date?
 
-## Generate a new site
+All recipes are written or reviewed by the Ignite team, and are also reviewed by the community. If you find a recipe that is out of date, or doesn't work, please [open an issue](https://github.com/infinitered/ignite-cookbook/issues). It's our goal to keep these recipes up to date and working, so we appreciate your help!
 
-Generate a new Docusaurus site using the **classic template**.
+## Backed by the Ignite Team & Community
 
-The classic template will automatically be added to your project after you run the command:
-
-```bash
-npm init docusaurus@latest my-website classic
-```
-
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
-
-The command also installs all necessary dependencies you need to run Docusaurus.
-
-## Start your site
-
-Run the development server:
-
-```bash
-cd my-website
-npm run start
-```
-
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
-
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
-
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+The Ignite Cookbook is maintained by the [Infinite Red](https://infinite.red) team, and the community. If you have any questions, or want to contribute, please [join our Slack](https://join.slack.com/t/infiniteredcommunity/shared_invite/zt-1e1gob8vn-pcFjKM~n1c~aXFsTnvHpdg) and say hi!
