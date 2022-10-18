@@ -1,7 +1,12 @@
----
 name: Recipe Idea
-about: For new recipe ideas or feature request
-title: ''
+about: For new recipe ideas
+description: For new recipe ideas
 labels: 'new recipe'
-assignees: ''
----
+
+body:
+  - type: textarea
+    attributes:
+      label: Describe your recipe idea
+      description: Also include a description of what is required to write the recipe
+    validations:
+      required: true
