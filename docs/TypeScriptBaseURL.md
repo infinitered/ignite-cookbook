@@ -74,7 +74,7 @@ to
 import { ListItem, Screen, Text } from "~/components";
 import { isRTL } from "~/i18n";
 import { DemoTabScreenProps } from "~/navigators/DemoNavigator";
-import { colors, spacing } from ".~/theme";
+import { colors, spacing } from "~/theme";
 ```
 
 Fire up the app and make sure everything still works!
