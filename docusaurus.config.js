@@ -75,11 +75,6 @@ const config = {
             position: 'left',
             label: 'Recipes',
           },
-          {
-            href: 'https://github.com/infinitered/ignite',
-            label: 'GitHub',
-            position: 'right',
-          },
         ],
       },
       footer: {
@@ -107,6 +102,18 @@ const config = {
             title: 'More Resources',
             items: [
               {
+                href: 'https://github.com/infinitered/ignite-cookbook/issues',
+                label: 'Submit a Recipe Idea',
+              },
+              {
+                href: 'https://github.com/infinitered/ignite-cookbook',
+                label: 'GitHub - Ignite Cookbook',
+              },
+              {
+                href: 'https://github.com/infinitered/ignite',
+                label: 'GitHub - Ignite',
+              },
+              {
                 label: 'React Native Radio',
                 href: 'https://reactnativeradio.com/',
               },
@@ -117,10 +124,6 @@ const config = {
               {
                 label: 'Red Shift - Blog',
                 href: 'https://shift.infinite.red/'
-              },
-              {
-                label: 'GitHub',
-                href: 'https://github.com/infinitered/ignite',
               },
             ],
           },
