@@ -27,3 +27,7 @@ All recipes are written or reviewed by the Ignite team, and are also reviewed by
 ## Backed by the Ignite Team & Community
 
 The Ignite Cookbook is maintained by the [Infinite Red](https://infinite.red) team, and the community. If you have any questions, or want to contribute, please [join our Slack](https://join.slack.com/t/infiniteredcommunity/shared_invite/zt-1e1gob8vn-pcFjKM~n1c~aXFsTnvHpdg) and say hi!
+
+## Have an idea for a recipe?
+
+We'd love to hear it! Please [open an issue](https://github.com/infinitered/ignite-cookbook/issues) and we'll review it. We're always looking for new ideas to add to the cookbook!
