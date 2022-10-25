@@ -133,6 +133,22 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
+        magicComments: [
+          // Remember to extend the default highlight class name as well!
+          {
+            className: 'theme-code-block-highlighted-line',
+            line: 'highlight-next-line',
+            block: { start: 'highlight-start', end: 'highlight-end' },
+          },
+          {
+            className: 'code-block-error-line',
+            line: 'error-line',
+          },
+          {
+            className: 'code-block-success-line',
+            line: 'success-line',
+          },
+        ],
       },
       // TO-DO: Once our repo is open source, we can fill out an application for Algolia DocSearch and get free search usage : https://docsearch.algolia.com/apply/
       // algolia: {
