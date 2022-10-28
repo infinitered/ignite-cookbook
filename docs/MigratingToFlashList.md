@@ -18,6 +18,7 @@ We'll start with the demo project provided by Ignite, so if you need a new one f
 
 ```nodejs
 npx ignite-cli new PizzaApp --yes
+cd PizzaApp
 ```
 
 ## Project Dependencies
@@ -35,7 +36,7 @@ _Note: No `pod install` was run here because the scripts set up in an Ignite pro
 Open `DemoPodcastListScreen.tsx` and add the new import:
 
 ```tsx
-import { FlashList } from "@shopify/flash-list"
+import { FlashList } from "@shopify/flash-list";
 ```
 
 Find the `FlatList` being used in the returned JSX and swap it out for `FlashList`
@@ -55,7 +56,7 @@ return (
       refreshing={refreshing}
       onRefresh={manualRefresh}
       // ...
-    />    
+    />
     // ...
   </Screen>
 )
@@ -72,35 +73,35 @@ You'll get a warning out in the terminal, something similar to:
 ```
  WARN  estimatedItemSize FlashList prop is not defined - based on current configuration you can set
  it to 184 to optimize list performance. Refer to FlashList documentation for more details.
- ```
+```
 
- Simply add that prop to the `FlashList` component with the suggested values:
+Simply add that prop to the `FlashList` component with the suggested values:
 
- ```jsx
+```jsx
 <FlashList<Episode>
-  data={episodeStore.episodesForList}
-  // highlight-next-line
-  estimatedItemSize={184}
-  // ...
+ data={episodeStore.episodesForList}
+ // highlight-next-line
+ estimatedItemSize={184}
+ // ...
 />
 ```
 
 Reload the app and take note that the warning message has changed this time:
 
 ```
- WARN  FlashList will ignore horizontal padding in case of vertical lists and vertical padding 
+ WARN  FlashList will ignore horizontal padding in case of vertical lists and vertical padding
  if the list is horizontal. If you need to have it apply relevant padding to your items instead.
- ```
+```
 
- This happens to be style related for the case of the demo screen, but let's solve it since you'll likely encounter something in your actual application. Update the styles near the bottom of the file:
+This happens to be style related for the case of the demo screen, but let's solve it since you'll likely encounter something in your actual application. Update the styles near the bottom of the file:
 
- ```jsx
- const $flatListContentContainer: ViewStyle = {
+```jsx
+const $flatListContentContainer: ViewStyle = {
   // highlight-next-line
   // removed paddingHoriztonal here
   paddingTop: spacing.large + spacing.extraLarge,
   paddingBottom: spacing.large,
-}
+};
 
 // ...
 
@@ -109,8 +110,8 @@ const $item: ViewStyle = {
   marginTop: spacing.medium,
   minHeight: 120,
   // updated style for our item as the library suggested
-  marginHorizontal: spacing.large, 
-}
+  marginHorizontal: spacing.large,
+};
 ```
 
 Now everything looks like it did before, while also gaining all of the performance boosts from FlashList! It's a pretty straight forward approach and Shopify has done a good job helping the developer along with the useful console warnings as a guide.
