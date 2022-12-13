@@ -6,15 +6,18 @@ import Layout from "@theme/Layout";
 import HomepageFeatures from "@site/src/components/HomepageFeatures";
 
 import styles from "./index.module.css";
+import SVGImage from "../components/SVGImage";
+
+const mainImageSvg = require("@site/static/img/cookbook_main_graphic.svg");
 
 const title = "Proven Recipes for your React Native apps";
 const description =
   "Starting from scratch doesn’t always make sense. That’s why we made the Ignite Cookbook for React Native – an easy way for developers to browse and share code snippets (or “recipes”) that actually work. ";
 
 function HomepageHeader() {
-  const { siteConfig } = useDocusaurusContext();
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
+      <SVGImage Svg={mainImageSvg.default} />
       <div className="container">
         <h1 className="hero__title">{title}</h1>
         <p className="hero__subtitle">{description}</p>
