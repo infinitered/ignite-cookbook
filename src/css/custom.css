@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap');
+
 /**
  * Any CSS included here will be global. The classic template
  * bundles Infima by default. Infima is a CSS framework designed to
@@ -6,6 +8,7 @@
 
 /* You can override the default Infima variables here. */
 :root {
+  --ifm-font-family-base: 'Space Grotesk';
   --ifm-color-primary: #e78a64;
   --ifm-color-primary-dark: #e37447;
   --ifm-color-primary-darker: #e06a39;
@@ -13,8 +16,10 @@
   --ifm-color-primary-light: #eba081;
   --ifm-color-primary-lighter: #eeaa8f;
   --ifm-color-primary-lightest: #f4cbba;
+  --ifm-color-background: #F4F2F1 
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  background-color: var(--ifm-color-background)
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -43,4 +48,41 @@
   margin: 0 calc(-1 * var(--ifm-pre-padding));
   padding: 0 var(--ifm-pre-padding);
   border-left: 3px solid #00ff0080;
+}
+
+/* Hero Title */
+[class^='hero__title'] {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 80px;
+  line-height: 102px;
+}
+[class^='hero__subtitle'] {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 140%;
+}
+
+/* Hero Banner */
+
+@media screen and (max-width: 996px) {
+  :root {
+    --ifm-font-size-base: 18px;
+  }
+  article header h1 {
+    font-size: 1.5rem !important;
+  }
+  .hero .hero__title {
+    font-size: 2.5rem;
+  }
+}
+
+@media screen and (min-width: 997px) {
+  :root {
+    --ifm-font-size-base: 17px;
+  }
+  article header h1 {
+    font-size: 2rem !important;
+  }
 }

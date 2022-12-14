@@ -64,6 +64,7 @@ const config = {
     ({
       navbar: {
         title: 'Ignite Cookbook for React Native',
+        hideOnScroll: true,
         logo: {
           alt: 'React Native Cookbook Logo',
           src: 'img/ignite.png',
@@ -72,8 +73,18 @@ const config = {
           {
             type: 'doc',
             docId: 'intro',
-            position: 'left',
+            position: 'right',
             label: 'Recipes',
+          },
+          {
+            position: 'right',
+            label: 'Boilerplate',
+            href: "https://github.com/infinitered/ignite"
+          },
+          {
+            position: 'right',
+            label: 'Submit an Idea',
+            href: 'https://github.com/infinitered/ignite-cookbook/issues',
           },
         ],
       },
@@ -81,37 +92,11 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
-            items: [
-              {
-                label: 'Intro to Recipes',
-                to: '/docs/intro',
-              },
-            ],
-          },
-          {
             title: 'Community',
             items: [
               {
-                label: 'Slack',
+                label: 'Slack Community',
                 href: 'https://join.slack.com/t/infiniteredcommunity/shared_invite/zt-1e1gob8vn-pcFjKM~n1c~aXFsTnvHpdg',
-              },
-            ],
-          },
-          {
-            title: 'More Resources',
-            items: [
-              {
-                href: 'https://github.com/infinitered/ignite-cookbook/issues',
-                label: 'Submit a Recipe Idea',
-              },
-              {
-                href: 'https://github.com/infinitered/ignite-cookbook',
-                label: 'GitHub - Ignite Cookbook',
-              },
-              {
-                href: 'https://github.com/infinitered/ignite',
-                label: 'GitHub - Ignite',
               },
               {
                 label: 'React Native Radio',
@@ -121,14 +106,42 @@ const config = {
                 label: 'React Native Newsletter',
                 href: 'https://reactnative.cc/',
               },
+            ],
+            
+          },
+          {
+            title: 'Resources',
+            items: [
               {
-                label: 'Red Shift - Blog',
+                href: 'https://github.com/infinitered/ignite-cookbook/issues',
+                label: 'Submit a Recipe',
+              },
+              {
+                href: 'https://github.com/infinitered/ignite-cookbook',
+                label: 'GitHub - Ignite Cookbook',
+              },
+              {
+                href: 'https://github.com/infinitered/ignite',
+                label: 'GitHub - Ignite Boilerplate',
+              },
+              {
+                label: 'RedShift Blog',
                 href: 'https://shift.infinite.red/'
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Infinite Red, Inc. Built with Docusaurus.`,
+        logo: {
+          alt: 'Ignite Cookbook Logo',
+          src: 'img/cookbook_main_graphic.svg',
+          width: 310,
+          height: 205,
+          style: {
+            display: "flex",
+            // margin: "-2rem 0 0 0"
+          }
+        },
+        copyright: `Copyright © ${new Date().getFullYear()} Infinite Red, Inc.`,
       },
       prism: {
         theme: lightCodeTheme,
