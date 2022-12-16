@@ -48,3 +48,13 @@
   margin: 0 20px;
   justify-content: flex-end;
 }
+
+
+
+@media screen and (max-width: 996px) {
+  .rowContainer {
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
+  }
+}

@@ -136,12 +136,8 @@ const config = {
           src: 'img/cookbook_main_graphic.svg',
           width: 310,
           height: 205,
-          style: {
-            display: "flex",
-            // margin: "-2rem 0 0 0"
-          }
         },
-        copyright: `Copyright © ${new Date().getFullYear()} Infinite Red, Inc.`,
+        // copyright: `Copyright © ${new Date().getFullYear()} Infinite Red, Inc.`,
       },
       prism: {
         theme: lightCodeTheme,
