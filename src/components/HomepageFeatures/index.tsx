@@ -10,7 +10,7 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: "Spin Up Your App In Record Time",
-    Svg: require("@site/static/img/cookbook_main_graphic.svg").default,
+    Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
     description: (
       <>
         Stop reinventing the wheel on every project. Use the Ignite CLI to get

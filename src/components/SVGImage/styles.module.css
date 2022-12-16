@@ -9,10 +9,16 @@
     display: flex;
     width: 200px;
     height: 150px;
+    min-width: 400px;
     margin-bottom: -3rem;
     margin-left: auto;
     margin-right: -9rem;
   }
+
+.chefHatSvg {
+  /* height: 30px; */
+  width: 30px;
+}
   
 
 @media screen and (max-width: 996px) {

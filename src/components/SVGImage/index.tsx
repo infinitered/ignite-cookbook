@@ -10,7 +10,6 @@ export default function SVGImage({
   Svg,
   classNameOverride,
 }: SVGImageProps): JSX.Element {
-  const className =
-    styles.mainSvg + (classNameOverride ? " " + styles[classNameOverride] : "");
+  const className = classNameOverride ? " " + styles[classNameOverride] : "";
   return <Svg className={className} role="img" />;
 }

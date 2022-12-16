@@ -80,6 +80,22 @@
   width: 80%;
 }
 
+[class^='button button--secondary button--lg heroButton']  {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 16px 24px;
+  gap: 10px;
+  background-color: var(--ifm-color-background);
+
+  width: 240px;
+  height: 56px;
+  
+
+  border: 1px solid #B6ACA6;
+  border-radius: 4px;
+ }
+
 
 
 

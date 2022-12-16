@@ -9,6 +9,7 @@ import SVGImage from "../components/SVGImage";
 
 const mainImageSvg = require("@site/static/img/cookbook_main_graphic.svg");
 const winkImageSvg = require("@site/static/img/wink.svg");
+const chefHatSvg = require("@site/static/img/chef-gear-hat-1.svg");
 
 const title = "Proven Recipes for your React Native apps";
 const description =
@@ -26,10 +27,12 @@ function HomepageHeader() {
         </div>
         <div className={styles.buttons}>
           <Link
-            className="button button--secondary button--lg"
+            className="button button--secondary button--lg heroButton"
             to="/docs/intro"
+            style={{ display: "flex", flexDirection: "row" }}
           >
-            Let's get cooking
+            <SVGImage Svg={chefHatSvg.default} classNameOverride="chefHatSvg" />
+            <p>Let's get cooking</p>
           </Link>
         </div>
       </div>
