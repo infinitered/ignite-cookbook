@@ -135,7 +135,7 @@ const config = {
           alt: 'Ignite Cookbook Logo',
           src: 'img/cookbook_main_graphic.svg',
           width: 310,
-          height: 205,
+          height: 250,
         },
         // copyright: `Copyright © ${new Date().getFullYear()} Infinite Red, Inc.`,
       },
