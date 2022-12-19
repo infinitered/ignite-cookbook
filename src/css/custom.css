@@ -75,7 +75,7 @@
 
 [class^='footer__bottom'] {
   margin-left: -25rem;
-  margin-top: -25rem;
+  margin-top: -420px;
   margin-bottom: 10rem;
   width: 80%;
 }
@@ -126,8 +126,12 @@
 
 @media screen and (max-width: 1300px) {
   [class^='footer__bottom'] {
-    margin-top: -25rem;
+    margin-top: -420px;
     margin-left: -15rem;
   }
   
+}
+
+[class^='footer footer--dark'] {
+  background-color: #292C46;
 }
