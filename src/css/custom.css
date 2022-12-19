@@ -67,7 +67,7 @@
 
 [class^='row footer__links'] {
   margin-left: 25rem;
-  width: 80%;
+  width: 75%;
   margin-top: 220px;
   margin-bottom: 220px;
 }
@@ -75,9 +75,9 @@
 
 [class^='footer__bottom'] {
   margin-left: -25rem;
-  margin-top: -420px;
+  margin-top: -435px;
   margin-bottom: 10rem;
-  width: 80%;
+  width: 75%;
 }
 
 [class^='button button--secondary button--lg heroButton']  {
@@ -108,7 +108,7 @@
   
   [class^='row footer__links'] {
     margin-left: 20rem;
-    width: 80%;
+    width: 75%;
     margin-top: 220px;
     margin-bottom: 220px;
   }
@@ -118,7 +118,7 @@
 @media screen and (max-width: 750px) {
   [class^='row footer__links'] {
     margin-left: 10rem;
-    width: 80%;
+    width: 75%;
     margin-top: 220px;
     margin-bottom: 220px;
   }
@@ -126,7 +126,7 @@
 
 @media screen and (max-width: 1300px) {
   [class^='footer__bottom'] {
-    margin-top: -420px;
+    margin-top: -445px;
     margin-left: -15rem;
   }
   
@@ -134,4 +134,14 @@
 
 [class^='footer footer--dark'] {
   background-color: #292C46;
+}
+
+[class^='footer__link-item'] {
+  display: flex;
+  flex-direction: row;
+}
+
+[class^='footer__links__custom'] {
+  margin-top: 4px;
+  margin-left: 4px;
 }

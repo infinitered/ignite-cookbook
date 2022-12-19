@@ -79,12 +79,12 @@ const config = {
           {
             position: 'right',
             label: 'Boilerplate',
-            href: "https://github.com/infinitered/ignite"
+            to: "https://github.com/infinitered/ignite"
           },
           {
             position: 'right',
             label: 'Submit an Idea',
-            href: 'https://github.com/infinitered/ignite-cookbook/issues',
+            to: 'https://github.com/infinitered/ignite-cookbook/issues/new?assignees=&labels=new+recipe&template=recipe_idea.yml',
           },
         ],
       },
@@ -95,16 +95,19 @@ const config = {
             title: 'Community',
             items: [
               {
-                label: 'Slack Community',
-                href: 'https://join.slack.com/t/infiniteredcommunity/shared_invite/zt-1e1gob8vn-pcFjKM~n1c~aXFsTnvHpdg',
+                // label: 'Slack Community',
+                // href: 'https://join.slack.com/t/infiniteredcommunity/shared_invite/zt-1e1gob8vn-pcFjKM~n1c~aXFsTnvHpdg',
+                html:  '<a href="https://join.slack.com/t/infiniteredcommunity/shared_invite/zt-1e1gob8vn-pcFjKM~n1c~aXFsTnvHpdg" target="_blank" rel="noopener noreferrer" class="footer__link-item">Slack Community<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>'
               },
               {
-                label: 'React Native Radio',
-                href: 'https://reactnativeradio.com/',
+                // label: 'React Native Radio',
+                // href: 'https://reactnativeradio.com/',
+                html:  '<a href="https://reactnativeradio.com/" target="_blank" rel="noopener noreferrer" class="footer__link-item">React Native Radio<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>'
               },
               {
-                label: 'React Native Newsletter',
-                href: 'https://reactnative.cc/',
+                // label: 'React Native Newsletter',
+                // href: 'https://reactnative.cc/',
+                html:  '<a href="https://reactnative.cc/" target="_blank" rel="noopener noreferrer" class="footer__link-item">React Native Newsletter<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>'
               },
             ],
             
@@ -113,20 +116,16 @@ const config = {
             title: 'Resources',
             items: [
               {
-                href: 'https://github.com/infinitered/ignite-cookbook/issues',
-                label: 'Submit a Recipe',
+                html:  '<a href="https://github.com/infinitered/ignite-cookbook/issues" target="_blank" rel="noopener noreferrer" class="footer__link-item">Submit a Recipe<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>'
               },
               {
-                href: 'https://github.com/infinitered/ignite-cookbook',
-                label: 'GitHub - Ignite Cookbook',
+                html:  '<a href="https://github.com/infinitered/ignite-cookbook" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub - Ignite Cookbook<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>'
               },
               {
-                href: 'https://github.com/infinitered/ignite',
-                label: 'GitHub - Ignite Boilerplate',
+                html:  '<a href="https://github.com/infinitered/ignite" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub - Ignite Boilerplate<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>'
               },
               {
-                label: 'RedShift Blog',
-                href: 'https://shift.infinite.red/'
+                html: '<a href="https://shift.infinite.red/" target="_blank" rel="noopener noreferrer" class="footer__link-item">RedShift Blog <div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>'
               },
             ],
           },
