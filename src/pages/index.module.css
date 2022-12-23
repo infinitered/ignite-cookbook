@@ -4,11 +4,44 @@
  */
 
 .heroBanner {
-  padding: 4rem 0;
-  text-align: center;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  max-width: 1400px;
+  margin: 120px auto 0 auto;
+  padding: 0 2rem;
 }
+
+.titleContainer {
+  display: flex;
+}
+
+.heroTitle {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 80px;
+  line-height: 102px;
+  color: #2F3458
+}
+
+.heroSubtitle {
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 140%;
+  color: #564E4A
+}
+
+.headerRight {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0 0 0 20px;
+  max-width: 900px;
+}
+
 
 @media screen and (max-width: 996px) {
   .heroBanner {
@@ -18,7 +51,17 @@
 
 .buttons {
   display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin: 20px 0;
+}
+
+.mainContainer {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 20px;
+  margin: 0 auto;
+  max-width: 1400px;
 }

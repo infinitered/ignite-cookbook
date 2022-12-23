@@ -1,0 +1,30 @@
+
+.mainSvg {
+    height: 400px;
+    width: 400px;
+    min-width: 400px;
+  }
+
+.winkSvg {
+    display: flex;
+    width: 200px;
+    height: 150px;
+    min-width: 400px;
+    margin-bottom: -3rem;
+    margin-left: auto;
+    margin-right: -9rem;
+  }
+
+.chefHatSvg {
+  width: 30px;
+}
+  
+
+@media screen and (max-width: 996px) {
+    .winkSvg {
+      display: none;
+    }
+    .mainSvg {
+        display: none;
+    }
+  }
