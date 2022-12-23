@@ -8,8 +8,8 @@ import styles from "./index.module.css";
 import SVGImage from "../components/SVGImage";
 
 const mainImageSvg = require("@site/static/img/cookbook_main_graphic.svg");
-const winkImageSvg = require("@site/static/img/wink.svg");
-const chefHatSvg = require("@site/static/img/chef-gear-hat-1.svg");
+const faceWinking = require("@site/static/img/face-winking.png");
+const chefHatSvg = require("@site/static/img/chef-hat.svg");
 
 const title = "Proven Recipes for your React Native apps";
 const description =
@@ -21,7 +21,7 @@ function HomepageHeader() {
       <SVGImage Svg={mainImageSvg.default} />
       <div className={styles.headerRight}>
         <div className="titleContainer">
-          <SVGImage Svg={winkImageSvg.default} classNameOverride="winkSvg" />
+          <img src={faceWinking.default} className={styles.faceWinking} />
           <h1 className={styles.heroTitle}>{title}</h1>
           <p className={styles.heroSubtitle}>{description}</p>
         </div>
@@ -29,10 +29,13 @@ function HomepageHeader() {
           <Link
             className="button button--secondary button--lg heroButton"
             to="/docs/intro"
-            style={{ display: "flex", flexDirection: "row" }}
+            style={{
+              display: "flex",
+              flexDirection: "row",
+            }}
           >
             <SVGImage Svg={chefHatSvg.default} classNameOverride="chefHatSvg" />
-            <p>Let's get cooking</p>
+            <p className={styles.buttonTitle}>Let's get cooking</p>
           </Link>
         </div>
       </div>

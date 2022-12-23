@@ -21,16 +21,17 @@
 .heroTitle {
   font-style: normal;
   font-weight: 500;
-  font-size: 80px;
+  font-size: 74px;
   line-height: 102px;
   color: #2F3458
 }
 
 .heroSubtitle {
   font-weight: 400;
-  font-size: 26px;
+  font-size: 24px;
   line-height: 140%;
-  color: #564E4A
+  color: #564E4A;
+  margin-bottom: 32px;
 }
 
 .headerRight {
@@ -50,11 +51,17 @@
 }
 
 .buttons {
+  background: #191015;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  margin: 20px 0;
+  border-radius: 4px;
+}
+
+.buttonTitle {
+  color: #f4f2f1;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 144%;
 }
 
 .mainContainer {
@@ -64,4 +71,10 @@
   justify-content: center;
   margin: 0 auto;
   max-width: 1400px;
+}
+
+.faceWinking {
+  display: flex;
+  width: 157px;
+  margin-left: auto;
 }

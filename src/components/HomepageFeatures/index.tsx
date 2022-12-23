@@ -1,16 +1,23 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import SVGImage from "../SVGImage";
 import styles from "./styles.module.css";
+import { usePluginData } from "@docusaurus/useGlobalData";
+
+const faceLookingDown = require("@site/static/img/face-looking-down.png");
 
 type FeatureItem = {
   title: string;
-  Svg: React.ComponentType<React.ComponentProps<"svg">>;
+  Component:
+    | React.ComponentType
+    | React.ComponentType<React.ComponentProps<"svg">>;
   description: JSX.Element;
 };
 
 const FeatureList: FeatureItem[] = [
   {
     title: "Spin Up Your App In Record Time",
-    Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
+    Component: require("@site/static/img/undraw_docusaurus_mountain.svg")
+      .default,
     description: (
       <>
         Stop reinventing the wheel on every project. Use the Ignite CLI to get
@@ -23,7 +30,50 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: "Find Quality Code When You Need It",
-    Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
+    Component: () => {
+      const { snippets } = usePluginData("example-code-snippets") as {
+        snippets: { author: string; content: string }[];
+      };
+
+      const [show, setShow] = useState(false);
+      const [current, setCurrent] = useState(0);
+      useEffect(() => {
+        const interval = setInterval(() => {
+          setShow(false);
+          setCurrent((current) => (current + 1) % snippets.length);
+          setTimeout(() => setShow(true), 1000);
+        }, 3300);
+        return () => clearInterval(interval);
+      }, [snippets]);
+
+      const snippet = show ? snippets[current] : { author: "...", content: "" };
+
+      return (
+        <div>
+          <div className={styles.codeSnippet}>
+            <div
+              className={styles.scrollBar}
+              style={show ? { transform: `translateY(376px)` } : {}}
+            />
+            <pre
+              style={!show ? { opacity: 0, transform: `translateY(50px)` } : {}}
+            >
+              {snippet.content}
+            </pre>
+          </div>
+
+          <div className={styles.timeStamp}>
+            <div className={styles.timeStampText}>
+              updated yesterday by {snippet.author}
+            </div>
+          </div>
+          <img
+            className={styles.faceLookingDown}
+            src={faceLookingDown.default}
+          />
+        </div>
+      );
+    },
     description: (
       <>
         The popular forum sites are great for finding code until you realize
@@ -36,7 +86,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: "Backed By A Community of React Native Experts",
-    Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
+    Component: require("@site/static/img/undraw_docusaurus_react.svg").default,
     description: (
       <>
         The Ignite Cookbook isn’t just a random group of code snippets. It’s a
@@ -49,7 +99,7 @@ const FeatureList: FeatureItem[] = [
   },
 ];
 
-function Feature({ title, Svg, description }: FeatureItem): JSX.Element {
+function Feature({ title, description, Component }: FeatureItem): JSX.Element {
   return (
     <div className={styles.rowContainer}>
       <div className={"col col--6 padding--top--md"}>
@@ -59,8 +109,8 @@ function Feature({ title, Svg, description }: FeatureItem): JSX.Element {
         </div>
       </div>
       <div className={"col col--6"}>
-        <div className={styles.featureSvgContainer}>
-          <Svg className={styles.featureSvg} role="img" />
+        <div className={styles.featureComponentContainer}>
+          <Component className={styles.featureComponent} />
         </div>
       </div>
     </div>
