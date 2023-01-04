@@ -125,12 +125,16 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      // Disabling dark mode for now until we have a better dark mode theme
+      colorMode: {
+        defaultMode: 'light',
+        disableSwitch: true,
+      },
       navbar: {
-        title: 'Ignite Cookbook for React Native',
         hideOnScroll: true,
         logo: {
           alt: 'React Native Cookbook Logo',
-          src: 'img/ignite.png',
+          src: 'img/logo.svg',
         },
         items: [
           {
