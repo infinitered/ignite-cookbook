@@ -7,9 +7,9 @@ import HomepageFeatures from "@site/src/components/HomepageFeatures";
 import styles from "./index.module.css";
 import SVGImage from "../components/SVGImage";
 
-const mainImageSvg = require("@site/static/img/cookbook_main_graphic.svg");
+const heroImage = require("@site/static/img/hero-graphic.svg");
 const faceWinking = require("@site/static/img/face-winking.png");
-const chefHatSvg = require("@site/static/img/chef-hat.svg");
+const chefHat = require("@site/static/img/chef-hat.svg");
 
 const title = "Proven Recipes for your React Native apps";
 const description =
@@ -18,7 +18,9 @@ const description =
 function HomepageHeader() {
   return (
     <header className={styles.heroBanner}>
-      <SVGImage Svg={mainImageSvg.default} />
+      <div className={styles.heroImage}>
+        <SVGImage Svg={heroImage.default} />
+      </div>
       <div className={styles.headerRight}>
         <div className="titleContainer">
           <img src={faceWinking.default} className={styles.faceWinking} />
@@ -34,7 +36,7 @@ function HomepageHeader() {
               flexDirection: "row",
             }}
           >
-            <SVGImage Svg={chefHatSvg.default} classNameOverride="chefHatSvg" />
+            <SVGImage Svg={chefHat.default} classNameOverride="chefHatSvg" />
             <p className={styles.buttonTitle}>Let's get cooking</p>
           </Link>
         </div>

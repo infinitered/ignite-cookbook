@@ -10,8 +10,12 @@
   flex-direction: row;
   justify-content: space-between;
   max-width: 1400px;
-  margin: 120px auto 0 auto;
+  margin: 64px auto 0 auto;
   padding: 0 2rem;
+}
+
+.heroImage {
+ margin-top: 4rem;
 }
 
 .titleContainer {
