@@ -29,10 +29,12 @@ Keep in mind you may have to adopt the following steps for a different package m
 - `rm -rf android`
 - `rm -rf ios`
 - `rm index.js` - Expo's entry point is App.js
+- `rm metro.config.js` - Expo will use the default
 
 ### Package Changes
 
 - `yarn remove react-native-bootsplash` - removes a native library pertaining to the splash screen (this will be handled via `expo-splash-screen`)
+- `yarn remove expo-modules-core`
 
 ### package.json Script Updates
 
