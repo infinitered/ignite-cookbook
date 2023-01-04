@@ -32,7 +32,7 @@ const FeatureList: FeatureItem[] = [
     title: "Find Quality Code When You Need It",
     Component: () => {
       const { snippets } = usePluginData("example-code-snippets") as {
-        snippets: { author: string; content: string }[];
+        snippets: { author: string; content: string; lastUpdated: string }[];
       };
 
       const [show, setShow] = useState(false);
@@ -46,7 +46,9 @@ const FeatureList: FeatureItem[] = [
         return () => clearInterval(interval);
       }, [snippets]);
 
-      const snippet = show ? snippets[current] : { author: "...", content: "" };
+      const snippet = show
+        ? snippets[current]
+        : { author: "", content: "", lastUpdated: "..." };
 
       return (
         <div>
@@ -64,7 +66,9 @@ const FeatureList: FeatureItem[] = [
 
           <div className={styles.timeStamp}>
             <div className={styles.timeStampText}>
-              updated yesterday by {snippet.author}
+              updated
+              <span> {snippet.lastUpdated}</span>
+              <span>{show && " by " + snippet.author}</span>
             </div>
           </div>
           <img

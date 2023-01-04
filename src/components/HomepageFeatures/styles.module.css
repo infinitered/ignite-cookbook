@@ -66,7 +66,8 @@
 .codeSnippet pre {
   background: #191015;
   padding: 0;
-  transition: all 0.5s;
+  transition: all 1s;
+  height: 90%;
 }
 
 .scrollBar {

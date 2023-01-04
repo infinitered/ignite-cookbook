@@ -6,6 +6,7 @@ const npm2yarn = require('@docusaurus/remark-plugin-npm2yarn');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const fs = require('fs')
 const readline = require('readline')
+const { gitlogPromise } = require('gitlog')
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -52,7 +53,17 @@ const config = {
 
           // read each doc and extract code snippets
           for await (const doc of docs) {
-            let author = ''
+            const docGitLog = await gitlogPromise({
+              repo: '.',
+              number: 1,
+              file: 'docs/' + doc,
+              fields: ['authorName', 'authorDateRel']
+            })
+
+            const author = docGitLog?.[0]?.authorName
+            const lastUpdated = docGitLog?.[0]?.authorDateRel
+
+            // let author = '' // Do we want to use the author from the doc or git log?
             const contents = []
             const input = fs.createReadStream('docs/' + doc)
             const rl = readline.createInterface({
@@ -63,10 +74,10 @@ const config = {
             let recordContents = false
             for await (const line of rl) {
               // extract author
-              if (/author:/.test(line)) {
-                author = line.split(':')[1].trim()
-                continue
-              }
+              // if (/author:/.test(line)) {
+              //   author = line.split(':')[1].trim()
+              //   continue
+              // }
 
               // extract snippet contents
               if (/```/.test(line)) {
@@ -80,7 +91,7 @@ const config = {
             // skip if no author or no contents
             if (!author || !contents.length) continue
 
-            snippets.push({ author, content: contents.join('') })
+            snippets.push({ author, content: contents.join(''), lastUpdated })
           }
 
           return snippets
