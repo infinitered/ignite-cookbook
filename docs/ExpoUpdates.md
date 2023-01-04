@@ -71,7 +71,7 @@ Modify the newly generated `eas.json` to configure a `preview` build profile. We
 
 ### 3. Create the Build
 
-Next, we'll create a build that we can test with on either an Android emulator or device. You may do this via EAS or [locally](https://docs.expo.dev/build-reference/local-builds/) if you
+Next, we'll create a build that we can test with on either an Android emulator or device. You may do this via EAS or [locally](https://docs.expo.dev/build-reference/local-builds/) if you the added queue time for an unpaid EAS account is getting in your way.
 
 ```bash
 # via EAS
@@ -81,7 +81,7 @@ eas build --profile preview -p android
 eas build --profile preview -p android --local
 ```
 
-Accept the prompts for generating the new Android Keystore. Once that is completed, drop it on your emulator or device and fire it up! 🔥
+Accept the prompts for generating the new Android Keystore. Once that is completed (~7-10 minutes if you do it locally, add some extra time if using the EAS servers due to the queue time), drop it on your emulator or device and fire it up! 🔥
 
 ### 4. Making a Project Update
 
