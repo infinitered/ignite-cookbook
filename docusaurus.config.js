@@ -197,7 +197,7 @@ const config = {
         ],
         logo: {
           alt: "Ignite Cookbook Logo",
-          src: "img/cookbook_main_graphic.svg",
+          src: "img/hero-graphic.svg",
           width: 310,
           height: 250,
         },
