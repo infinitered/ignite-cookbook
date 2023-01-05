@@ -30,7 +30,7 @@ Go to [Github](https://github.com/facebook/react-native) and fork react-native. 
 _2 - Checkout the Correct Commit_
 
 If you are following this guide, you are most likely trying to patch react-native Android source files at a specific older version. The easiest way to do this is to checkout the commit specified in the respective version's git tag.
-![Branch and Commit History](<../static/img/PatchingBuildingAndroid(1).jpg>)
+![Branch and Commit History](<../../static/img/PatchingBuildingAndroid(1).jpg>)
 
 _3 - Install Dependencies_
 
@@ -39,12 +39,12 @@ Just type `yarn`.
 _4 - Configure the SDK_
 
 You will need the version of the SDk specifice in the `./ReactAndroid/build.gradle` for `compileSdkVersion`. You can install it via Android Studio.
-![Android SDK Configuration](<../static//img/PatchingBuildingAndroid(2).jpg>)
+![Android SDK Configuration](<../../static//img/PatchingBuildingAndroid(2).jpg>)
 
 _5 - Configure the NDK_
 
 Check the `./gradle.properties` file, `ANDROID_NDK_VERSION` key, for the version needed. This can be installed from Android Studio as well.
-![Android NDK Configuration](<../static//img/PatchingBuildingAndroid(3).jpg>)
+![Android NDK Configuration](<../../static//img/PatchingBuildingAndroid(3).jpg>)
 
 > Note: The official docs provide links to NDK archives. Installing through Android Studio is probably easer. One caveat is that I didn't find arm architecture NDKs in Android Studio. It's not a big deal though to use those since you won't do this often.
 
@@ -89,6 +89,6 @@ In your `.gitignore`, remove the line which ignores the `/android/` directory. W
 _10 - Update Project's React-Native_
 
 Now that you have build and pushed your changes, you can reference that in your application's `package.json`.
-![package json](<../static//img/PatchingBuildingAndroid
+![package json](<../../static//img/PatchingBuildingAndroid
 
 > Note: You'll most likely need to delete/re-install your node_modules as well as run `./android/gradlew clean`.
