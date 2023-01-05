@@ -90,7 +90,6 @@
 
   width: 240px;
   height: 56px;
-  
 
   border: 1px solid #B6ACA6;
   border-radius: 4px;
@@ -104,8 +103,7 @@
   [class^='footer__bottom'] {
     display: none;
   }
-  
-  
+
   [class^='row footer__links'] {
     margin-left: 20rem;
     width: 75%;
@@ -129,7 +127,6 @@
     margin-top: -445px;
     margin-left: -15rem;
   }
-  
 }
 
 [class^='footer footer--dark'] {

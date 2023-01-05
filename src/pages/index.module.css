@@ -10,8 +10,12 @@
   flex-direction: row;
   justify-content: space-between;
   max-width: 1400px;
-  margin: 120px auto 0 auto;
+  margin: 64px auto 0 auto;
   padding: 0 2rem;
+}
+
+.heroImage {
+ margin-top: 4rem;
 }
 
 .titleContainer {
@@ -21,16 +25,17 @@
 .heroTitle {
   font-style: normal;
   font-weight: 500;
-  font-size: 80px;
-  line-height: 102px;
+  font-size: 74px;
+  line-height: 96px;
   color: #2F3458
 }
 
 .heroSubtitle {
   font-weight: 400;
-  font-size: 26px;
-  line-height: 140%;
-  color: #564E4A
+  font-size: 24px;
+  line-height: 34px;
+  color: #564E4A;
+  margin-bottom: 32px;
 }
 
 .headerRight {
@@ -50,11 +55,17 @@
 }
 
 .buttons {
+  background: #191015;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  margin: 20px 0;
+  border-radius: 4px;
+}
+
+.buttonTitle {
+  color: #f4f2f1;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 144%;
 }
 
 .mainContainer {
@@ -64,4 +75,10 @@
   justify-content: center;
   margin: 0 auto;
   max-width: 1400px;
+}
+
+.faceWinking {
+  display: flex;
+  width: 157px;
+  margin-left: auto;
 }

@@ -17,7 +17,7 @@
   margin: 80px auto;
 }
 
-.featureSvg {
+.featureComponent {
   height: 300px;
   width: 300px;
 }
@@ -43,13 +43,67 @@
   margin: 0 20px;
 }
 
-.featureSvgContainer {
+.featureComponentContainer {
   display: flex;
   margin: 0 20px;
   justify-content: flex-end;
 }
 
+.codeSnippet {
+  background: #191015;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 500;
+  height: 426px;
+  line-height: 130%;
+  margin-bottom: 12px;
+  overflow: hidden;
+  padding: 18px;
+  width: 504px;
+  overflow: hidden;
+}
 
+.codeSnippet pre {
+  background: #191015;
+  padding: 0;
+  transition: all 1s;
+  height: 90%;
+  overflow: hidden;
+}
+
+.scrollBar {
+  background: #F4F2F1;
+  height: 14px;
+  width: 6px;
+  left: 18px;
+  transition: all 0.5s;
+}
+
+.timeStamp {
+  background:#D7CEC9 ;
+  border-radius: 4px;
+  display: flex;
+  height: 32px;
+  padding: 6px 12px;
+  transition: all 3.3s;
+  width: fit-content;
+}
+
+.timeStampText {
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 150%;
+  text-align: center;
+  color: #191015;
+}
+
+.faceLookingDown{
+  position: relative;
+  width: 127px;
+  top: -12rem;
+  left: -6rem;
+}
 
 @media screen and (max-width: 996px) {
   .rowContainer {
