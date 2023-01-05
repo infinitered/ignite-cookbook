@@ -1,6 +1,6 @@
 ---
-title: Add component tests to component generator
-description: Customize `npx ignite-cli generate component` to add test files for each component generated 
+title: Generator for Component Tests
+description: Customize `npx ignite-cli generate component` to add test files for each component generated
 tags:
   - Generator
 last_update:

@@ -22,7 +22,7 @@ When creating a recipe there are a few needed elements (front-matter) for Docusa
 
 ```markdown
 ---
-title: Recipe Template
+title: Recipe Template (should match the file name for proper alphabetization)
 description: A quick look at what's needed for Docusaurus
 tags:
   - Guide
