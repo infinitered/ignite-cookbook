@@ -57,13 +57,12 @@ const config = {
               repo: '.',
               number: 1,
               file: 'docs/' + doc,
-              fields: ['authorName', 'authorDateRel']
+              fields: ['authorDateRel']
             })
 
-            const author = docGitLog?.[0]?.authorName
             const lastUpdated = docGitLog?.[0]?.authorDateRel
 
-            // let author = '' // Do we want to use the author from the doc or git log?
+            let author = '' // Do we w÷nt to use the author from the doc or git log?
             const contents = []
             const input = fs.createReadStream('docs/' + doc)
             const rl = readline.createInterface({
@@ -74,10 +73,10 @@ const config = {
             let recordContents = false
             for await (const line of rl) {
               // extract author
-              // if (/author:/.test(line)) {
-              //   author = line.split(':')[1].trim()
-              //   continue
-              // }
+              if (/author:/.test(line)) {
+                author = line.split(':')[1].trim()
+                continue
+              }
 
               // extract snippet contents
               if (/```/.test(line)) {

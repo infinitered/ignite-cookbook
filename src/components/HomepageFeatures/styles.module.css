@@ -61,6 +61,7 @@
   overflow: hidden;
   padding: 18px;
   width: 504px;
+  overflow: hidden;
 }
 
 .codeSnippet pre {
@@ -68,6 +69,7 @@
   padding: 0;
   transition: all 1s;
   height: 90%;
+  overflow: hidden;
 }
 
 .scrollBar {
