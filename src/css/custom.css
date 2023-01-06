@@ -187,8 +187,32 @@
 
 [class^='theme-doc-markdown'] {
   border-bottom: 1px #D7CEC9 solid;
-  padding-bottom: 2rem;
+  padding: 2rem 0;
 }
+
+[class^='table-of-contents__link toc-highlight'] {
+  padding-left: 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+[class^='table-of-contents__link toc-highlight table-of-contents__link--active']::before {
+  content: ">";
+  margin-right: 5px;
+  margin-left: -15px;
+}
+
+[class^='table-of-contents__link toc-highlight table-of-contents__link--active'] {
+  padding-left: 25px;
+}
+
+[class^='table-of-contents table-of-contents__left-border']::before {
+  content: "Jump to:";
+  padding-left: 18px;
+  font-size: 16px;
+  color: #564E4A;
+}
+
 
 [class^='menu__link--active'] {
   background-color: #DDA28E !important;
@@ -214,4 +238,12 @@
   color: #191015 !important;
   padding: 8px;
   border-radius: 4px;
+}
+
+[class^='clean-btn theme-back-to-top-button backToTopButton_node_modules-@docusaurus-theme-classic-lib-theme-BackToTopButton-styles-module backToTopButtonShow_node_modules-@docusaurus-theme-classic-lib-theme-BackToTopButton-styles-module'] {
+  background-color: #DCDDE9 !important;
+}
+
+[class^='clean-btn theme-back-to-top-button backToTopButton_node_modules-@docusaurus-theme-classic-lib-theme-BackToTopButton-styles-module backToTopButtonShow_node_modules-@docusaurus-theme-classic-lib-theme-BackToTopButton-styles-module']::after {
+  background-color: #191015 !important;
 }
