@@ -156,6 +156,7 @@
   background: #E8C1B4;
   color: #692810;
   border-radius: 0 !important;
+  border: none !important;
 }
 
 [class^='pagination-nav__sublabel'] {
@@ -166,25 +167,14 @@
 }
 
 [class^='pagination-nav__link'] {
+  color: #564E4A;
+  font-size: 20px;
   border: none;
 }
 
 [class^='container'] {
   padding-bottom: 2rem;
 }
-/* 
-[class^='theme-doc-footer']  {
-  display: flex;
-} */
-
-/* [class^='theme-last-updated'] {
-  justify-content: flex-end;
-  margin-left: 20px;
-} 
-
-[class^='lastUpdated_node_modules-@docusaurus-theme-classic-lib-theme-DocItem-Footer-styles-module'] {
-  flex: 1 !important;
-} */
 
 [class^='theme-doc-footer-tags-row'] .col {
   padding: 0 !important;
@@ -203,4 +193,25 @@
 [class^='menu__link--active'] {
   background-color: #DDA28E !important;
   color: #191015;
+}
+
+[class^='breadcrumbs__item breadcrumbs__item--active'] span {
+  border-bottom: 2px #C76542 solid;
+  background: inherit !important;
+  border-radius: 0;
+  padding: 0;
+  color: #191015 !important;
+  font-size: 16 !important;
+  font-weight: 700 !important;
+}
+
+[class^='menu__link'] {
+  color: #564E4A !important;
+}
+
+[class^='menu__link menu__link--active'] {
+  background-color: #DDA28E !important;
+  color: #191015 !important;
+  padding: 8px;
+  border-radius: 4px;
 }
