@@ -17,7 +17,7 @@
   --ifm-color-primary-lighter: #eeaa8f;
   --ifm-color-primary-lightest: #f4cbba;
   --ifm-color-background: #F4F2F1;
-  --ifm-color-button: #191015
+  --ifm-color-button: #191015;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
   background-color: var(--ifm-color-background)
@@ -73,7 +73,6 @@
   z-index: 300;
 }
 
-/* TODO: Need to figure out how to persist the dropdown menu when hovering over the navbar link */
 
 .navbar__link:hover {
   color: #564E4A;
