@@ -136,11 +136,12 @@ const config = {
           src: "img/logo.svg",
         },
         items: [
-          {
-            position: 'right',
-            html: '<div class="hover-underline">Get started</div>',
-            to: "https://ignitecookbook.com"
-          },
+          // TODO: Add back in when we have content
+          // {
+          //   position: 'right',
+          //   html: '<div class="hover-underline">Get started</div>',
+          //   to: "https://ignitecookbook.com"
+          // },
           {
             type: 'doc',
             docId: 'intro',
