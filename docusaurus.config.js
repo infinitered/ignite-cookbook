@@ -136,21 +136,61 @@ const config = {
           src: "img/logo.svg",
         },
         items: [
+          // TODO: Add back in when we have content
+          // {
+          //   position: 'right',
+          //   html: '<div class="hover-underline">Get started</div>',
+          //   to: "https://ignitecookbook.com"
+          // },
           {
-            type: "doc",
-            docId: "intro",
-            position: "right",
-            label: "Recipes",
+            type: 'doc',
+            docId: 'intro',
+            position: 'right',
+            html: '<div class="hover-underline">Recipes</div>',
           },
           {
-            position: "right",
-            label: "Boilerplate",
-            to: "https://github.com/infinitered/ignite",
+            position: 'right',
+            html: '<div class="hover-underline">Boilerplate</div>',
+            to: "https://github.com/infinitered/ignite"
           },
           {
-            position: "right",
-            label: "Submit an Idea",
-            to: "https://github.com/infinitered/ignite-cookbook/issues/new?assignees=&labels=new+recipe&template=recipe_idea.yml",
+            //override CSS only for this last item
+            style: {marginRight: '0px'},
+            type: 'dropdown',
+            html: ` <div class="hover-underline">
+                      Community
+                      <img src="/ignite-cookbook/img/caret-down.svg" alt="dropdown" class="icon" />
+                    </div>
+                  `,
+            position: 'right',
+            items: [
+              {
+                html: ` <div>
+                          <div class="dropdown-item  hover-underline">
+                            Slack community
+                            <img src="/ignite-cookbook/img/arrow.svg" alt="dropdown" class="icon" />
+                          </div>
+                          <div class="dropdown-item-description">
+                            <p>Join a growing React Native community with 2,000 developers and counting.<p>
+                          </div>
+                        </div>
+                      `,
+                to: 'https://join.slack.com/t/infiniteredcommunity/shared_invite/zt-1e1gob8vn-pcFjKM~n1c~aXFsTnvHpdg',
+              },
+              {
+                html: ` <div>
+                          <div class="dropdown-item  hover-underline">
+                            Submit an idea
+                            <img src="/ignite-cookbook/img/arrow.svg" alt="dropdown" class="icon" />
+                          </div>
+                          <div class="dropdown-item-description">
+                            <p>Have an recipe idea for the cookbook? Contribute your ideas on GitHub!<p>
+                          </div>
+                        </div>
+                      `,
+                to: 'https://github.com/infinitered/ignite-cookbook/issues/new?assignees=&labels=new+recipe&template=recipe_idea.yml',
+              },
+            ],
           },
         ],
       },

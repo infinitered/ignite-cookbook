@@ -16,11 +16,14 @@
   --ifm-color-primary-light: #eba081;
   --ifm-color-primary-lighter: #eeaa8f;
   --ifm-color-primary-lightest: #f4cbba;
-  --ifm-color-background: #F4F2F1 
+  --ifm-color-background: #F4F2F1;
+  --ifm-color-button: #191015;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
   background-color: var(--ifm-color-background)
 }
+
+
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 /* [data-theme="dark"] {
@@ -49,6 +52,106 @@
   padding: 0 var(--ifm-pre-padding);
   border-left: 3px solid #00ff0080;
 }
+
+/* Navbar */
+.navbar {
+  background-color: rgb(255, 255, 255);
+  height: 96px;
+  padding: 12px 48px;
+  box-shadow: none;
+
+
+}
+.navbar__logo {
+  height: 48px;
+}
+
+
+.navbar__link {
+  color: #564E4A;
+  margin-right: 28px;
+  z-index: 300;
+}
+
+
+.navbar__link:hover {
+  color: #564E4A;
+
+}
+
+.hover-underline {
+  display: inline-block;
+  position: relative;
+}
+
+.hover-underline::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #DDA28E;
+}
+
+.hover-underline:hover::after {
+  transform: scaleX(1);
+}
+
+.dropdown {
+  z-index: 200;
+
+}
+
+.dropdown .navbar__link:after{
+  display: none;
+}
+
+.icon {
+  right: -30px;
+  position: absolute;
+}
+
+.dropdown__menu {
+  display: flex;
+  background-color: #FFFFFF;
+  border-color: #F4F2F1;
+  border-width: 1px;
+  border-radius: 0;
+  top: -10px;
+  right: -50px !important;
+  padding: 88px 48px 48px;
+  box-shadow: none;
+  flex-direction: row;
+  width: 600px ;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.dropdown__link {
+  white-space: normal;
+}
+
+.dropdown__link:hover {
+  background-color: #FFFFFF;
+}
+
+.dropdown-item {
+  color: #564E4A;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  margin-bottom: 4px;
+}
+
+.dropdown-item-description {
+  color: #564E4A;
+  font-size: 16px;
+  line-height: 24px;
+}
+
 
 /* Hero Title */
 [class^='hero__title'] {
@@ -86,7 +189,7 @@
   align-items: flex-start;
   padding: 16px 24px;
   gap: 10px;
-  background-color: var(--ifm-color-background);
+  background-color: var(--ifm-color-button);
 
   width: 240px;
   height: 56px;
