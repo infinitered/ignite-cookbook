@@ -55,7 +55,7 @@
 
 /* Navbar */
 .navbar {
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgb(255, 255, 255);
   height: 96px;
   padding: 12px 48px;
   box-shadow: none;
