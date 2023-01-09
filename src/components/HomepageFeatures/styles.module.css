@@ -3,8 +3,6 @@
 .features {
   display: flex;
   align-items: center;
-  padding: 2rem;
-  width: 100%;
 }
 
 .rowContainer {
@@ -12,10 +10,11 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
   max-width: 1400px;
   margin: 80px auto;
+  padding: 0 2rem;  
 }
+
 
 .featureComponent {
   height: 300px;
@@ -107,8 +106,54 @@
 
 @media screen and (max-width: 996px) {
   .rowContainer {
-    flex-direction: column-reverse;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+  .featureComponentContainer {
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .rowContainer {
+    margin: 0 auto
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .rowContainer {
+    max-width: 900px;
+    margin: 0 10px;
+  }
+
+  .featureComponent {
+    height: 200px;
+    width: 200px;
+  }
+}
+
+@media screen and (max-width: 1350px) {
+  .codeSnippet {
+    width: 400px;
+    height: 340px;
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  .codeSnippet {
+    width: 350px;
+    height: 297px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .codeSnippet {
+    width: 250px;
+    height: 350px;
+  }
+
+  .timeStampText {
+    font-size: 10px;
   }
 }
