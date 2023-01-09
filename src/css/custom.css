@@ -26,6 +26,7 @@
 
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
+/* Currently we aren't using the dark mode  */
 /* [data-theme="dark"] {
   --ifm-color-primary: #e78a64;
   --ifm-color-primary-dark: #e37447;
@@ -160,6 +161,7 @@
   font-size: 80px;
   line-height: 102px;
 }
+
 [class^='hero__subtitle'] {
   font-style: normal;
   font-weight: 400;
@@ -197,40 +199,6 @@
   border: 1px solid #B6ACA6;
   border-radius: 4px;
  }
-
-
-
-
-@media screen and (max-width: 996px) {
-
-  [class^='footer__bottom'] {
-    display: none;
-  }
-
-  [class^='row footer__links'] {
-    margin-left: 20rem;
-    width: 75%;
-    margin-top: 220px;
-    margin-bottom: 220px;
-  }
-}
-
-
-@media screen and (max-width: 750px) {
-  [class^='row footer__links'] {
-    margin-left: 10rem;
-    width: 75%;
-    margin-top: 220px;
-    margin-bottom: 220px;
-  }
-}
-
-@media screen and (max-width: 1300px) {
-  [class^='footer__bottom'] {
-    margin-top: -445px;
-    margin-left: -15rem;
-  }
-}
 
 [class^='footer footer--dark'] {
   background-color: #292C46;
@@ -349,4 +317,77 @@
 
 [class^='clean-btn theme-back-to-top-button backToTopButton_node_modules-@docusaurus-theme-classic-lib-theme-BackToTopButton-styles-module backToTopButtonShow_node_modules-@docusaurus-theme-classic-lib-theme-BackToTopButton-styles-module']::after {
   background-color: #191015 !important;
+}
+
+
+
+
+@media screen and (max-width: 1300px) {
+  [class^='footer__bottom'] {
+    margin-top: -445px;
+    margin-left: -15rem;
+  }
+}
+
+@media screen and (max-width: 996px) {
+
+  [class^='footer__bottom'] {
+    margin-top: 0px;
+    margin-left: 0rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0 !important;
+  }
+
+  [class^='row footer__links'] {
+    margin-left: 0;
+    width: 100%;
+    margin-top: 50px;
+    padding-left: 15rem;
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  [class^='footer__bottom'] {
+    display: block;
+    margin-top: 0;
+    margin-left: 0;
+    margin-bottom: 0 !important;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  [class^='heroImage_src-pages-index-module'] {
+    display: none;
+  }
+  [class^='heroTitle_src-pages-index-module'] {
+    font-size: 56px !important;
+    line-height: 72px !important;
+  }
+  [class^='faceWinking_src-pages-index-module'] {
+    margin-bottom: -25px;
+  }
+  [class^='"heroBanner_src-pages-index-module'] {
+    padding: 1rem;
+  }
+  [class^='headerRight_src-pages-index-module'] {
+    margin-left: 0 !important;
+    align-items: center !;
+  }
+  .col {
+    padding: 0;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  [class^='row footer__links'] {
+    margin-left: 0;
+    width: 100%;
+    margin-top: 50px;
+    padding-left: 2rem;
+  }
 }
