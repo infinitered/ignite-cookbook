@@ -104,6 +104,20 @@
   left: -6rem;
 }
 
+@media screen and (max-width: 1350px) {
+  .codeSnippet {
+    width: 400px;
+    height: 340px;
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  .codeSnippet {
+    width: 350px;
+    height: 297px;
+  }
+}
+
 @media screen and (max-width: 996px) {
   .rowContainer {
     flex-direction: column;
@@ -124,26 +138,13 @@
 @media screen and (max-width: 500px) {
   .rowContainer {
     max-width: 900px;
-    margin: 0 10px;
+    margin: 0;
+    padding: 0;
   }
 
   .featureComponent {
     height: 200px;
     width: 200px;
-  }
-}
-
-@media screen and (max-width: 1350px) {
-  .codeSnippet {
-    width: 400px;
-    height: 340px;
-  }
-}
-
-@media screen and (max-width: 1050px) {
-  .codeSnippet {
-    width: 350px;
-    height: 297px;
   }
 }
 

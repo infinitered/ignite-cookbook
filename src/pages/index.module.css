@@ -98,3 +98,32 @@
   border: 1px solid #B6ACA6;
   border-radius: 4px;
  }
+
+
+@media screen and (max-width: 700px) {
+  .heroImage {
+    display: none;
+  }
+  .heroTitle {
+    font-size: 56px !important;
+    line-height: 72px !important;
+  }
+  .heroBanner {
+    padding: 1rem;
+    padding-bottom: 5rem;
+  }
+  .headerRight {
+    margin-left: 0 !important;
+    align-items: center !important;
+  }
+  .col {
+    padding: 0;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .faceWinking{
+    margin-bottom: -25px;
+  }
+}
+
