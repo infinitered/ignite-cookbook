@@ -19,7 +19,7 @@ function HomepageHeader() {
   return (
     <header className={styles.heroBanner}>
       <div className={styles.heroImage}>
-        <SVGImage Svg={heroImage.default} />
+        <SVGImage Svg={heroImage.default} classNameOverride="heroImage" />
       </div>
       <div className={styles.headerRight}>
         <div className="titleContainer">

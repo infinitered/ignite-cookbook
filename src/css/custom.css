@@ -361,9 +361,6 @@
 }
 
 @media screen and (max-width: 700px) {
-  [class^='heroImage_src-pages-index-module'] {
-    display: none;
-  }
   [class^='heroTitle_src-pages-index-module'] {
     font-size: 56px !important;
     line-height: 72px !important;
