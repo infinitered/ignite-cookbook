@@ -257,16 +257,20 @@
   }
 
   .cardButtonsFinal {
-    left: 300px;
+    left: 180px;
+    width: 150px;
+    top: 175px;
   }
 
   .cardControlsFinal {
-    left: 270px;
+    width: 150px;
+    left: 130px;
+    top: 30px;
   }
 
   .cardTextStylesFinal {
-    left: 100px;
-    top: -30px;
+    left: 75px;
+    top: -60px;
     width: 150px;
   }
 
@@ -282,7 +286,9 @@
   }
 
   .monocleFinal {
-    left: 410px;
+    left: 236px;
+    width: 85px;
+    top: 80px;
   }
 }
 
