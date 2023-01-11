@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./styles.module.css";
 import { usePluginData } from "@docusaurus/useGlobalData";
 
@@ -22,17 +22,63 @@ const FeatureList: FeatureItem[] = [
   {
     title: "Spin Up Your App In Record Time",
     Component: () => {
+      const ref = useRef();
+      const inViewport = useIntersection(ref, "0px");
+      const [transition, setTransition] = useState(false);
+      const [monocleTransition, setMonocleTransition] = useState(false);
+
+      useEffect(() => {
+        if (inViewport) {
+          const timeout = setTimeout(() => setTransition(true), 500);
+          const monocleTimeout = setTimeout(
+            () => setMonocleTransition(true),
+            1000
+          );
+          return () => {
+            clearTimeout(timeout);
+            clearTimeout(monocleTimeout);
+          };
+        }
+      }, [inViewport]);
+
       return (
-        <div className={styles.imageOneContainer}>
-          <img src={cardButtons.default} className={styles.cardButtons} />
-          <img src={cardControls.default} className={styles.cardControls} />
-          <img src={cardTextStyles.default} className={styles.cardTextStyles} />
+        <div className={styles.imageOneContainer} ref={ref}>
+          <img
+            src={cardButtons.default}
+            className={`${styles.cardButtonsInitial} ${
+              transition ? styles.cardButtonsFinal : ""
+            }`}
+          />
+          <img
+            src={cardControls.default}
+            className={`${styles.cardControlsInitial} ${
+              transition ? styles.cardControlsFinal : ""
+            }`}
+          />
+          <img
+            src={cardTextStyles.default}
+            className={`${styles.cardTextStylesInitial} ${
+              transition ? styles.cardTextStylesFinal : ""
+            }`}
+          />
           <img
             src={screenComponents.default}
-            className={styles.screenComponents}
+            className={`${styles.screenComponentsInitial} ${
+              transition ? styles.screenComponentsFinal : ""
+            }`}
           />
-          <img src={screenMenu.default} className={styles.screenMenu} />
-          <img src={monocle.default} className={styles.monocle} />
+          <img
+            src={screenMenu.default}
+            className={`${styles.screenMenuInitial} ${
+              transition ? styles.screenMenuFinal : ""
+            }`}
+          />
+          <img
+            src={monocle.default}
+            className={`${styles.monocleInitial} ${
+              monocleTransition ? styles.monocleFinal : ""
+            }`}
+          />
         </div>
       );
     },
@@ -69,7 +115,7 @@ const FeatureList: FeatureItem[] = [
         : { author: "", content: "", lastUpdated: "..." };
 
       return (
-        <div>
+        <div className={styles.imageTwoContainer}>
           <div className={styles.codeSnippet}>
             <div
               className={styles.scrollBar}
@@ -150,3 +196,22 @@ export default function HomepageFeatures(): JSX.Element {
     </section>
   );
 }
+
+const useIntersection = (element, rootMargin) => {
+  const [isVisible, setState] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setState(entry.isIntersecting);
+      },
+      { rootMargin }
+    );
+
+    element.current && observer.observe(element.current);
+
+    return () => observer.unobserve(element.current);
+  }, []);
+
+  return isVisible;
+};
