@@ -1,9 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
-import SVGImage from "../SVGImage";
+import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import { usePluginData } from "@docusaurus/useGlobalData";
 
 const faceLookingDown = require("@site/static/img/face-looking-down.png");
+const cardButtons = require("@site/static/img/card-buttons.png");
+const cardControls = require("@site/static/img/card-controls.png");
+const cardTextStyles = require("@site/static/img/card-text-styles.png");
+const monocle = require("@site/static/img/monocle.png");
+const screenComponents = require("@site/static/img/screen-components.png");
+const screenMenu = require("@site/static/img/screen-menu.png");
 
 type FeatureItem = {
   title: string;
@@ -16,8 +21,21 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: "Spin Up Your App In Record Time",
-    Component: require("@site/static/img/undraw_docusaurus_mountain.svg")
-      .default,
+    Component: () => {
+      return (
+        <div className={styles.imageOneContainer}>
+          <img src={cardButtons.default} className={styles.cardButtons} />
+          <img src={cardControls.default} className={styles.cardControls} />
+          <img src={cardTextStyles.default} className={styles.cardTextStyles} />
+          <img
+            src={screenComponents.default}
+            className={styles.screenComponents}
+          />
+          <img src={screenMenu.default} className={styles.screenMenu} />
+          <img src={monocle.default} className={styles.monocle} />
+        </div>
+      );
+    },
     description: (
       <>
         Stop reinventing the wheel on every project. Use the Ignite CLI to get

@@ -45,7 +45,7 @@
 .featureComponentContainer {
   display: flex;
   margin: 0 20px;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .codeSnippet {
@@ -157,4 +157,53 @@
   .timeStampText {
     font-size: 10px;
   }
+}
+
+.imageOneContainer {
+  position: relative;
+  height: 500px;
+  width: 500px;
+  margin-top: 70px;
+  margin-bottom: 120px;
+}
+
+.cardButtons {
+  position: absolute;
+  z-index: 10;
+  left: 400px;
+  top: 350px;
+}
+
+.cardControls {
+  position: absolute;
+  z-index: 10;
+  left: 370px;
+  top: 160px;
+}
+
+.cardTextStyles {
+  position: absolute;
+  z-index: 10;
+  left: 300px;
+  top: 0px;
+}
+
+.screenComponents {
+  position: absolute;
+  z-index: 10;
+  top: 100px;
+}
+
+.screenMenu {
+  position: absolute;
+  z-index: 5;
+  top: -50px;
+  left: 150px;
+}
+
+.monocle {
+  position: absolute;
+  z-index: 10;
+  left: 510px;
+  top: 200px;
 }
