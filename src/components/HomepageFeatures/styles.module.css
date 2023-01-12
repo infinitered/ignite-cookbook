@@ -206,6 +206,21 @@
   left: 510px;
 }
 
+@media screen and (max-width: 1350px) {
+  .codeSnippet {
+    width: 400px;
+    height: 340px;
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  .codeSnippet {
+    width: 350px;
+    height: 297px;
+  }
+}
+
+
 @media screen and (max-width: 996px) {
   .rowContainer {
     flex-direction: column;
@@ -223,48 +238,27 @@
   }
 }
 
-@media screen and (max-width: 500px) {
-  .rowContainer {
-    max-width: 900px;
-    margin: 0;
-    padding: 0;
-  }
-
-  .featureComponent {
-    height: 200px;
-    width: 200px;
-  }
-}
-
-@media screen and (max-width: 1350px) {
-  .codeSnippet {
-    width: 400px;
-    height: 340px;
-  }
-}
-
-@media screen and (max-width: 1050px) {
-  .codeSnippet {
-    width: 350px;
-    height: 297px;
-  }
-}
-
 @media screen and (max-width: 600px) {
   .imageOneContainer {
+    margin-top: 50%;
     height: 300px;
     width: 300px;
   }
 
+  .imageTwoContainer {
+    margin-top: 10%;
+    padding-left: 10px;
+  }
+
   .cardButtonsFinal {
-    left: 180px;
+    left: 140px;
     width: 150px;
-    top: 175px;
+    top: 155px;
   }
 
   .cardControlsFinal {
     width: 150px;
-    left: 130px;
+    left: 120px;
     top: 30px;
   }
 
@@ -289,6 +283,19 @@
     left: 236px;
     width: 85px;
     top: 80px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .rowContainer {
+    max-width: 350px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .featureComponent {
+    height: 200px;
+    width: 200px;
   }
 }
 
