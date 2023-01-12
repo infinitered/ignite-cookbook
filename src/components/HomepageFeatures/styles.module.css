@@ -240,7 +240,7 @@
 
 @media screen and (max-width: 600px) {
   .imageOneContainer {
-    margin-top: 50%;
+    margin-top: 30%;
     height: 300px;
     width: 280px;
   }
