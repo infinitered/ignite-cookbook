@@ -242,10 +242,11 @@
   .imageOneContainer {
     margin-top: 50%;
     height: 300px;
-    width: 300px;
+    width: 280px;
   }
 
   .imageTwoContainer {
+    margin-left: 10%;
     margin-top: 10%;
     padding-left: 10px;
   }
@@ -288,7 +289,7 @@
 
 @media screen and (max-width: 500px) {
   .rowContainer {
-    max-width: 350px;
+    max-width: 95%;
     margin: 0;
     padding: 0;
   }
