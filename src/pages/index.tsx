@@ -29,7 +29,7 @@ function HomepageHeader() {
         </div>
         <div className={styles.buttons}>
           <Link
-            className="button button--secondary button--lg heroButton"
+            className={styles.heroButton}
             to="/docs/intro"
             style={{
               display: "flex",
