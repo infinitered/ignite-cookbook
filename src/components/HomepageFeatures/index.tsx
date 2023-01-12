@@ -1,9 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import SVGImage from "../SVGImage";
 import styles from "./styles.module.css";
 import { usePluginData } from "@docusaurus/useGlobalData";
 
 const faceLookingDown = require("@site/static/img/face-looking-down.png");
+const cardButtons = require("@site/static/img/card-buttons.png");
+const cardControls = require("@site/static/img/card-controls.png");
+const cardTextStyles = require("@site/static/img/card-text-styles.png");
+const monocle = require("@site/static/img/monocle.png");
+const screenComponents = require("@site/static/img/screen-components.png");
+const screenMenu = require("@site/static/img/screen-menu.png");
 
 type FeatureItem = {
   title: string;
@@ -16,8 +21,67 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: "Spin Up Your App In Record Time",
-    Component: require("@site/static/img/undraw_docusaurus_mountain.svg")
-      .default,
+    Component: () => {
+      const ref = useRef();
+      const inViewport = useIntersection(ref, "0px");
+      const [transition, setTransition] = useState(false);
+      const [monocleTransition, setMonocleTransition] = useState(false);
+
+      useEffect(() => {
+        if (inViewport) {
+          const timeout = setTimeout(() => setTransition(true), 500);
+          const monocleTimeout = setTimeout(
+            () => setMonocleTransition(true),
+            1000
+          );
+          return () => {
+            clearTimeout(timeout);
+            clearTimeout(monocleTimeout);
+          };
+        }
+      }, [inViewport]);
+
+      return (
+        <div className={styles.imageOneContainer} ref={ref}>
+          <img
+            src={cardButtons.default}
+            className={`${styles.cardButtonsInitial} ${
+              transition ? styles.cardButtonsFinal : ""
+            }`}
+          />
+          <img
+            src={cardControls.default}
+            className={`${styles.cardControlsInitial} ${
+              transition ? styles.cardControlsFinal : ""
+            }`}
+          />
+          <img
+            src={cardTextStyles.default}
+            className={`${styles.cardTextStylesInitial} ${
+              transition ? styles.cardTextStylesFinal : ""
+            }`}
+          />
+          <img
+            src={screenComponents.default}
+            className={`${styles.screenComponentsInitial} ${
+              transition ? styles.screenComponentsFinal : ""
+            }`}
+          />
+          <img
+            src={screenMenu.default}
+            className={`${styles.screenMenuInitial} ${
+              transition ? styles.screenMenuFinal : ""
+            }`}
+          />
+          <img
+            src={monocle.default}
+            className={`${styles.monocleInitial} ${
+              monocleTransition ? styles.monocleFinal : ""
+            }`}
+          />
+        </div>
+      );
+    },
     description: (
       <>
         Stop reinventing the wheel on every project. Use the Ignite CLI to get
@@ -51,7 +115,7 @@ const FeatureList: FeatureItem[] = [
         : { author: "", content: "", lastUpdated: "..." };
 
       return (
-        <div>
+        <div className={styles.imageTwoContainer}>
           <div className={styles.codeSnippet}>
             <div
               className={styles.scrollBar}
@@ -132,3 +196,22 @@ export default function HomepageFeatures(): JSX.Element {
     </section>
   );
 }
+
+const useIntersection = (element, rootMargin) => {
+  const [isVisible, setState] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setState(entry.isIntersecting);
+      },
+      { rootMargin }
+    );
+
+    element.current && observer.observe(element.current);
+
+    return () => observer.unobserve(element.current);
+  }, []);
+
+  return isVisible;
+};

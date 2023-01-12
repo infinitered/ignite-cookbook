@@ -11,7 +11,7 @@
   align-items: center;
   justify-content: space-between;
   max-width: 1400px;
-  margin: 80px auto;
+  margin: 100px auto;
   padding: 0 2rem;  
 }
 
@@ -44,8 +44,8 @@
 
 .featureComponentContainer {
   display: flex;
-  margin: 0 20px;
-  justify-content: flex-end;
+  margin: 0 30px;
+  justify-content: center;
 }
 
 .codeSnippet {
@@ -104,6 +104,108 @@
   left: -6rem;
 }
 
+
+.imageTwoContainer {
+  padding-left: 70px;
+}
+
+.imageOneContainer {
+  position: relative;
+  height: 500px;
+  width: 500px;
+  margin-top: 70px;
+  margin-bottom: 120px;
+}
+
+.cardButtonsInitial {
+  position: absolute;
+  z-index: 10;
+  left: 480px;
+  top: 400px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.cardButtonsFinal {
+  left: 400px;
+  top: 350px;
+  opacity: 1;
+}
+
+.cardControlsInitial {
+  position: absolute;
+  z-index: 10;
+  left: 410px;
+  top: 220px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.cardControlsFinal {
+  left: 370px;
+  top: 160px;
+  opacity: 1;
+}
+
+.cardTextStylesInitial {
+  position: absolute;
+  z-index: 10;
+  left: 360px;
+  top: 75px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.cardTextStylesFinal {
+  left: 300px;
+  top: 0px;
+  opacity: 1;
+}
+
+.screenComponentsInitial {
+  position: absolute;
+  z-index: 10;
+  top: 150px;
+  left: 50px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.screenComponentsFinal {
+  left: 0px;
+  top: 100px;
+  opacity: 1;
+}
+
+.screenMenuInitial {
+  position: absolute;
+  z-index: 5;
+  top: 40px;
+  left: 220px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.screenMenuFinal {
+  top: -50px;
+  left: 150px;
+  opacity: 1;
+}
+
+.monocleInitial {
+  position: absolute;
+  z-index: 10;
+  left: 530px;
+  top: 200px;
+  opacity: 0;
+  transition: all 1s;
+}
+
+.monocleFinal {
+  opacity: 1;
+  left: 510px;
+}
+
 @media screen and (max-width: 1350px) {
   .codeSnippet {
     width: 400px;
@@ -117,6 +219,7 @@
     height: 297px;
   }
 }
+
 
 @media screen and (max-width: 996px) {
   .rowContainer {
@@ -135,9 +238,58 @@
   }
 }
 
+@media screen and (max-width: 600px) {
+  .imageOneContainer {
+    margin-top: 30%;
+    height: 300px;
+    width: 280px;
+  }
+
+  .imageTwoContainer {
+    margin-left: 10%;
+    margin-top: 10%;
+    padding-left: 10px;
+  }
+
+  .cardButtonsFinal {
+    left: 140px;
+    width: 150px;
+    top: 155px;
+  }
+
+  .cardControlsFinal {
+    width: 150px;
+    left: 120px;
+    top: 30px;
+  }
+
+  .cardTextStylesFinal {
+    left: 75px;
+    top: -60px;
+    width: 150px;
+  }
+
+  .screenComponentsFinal {
+    left: -100px;
+    top: 0px;
+  }
+
+  .screenMenuFinal {
+    top: -100px;
+    left: -30px;
+
+  }
+
+  .monocleFinal {
+    left: 236px;
+    width: 85px;
+    top: 80px;
+  }
+}
+
 @media screen and (max-width: 500px) {
   .rowContainer {
-    max-width: 900px;
+    max-width: 95%;
     margin: 0;
     padding: 0;
   }
