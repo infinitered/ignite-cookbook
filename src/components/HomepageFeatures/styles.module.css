@@ -252,7 +252,6 @@
   opacity: 1;
 }
 
-
 .communityScreenFourInitial {
   position: absolute;
   top: 95px;
@@ -262,7 +261,6 @@
 }
 
 .communityScreenFour {
-  position: absolute;
   top: 15px;
   left: 120px;
   opacity: 1;
@@ -277,7 +275,6 @@
 }
 
 .communityScreenFive {
-  position: absolute;
   top: -15px;
   left: 160px;
   opacity: 1;
@@ -292,7 +289,6 @@
 }
 
 .communityScreenSix {
-  position: absolute;
   top: 5px;
   left: 220px;
   opacity: 1;
@@ -307,12 +303,10 @@
 }
 
 .communityScreenSeven {
-  position: absolute;
   top: 75px;
   left: 310px;
   opacity: 1;
 }
-
 
 .communityScreenEightInitial {
   position: absolute;
@@ -323,7 +317,6 @@
 }
 
 .communityScreenEight {
-  position: absolute;
   top: 145px;
   left: 425px;
   opacity: 1;
@@ -371,6 +364,19 @@
   transform: scale(1);
 }
 
+@media screen and (max-width: 1350px) {
+  .codeSnippet {
+    width: 400px;
+    height: 340px;
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  .codeSnippet {
+    width: 350px;
+    height: 297px;
+  }
+}
 
 
 @media screen and (max-width: 1350px) {
@@ -464,6 +470,75 @@
   .featureComponent {
     height: 200px;
     width: 200px;
+  }
+
+  .imageThreeContainer {
+    margin-top: 50px;
+    width: 400px;
+    height: 500px;
+  }
+
+  .circleFaceOneInitial {
+    width: 50px;
+    top: -25px;
+    left: 280px;
+  }
+  .circleFaceTwoInitial {
+    width: 50px;
+    top: 30px;
+    left: 310px;
+  }
+  .circleFaceThreeInitial {
+    width: 50px;
+    top: 275px;
+    left: 130px;
+  }
+  .communityScreenOneInitial {
+    width: 120px;
+  }
+  .communityScreenTwoInitial {
+    width: 120px;
+  }
+  .communityScreenTwo {
+    left: 20px;
+  }
+  .communityScreenThreeInitial {
+    width: 120px;
+  }
+  .communityScreenThree {
+    left: 60px;
+    opacity: 1;
+  }
+  .communityScreenFourInitial {
+    width: 120px;
+  }
+  .communityScreenFour {
+    left: 90px;
+  }
+  .communityScreenFiveInitial {
+    width: 120px;
+  }
+  .communityScreenFive {
+    left: 130px;
+  }
+  .communityScreenSixInitial {
+    width: 120px;
+  }
+  .communityScreenSix {
+    left: 160px;
+  }
+  .communityScreenSevenInitial {
+    width: 120px;
+  }
+  .communityScreenSeven {
+    left: 220px;
+  }
+  .communityScreenEightInitial {
+    width: 120px;
+  }
+  .communityScreenEight {
+    left: 275px;
+    opacity: 1;
   }
 }
 

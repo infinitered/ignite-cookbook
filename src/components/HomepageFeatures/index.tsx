@@ -176,7 +176,7 @@ const FeatureList: FeatureItem[] = [
         console.log("inViewport", inViewport);
         if (inViewport) {
           const timeout = setTimeout(() => setTransition(true), 500);
-          const facesTimeout = setTimeout(() => setFacesTransition(true), 1000);
+          const facesTimeout = setTimeout(() => setFacesTransition(true), 1500);
           return () => {
             clearTimeout(timeout);
             clearTimeout(facesTimeout);
