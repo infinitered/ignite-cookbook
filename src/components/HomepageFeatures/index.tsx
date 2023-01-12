@@ -9,6 +9,17 @@ const cardTextStyles = require("@site/static/img/card-text-styles.png");
 const monocle = require("@site/static/img/monocle.png");
 const screenComponents = require("@site/static/img/screen-components.png");
 const screenMenu = require("@site/static/img/screen-menu.png");
+const circleFace1 = require("@site/static/img/circle-face.png");
+const circleFace2 = require("@site/static/img/circle-face-2.png");
+const circleFace3 = require("@site/static/img/circle-face-3.png");
+const communityScreen1 = require("@site/static/img/community-screen-1.png");
+const communityScreen2 = require("@site/static/img/community-screen-2.png");
+const communityScreen3 = require("@site/static/img/community-screen-3.png");
+const communityScreen4 = require("@site/static/img/community-screen-4.png");
+const communityScreen5 = require("@site/static/img/community-screen-5.png");
+const communityScreen6 = require("@site/static/img/community-screen-6.png");
+const communityScreen7 = require("@site/static/img/community-screen-7.png");
+const communityScreen8 = require("@site/static/img/community-screen-8.png");
 
 type FeatureItem = {
   title: string;
@@ -154,7 +165,95 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: "Backed By A Community of React Native Experts",
-    Component: require("@site/static/img/undraw_docusaurus_react.svg").default,
+    Component: () => {
+      const ref = useRef();
+      const inViewport = useIntersection(ref, "0px");
+
+      const [transition, setTransition] = useState(false);
+      const [facesTransition, setFacesTransition] = useState(false);
+
+      useEffect(() => {
+        console.log("inViewport", inViewport);
+        if (inViewport) {
+          const timeout = setTimeout(() => setTransition(true), 500);
+          const facesTimeout = setTimeout(() => setFacesTransition(true), 1000);
+          return () => {
+            clearTimeout(timeout);
+            clearTimeout(facesTimeout);
+          };
+        }
+      }, [inViewport]);
+      return (
+        <div className={styles.imageThreeContainer} ref={ref}>
+          <img
+            src={circleFace1.default}
+            className={`${styles.circleFaceOneInitial} ${
+              facesTransition ? styles.circleFaceOne : ""
+            }`}
+          />
+          <img
+            src={circleFace2.default}
+            className={`${styles.circleFaceTwoInitial} ${
+              facesTransition ? styles.circleFaceTwo : ""
+            }`}
+          />
+          <img
+            src={circleFace3.default}
+            className={`${styles.circleFaceThreeInitial} ${
+              facesTransition ? styles.circleFaceThree : ""
+            }`}
+          />
+          <img
+            src={communityScreen1.default}
+            className={`${styles.communityScreenOneInitial} ${
+              transition ? styles.communityScreenOne : ""
+            }`}
+          />
+          <img
+            src={communityScreen2.default}
+            className={`${styles.communityScreenTwoInitial} ${
+              transition ? styles.communityScreenTwo : ""
+            }`}
+          />
+          <img
+            src={communityScreen3.default}
+            className={`${styles.communityScreenThreeInitial} ${
+              transition ? styles.communityScreenThree : ""
+            }`}
+          />
+          <img
+            src={communityScreen4.default}
+            className={`${styles.communityScreenFourInitial} ${
+              transition ? styles.communityScreenFour : ""
+            }`}
+          />
+          <img
+            src={communityScreen5.default}
+            className={`${styles.communityScreenFiveInitial} ${
+              transition ? styles.communityScreenFive : ""
+            }`}
+          />
+          <img
+            src={communityScreen6.default}
+            className={`${styles.communityScreenSixInitial} ${
+              transition ? styles.communityScreenSix : ""
+            }`}
+          />
+          <img
+            src={communityScreen7.default}
+            className={`${styles.communityScreenSevenInitial} ${
+              transition ? styles.communityScreenSeven : ""
+            }`}
+          />
+          <img
+            src={communityScreen8.default}
+            className={`${styles.communityScreenEightInitial} ${
+              transition ? styles.communityScreenEight : ""
+            }`}
+          />
+        </div>
+      );
+    },
     description: (
       <>
         The Ignite Cookbook isn’t just a random group of code snippets. It’s a

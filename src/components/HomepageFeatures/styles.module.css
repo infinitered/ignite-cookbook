@@ -206,6 +206,173 @@
   left: 510px;
 }
 
+.imageThreeContainer {
+  position: relative;
+  width: 500px;
+  height: 400px;
+}
+
+.communityScreenOneInitial {
+  position: absolute;
+  top: 0px;
+  opacity: 0;
+  transition: all 1s;
+}
+
+.communityScreenOne {
+  top: 40px;
+  opacity: 1;
+}
+
+.communityScreenTwoInitial {
+  position: absolute;
+  top: 160px;
+  left: 30px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.communityScreenTwo {
+  top: 70px;
+  left: 40px;
+  opacity: 1;
+}
+
+.communityScreenThreeInitial {
+  position: absolute;
+  top: 115px;
+  left: 70px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.communityScreenThree {
+  top: 45px;
+  left: 80px;
+  opacity: 1;
+}
+
+
+.communityScreenFourInitial {
+  position: absolute;
+  top: 95px;
+  left: 100px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.communityScreenFour {
+  position: absolute;
+  top: 15px;
+  left: 120px;
+  opacity: 1;
+}
+
+.communityScreenFiveInitial {
+  position: absolute;
+  top: 75px;
+  left: 120px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.communityScreenFive {
+  position: absolute;
+  top: -15px;
+  left: 160px;
+  opacity: 1;
+}
+
+.communityScreenSixInitial {
+  position: absolute;
+  top: 45px;
+  left: 130px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.communityScreenSix {
+  position: absolute;
+  top: 5px;
+  left: 220px;
+  opacity: 1;
+}
+
+.communityScreenSevenInitial {
+  position: absolute;
+  top: 105px;
+  left: 140px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.communityScreenSeven {
+  position: absolute;
+  top: 75px;
+  left: 310px;
+  opacity: 1;
+}
+
+
+.communityScreenEightInitial {
+  position: absolute;
+  top: 115px;
+  left: 165px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.communityScreenEight {
+  position: absolute;
+  top: 145px;
+  left: 425px;
+  opacity: 1;
+}
+
+.circleFaceOneInitial {
+  position: absolute;
+  top: -75px;
+  left: 400px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 1s;
+}
+
+.circleFaceOne {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.circleFaceTwoInitial {
+  position: absolute;
+  top: 10px;
+  left: 500px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 1s;
+}
+
+.circleFaceTwo {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.circleFaceThreeInitial {
+  position: absolute;
+  top: 375px;
+  left: 200px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 1s;
+}
+
+.circleFaceThree {
+  opacity: 1;
+  transform: scale(1);
+}
+
+
+
 @media screen and (max-width: 1350px) {
   .codeSnippet {
     width: 400px;
