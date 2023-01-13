@@ -180,7 +180,6 @@ const FeatureList: FeatureItem[] = [
       const [facesTransition, setFacesTransition] = useState(false);
 
       useEffect(() => {
-        console.log("inViewport", inViewport);
         if (inViewport) {
           const timeout = setTimeout(() => setTransition(true), 500);
           const facesTimeout = setTimeout(() => setFacesTransition(true), 1000);
