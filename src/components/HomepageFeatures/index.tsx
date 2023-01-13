@@ -55,36 +55,42 @@ const FeatureList: FeatureItem[] = [
       return (
         <div className={styles.imageOneContainer} ref={ref}>
           <img
+            alt="Animation Image"
             src={cardButtons.default}
             className={`${styles.cardButtonsInitial} ${
               transition ? styles.cardButtonsFinal : ""
             }`}
           />
           <img
+            alt="Animation Image"
             src={cardControls.default}
             className={`${styles.cardControlsInitial} ${
               transition ? styles.cardControlsFinal : ""
             }`}
           />
           <img
+            alt="Animation Image"
             src={cardTextStyles.default}
             className={`${styles.cardTextStylesInitial} ${
               transition ? styles.cardTextStylesFinal : ""
             }`}
           />
           <img
+            alt="Animation Image"
             src={screenComponents.default}
             className={`${styles.screenComponentsInitial} ${
               transition ? styles.screenComponentsFinal : ""
             }`}
           />
           <img
+            alt="Animation Image"
             src={screenMenu.default}
             className={`${styles.screenMenuInitial} ${
               transition ? styles.screenMenuFinal : ""
             }`}
           />
           <img
+            alt="Animation Image"
             src={monocle.default}
             className={`${styles.monocleInitial} ${
               monocleTransition ? styles.monocleFinal : ""
@@ -147,6 +153,7 @@ const FeatureList: FeatureItem[] = [
             </div>
           </div>
           <img
+            alt="Animation Image"
             className={styles.faceLookingDown}
             src={faceLookingDown.default}
           />
@@ -186,66 +193,77 @@ const FeatureList: FeatureItem[] = [
       return (
         <div className={styles.imageThreeContainer} ref={ref}>
           <img
+            alt="Animation Image"
             src={circleFace1.default}
             className={`${styles.circleFaceOneInitial} ${
               facesTransition ? styles.circleFaceOne : ""
             }`}
           />
           <img
+            alt="Animation Image"
             src={circleFace2.default}
             className={`${styles.circleFaceTwoInitial} ${
               facesTransition ? styles.circleFaceTwo : ""
             }`}
           />
           <img
+            alt="Animation Image"
             src={circleFace3.default}
             className={`${styles.circleFaceThreeInitial} ${
               facesTransition ? styles.circleFaceThree : ""
             }`}
           />
           <img
+            alt="Animation Image"
             src={communityScreen1.default}
             className={`${styles.communityScreenOneInitial} ${
               transition ? styles.communityScreenOne : ""
             }`}
           />
           <img
+            alt="Animation Image"
             src={communityScreen2.default}
             className={`${styles.communityScreenTwoInitial} ${
               transition ? styles.communityScreenTwo : ""
             }`}
           />
           <img
+            alt="Animation Image"
             src={communityScreen3.default}
             className={`${styles.communityScreenThreeInitial} ${
               transition ? styles.communityScreenThree : ""
             }`}
           />
           <img
+            alt="Animation Image"
             src={communityScreen4.default}
             className={`${styles.communityScreenFourInitial} ${
               transition ? styles.communityScreenFour : ""
             }`}
           />
           <img
+            alt="Animation Image"
             src={communityScreen5.default}
             className={`${styles.communityScreenFiveInitial} ${
               transition ? styles.communityScreenFive : ""
             }`}
           />
           <img
+            alt="Animation Image"
             src={communityScreen6.default}
             className={`${styles.communityScreenSixInitial} ${
               transition ? styles.communityScreenSix : ""
             }`}
           />
           <img
+            alt="Animation Image"
             src={communityScreen7.default}
             className={`${styles.communityScreenSevenInitial} ${
               transition ? styles.communityScreenSeven : ""
             }`}
           />
           <img
+            alt="Animation Image"
             src={communityScreen8.default}
             className={`${styles.communityScreenEightInitial} ${
               transition ? styles.communityScreenEight : ""
