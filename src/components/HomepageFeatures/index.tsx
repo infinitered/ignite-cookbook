@@ -320,6 +320,7 @@ const useIntersection = (element, rootMargin) => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         setState(entry.isIntersecting);
+        if (entry.isIntersecting) observer.unobserve(element.current);
       },
       { rootMargin }
     );
