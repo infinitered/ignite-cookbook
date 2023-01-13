@@ -413,7 +413,7 @@
 
 @media screen and (max-width: 600px) {
   .imageOneContainer {
-    margin-top: 30%;
+    margin-top: 40%;
     height: 300px;
     width: 280px;
   }
@@ -450,7 +450,6 @@
   .screenMenuFinal {
     top: -100px;
     left: -30px;
-
   }
 
   .monocleFinal {
@@ -458,11 +457,8 @@
     width: 85px;
     top: 80px;
   }
-}
 
-@media screen and (max-width: 500px) {
   .rowContainer {
-    max-width: 95%;
     margin: 0;
     padding: 0;
   }
@@ -474,70 +470,81 @@
 
   .imageThreeContainer {
     margin-top: 50px;
-    width: 400px;
-    height: 500px;
+    width: 280px;
+    height: 380px;
   }
 
   .circleFaceOneInitial {
     width: 50px;
     top: -25px;
-    left: 280px;
+    left: 190px;
   }
   .circleFaceTwoInitial {
     width: 50px;
     top: 30px;
-    left: 310px;
+    left: 220px;
   }
   .circleFaceThreeInitial {
     width: 50px;
     top: 275px;
-    left: 130px;
+    left: 40px;
   }
   .communityScreenOneInitial {
-    width: 120px;
+    width: 100px;
+    left: -40px;
+  }
+  .communityScreenOne {
+    left: -50px
   }
   .communityScreenTwoInitial {
-    width: 120px;
+    width: 100px;
+    left: -40px;
   }
   .communityScreenTwo {
-    left: 20px;
+    left: -30px;
   }
   .communityScreenThreeInitial {
-    width: 120px;
+    width: 100px;
+    left: 30px;
   }
   .communityScreenThree {
-    left: 60px;
+    left: 10px;
     opacity: 1;
   }
   .communityScreenFourInitial {
-    width: 120px;
+    width: 100px;
+    left: 60px;
   }
   .communityScreenFour {
-    left: 90px;
+    left: 40px;
   }
   .communityScreenFiveInitial {
-    width: 120px;
+    width: 100px;
+    left: 80px;
   }
   .communityScreenFive {
-    left: 130px;
+    left: 80px;
   }
   .communityScreenSixInitial {
-    width: 120px;
+    width: 100px;
+    left: 80px
   }
   .communityScreenSix {
-    left: 160px;
+    left: 110px;
   }
   .communityScreenSevenInitial {
-    width: 120px;
+    width: 100px;
+    left: 90px;
   }
   .communityScreenSeven {
-    left: 220px;
+    left: 170px;
   }
   .communityScreenEightInitial {
-    width: 120px;
+    width: 100px;
+    left: 115px;
   }
   .communityScreenEight {
-    left: 275px;
+    left: 225px;
     opacity: 1;
   }
 }
