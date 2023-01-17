@@ -342,6 +342,11 @@
   .theme-doc-footer {
     padding: 2rem;
   }
+
+  [class*='col col--6'] {
+    width: 90% !important;
+    padding: 0 !important;
+  }
 }
 
 #__docusaurus {
