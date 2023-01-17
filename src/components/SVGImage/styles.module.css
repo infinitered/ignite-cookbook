@@ -1,12 +1,8 @@
 
 .heroImage {
-    height: 400px;
-    width: 400px;
-    min-width: 400px;
-  }
-.chefHatSvg {
-  width: 24px;
-
+  height: 400px;
+  width: 400px;
+  min-width: 400px;
 }
 
 @media screen and (max-width: 996px) {

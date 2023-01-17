@@ -9,7 +9,7 @@ import SVGImage from "../components/SVGImage";
 
 const heroImage = require("@site/static/img/hero-graphic.svg");
 const faceWinking = require("@site/static/img/face-winking.png");
-const chefHat = require("@site/static/img/chef-hat.svg");
+const chefHat = require("@site/static/img/chef-hat.png");
 
 const title = "Proven Recipes for your React Native apps";
 const description =
@@ -36,7 +36,7 @@ function HomepageHeader() {
               flexDirection: "row",
             }}
           >
-            <SVGImage Svg={chefHat.default} classNameOverride="chefHatSvg" />
+            <img src={chefHat.default} alt="chefHatSvg" />
             <p className={styles.buttonTitle}>Let's get cooking</p>
           </Link>
         </div>
