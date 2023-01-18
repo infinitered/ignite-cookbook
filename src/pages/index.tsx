@@ -36,7 +36,7 @@ function HomepageHeader() {
               flexDirection: "row",
             }}
           >
-            <img src={chefHat.default} alt="chefHatSvg" />
+            <img src={chefHat.default} alt="Chef's Hat" />
             <p className={styles.buttonTitle}>Let's get cooking</p>
           </Link>
         </div>
