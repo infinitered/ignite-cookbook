@@ -21,7 +21,7 @@ You'll also need `eas-cli` globally installed and and an [Expo account](https://
 
 `npm install -g eas-cli`
 
-_Optional_: You can use EAS builds for free, however there is a queue time to wait for your build. It is possible to [build locally](https://docs.expo.dev/build-reference/local-builds/), however you'll need a couple of other dependencies installed for proper iOS and Android builds (if you can already build iOS/Android natively, you're probably good to go!)
+*Optional*: You can use EAS builds for free, however there is a queue time to wait for your build. It is possible to [build locally](https://docs.expo.dev/build-reference/local-builds/), however you'll need a couple of other dependencies installed for proper iOS and Android builds (if you can already build iOS/Android natively, you're probably good to go!)
 
 **iOS**
 `brew install cocoapods`
