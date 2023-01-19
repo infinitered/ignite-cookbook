@@ -105,6 +105,52 @@ function HomepageHeader() {
   );
 }
 
+function FreshRecipes() {
+  const { snippets } = usePluginData("example-code-snippets") as {
+    snippets: {
+      author: string;
+      publish_date: string;
+      title: string;
+    }[];
+  };
+
+  const mostRecentRecipes = snippets.sort(
+    (a, b) =>
+      new Date(b.publish_date).getTime() - new Date(a.publish_date).getTime()
+  );
+
+  return (
+    <div className={styles.freshSection}>
+      <p className={styles.freshSectionHeader}>Freshly added to the cookbook</p>
+      {mostRecentRecipes.slice(0, 4).map((recipe) => {
+        console.log(recipe);
+        return (
+          <Link
+            to={`/docs/recipes/${recipe.title.replace(/\s+/g, "")}`}
+            className={styles.recipeWrapper}
+          >
+            {moment(recipe.publish_date).diff(moment(), "days") * -1 < 31 && (
+              <div className={styles.freshSectionTag}>
+                <p className={styles.freshSectionTagText}>New</p>
+              </div>
+            )}
+            <h3 className={styles.freshSectionTitle}>{recipe.title}</h3>
+            <p className={styles.freshSectionDate}>
+              {`Published on `}
+              <b>{moment(recipe.publish_date).format("MMMM Do, YYYY")}</b>
+              {` by `}
+              <b>{recipe.author}</b>
+            </p>
+          </Link>
+        );
+      })}
+      <Link to="/docs/recipes" className={styles.viewAllRecipes}>
+        View all recipes
+      </Link>
+    </div>
+  );
+}
+
 export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
   return (
@@ -116,6 +162,7 @@ export default function Home(): JSX.Element {
       <HomepageHeader />
       <main className={styles.mainContainer}>
         <HomepageFeatures />
+        <FreshRecipes />
       </main>
     </Layout>
   );
