@@ -113,7 +113,11 @@ const FeatureList: FeatureItem[] = [
     title: "Find Quality Code When You Need It",
     Component: () => {
       const { snippets } = usePluginData("example-code-snippets") as {
-        snippets: { author: string; content: string; lastUpdated: string }[];
+        snippets: {
+          author: string;
+          content: string;
+          lastUpdated: string;
+        }[];
       };
 
       const [show, setShow] = useState(false);

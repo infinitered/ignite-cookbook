@@ -6,6 +6,7 @@ tags:
   - FlashList
 last_update:
   author: Frank Calise
+publish_date: 2022-10-13
 ---
 
 # Migrating to FlashList

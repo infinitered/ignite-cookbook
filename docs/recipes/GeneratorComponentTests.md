@@ -5,6 +5,7 @@ tags:
   - Generator
 last_update:
   author: Joshua Yoes
+publish_date: 2022-10-10
 ---
 
 # Add component tests to `npx ignite-cli generate component`
