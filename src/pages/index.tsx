@@ -39,7 +39,7 @@ const NewSection = () => {
         </div>
         <h3 className={styles.notificationTitle}>{mostRecentRecipe.title}</h3>
         <p className={styles.notificationDate}>
-          {`Last updated on `}
+          {`Published on `}
           <b>{moment(mostRecentRecipe.publishDate).format("MMMM Do, YYYY")}</b>
           {` by `}
           <b>{mostRecentRecipe.author}</b>

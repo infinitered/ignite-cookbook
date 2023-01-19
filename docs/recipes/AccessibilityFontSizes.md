@@ -5,7 +5,7 @@ tags:
   - Accessibility
 last_update:
   author: Mark Rickert
-publish_date: 2018-01-01
+publish_date: 2022-10-09
 ---
 
 # Dealing With Accessibility Font Sizes in React Native

@@ -6,7 +6,7 @@ tags:
   - Intro
 last_update:
   author: Jamon Holmgren
-publish_date: 2018-01-01
+publish_date: 2022-10-09
 ---
 
 Detox is a library for end-to-end testing of React Native apps. This wiki provides information on how to use Detox effectively.

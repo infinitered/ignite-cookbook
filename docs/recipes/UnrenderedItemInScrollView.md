@@ -8,7 +8,7 @@ tags:
   - scrollTo
 last_update:
   author: Mark Rickert
-publish_date: 2018-01-01
+publish_date: 2022-10-09
 ---
 
 Calling `scrollViewRef.current.scrollToLocation()` on a React Native `FlatList` or `SectionList` will fail on occasion because it can't scroll to a location that hasn't been rendered yet.

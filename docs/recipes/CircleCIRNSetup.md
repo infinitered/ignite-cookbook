@@ -6,7 +6,7 @@ tags:
   - CI/CD
 last_update:
   author: Robin Heinze
-publish_date: 2018-01-01
+publish_date: 2022-10-09
 ---
 
 This document shows the steps necessary to set up CircleCI automatic continuous integration testing and automatic Fastlane beta builds upon successfully merging a pull request.
