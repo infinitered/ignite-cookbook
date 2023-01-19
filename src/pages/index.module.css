@@ -179,10 +179,17 @@
   color: #564E4A;
   font-size: 24px;
   line-height: 34px;
+  padding: 5px;
  }
 
  .recipeWrapper {
   margin-top: 40px;
+  padding: 5px;
+ }
+
+ .recipeWrapper:hover {
+  background-color: rgba(86, 78, 74, 0.1);
+  text-decoration: none;
  }
 
  .freshSectionTag {
@@ -220,6 +227,7 @@
   line-height: 26px;
   color: #41476E;
   margin-top: 50px;
+  padding: 5px;
 }
 
 .viewAllRecipes:hover {
