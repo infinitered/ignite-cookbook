@@ -18,14 +18,14 @@ const NewSection = () => {
   const { snippets } = usePluginData("example-code-snippets") as {
     snippets: {
       author: string;
-      publishDate: string;
+      publish_date: string;
       title: string;
     }[];
   };
 
   const mostRecentRecipe = snippets.sort(
     (a, b) =>
-      new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
+      new Date(b.publish_date).getTime() - new Date(a.publish_date).getTime()
   )[0];
 
   const igniteReleaseVersion = "v8.4.6";
@@ -40,7 +40,7 @@ const NewSection = () => {
         <h3 className={styles.notificationTitle}>{mostRecentRecipe.title}</h3>
         <p className={styles.notificationDate}>
           {`Published on `}
-          <b>{moment(mostRecentRecipe.publishDate).format("MMMM Do, YYYY")}</b>
+          <b>{moment(mostRecentRecipe.publish_date).format("MMMM Do, YYYY")}</b>
           {` by `}
           <b>{mostRecentRecipe.author}</b>
         </p>

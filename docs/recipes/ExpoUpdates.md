@@ -8,7 +8,7 @@ tags:
   - Expo Updates
 last_update:
   author: Frank Calise
-publish_date: 2022-12-16
+publish_date: 2023-01-06
 ---
 
 # Expo Updates
