@@ -3,6 +3,69 @@
  * and scoped locally.
  */
 
+ .newSection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  background-color: rgb(255, 255, 255);
+  margin: 0 auto;
+  width: 100%;
+  padding: 25px 0;
+ }
+
+ .notificationSection {
+  margin-bottom: 20px;
+ }
+
+ .notificationTag {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 4px 12px;
+  gap: 10px;
+  width: 103px;
+  height: 29px;
+  background: #E8C1B4;
+ }
+
+ .notificationTagText {
+  color: #692810;
+  font-size: 14px;
+  line-height: 21px;
+ }
+
+.notificationTitle {
+  margin-top: 8px;
+  margin-bottom: 0;
+  color: #41476E;
+  font-size: 20px;
+  line-height: 24px;
+} 
+
+.notificationDate {
+  color: #564E4A;
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 4px;;
+}
+
+.notificationLink {
+  margin-top: 8px;
+  display: flex;
+}
+
+.notificationLink:hover {
+  text-decoration: underline;
+  text-decoration-color: #41476E;
+}
+
+.notificationLinkText {
+  color: #41476E;
+  font-size: 16px;
+  line-height: 24px;
+}
+
 .heroBanner {
   position: relative;
   overflow: hidden;
@@ -118,6 +181,11 @@
   }
   .col {
     padding: 0;
+  }
+  .newSection {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 25px;
   }
 }
 

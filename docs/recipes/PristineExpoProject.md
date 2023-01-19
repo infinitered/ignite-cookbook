@@ -5,6 +5,7 @@ tags:
   - Expo
 last_update:
   author: Frank Calise
+publish_date: 2018-01-01
 ---
 
 # Pristine Expo Project

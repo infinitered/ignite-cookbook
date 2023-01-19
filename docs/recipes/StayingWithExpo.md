@@ -6,6 +6,7 @@ tags:
   - expo-dev-client
 last_update:
   author: Frank Calise
+publish_date: 2018-01-01
 ---
 
 # Staying With Expo
@@ -20,7 +21,7 @@ You'll also need `eas-cli` globally installed and and an [Expo account](https://
 
 `npm install -g eas-cli`
 
-*Optional*: You can use EAS builds for free, however there is a queue time to wait for your build. It is possible to [build locally](https://docs.expo.dev/build-reference/local-builds/), however you'll need a couple of other dependencies installed for proper iOS and Android builds (if you can already build iOS/Android natively, you're probably good to go!)
+_Optional_: You can use EAS builds for free, however there is a queue time to wait for your build. It is possible to [build locally](https://docs.expo.dev/build-reference/local-builds/), however you'll need a couple of other dependencies installed for proper iOS and Android builds (if you can already build iOS/Android natively, you're probably good to go!)
 
 **iOS**
 `brew install cocoapods`

@@ -7,6 +7,7 @@ tags:
   - Android
 last_update:
   author: Lizzi Lindboe
+publish_date: 2018-01-01
 ---
 
 ## UI Patterns

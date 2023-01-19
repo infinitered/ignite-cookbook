@@ -6,6 +6,7 @@ tags:
   - Guide
 last_update:
   author: Robin Heinze
+publish_date: 2018-01-01
 ---
 
 ### Sampl YAML File

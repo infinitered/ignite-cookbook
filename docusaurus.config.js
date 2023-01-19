@@ -63,6 +63,8 @@ const config = {
             const lastUpdated = docGitLog?.[0]?.authorDateRel;
 
             let author = ""; // Do we w÷nt to use the author from the doc or git log?
+            let title = "";
+            let publishDate = "";
             const contents = [];
             const input = fs.createReadStream("docs/recipes/" + doc);
             const rl = readline.createInterface({
@@ -78,6 +80,17 @@ const config = {
                 continue;
               }
 
+              // extract author
+              if (/title:/.test(line)) {
+                title = line.split(":")[1].trim();
+                continue;
+              }
+
+              if (/publish_date:/.test(line)) {
+                publishDate = line.split(":")[1].trim();
+                continue;
+              }
+
               // extract snippet contents
               if (/```/.test(line)) {
                 recordContents = !recordContents;
@@ -90,7 +103,7 @@ const config = {
             // skip if no author or no contents
             if (!author || !contents.length) continue;
 
-            snippets.push({ author, content: contents.join(""), lastUpdated });
+            snippets.push({ author, content: contents.join(""), lastUpdated, title, publishDate });
           }
 
           return snippets;

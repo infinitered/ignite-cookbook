@@ -8,6 +8,7 @@ tags:
   - Expo Updates
 last_update:
   author: Frank Calise
+publish_date: 2019-01-01
 ---
 
 # Expo Updates

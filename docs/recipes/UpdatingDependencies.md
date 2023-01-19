@@ -6,6 +6,7 @@ tags:
   - Dependencies
 last_update:
   author: Derek Greenberg
+publish_date: 2018-01-01
 ---
 
 If you get a bunch of warnings in the git command output about vulnerabilities, similar to this: `remote: Github found 80 vulnerabilities on <branch>...`, you can examine these vulnerabilities with yarn audit, get a list of outdated packages with yarn outdated, and update each dependency using yarn update

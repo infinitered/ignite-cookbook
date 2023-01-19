@@ -6,6 +6,7 @@ tags:
   - Environment Variables
 last_update:
   author: Frank Calise
+publish_date: 2018-01-01
 ---
 
 # Environment Variables
@@ -35,7 +36,7 @@ const plugins = [
   ["@babel/plugin-proposal-optional-catch-binding"],
   "inline-dotenv",
   "react-native-reanimated/plugin", // NOTE: this must be last in the plugins
-]
+];
 
 const expoConfig = {
   presets: ["babel-preset-expo"],
@@ -43,7 +44,7 @@ const expoConfig = {
     production: {},
   },
   plugins,
-}
+};
 ```
 
 _Note: this configuration also works for a bare react-native app_
@@ -60,8 +61,8 @@ KEEP_IN_MIND="THESE ARE NOT SECURE"
 You'll now have access to your values from the `.env` file
 
 ```javascript
-console.log(process.env.MY_VAR)        // results in: MY_VALUE
-console.log(process.env.KEEP_IN_MIND)  // results in: THESE ARE NOT SECURE
+console.log(process.env.MY_VAR); // results in: MY_VALUE
+console.log(process.env.KEEP_IN_MIND); // results in: THESE ARE NOT SECURE
 ```
 
 If making changes to the environment variables, you'll have to restart your metro server (and possibly clear cache)

@@ -7,6 +7,7 @@ tags:
   - Android
 last_update:
   author: Yulian Glukhenko
+publish_date: 2018-01-01
 ---
 
 ### Why?

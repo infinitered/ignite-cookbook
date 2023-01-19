@@ -6,6 +6,7 @@ tags:
   - AsyncStorage
 last_update:
   author: Frank Calise
+publish_date: 2018-01-01
 ---
 
 # Migrating to MMKV
