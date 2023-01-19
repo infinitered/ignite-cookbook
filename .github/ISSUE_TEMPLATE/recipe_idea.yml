@@ -9,3 +9,21 @@ body:
       description: Also include a description of what is required to write the recipe
     validations:
       required: true
+  - type: markdown
+    attributes:
+      label: Required Front-matter for recipes
+      description: Whenever this idea 
+      value: |
+      ```
+        ---
+          title: Recipe Title
+          description: Recipe Description
+          tags:
+            - Relevant Tag
+          last_update:
+            author: Author Name
+          publish_date: Date when the recipe PR is created
+        ---
+      ```
+      The above code block should be placed at the top of the recipe post.
+
