@@ -145,7 +145,7 @@ function FreshRecipes() {
           </Link>
         );
       })}
-      <Link to="/docs/recipes" className={styles.viewAllRecipes}>
+      <Link to="/docs/intro" className={styles.viewAllRecipes}>
         View all recipes
       </Link>
     </div>
