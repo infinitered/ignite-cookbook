@@ -1,6 +1,6 @@
 name: Recipe Idea
 description: For new recipe ideas
-labels: 'new recipe'
+labels: ['new recipe']
 
 body:
   - type: textarea
@@ -11,19 +11,18 @@ body:
       required: true
   - type: markdown
     attributes:
-      label: Required Front-matter for recipes
-      description: Whenever this idea 
       value: |
-      ```
-        ---
-          title: Recipe Title
-          description: Recipe Description
-          tags:
-            - Relevant Tag
-          last_update:
-            author: Author Name
-          publish_date: Date when the recipe PR is created
-        ---
-      ```
-      The above code block should be placed at the top of the recipe post.
+        Required front-matter for recipe docs:
+        ```
+           ---
+             title: Recipe Title
+             description: Recipe Description
+             tags:
+               - Relevant Tag
+             last_update:
+               author: Author Name
+             publish_date: Date when the recipe PR is created
+           ---
+        ```
+        The above code block should be placed at the top of the recipe post.
 

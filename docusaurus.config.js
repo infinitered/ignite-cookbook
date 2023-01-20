@@ -64,7 +64,8 @@ const config = {
 
             let author = ""; // Do we w÷nt to use the author from the doc or git log?
             let title = "";
-            let publishDate = "";
+            let publish_date = "";
+            const doc_name = doc;
             const contents = [];
             const input = fs.createReadStream("docs/recipes/" + doc);
             const rl = readline.createInterface({
@@ -80,14 +81,15 @@ const config = {
                 continue;
               }
 
-              // extract author
+              // extract title
               if (/title:/.test(line)) {
                 title = line.split(":")[1].trim();
                 continue;
               }
 
+              // extract publish_date
               if (/publish_date:/.test(line)) {
-                publishDate = line.split(":")[1].trim();
+                publish_date = line.split(":")[1].trim();
                 continue;
               }
 
@@ -103,7 +105,7 @@ const config = {
             // skip if no author or no contents
             if (!author || !contents.length) continue;
 
-            snippets.push({ author, content: contents.join(""), lastUpdated, title, publishDate });
+            snippets.push({ author, content: contents.join(""), lastUpdated, title, publish_date, doc_name });
           }
 
           return snippets;
