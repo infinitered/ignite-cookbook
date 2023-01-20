@@ -20,6 +20,7 @@ const NewSection = () => {
       author: string;
       publish_date: string;
       title: string;
+      doc_name: string;
     }[];
   };
 
@@ -46,7 +47,7 @@ const NewSection = () => {
         </p>
         <Link
           className={styles.notificationLink}
-          to={`/docs/recipes/${mostRecentRecipe.title.replace(/\s+/g, "")}`}
+          to={`/docs/recipes/${mostRecentRecipe.doc_name.slice(0, -3)}`}
         >
           <b className={styles.notificationLinkText}>View recipe</b>
           <Arrow.default />
@@ -111,6 +112,7 @@ function FreshRecipes() {
       author: string;
       publish_date: string;
       title: string;
+      doc_name: string;
     }[];
   };
 
@@ -123,10 +125,9 @@ function FreshRecipes() {
     <div className={styles.freshSection}>
       <p className={styles.freshSectionHeader}>Freshly added to the cookbook</p>
       {mostRecentRecipes.slice(0, 4).map((recipe) => {
-        console.log(recipe);
         return (
           <Link
-            to={`/docs/recipes/${recipe.title.replace(/\s+/g, "")}`}
+            to={`/docs/recipes/${recipe.doc_name.slice(0, -3)}`}
             className={styles.recipeWrapper}
           >
             {moment(recipe.publish_date).diff(moment(), "days") * -1 < 31 && (
