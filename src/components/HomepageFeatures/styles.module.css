@@ -346,8 +346,8 @@
 }
 
 .circleFaceTwo {
-  opacity: 1;
-  transform: scale(1);
+  opacity: 1 !important;
+  transform: scale(1) !important;
 }
 
 .circleFaceThreeInitial {
@@ -360,8 +360,8 @@
 }
 
 .circleFaceThree {
-  opacity: 1;
-  transform: scale(1);
+  opacity: 1 !important;
+  transform: scale(1) !important;
 }
 
 @media screen and (max-width: 1350px) {
