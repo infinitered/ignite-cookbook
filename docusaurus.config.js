@@ -116,6 +116,9 @@ const config = {
         },
       };
     },
+    [require.resolve("@cmfcmf/docusaurus-search-local"), {
+      indexBlog: false,
+    }],
   ],
   presets: [
     [
@@ -157,6 +160,10 @@ const config = {
           //   html: '<div class="hover-underline">Get started</div>',
           //   to: "https://ignitecookbook.com"
           // },
+          {
+            type: 'search',
+            position: 'right',
+          },
           {
             type: 'doc',
             docId: 'intro',
