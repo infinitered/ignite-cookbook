@@ -375,6 +375,10 @@
     width: 90% !important;
     padding: 0 !important;
   }
+  
+  [class*='searchBox'] {
+    display: none !important;
+  }
 }
 
 #__docusaurus {
