@@ -181,7 +181,7 @@ const config = {
             type: 'dropdown',
             html: ` <div class="hover-underline">
                       Community
-                      <img src="/ignite-cookbook/img/caret-down.svg" alt="dropdown" class="icon" />
+                      <img src="/img/caret-down.svg" alt="dropdown" class="icon" />
                     </div>
                   `,
             position: 'right',
@@ -190,7 +190,7 @@ const config = {
                 html: ` <div>
                           <div class="dropdown-item  hover-underline">
                             Slack community
-                            <img src="/ignite-cookbook/img/arrow.svg" alt="dropdown" class="icon" />
+                            <img src="/img/arrow.svg" alt="dropdown" class="icon" />
                           </div>
                           <div class="dropdown-item-description">
                             <p>Join a growing React Native community with 2,000 developers and counting.<p>
@@ -203,7 +203,7 @@ const config = {
                 html: ` <div>
                           <div class="dropdown-item  hover-underline">
                             Submit an idea
-                            <img src="/ignite-cookbook/img/arrow.svg" alt="dropdown" class="icon" />
+                            <img src="/img/arrow.svg" alt="dropdown" class="icon" />
                           </div>
                           <div class="dropdown-item-description">
                             <p>Have an recipe idea for the cookbook? Contribute your ideas on GitHub!<p>

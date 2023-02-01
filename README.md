@@ -33,9 +33,9 @@
 
 ### Some of the recipes you'll find in the Ignite Cookbook:
 
-- [Staying With Expo](https://infinitered.github.io/ignite-cookbook/docs/recipes/StayingWithExpo)
-- [Pristine Expo Project](https://infinitered.github.io/ignite-cookbook/docs/recipes/PristineExpoProject)
-- [Add Component Tests to Component Generator](https://infinitered.github.io/ignite-cookbook/docs/recipes/GenerateComponentTests)
-- [Using Screen Readers](https://infinitered.github.io/ignite-cookbook/docs/recipes/UsingScreenReaders)
-- [CircleCI CD Setup](https://infinitered.github.io/ignite-cookbook/docs/recipes/CircleCIRNSetup)
+- [Staying With Expo](https://infinitered.github.io/docs/recipes/StayingWithExpo)
+- [Pristine Expo Project](https://infinitered.github.io/docs/recipes/PristineExpoProject)
+- [Add Component Tests to Component Generator](https://infinitered.github.io/docs/recipes/GenerateComponentTests)
+- [Using Screen Readers](https://infinitered.github.io/docs/recipes/UsingScreenReaders)
+- [CircleCI CD Setup](https://infinitered.github.io/docs/recipes/CircleCIRNSetup)
 - And Many More!!
