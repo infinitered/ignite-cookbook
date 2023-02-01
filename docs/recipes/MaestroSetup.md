@@ -15,10 +15,6 @@ publish_date: 2023-01-06
 
 E2E testing is a critical part of any application but it can be difficult to set up and maintain. Maestro is a tool that promises to be easy to set up and maintain e2e tests. This recipe will walk you through setting up Maestro in your Ignite project.
 
-> ##### Note
->
-> Detox is the default e2e testing tool in Ignite. Should you choose to use Maestro, you will need to remove Detox from your project. There will be a section at the end of this recipe that will walk you through removing Detox.
-
 ## Maestro Installation
 
 We're going to start by installing Maestro via the terminal. To do this, we'll need to run the following command:
@@ -90,5 +86,40 @@ Let's create another flow that will run the login flow and then navigate to the 
 Go ahead and create a flow called `FavoritePodcast.yaml` and add the following to it:
 
 ```yaml
+# flow: run the login flow and then navigate to the demo podcast list screen, favorite a podcast, and then switch the list to only be favorites.
 
+appId: com.maestroapp
+env:
+  TITLE: "RNR 257 - META RESPONDS! How can we improve React Native, part 2"
+
+---
+- runFlow: Login.yaml
+- tapOn: "Podcast, tab, 3 of 4"
+- assertVisible: "React Native Radio episodes"
+- tapOn:
+    text: "Switch on to only show favorites"
+- assertVisible: "This looks a bit empty"
+- tapOn:
+    text: "Switch on to only show favorites"
+- longPressOn: ${TITLE}
+- tapOn:
+    text: "Switch on to only show favorites"
+- assertVisible: ${TITLE}
 ```
+
+We did a few things new here. Let's take a look at what they are:
+
+1. We added an `env` section to our flow. This allows us to set environment variables that we can use in our flow. In this case, we're setting the title of the podcast we want to favorite.
+2. We added a `runFlow` action. This action allows us to run another flow from within our flow. In this case, we're running the `Login.yaml` flow before we run the rest of our flow.
+3. We added a `longPressOn` action. This action allows us to long press on an element. In this case, we're long pressing on the podcast we want to favorite, we're able to do this because of the accessability action that's associated with the Podcast Card.
+4. The text "Switch on to only show favorites" is the accessibility label passed to the Toggle component. Maestro identifies accessibility labels as text as long as that element does not have any text children.
+
+> If you're running these tests on an iOS simulator, you may need to add `accessibilityLabel: episode.title,` to line 180 of `DemoPodcastListScreen.tsx` in your Ignite project.
+
+## Conclusion
+
+Maestro is a great tool for e2e testing. It's easy to set up and maintain. It's also easy to add to your Ignite project. If you want to check out how to use their other features, like Maestro cloud & Maestro Studio, check out their [documentation](https://maestro.mobile.dev/).
+
+> ## Notes
+>
+> Detox is the default e2e testing tool in Ignite. Should you choose to use Maestro, you will need to remove Detox from your project.
