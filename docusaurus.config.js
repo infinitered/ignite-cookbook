@@ -13,7 +13,7 @@ const config = {
   title: "Ignite Cookbook for React Native",
   tagline: "Cooking up some cool recipes in Ignite for React Native!",
   url: "https://infinitered.github.io",
-  baseUrl: "/ignite-cookbook/",
+  baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
