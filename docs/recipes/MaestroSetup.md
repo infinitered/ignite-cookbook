@@ -13,7 +13,7 @@ publish_date: 2023-01-06
 
 ## Overview
 
-E2E testing is a critical part of any application but it can be difficult to set up and maintain. [Maestro](https://maestro.mobile.dev/) is a tool that promises to be easy to set up and maintain e2e tests. This recipe will walk you through setting up Maestro in your Ignite project.
+End-to-end (e2e) testing is a critical part of any application but it can be difficult to set up and maintain. [Maestro](https://maestro.mobile.dev/) is a tool that promises to be easy to set up and maintain e2e tests. This recipe will walk you through setting up Maestro in your Ignite project.
 
 ## Maestro Installation
 
@@ -22,6 +22,8 @@ We're going to start by installing Maestro via the terminal. To do this, we'll n
 ```bash
     curl -Ls "https://get.maestro.mobile.dev" | bash
 ```
+
+If you run into any issues, check out the [Maestro cli installation guide](https://maestro.mobile.dev/getting-started/installing-maestro#installing-the-cli) for more information.
 
 Once the installation is complete, you'll be ready to create your first Maestro flow!
 
@@ -37,7 +39,9 @@ With this flow we want to open up our app and then login with the default creden
 # Open up our app and use the default credentials to login
 # and navigate to the demo screen
 
-appId: com.maestroapp # the app id of the app we want to test, in my case it's the com.maestroapp
+appId: com.maestroapp # the app id of the app we want to test
+# You can find the appId of an Ignite app in the `app.json` file
+# as the "package" under the "android" section and "bundleIdentifier" under the "ios" section
 ---
 - clearState # clears the state of our app (navigation and authentication)
 - launchApp # launches the app
@@ -57,7 +61,7 @@ launchApp - This action launches our app specified with the `appId` in our flow.
 assertVisible - This assertion checks to see if the text we pass in is visible on the screen.
 tapOn - This action taps on the specified element. In our case, we're tapping on the text we pass in.
 
-To run our flow we can `cd` into our `maestro` folder and simply run the following command:
+To run our flow we can `cd` into our `.maestro` folder and simply run the following command:
 
 ```bash
     maestro test Login.yaml
@@ -81,7 +85,14 @@ Let's add another flow to see what else we can do with Maestro!
 
 ## Let's see what else Maestro can do
 
-Let's create another flow that will run the login flow and then navigate to the demo podcast list screen, favorite a podcast, and then switch the list to only be favorites.
+Let's create a more advanded flow that spans across multiple screens, we'll want to accomplish the following:
+
+1. Use environment variables
+2. Run the login flow
+3. Navigate to the demo podcast list screen
+4. Favorite a podcast
+5. Switch the list to only be favorites
+6. Use accessibility labels to find elements
 
 Go ahead and create a flow called `FavoritePodcast.yaml` and add the following to it:
 
@@ -122,4 +133,4 @@ Maestro is a great tool for e2e testing. It's easy to set up and maintain. It's 
 
 > ## Notes
 >
-> Detox is the default e2e testing tool in Ignite. Should you choose to use Maestro, you will need to remove Detox from your project.
+> Detox is the default e2e testing tool in Ignite. Should you choose to use Maestro, remove Detox from your project.
