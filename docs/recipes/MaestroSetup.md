@@ -13,7 +13,7 @@ publish_date: 2023-01-06
 
 ## Overview
 
-E2E testing is a critical part of any application but it can be difficult to set up and maintain. Maestro is a tool that promises to be easy to set up and maintain e2e tests. This recipe will walk you through setting up Maestro in your Ignite project.
+E2E testing is a critical part of any application but it can be difficult to set up and maintain. [Maestro](https://maestro.mobile.dev/) is a tool that promises to be easy to set up and maintain e2e tests. This recipe will walk you through setting up Maestro in your Ignite project.
 
 ## Maestro Installation
 
