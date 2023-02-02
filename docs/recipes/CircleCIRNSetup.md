@@ -11,8 +11,6 @@ publish_date: 2022-10-09
 
 This document shows the steps necessary to set up CircleCI automatic continuous integration testing and automatic Fastlane beta builds upon successfully merging a pull request.
 
-Note: there is some experimental information about using Github Actions at the end of this article.
-
 ### First Things First
 
 1. Write Tests
