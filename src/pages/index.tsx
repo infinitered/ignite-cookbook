@@ -47,7 +47,7 @@ const NewSection = () => {
         </p>
         <Link
           className={styles.notificationLink}
-          to={`/docs/recipes/${mostRecentRecipe.doc_name.split(".")[0]}}`}
+          to={`/docs/recipes/${mostRecentRecipe.doc_name.split(".")[0]}`}
         >
           <b className={styles.notificationLinkText}>View recipe</b>
           <Arrow.default />
