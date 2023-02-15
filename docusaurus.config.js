@@ -105,7 +105,14 @@ const config = {
             // skip if no author or no contents
             if (!author || !contents.length) continue;
 
-            snippets.push({ author, content: contents.join(""), lastUpdated, title, publish_date, doc_name });
+            snippets.push({
+              author,
+              content: contents.join(""),
+              lastUpdated,
+              title,
+              publish_date,
+              doc_name,
+            });
           }
 
           return snippets;
@@ -116,9 +123,12 @@ const config = {
         },
       };
     },
-    [require.resolve("@cmfcmf/docusaurus-search-local"), {
-      indexBlog: false,
-    }],
+    [
+      require.resolve("@cmfcmf/docusaurus-search-local"),
+      {
+        indexBlog: false,
+      },
+    ],
   ],
   presets: [
     [
@@ -161,30 +171,30 @@ const config = {
           //   to: "https://ignitecookbook.com"
           // },
           {
-            type: 'search',
-            position: 'right',
+            type: "search",
+            position: "right",
           },
           {
-            type: 'doc',
-            docId: 'intro',
-            position: 'right',
+            type: "doc",
+            docId: "intro",
+            position: "right",
             html: '<div class="hover-underline">Recipes</div>',
           },
           {
-            position: 'right',
+            position: "right",
             html: '<div class="hover-underline">Boilerplate</div>',
-            to: "https://github.com/infinitered/ignite"
+            to: "https://github.com/infinitered/ignite",
           },
           {
             //override CSS only for this last item
-            style: {marginRight: '0px'},
-            type: 'dropdown',
+            style: { marginRight: "0px" },
+            type: "dropdown",
             html: ` <div class="hover-underline">
                       Community
                       <img src="/img/caret-down.svg" alt="dropdown" class="icon" />
                     </div>
                   `,
-            position: 'right',
+            position: "right",
             items: [
               {
                 html: ` <div>
@@ -197,7 +207,7 @@ const config = {
                           </div>
                         </div>
                       `,
-                to: 'https://join.slack.com/t/infiniteredcommunity/shared_invite/zt-1e1gob8vn-pcFjKM~n1c~aXFsTnvHpdg',
+                to: "https://join.slack.com/t/infiniteredcommunity/shared_invite/zt-1e1gob8vn-pcFjKM~n1c~aXFsTnvHpdg",
               },
               {
                 html: ` <div>
@@ -210,7 +220,7 @@ const config = {
                           </div>
                         </div>
                       `,
-                to: 'https://github.com/infinitered/ignite-cookbook/issues/new?assignees=&labels=new+recipe&template=recipe_idea.yml',
+                to: "https://github.com/infinitered/ignite-cookbook/issues/new?assignees=&labels=new+recipe&template=recipe_idea.yml",
               },
             ],
           },
@@ -275,6 +285,7 @@ const config = {
           {
             className: "code-block-success-line",
             line: "success-line",
+            block: { start: "success-line-start", end: "success-line-end" },
           },
         ],
       },
