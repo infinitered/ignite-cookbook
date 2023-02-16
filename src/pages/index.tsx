@@ -135,7 +135,7 @@ function FreshRecipes() {
       {mostRecentRecipes.slice(0, 4).map((recipe) => {
         return (
           <Link
-            to={`/docs/recipes/${recipe.doc_name.slice(0, -3)}`}
+            to={`/docs/recipes/${recipe.doc_name.split(".")[0]}`}
             className={styles.recipeWrapper}
           >
             {moment(recipe.publish_date).diff(moment(), "days") * -1 < 31 && (
