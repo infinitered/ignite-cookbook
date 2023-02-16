@@ -6,7 +6,7 @@ tags:
   - testing
 last_update:
   author: Dan Edwards
-publish_date: 2023-01-06
+publish_date: 2023-02-01
 ---
 
 # Setting Up Maestro in Ignite
