@@ -1,0 +1,716 @@
+---
+title: SelectField using `react-native-bottom-sheet`
+description: Extending Ignite's TextField to be used as a SelectField with react-native-bottom-sheet
+tags:
+  - TextField
+  - SelectField
+  - UI
+last_update:
+  author: Yulian Glukhenko
+publish_date: 2023-02-15
+---
+
+import ReactPlayer from "react-player";
+
+# SelectField using `react-native-bottom-sheet`
+
+In this guide, we'll be creating a `SelectField` component by extending the `TextField` with a scrollable options View and additional props to handle its customization.
+
+<ReactPlayer
+  width="100%"
+  controls
+  url="https://user-images.githubusercontent.com/1775841/219038677-bcc9c61d-1776-4aad-bb50-1e932721bc04.mp4"
+/>
+
+We will be using the [`react-native-bottom-sheet`](https://gorhom.github.io/react-native-bottom-sheet/) library for the options list, the `ListItem` component for displaying individual options, and the `TextField` component for opening the options list and displaying selected options.
+
+There are many ways you can setup `react-native-bottom-sheet` to function as a `Picker`. We'll keep it simple - pressing the `TextField` will open the options-list. Pressing the option(s) will update the value via callback. You can customize this to fit your usecase.
+
+## 1. Installation
+
+Let's start by installing the necessary dependencies. You can see complete installation instructions for `react-native-bottom-sheet` [here](https://gorhom.github.io/react-native-bottom-sheet/).
+
+```bash
+yarn add @gorhom/bottom-sheet@^4
+```
+
+The library requires the `react-native-gesture-handler` and `react-native-reanimated` dependencies, but if you're using a newer Ignite boilerplate version, those should already be installed. Just check your `package.json` file and if you don't see them, follow these steps:
+
+```bash
+yarn add react-native-reanimated react-native-gesture-handler
+# or
+expo install react-native-reanimated react-native-gesture-handler
+```
+
+## 2. Create the `SelectField.tsx` Component File
+
+Instead of extending the `TextField` component with more props and functionality, we'll be creating a wrapper for the `TextField` component that contains additional functionality.
+
+We'll start by creating a new file in the components directory.
+
+```bash
+touch ./app/components/SelectField.tsx
+```
+
+Let's add some preliminary code to the file. Since the `TextInput` has its own touch handlers for focus, we'll want to disable that by wrapping it in a `View` with no pointer-events. The new `TouchableOpacity` will trigger our options sheet.
+
+```tsx
+import React, { forwardRef, Ref, useImperativeHandle } from "react";
+import { View, TouchableOpacity } from "react-native";
+import { TextField, TextFieldProps } from "./TextField";
+
+export interface SelectFieldProps
+  extends Omit<
+    TextFieldProps,
+    "ref" | "onValueChange" | "onChange" | "value"
+  > {}
+export interface SelectFieldRef {}
+
+export const SelectField = forwardRef(function SelectField(
+  props: SelectFieldProps,
+  ref: Ref<SelectFieldRef>
+) {
+  const { ...TextFieldProps } = props;
+
+  const disabled =
+    TextFieldProps.editable === false || TextFieldProps.status === "disabled";
+
+  useImperativeHandle(ref, () => ({}));
+
+  return (
+    <>
+      <TouchableOpacity activeOpacity={1}>
+        <View pointerEvents="none">
+          <TextField {...TextFieldProps} />
+        </View>
+      </TouchableOpacity>
+    </>
+  );
+});
+```
+
+<details>
+  <summary>Demo Preview</summary>
+
+```tsx
+import { SelectField } from "../components/SelectField";
+
+function FavoriteNBATeamsScreen() {
+  return (
+    <SelectField
+      label="NBA Team(s)"
+      helper="Select your team(s)"
+      placeholder="e.g. Trail Blazers"
+    />
+  );
+}
+```
+
+![yulolimum-capture-2023-02-15--02-34-52](https://user-images.githubusercontent.com/1775841/219003766-5331678b-a5b9-42fb-b393-3851bf2ebeaf.jpg)
+
+</details>
+
+## 3. Add New Props and Customize the TextField
+
+Now, we can start modifying the code we added in the previous step to support multiple options as well as making the `TextField` _look_ like a `SelectField`.
+
+### Add a Caret Icon Accessory
+
+Let's add an accessory to the input to make it look like a `SelectField`.
+
+```tsx
+<TextField
+  {...TextFieldProps}
+  RightAccessory={(props) => (
+    <Icon icon="caretRight" containerStyle={props.style} />
+  )}
+/>
+```
+
+### Add Props
+
+The `options` prop can be any structure that you want (e.g. flat array of values, object where the key is the option value and the value is the label, etc). For our `SelectField` guide, we'll be doing an array of objects.
+
+We will support multi-select (by default) as well as a single select.
+
+We will override the `value` prop.
+
+A new `renderValue` prop can be used to format and display a custom text value. This can be useful when the `TextField` is not multiline, but your `SelectField` is.
+
+Additionally, we'll add a new event callback called `onSelect` since that makes more sense for a `SelectField`. However, feel free to override `TextField`'s `onChange` if you prefer.
+
+```tsx
+export interface SelectFieldProps
+  extends Omit<TextFieldProps, "ref" | "onValueChange" | "onChange"> {
+  value?: string[];
+  renderValue?: (value: string[]) => string;
+  onSelect?: (newValue: string[]) => void;
+  multiple?: boolean;
+  options: { label: string; value: string }[];
+}
+
+// ...
+
+const {
+  value = [],
+  renderValue,
+  onSelect,
+  options = [],
+  multiple = true,
+  ...TextFieldProps
+} = props;
+```
+
+### Add Logic to Display Selected Options
+
+We'll add some code to display the selected options inside the `TextField`. This will attempt to use the `renderValue` formatter function and fallback to a joined string.
+
+```tsx
+const valueString =
+  renderValue?.(value) ??
+  value
+    .map((v) => options.find((o) => o.value === v)?.label)
+    .filter(Boolean)
+    .join(", ");
+```
+
+### Full Code For This Step
+
+```tsx
+import React, { forwardRef, Ref, useImperativeHandle } from "react";
+import { TouchableOpacity, View } from "react-native";
+// success-line
+import { Icon } from "./Icon";
+import { TextField, TextFieldProps } from "./TextField";
+
+export interface SelectFieldProps
+  extends Omit<TextFieldProps, "ref" | "onValueChange" | "onChange" | "value"> {
+  // success-line-start
+  value?: string[];
+  renderValue?: (value: string[]) => string;
+  onSelect?: (newValue: string[]) => void;
+  multiple?: boolean;
+  options: { label: string; value: string }[];
+  // success-line-end
+}
+export interface SelectFieldRef {}
+
+export const SelectField = forwardRef(function SelectField(
+  props: SelectFieldProps,
+  ref: Ref<SelectFieldRef>
+) {
+  const {
+    // success-line-start
+    value = [],
+    onSelect,
+    renderValue,
+    options = [],
+    multiple = true,
+    // success-line-end
+    ...TextFieldProps
+  } = props;
+
+  const disabled =
+    TextFieldProps.editable === false || TextFieldProps.status === "disabled";
+
+  useImperativeHandle(ref, () => ({}));
+
+  // success-line-start
+  const valueString =
+    renderValue?.(value) ??
+    value
+      .map((v) => options.find((o) => o.value === v)?.label)
+      .filter(Boolean)
+      .join(", ");
+  // success-line-end
+
+  return (
+    <>
+      <TouchableOpacity activeOpacity={1}>
+        <View pointerEvents="none">
+          <TextField
+            {...TextFieldProps}
+            // success-line-start
+            value={valueString}
+            RightAccessory={(props) => (
+              <Icon icon="caretRight" containerStyle={props.style} />
+            )}
+            // success-line-end
+          />
+        </View>
+      </TouchableOpacity>
+    </>
+  );
+});
+```
+
+<details>
+  <summary>Demo Preview</summary>
+
+```tsx
+import { SelectField } from "../components/SelectField";
+
+const teams = [
+  { label: "Hawks", value: "ATL" },
+  { label: "Celtics", value: "BOS" },
+  // ...
+  { label: "Jazz", value: "UTA" },
+  { label: "Wizards", value: "WAS" },
+];
+
+// prettier-ignore
+function FavoriteNBATeamsScreen() {
+  return (
+    <>
+      <SelectField
+        label="NBA Team(s)"
+        helper="Select your team(s)"
+        placeholder="e.g. Trail Blazers"
+        value={["POR", "MEM", "NOP", "CHI", "CLE", "SAS", "MIL", "LAL", "PHX", "WAS"]}
+        options={teams}
+        containerStyle={{ marginBottom: spacing.large }}
+      />
+
+      <SelectField
+        label="NBA Team(s)"
+        helper="Select your team(s)"
+        placeholder="e.g. Trail Blazers"
+        value={["POR", "MEM", "NOP", "CHI", "CLE", "SAS", "MIL", "LAL", "PHX", "WAS"]}
+        options={teams}
+        containerStyle={{ marginBottom: spacing.large }}
+        multiline
+      />
+
+      <SelectField
+        label="NBA Team(s)"
+        helper="Select your team(s)"
+        placeholder="e.g. Trail Blazers"
+        value={["POR", "MEM", "NOP", "CHI", "CLE", "SAS", "MIL", "LAL", "PHX", "WAS"]}
+        options={teams}
+        containerStyle={{ marginBottom: spacing.large }}
+        renderValue={(value) => `Selected ${value.length} Teams`}
+      />
+    </>
+  )
+}
+```
+
+![yulolimum-capture-2023-02-15--03-07-33](https://user-images.githubusercontent.com/1775841/219011088-688696b8-05a6-43e8-8e9b-43578320d70a.jpg)
+
+</details>
+
+## 4. Add the Sheet Components
+
+In this step, we'll be adding the `BottomSheetModal` and related components and setting up the touch-events to show/hide it.
+
+### Add the `BottomSheetModalProvider`
+
+Since we will be using the `BottomSheetModal` component instead of `BottomSheet`, we will need to add a provider to your entry file.
+
+```tsx title="./app/app.tsx"
+//...
+// success-line
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+
+//...
+
+return (
+  <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+    <ErrorBoundary catchErrors={Config.catchErrors}>
+      // success-line
+      <BottomSheetModalProvider>
+        <AppNavigator
+          linking={linking}
+          initialState={initialNavigationState}
+          onStateChange={onNavigationStateChange}
+        />
+        // success-line
+      </BottomSheetModalProvider>
+    </ErrorBoundary>
+  </SafeAreaProvider>
+);
+
+//...
+```
+
+### Add the Necessary Components to `SelectField`
+
+Now we will add the UI components that will display our options. This will be a basic example and can be customized as needed.
+
+```tsx
+// success-line-start
+import {
+  BottomSheetBackdrop,
+  BottomSheetFlatList,
+  BottomSheetFooter,
+  BottomSheetModal,
+} from "@gorhom/bottom-sheet";
+// success-line-end
+import React, { forwardRef, Ref, useImperativeHandle, useRef } from "react";
+import { TouchableOpacity, View, ViewStyle } from "react-native";
+// success-line
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+// success-line
+import { spacing } from "../theme";
+// success-line
+import { Button } from "./Button";
+import { Icon } from "./Icon";
+// success-line
+import { ListItem } from "./ListItem";
+import { TextField, TextFieldProps } from "./TextField";
+
+export interface SelectFieldProps
+  extends Omit<TextFieldProps, "ref" | "onValueChange" | "onChange" | "value"> {
+  value?: string[];
+  renderValue?: (value: string[]) => string;
+  onSelect?: (newValue: string[]) => void;
+  multiple?: boolean;
+  options: { label: string; value: string }[];
+}
+export interface SelectFieldRef {
+  // success-line-start
+  presentOptions: () => void;
+  dismissOptions: () => void;
+  // success-line-end
+}
+
+export const SelectField = forwardRef(function SelectField(
+  props: SelectFieldProps,
+  ref: Ref<SelectFieldRef>
+) {
+  const {
+    value = [],
+    onSelect,
+    renderValue,
+    options = [],
+    multiple = true,
+    ...TextFieldProps
+  } = props;
+  // success-line-start
+  const sheet = useRef<BottomSheetModal>(null);
+  const { bottom } = useSafeAreaInsets();
+  // success-line-end
+
+  const disabled =
+    TextFieldProps.editable === false || TextFieldProps.status === "disabled";
+
+  // success-line
+  useImperativeHandle(ref, () => ({ presentOptions, dismissOptions }));
+
+  const valueString =
+    renderValue?.(value) ??
+    value
+      .map((v) => options.find((o) => o.value === v)?.label)
+      .filter(Boolean)
+      .join(", ");
+
+  // success-line-start
+  function presentOptions() {
+    if (disabled) return;
+    sheet.current?.present();
+  }
+
+  function dismissOptions() {
+    sheet.current?.dismiss();
+  }
+  // success-line-end
+
+  return (
+    <>
+      <TouchableOpacity
+        activeOpacity={1}
+        // success-line
+        onPress={presentOptions}
+      >
+        <View pointerEvents="none">
+          <TextField
+            {...TextFieldProps}
+            value={valueString}
+            RightAccessory={(props) => (
+              <Icon icon="caretRight" containerStyle={props.style} />
+            )}
+          />
+        </View>
+      </TouchableOpacity>
+
+      {/* success-line-start */}
+      <BottomSheetModal
+        ref={sheet}
+        snapPoints={["50%"]}
+        stackBehavior="replace"
+        enableDismissOnClose
+        backdropComponent={(props) => (
+          <BottomSheetBackdrop
+            {...props}
+            appearsOnIndex={0}
+            disappearsOnIndex={-1}
+          />
+        )}
+        footerComponent={
+          !multiple
+            ? undefined
+            : (props) => (
+                <BottomSheetFooter
+                  {...props}
+                  style={$bottomSheetFooter}
+                  bottomInset={bottom}
+                >
+                  <Button
+                    text="Dismiss"
+                    preset="reversed"
+                    onPress={dismissOptions}
+                  />
+                </BottomSheetFooter>
+              )
+        }
+      >
+        <BottomSheetFlatList
+          style={{ marginBottom: bottom + (multiple ? 56 : 0) }}
+          data={options}
+          keyExtractor={(o) => o.value}
+          renderItem={({ item, index }) => (
+            <ListItem
+              text={item.label}
+              topSeparator={index !== 0}
+              style={$listItem}
+            />
+          )}
+        />
+      </BottomSheetModal>
+      {/* success-line-end */}
+    </>
+  );
+});
+
+// success-line-start
+const $bottomSheetFooter: ViewStyle = {
+  paddingHorizontal: spacing.large,
+};
+
+const $listItem: ViewStyle = {
+  paddingHorizontal: spacing.large,
+};
+// success-line-end
+```
+
+<details>
+  <summary>Demo Preview</summary>
+
+![yulolimum-capture-2023-02-15--04-38-11](https://user-images.githubusercontent.com/1775841/219029547-3c92dbdc-5f04-4f02-a82e-0af9392af6ad.gif)
+
+</details>
+
+## 5. Add Selected State to Options and Hook Up Callback
+
+The last step is to add the selected state to our options inside the sheet as well as hook up the callback to change the value.
+
+```tsx
+import {
+  BottomSheetBackdrop,
+  BottomSheetFlatList,
+  BottomSheetFooter,
+  BottomSheetModal,
+} from "@gorhom/bottom-sheet";
+import React, { forwardRef, Ref, useImperativeHandle, useRef } from "react";
+import { TouchableOpacity, View, ViewStyle } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+// success-line
+import { colors, spacing } from "../theme";
+import { Button } from "./Button";
+import { Icon } from "./Icon";
+import { ListItem } from "./ListItem";
+import { TextField, TextFieldProps } from "./TextField";
+
+export interface SelectFieldProps
+  extends Omit<TextFieldProps, "ref" | "onValueChange" | "onChange" | "value"> {
+  value?: string[];
+  renderValue?: (value: string[]) => string;
+  onSelect?: (newValue: string[]) => void;
+  multiple?: boolean;
+  options: { label: string; value: string }[];
+}
+export interface SelectFieldRef {
+  presentOptions: () => void;
+  dismissOptions: () => void;
+}
+
+// success-line-start
+function without<T>(array: T[], value: T) {
+  return array.filter((v) => v !== value);
+}
+// success-line-end
+
+export const SelectField = forwardRef(function SelectField(
+  props: SelectFieldProps,
+  ref: Ref<SelectFieldRef>
+) {
+  const {
+    value = [],
+    onSelect,
+    renderValue,
+    options = [],
+    multiple = true,
+    ...TextFieldProps
+  } = props;
+  const sheet = useRef<BottomSheetModal>(null);
+  const { bottom } = useSafeAreaInsets();
+
+  const disabled =
+    TextFieldProps.editable === false || TextFieldProps.status === "disabled";
+
+  useImperativeHandle(ref, () => ({ presentOptions, dismissOptions }));
+
+  const valueString =
+    renderValue?.(value) ??
+    value
+      .map((v) => options.find((o) => o.value === v)?.label)
+      .filter(Boolean)
+      .join(", ");
+
+  function presentOptions() {
+    if (disabled) return;
+
+    sheet.current?.present();
+  }
+
+  function dismissOptions() {
+    sheet.current?.dismiss();
+  }
+
+  // success-line-start
+  function updateValue(optionValue: string) {
+    if (value.includes(optionValue)) {
+      onSelect?.(multiple ? without(value, optionValue) : []);
+    } else {
+      onSelect?.(multiple ? [...value, optionValue] : [optionValue]);
+      if (!multiple) dismissOptions();
+    }
+  }
+  // success-line-end
+
+  return (
+    <>
+      <TouchableOpacity activeOpacity={1} onPress={presentOptions}>
+        <View pointerEvents="none">
+          <TextField
+            {...TextFieldProps}
+            value={valueString}
+            RightAccessory={(props) => (
+              <Icon icon="caretRight" containerStyle={props.style} />
+            )}
+          />
+        </View>
+      </TouchableOpacity>
+
+      <BottomSheetModal
+        ref={sheet}
+        snapPoints={["50%"]}
+        stackBehavior="replace"
+        enableDismissOnClose
+        backdropComponent={(props) => (
+          <BottomSheetBackdrop
+            {...props}
+            appearsOnIndex={0}
+            disappearsOnIndex={-1}
+          />
+        )}
+        footerComponent={
+          !multiple
+            ? undefined
+            : (props) => (
+                <BottomSheetFooter
+                  {...props}
+                  style={$bottomSheetFooter}
+                  bottomInset={bottom}
+                >
+                  <Button
+                    text="Dismiss"
+                    preset="reversed"
+                    onPress={dismissOptions}
+                  />
+                </BottomSheetFooter>
+              )
+        }
+      >
+        <BottomSheetFlatList
+          style={{ marginBottom: bottom + (multiple ? 56 : 0) }}
+          data={options}
+          keyExtractor={(o) => o.value}
+          renderItem={({ item, index }) => (
+            <ListItem
+              text={item.label}
+              topSeparator={index !== 0}
+              style={$listItem}
+              // success-line-start
+              rightIcon={value.includes(item.value) ? "check" : undefined}
+              rightIconColor={colors.palette.angry500}
+              onPress={() => updateValue(item.value)}
+              // success-line-end
+            />
+          )}
+        />
+      </BottomSheetModal>
+    </>
+  );
+});
+
+const $bottomSheetFooter: ViewStyle = {
+  paddingHorizontal: spacing.large,
+};
+
+const $listItem: ViewStyle = {
+  paddingHorizontal: spacing.large,
+};
+```
+
+And we're done!
+
+<details>
+  <summary>Demo Preview</summary>
+
+```tsx
+import { SelectField } from "../components/SelectField";
+
+const teams = [
+  { label: "Hawks", value: "ATL" },
+  { label: "Celtics", value: "BOS" },
+  // ...
+  { label: "Jazz", value: "UTA" },
+  { label: "Wizards", value: "WAS" },
+];
+
+function FavoriteNBATeamsScreen() {
+  const [selectedTeam, setSelectedTeam] = useState<string[]>([]);
+  const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
+
+  return (
+    <>
+      <SelectField
+        label="NBA Team(s)"
+        helper="Select your team(s)"
+        placeholder="e.g. Trail Blazers"
+        value={selectedTeam}
+        onSelect={setSelectedTeam}
+        options={teams}
+        multiple={false}
+        containerStyle={{ marginBottom: spacing.large }}
+      />
+
+      <SelectField
+        label="NBA Team(s)"
+        helper="Select your team(s)"
+        placeholder="e.g. Trail Blazers"
+        value={selectedTeams}
+        onSelect={setSelectedTeams}
+        options={teams}
+        containerStyle={{ marginBottom: spacing.large }}
+        renderValue={(value) => `Selected ${value.length} Teams`}
+      />
+    </>
+  );
+}
+```
+
+![yulolimum-capture-2023-02-15--05-11-11](https://user-images.githubusercontent.com/1775841/219036892-e7e38288-b859-487d-b51a-ca67f91c83ff.gif)
+
+</details>
