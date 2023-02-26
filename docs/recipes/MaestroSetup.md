@@ -56,15 +56,16 @@ appId: com.maestroapp # the app id of the app we want to test
 
 We're using a few different actions and assertions in this flow. Let's take a look at what they do:
 
-clearState - This action clears the state of our app. This is useful if we want to start from a clean slate.
-launchApp - This action launches our app specified with the `appId` in our flow.
-assertVisible - This assertion checks to see if the text we pass in is visible on the screen.
-tapOn - This action taps on the specified element. In our case, we're tapping on the text we pass in.
+`clearState` - This action clears the state of our app. This is useful if we want to start from a clean slate.
+`launchApp` - This action launches our app specified with the `appId` in our flow.
+`assertVisible` - This assertion checks to see if the text we pass in is visible on the screen.
+`tapOn` - This action taps on the specified element. In our case, we're tapping on the text we pass in.
 
-To run our flow we can `cd` into our `.maestro` folder and simply run the following command:
+To run our flow, first make sure the app is loaded on the simulator (or running via metro through `yarn ios`, for example). Then execute maestro from its test directory with the following command:
 
 ```bash
-    maestro test Login.yaml
+cd .maestro
+maestro test Login.yaml
 ```
 
 And that's it! We've successfully created our first Maestro flow and ran it. You should see something like this in your terminal after running the test:
@@ -102,28 +103,44 @@ Go ahead and create a flow called `FavoritePodcast.yaml` and add the following t
 appId: com.maestroapp
 env:
   TITLE: "RNR 257 - META RESPONDS! How can we improve React Native, part 2"
+  FAVORITES_TEXT: "Switch on to only show favorites"
 
 ---
 - runFlow: Login.yaml
 - tapOn: "Podcast, tab, 3 of 4"
 - assertVisible: "React Native Radio episodes"
 - tapOn:
-    text: "Switch on to only show favorites"
+    text: ${FAVORITES_TEXT}
 - assertVisible: "This looks a bit empty"
 - tapOn:
-    text: "Switch on to only show favorites"
+    text: ${FAVORITES_TEXT}
+- scrollUntilVisible:
+    element:
+      text: ${TITLE}
+    direction: DOWN
+    timeout: 50000
+    speed: 40
+    visibilityPercentage: 100
 - longPressOn: ${TITLE}
+- scrollUntilVisible:
+    element:
+      text: ${FAVORITES_TEXT}
+    direction: UP
+    timeout: 50000
+    speed: 40
+    visibilityPercentage: 100
 - tapOn:
-    text: "Switch on to only show favorites"
+    text: ${FAVORITES_TEXT}
 - assertVisible: ${TITLE}
 ```
 
 We did a few things new here. Let's take a look at what they are:
 
-1. We added an `env` section to our flow. This allows us to set environment variables that we can use in our flow. In this case, we're setting the title of the podcast we want to favorite.
+1. We added an `env` section to our flow. This allows us to set environment variables that we can use in our flow. In this case, we're setting the title of the podcast we want to favorite and the favorites toggle label text.
 2. We added a `runFlow` action. This action allows us to run another flow from within our flow. In this case, we're running the `Login.yaml` flow before we run the rest of our flow.
-3. We added a `longPressOn` action. This action allows us to long press on an element. In this case, we're long pressing on the podcast we want to favorite, we're able to do this because of the accessability action that's associated with the Podcast Card.
-4. The text "Switch on to only show favorites" is the accessibility label passed to the Toggle component. Maestro identifies accessibility labels as text as long as that element does not have any text children.
+3. We added a `scrollUntilVisible` action. This will help us find the episode we are looking for because it won't always be available in the first visible content as new episodes are released. This action is also used to scroll back up to toggle the `Only Show Favorites` switch.
+4. We added a `longPressOn` action. This action allows us to long press on an element. In this case, we're long pressing on the podcast we want to favorite, we're able to do this because of the accessability action that's associated with the Podcast Card.
+5. The text "Switch on to only show favorites" (or env var `${FAVOREITES_TEXT}`) is the accessibility label passed to the Toggle component. Maestro identifies accessibility labels as text as long as that element does not have any text children.
 
 > If you're running these tests on an iOS simulator, you may need to add `accessibilityLabel: episode.title,` to line 180 of `DemoPodcastListScreen.tsx` in your Ignite project.
 
