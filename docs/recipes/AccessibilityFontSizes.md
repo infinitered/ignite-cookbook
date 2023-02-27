@@ -21,7 +21,7 @@ import { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 import { DrawerNavigationOptions } from "@react-navigation/drawer";
 import { Text } from "./Text";
 
-// These constants determine mow much bigger the font size should get based on the user's
+// These constants determine how much bigger the font size should get based on the user's
 // accessibility settings. Even if they turn the dial all the way to 11, we will only ever
 // scale the fonts by these factors. This is to prevent the font size from getting too large
 // and completely breaking the layout.
