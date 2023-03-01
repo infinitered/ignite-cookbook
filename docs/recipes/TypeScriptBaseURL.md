@@ -27,7 +27,9 @@ import { Thing } from "~/components/thing";
 
 ## Project Dependencies
 
-`yarn add -D babel-plugin-root-import`
+```bash
+yarn add -D babel-plugin-root-import
+```
 
 ## TypeScript Configuration Changes
 
@@ -80,9 +82,15 @@ import { colors, spacing } from "~/theme";
 
 Fire up the app and make sure everything still works!
 
-`yarn expo:start`
+```bash
+yarn expo:start
+```
 
-_Note: if you receive an error about not being able to resolve the components, you may have to clear your bundler cache, `yarn expo:start --clear`_
+_Note: if you receive an error about not being able to resolve the components, you may have to clear your bundler cache via_
+
+```bash
+yarn expo:start --clear
+```
 
 ## Resources
 
