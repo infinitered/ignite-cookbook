@@ -1,17 +1,16 @@
 ---
-title: Expo Updates
-description: Setting up Ignite to deployed over-the-air (OTA) updates
+title: EAS Update
+description: Setting up Ignite to deploy over-the-air (OTA) updates via EAS
 tags:
   - Expo
   - expo-updates
   - EAS Update
-  - Expo Updates
 last_update:
   author: Frank Calise
 publish_date: 2023-01-06
 ---
 
-# Expo Updates
+# EAS Update
 
 This guide will teach you how to set up over-the-air (OTA) updates with Expo and EAS Update within an Ignite project.
 
@@ -157,10 +156,11 @@ This will tell Expo to skip checking for updates on load and instead only do it 
 
 ## Notes
 
-Expo SDK updates, native code changes and `app.json` or `app.config.js` changes behave differently, so make sure to read the additional documentation below if that is your goal.
+Upgrading to the next Expo SDK version, native code changes and `app.json` or `app.config.js` changes behave differently, so make sure to read the additional documentation below if that is your goal.
 
 ## More Resources
 
-- [Expo Updates](https://docs.expo.dev/versions/latest/sdk/updates/)
-- [EAS Update](https://docs.expo.dev/eas-update/introduction/)
+- [EAS Update Introduction](https://docs.expo.dev/eas-update/introduction/)
+- [Using EAS Update with EAS Build](https://docs.expo.dev/build/updates/)
+- [Expo Updates Library Docs](https://docs.expo.dev/versions/latest/sdk/updates/)
 - [Running builds on your own infrastructure](https://docs.expo.dev/build-reference/local-builds/)
