@@ -19,16 +19,27 @@ Follow the [Pristine Expo Project](./PristineExpoProject.md) recipe first to mak
 
 You'll also need `eas-cli` globally installed and and an [Expo account](https://expo.dev/signup) if you don't already have one.
 
-`npm install -g eas-cli`
+```console
+npm install -g eas-cli
+```
 
 *Optional*: You can use EAS builds for free, however there is a queue time to wait for your build. It is possible to [build locally](https://docs.expo.dev/build-reference/local-builds/), however you'll need a couple of other dependencies installed for proper iOS and Android builds (if you can already build iOS/Android natively, you're probably good to go!)
 
-**iOS**
-`brew install cocoapods`
-`brew install fastlane`
+<details>
+<summary><strong>iOS</strong></summary>
 
-**Android**
+```console
+brew install cocoapods fastlane
+```
+
+</details>
+
+<details>
+<summary><strong>Android</strong></summary>
+
 SDK and NDK
+
+</details>
 
 ## Steps
 
@@ -36,8 +47,13 @@ SDK and NDK
 
 From within your project directory, run the following:
 
-- `yarn add expo-dev-client`
-- `eas build:configure`
+```console
+yarn add expo-dev-client
+```
+
+```console
+eas build:configure
+```
 
 ### 2. Build Profile
 
@@ -71,17 +87,23 @@ Modify the newly generated `eas.json` to configure a `preview` build profile
 
 **Using EAS build servers**
 
-`eas build --profile preview`
+```console
+eas build --profile preview
+```
 
-Once complete you can download the Android APK or iOS tar file.
+Once complete, you can download the Android `apk` or iOS `tar` file.
 
 **Build Locally**
 
-`eas build --profile preview --local`
+```console
+eas build --profile preview --local
+```
 
 Your app will be saved in the root directory unless you specify the desired directory with the environment variable `EAS_LOCAL_BUILD_ARTIFACTS_DIR`, for example:
 
-`EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile preview --local`
+```console
+EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile preview --local
+```
 
 This will save your `*.apk` or `*.tar.gz` (containing the `.app`) in the `[project-dir]/build/` directory.
 
@@ -89,17 +111,28 @@ This will save your `*.apk` or `*.tar.gz` (containing the `.app`) in the `[proje
 
 With the builds complete, let's add them to your emulator or simulator.
 
-**Android**
-
-Drag the APK onto your emulator or install it on a device (making sure your settings are appropriate for "Install unknown apps")
-
-**iOS**
+<details>
+<summary><strong>iOS</strong></summary>
 
 - `tar zxvf build/build-*.tar.gz -C build/` (adapt this command depending on where you saved it to)
 - Drag the `PizzaApp.app` onto your iOS simulator
 
+</details>
+
+<details>
+<summary><strong>Android</strong></summary>
+
+Drag the APK onto your emulator or install it on a device (making sure your settings are appropriate for "Install unknown apps")
+
+</details>
+
 You can now develop locally like you normally would with Expo Go, with one last adjustment to the `start` script.
 
-In `package.json` modify `"start": "expo start"` to `"start": "expo start --dev-client"`.
+In `package.json` modify the start script to use the `expo-dev-client` package.
+
+```diff
+--"start": "expo start"
+++"start": "expo start --dev-client"
+```
 
 Run `yarn start` in your terminal so metro starts up. Follow the Expo CLI to boot up either the Android or iOS app. You'll notice Expo Go has not launched in this case, but something that looks very similar (you can still shake the device for developer menu, etc).
