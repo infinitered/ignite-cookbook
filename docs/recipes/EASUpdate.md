@@ -20,7 +20,9 @@ Follow the [Pristine Expo Project](./PristineExpoProject.md) recipe first to mak
 
 You'll also need `eas-cli` globally installed and and an [Expo account](https://expo.dev/signup) if you don't already have one.
 
-`npm install -g eas-cli`
+```console
+npm install -g eas-cli
+```
 
 ## Steps
 

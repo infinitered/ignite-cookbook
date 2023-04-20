@@ -20,7 +20,7 @@ End-to-end (e2e) testing is a critical part of any application but it can be dif
 We're going to start by installing Maestro via the terminal. To do this, we'll need to run the following command:
 
 ```bash
-    curl -Ls "https://get.maestro.mobile.dev" | bash
+curl -Ls "https://get.maestro.mobile.dev" | bash
 ```
 
 If you run into any issues, check out the [Maestro cli installation guide](https://maestro.mobile.dev/getting-started/installing-maestro#installing-the-cli) for more information.

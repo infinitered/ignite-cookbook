@@ -33,7 +33,7 @@ By default, Ignite provides a `ignite/templates/component/NAME.tsx.ejs` template
 
 Add the following file to `ignite/templates/component/NAME.spec.tsx.ejs`
 
-```
+```ejs
 ---
 destinationDir: app/components/specs
 ---

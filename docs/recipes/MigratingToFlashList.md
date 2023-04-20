@@ -42,7 +42,7 @@ import { FlashList } from "@shopify/flash-list";
 
 Find the `FlatList` being used in the returned JSX and swap it out for `FlashList`
 
-```jsx
+```tsx
 return (
   <Screen
     preset="fixed"
@@ -71,14 +71,14 @@ Run the app in the iOS simulator to test the changes, either `yarn expo:ios` or 
 
 You'll get a warning out in the terminal, something similar to:
 
-```
+```console
  WARN  estimatedItemSize FlashList prop is not defined - based on current configuration you can set
  it to 184 to optimize list performance. Refer to FlashList documentation for more details.
 ```
 
 Simply add that prop to the `FlashList` component with the suggested values:
 
-```jsx
+```tsx
 <FlashList<Episode>
  data={episodeStore.episodesForList}
  // highlight-next-line
@@ -89,14 +89,14 @@ Simply add that prop to the `FlashList` component with the suggested values:
 
 Reload the app and take note that the warning message has changed this time:
 
-```
+```console
  WARN  FlashList will ignore horizontal padding in case of vertical lists and vertical padding
  if the list is horizontal. If you need to have it apply relevant padding to your items instead.
 ```
 
 This happens to be style related for the case of the demo screen, but let's solve it since you'll likely encounter something in your actual application. Update the styles near the bottom of the file:
 
-```jsx
+```tsx
 const $flatListContentContainer: ViewStyle = {
   // highlight-next-line
   // removed paddingHoriztonal here
