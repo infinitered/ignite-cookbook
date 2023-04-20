@@ -22,22 +22,33 @@ Keep in mind you may have to adopt the following steps for a different package m
 
 ### Project Initialization
 
-- `npx ignite-cli new PizzaApp --yes`
-- `cd PizzaApp`
+```terminal
+npx ignite-cli new PizzaApp --yes
+cd PizzaApp
+```
 
 ### Filesystem Changes
 
-- `rm -rf android`
-- `rm -rf ios`
-- `rm index.js` - Expo's entry point is App.js
-- `rm metro.config.js` - Expo will use the default
+```terminal
+rm -rf android
+rm -rf ios
+rm index.js          # Expo's entry point is App.js
+rm metro.config.js   # Expo will use the default
+```
 
 ### Package Changes
 
-- `yarn remove react-native-bootsplash` - removes a native library pertaining to the splash screen (this will be handled via `expo-splash-screen`)
-- `yarn remove expo-modules-core`
+```terminal
+yarn remove react-native-bootsplash
+```
 
-### package.json Script Updates
+Removes a native library pertaining to the splash screen (this will be handled via `expo-splash-screen`)
+
+```terminal
+yarn remove expo-modules-core
+```
+
+### `package.json` Script Updates
 
 These changes are optional as you can continue to use the prefixed `expo:` commands, however you might just want a cleaned up `scripts` section of your `package.json`.
 
