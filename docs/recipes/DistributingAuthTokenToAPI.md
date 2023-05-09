@@ -2,7 +2,7 @@
 title: Distributing Auth Token to APIs
 description: Use token stored in Authentication Store with API Sauce
 tags:
-  - Mobx State Tree
+  - Authentication
   - Apisauce
   - Guide
 last_update:
@@ -12,13 +12,13 @@ publish_date: 2023-05-09
 
 # Distributing Auth Token to APISauce
 
-Building off of the Ignite Boilerplate, this recipe will show you how to connect your Mobx State Tree Authentication Store with an APISauce instance to make authenticating your API requests a breeze.
+Building off of the Ignite Boilerplate, this recipe will show you how to connect your Mobx State Tree Authentication Store with an Apisauce instance to make authenticating your API requests a breeze.
 
 ## Review of API Instance and Auth Store
 
 To start off let's quickly review the boilerplate Auth Store and API Instance.
 
-In `app/services/api/api.ts` we have an example API class with an export of a singleton instance of that class at the end of the file. This api singleton what we're going to use to update the apiSauce configuration on the instance outside of this file.
+In `app/services/api/api.ts` we have an example API class with an export of a singleton instance of that class at the end of the file. This api singleton is what we're going to use to update the apisauce configuration on the instance outside of this file.
 
 ```tsx
 export const DEFAULT_API_CONFIG: ApiConfig = {
@@ -81,15 +81,6 @@ export interface AuthenticationStoreSnapshot
 Once we have an auth token and setAuthToken has been called, we need to hydrate the authentication header on all APIs that require requests to be authenticated. One of the easiest ways to do that is to grab the instance(s) in an action on the authStore and update the apiSauce configuration directly like so:
 
 ```tsx
-import { api } from "app/services/api/api.ts";
-
-export const AuthenticationStoreModel = types
-  .model("AuthenticationStore")
-  .props({
-    authToken: types.maybe(types.string),
-    authEmail: "",
-  })
-  .views((store) => ({}))
   .actions((store) => ({
     setAuthToken(value?: string) {
       store.authToken = value;
@@ -99,10 +90,10 @@ export const AuthenticationStoreModel = types
       const token = value || store.authToken;
       api.apiSauce.setHeader("Authorization", `Bearer ${token}`);
     },
-  }));
+  })
 ```
 
-From there you have a couple options of how to trigger the distribution.
+From there you have a couple options of where to trigger the distribution.
 
 - Add another action that calls both setAuthToken and distributeAuthToken and replace wherever you call setAuthToken with this new dual action
 - Call distributeAuthToken immediately after wherever you are calling setAuthToken
@@ -131,3 +122,7 @@ function login() {
 ```
 
 And that's it! Now all of your requests to that API will be made with the authentication header, leveraging the auth token received on login.
+
+### Other configuration
+
+This method works for updating both the apisauce and config properties on the default API instance or any custom properties you have added to the API!
