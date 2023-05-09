@@ -121,7 +121,7 @@ function login() {
 }
 ```
 
-And that's it! Now all of your requests to that API will be made with the authentication header, leveraging the auth token received on login.
+And that's it! Now all of your requests made using that API will include the authentication header, leveraging the auth token received on login.
 
 ### Other configuration
 
