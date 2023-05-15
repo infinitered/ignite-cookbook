@@ -29,8 +29,8 @@ const NewSection = () => {
       new Date(b.publish_date).getTime() - new Date(a.publish_date).getTime()
   )[0];
 
-  const igniteReleaseVersion = "v8.7.0";
-  const igniteReleaseDate = moment("2023-04-26").diff(moment(), "days") * -1;
+  const igniteReleaseVersion = "v8.8.1";
+  const igniteReleaseDate = moment("2023-05-15").diff(moment(), "days") * -1;
 
   return (
     <div className={styles.newSection}>
