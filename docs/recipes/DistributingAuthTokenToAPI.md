@@ -81,6 +81,12 @@ export interface AuthenticationStoreSnapshot
 Once we have an auth token and setAuthToken has been called, we need to hydrate the authentication header on all APIs that require requests to be authenticated. One of the easiest ways to do that is to grab the instance(s) in an action on the authStore and update the apiSauce configuration directly like so:
 
 ```tsx
+	// We will need to import the api from the service
+	import { api } from "app/services/api"
+
+  ...
+
+  // then update the Authentication Model actions
   .actions((store) => ({
     setAuthToken(value?: string) {
       store.authToken = value;
@@ -102,23 +108,30 @@ From there you have a couple options of where to trigger the distribution.
 For example in `app/screens/LoginScreen.tsx` we can update the login function to distribute the auth token after setting it in the store.
 
 ```tsx
-function login() {
-  setIsSubmitted(true);
-  setAttemptsCount(attemptsCount + 1);
+	// We can update `authenticationStore` from the useStores hook to include `distributeAuthToken`
+	const {
+	    authenticationStore: { authEmail, setAuthEmail, setAuthToken, distributeAuthToken, validationError },
+	  } = useStores()
 
-  if (validationError) return;
+	  ...
 
-  // Make a request to your server to get an authentication token.
-  // If successful, reset the fields and set the token.
-  setIsSubmitted(false);
-  setAuthPassword("");
-  setAuthEmail("");
+  function login() {
+    setIsSubmitted(true);
+    setAttemptsCount(attemptsCount + 1);
 
-  // We'll mock this with a fake token.
-  const token = String(Date.now());
-  setAuthToken(token);
-  distributeAuthToken(token);
-}
+    if (validationError) return;
+
+    // Make a request to your server to get an authentication token.
+    // If successful, reset the fields and set the token.
+    setIsSubmitted(false);
+    setAuthPassword("");
+    setAuthEmail("");
+
+    // We'll mock this with a fake token.
+    const token = String(Date.now());
+    setAuthToken(token);
+    distributeAuthToken(token);
+  }
 ```
 
 And that's it! Now all of your requests made using that API will include the authentication header, leveraging the auth token received on login.
