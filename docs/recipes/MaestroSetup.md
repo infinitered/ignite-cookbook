@@ -23,6 +23,13 @@ We're going to start by installing Maestro via the terminal. To do this, we'll n
 curl -Ls "https://get.maestro.mobile.dev" | bash
 ```
 
+If you haven't already, you'll also need to install Facebook's IDB Companion tool:
+
+```bash
+brew tap facebook/fb
+brew install idb-companion
+```
+
 If you run into any issues, check out the [Maestro cli installation guide](https://maestro.mobile.dev/getting-started/installing-maestro#installing-the-cli) for more information.
 
 Once the installation is complete, you'll be ready to create your first Maestro flow!
