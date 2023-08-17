@@ -11,7 +11,7 @@ publish_date: 2022-10-11
 
 # Staying With Expo
 
-This guide will teach you how to set up an [Expo development build](https://docs.expo.dev/development/getting-started/) which prepares your project for native code via [Config Plugins](https://docs.expo.dev/guides/config-plugins/), but keeps you in Expo's managed workflow.
+This guide will teach you how to set up an [Expo development build](https://docs.expo.dev/develop/development-builds/create-a-build/) which prepares your project for native code via [Config Plugins](https://docs.expo.dev/guides/config-plugins/), but keeps you in Expo's managed workflow.
 
 ## Appetizer
 
@@ -50,6 +50,16 @@ From within your project directory, run the following:
 ```console
 yarn add expo-dev-client
 ```
+
+Create or link an EAS project.
+
+```console
+eas init
+✔ Linked to project @infinitered/cookbook
+✔ Linked app.json to project with ID 012aaaa3-4ce5-4bae-9f4d-2f842489f07a
+```
+
+Configure the project to support EAS Build.
 
 ```console
 eas build:configure
