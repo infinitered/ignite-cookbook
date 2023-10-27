@@ -59,10 +59,11 @@ Add the plugin to `app.json` as per the documentation. It'll look like the follo
 ],
 ```
 
-To get this native dependency working in our project, we'll need to run prebuild so Expo can execute the proper native code changes for us.
+To get this native dependency working in our project, we'll need to run prebuild so Expo can execute the proper native code changes for us. Then we can boot up the app on a device.
 
 ```terminal
 npx expo prebuild
+yarn android
 ```
 
 ## Permissions
