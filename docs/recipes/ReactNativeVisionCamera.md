@@ -59,12 +59,16 @@ Add the plugin to `app.json` as per the documentation. It'll look like the follo
 ],
 ```
 
+> **Note:** `$(PRODUCT_NAME)` comes from the iOS project build configuration, this will be populated with the app name at runtime as long as it's configured properly (in this case, it is in the Ignite boilerplate)
+
 To get this native dependency working in our project, we'll need to run prebuild so Expo can execute the proper native code changes for us. Then we can boot up the app on a device.
 
 ```terminal
 npx expo prebuild
 yarn android
 ```
+
+Since the simulators do not offer a good way of testing the camera for this recipe, we'll be creating an Android build to test on an actual device. This is for convenience, as it's a bit easier to achieve than running on an iOS device, however both would work.
 
 ## Permissions
 
@@ -143,7 +147,7 @@ npx ignite-cli@next g model CodeStore
 npx ignite-cli@next g screen Codes
 ```
 
-If you're not familiar with generators, head on over to the [Ignite Generators](https://github.com/infinitered/ignite/blob/master/docs/Generators.md) documentation to learn more!
+If you're not familiar with generators, head on over to the [Ignite Generators](https://docs.infinite.red/ignite/concept/generators) documentation to learn more!
 
 Open the generated `models/CodeStore.ts`. Our Code Store will just have a simple string array and an action to add a new code:
 
