@@ -281,6 +281,7 @@ const config = {
           {
             className: "code-block-error-line",
             line: "error-line",
+            block: { start: "error-line-start", end: "error-line-end" },
           },
           {
             className: "code-block-success-line",
