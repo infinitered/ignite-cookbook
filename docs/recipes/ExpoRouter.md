@@ -16,7 +16,7 @@ publish_date: 2023-11-03
 
 Expo Router brings file-based routing to React Native and web applications allowing you to easily create universal apps. Whenever a file is added to your `app` directory, a new path is automatically added to your navigation.
 
-For the full documentation, head on over to the [Introduction to Expo Router](https://docs.expo.dev/routing/introduction/).
+For the full documentation by [Expo](https://expo.dev), head on over to the [Introduction to Expo Router](https://docs.expo.dev/routing/introduction/).
 
 Ignite v9 is fully equipped to utilize `expo-router` after dependency installation and some directory structure updates! In this recipe, we'll convert the demo app's auth and tab navigators from `react-navigation` to use `expo-router`.
 
@@ -87,16 +87,7 @@ And finally, let's update the TS alias and include paths over in `tsconfig.json`
       // ...
     },
   }
-  "include": [
-    "index.js",
-    "app",
-    "types",
-    "plugins",
-    "app.config.ts",
-    "src",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-  ],
+  "include": ["**/*.ts", "**/*.tsx"],
   // ...
 }
 ```
@@ -108,14 +99,15 @@ Due to some naming conventions forced by `expo-router`, we'll have to rename the
 ```terminal
 rm App.tsx
 mv app src
-mkdir app
+mv src/screens/ErrorBoundary src/components
+mkdir src/app
 ```
 
 ## Creating File-based Routes
 
-### app/\_layout.tsx
+### src/app/\_layout.tsx
 
-We're now ready to start setting up the navigation for the app! If you're familiar with Ignite, `app.tsx` is where our root navigator lives, however, with `expo-router`, we'll use `app/_layout.tsx` for that. We'll add the providers here that any route would need within the app.
+We're now ready to start setting up the navigation for the app! If you're familiar with Ignite, `app.tsx` is where our root navigator lives, however, with `expo-router`, we'll use `src/app/_layout.tsx` for that. We'll add the providers here that any route would need within the app.
 
 ```tsx
 // app/_layout.tsx
@@ -132,7 +124,7 @@ if (__DEV__) {
   require("src/devtools/ReactotronConfig.ts");
 }
 
-export { ErrorBoundary } from "src/screens/ErrorScreen/ErrorBoundary";
+export { ErrorBoundary } from "src/components/ErrorBoundary/ErrorBoundary";
 
 export default function Root() {
   // Wait for stores to load and render our layout inside of it so we have access
@@ -142,7 +134,6 @@ export default function Root() {
     return null;
   }
 
-  // TODO: render gesture handler wrapper here? <GestureHandlerRootView style={$container}>
   return <Slot />;
 }
 ```
@@ -151,9 +142,9 @@ For starters, this sets up our error boundary for the app and handles waiting on
 
 Next, we'll convert the conditional part of authentication from `react-navigation` to `expo-router`, deciding on whether or not to display the login form or get to the welcome screen experience.
 
-### app/(app)/\_layout.tsx
+### src/app/(app)/\_layout.tsx
 
-Create another `_layout.tsx` but this time inside of a new directory, `app/(app)`. This route wrapped in parentheses is called a [Group](https://docs.expo.dev/routing/layouts/#groups). Groups can be used to add layouts and/or help organize sections of the app without adding additional segments to the URL. Remember, each directory is a route in this new mental model of file-based routing - but sometimes we don't want that, that's when you'll call upon groups.
+Create another `_layout.tsx` but this time inside of a new directory, `src/app/(app)`. This route wrapped in parentheses is called a [Group](https://docs.expo.dev/routing/layouts/#groups). Groups can be used to add layouts and/or help organize sections of the app without adding additional segments to the URL. Remember, each directory is a route in this new mental model of file-based routing - but sometimes we don't want that, that's when you'll call upon groups.
 
 In this layout is where we'll determine if the user is authenticated by checking our MST store. We'll also wait here while assets are loaded and then hide the splash screen when finished.
 
@@ -193,12 +184,12 @@ export default observer(function Layout() {
 
 As you can see, if the user is not authenticated we redirect them to the `/log-in` route, otherwise we'll render a stack navigator. TypeScript is probably telling us that route doesn't exist yet, so let's fix that.
 
-### app/log-in.tsx
+### src/app/log-in.tsx
 
-To redirect the user to the login form, create `app/log-in.tsx`. We'll copy over the contents from the original boilerplate `src/screens/LoginScreen.tsx` to help the UI layout of this page.
+To redirect the user to the login form, create `src/app/log-in.tsx`. We'll copy over the contents from the original boilerplate `src/screens/LoginScreen.tsx` to help the UI layout of this page.
 
 <details>
-  <summary>app/log-in.tsx</summary>
+  <summary>src/app/log-in.tsx</summary>
 
 ```tsx
 import { observer } from "mobx-react-lite";
@@ -380,7 +371,7 @@ const $tapButton: ViewStyle = {
 
 If you're familiar with the Ignite boilerplate, this is the same authentication screen you are used to - the only difference here is some of the imports now from from `src/*` rather than the relative paths. So keep that in mind if you're upgrading an existing application.
 
-### app/(app)/index.tsx
+### src/app/(app)/index.tsx
 
 If the user is successfully authenticated, we'll show them the welcome screen. Can you guess what the route will be by looking at the directory structure?
 
@@ -391,7 +382,7 @@ This JSX will be the same exact contents from `WelcomeScreen.tsx` in the origina
 Since we'll no longer use the `navigation` prop, we utilize `expo-router`'s [Imperative navigation](https://docs.expo.dev/routing/navigating-pages/#imperative-navigation) to navigate to the component demo Showroom next. We're using `.replace` since we don't need to get back to this route. You can read more about [Navigating between pages](https://docs.expo.dev/routing/navigating-pages/) at Expo's documentation.
 
 <details>
-  <summary>app/(app)/index.tsx</summary>
+  <summary>src/app/(app)/index.tsx</summary>
 
 ```tsx
 import { router } from "expo-router";
@@ -503,10 +494,10 @@ const $welcomeHeading: TextStyle = {
 
 Now that we can see the welcome screen, it's time to add the tab navigator. First, we'll create another route group to help contain where these routes live and set the layout for the tabs.
 
-Create `app/(app)/(tabs)/_layout.tsx` and we'll convert Ignite's previous `app/navigators/DemoNavigator.tsx` to live here.
+Create `src/app/(app)/(tabs)/_layout.tsx` and we'll convert Ignite's previous `app/navigators/DemoNavigator.tsx` to live here.
 
 <details>
-  <summary>app/(app)/(tabs)/_layout.tsx</summary>
+  <summary>src/app/(app)/(tabs)/_layout.tsx</summary>
 
 ```tsx
 import React from "react";
@@ -622,7 +613,7 @@ const $tabBarLabel: TextStyle = {
 Now to create screens for each tabs, you simply just add `[screen].tsx` under the `(tabs)` group. Let's bring over the 3 simpler screens first - Community, Podcasts and Debug. Those will mostly be copy 🍝 aside from changing the exports to default and import from our TS paths.
 
 <details>
-  <summary>app/(app)/(tabs)/community.tsx</summary>
+  <summary>src/app/(app)/(tabs)/community.tsx</summary>
 
 ```tsx
 import React from "react";
@@ -778,7 +769,7 @@ const $logo: ImageStyle = {
 </details>
 
 <details>
-  <summary>app/(app)/(tabs)/podcasts.tsx</summary>
+  <summary>src/app/(app)/(tabs)/podcasts.tsx</summary>
 
 ```tsx
 import { observer } from "mobx-react-lite";
@@ -1178,7 +1169,7 @@ const $emptyStateImage: ImageStyle = {
 </details>
 
 <details>
-  <summary>app/(app)/(tabs)/debug.tsx</summary>
+  <summary>src/app/(app)/(tabs)/debug.tsx</summary>
 
 ```tsx
 import React from "react";
@@ -1350,14 +1341,28 @@ These will all be navigable by routing to `/community`, `/podcasts` or `/debug`.
 
 ### Showroom Screen
 
-The Showroom screen has some supporting components it needs that only applies to that route. Ignite used to colocate these next to the screen file itself, in the `app/screens/DemoShowroomScreen` directory. However, `expo-router` wants to keep the `app` directory strictly for app routes.
+The Showroom screen has some supporting components it needs that only applies to that route. Ignite used to colocate these next to the screen file itself, in the `src/app/screens/DemoShowroomScreen` directory. However, `expo-router` wants to keep the `app` directory strictly for app routes.
 
-To adhere to this, we'll move the supporting components to `src/components/Showroom` and import them from their in our `app/(app)/(tabs)/showroom.tsx`.
+To adhere to this, we'll move the supporting components to `src/components/Showroom` and import them from their in our `src/app/(app)/(tabs)/showroom.tsx`.
 
 ```terminal
 mv src/screens/DemoShowroomScreen src/components/Showroom
 rm src/components/Showroom/DemoShowroomScreen.tsx
 ```
+
+> **Note**: There is a type that gets removed by the above command. Add the following to the top of `src/components/Showroom/demos/index.ts`
+>
+> ```tsx
+> import { ReactElement } from "react";
+>
+> export interface Demo {
+>   name: string;
+>   description: string;
+>   data: ReactElement[];
+> }
+> ```
+>
+> You'll need to update the imports in the `src/components/Showroom/demos/Demo*.ts` files.
 
 We've deleted the screen file because we'll make a few `expo-router` specific changes to it over in the `app` directory. One improvement we can make to the Showroom screen is that we can reduce the platform specific code with regards to the `renderItem` of `SectionList`.
 
@@ -1451,7 +1456,7 @@ Note the `Link` wrapper provided by `expo-router`. We link to the `/showroom` ro
 The snippet below contains the entire file for reference:
 
 <details>
-  <summary>app/(app)/(tabs)/showroom.tsx</summary>
+  <summary>src/app/(app)/(tabs)/showroom.tsx</summary>
 
 ```tsx
 import React, { FC, useEffect, useRef, useState } from "react";
@@ -1712,14 +1717,71 @@ Observe the simulator opens the mobile app and navigates to the Showroom screen,
 
 We get that universal linking for free with `expo-router`!
 
-## Code Removal
+## Code Cleanup
 
-Now that we have the boilerplate up and running again, let's clean up some of the screen and navigation files that are no longer needed.
+Now that we have the boilerplate up and running again, let's clean some of the screen and navigation files that are no longer needed.
 
 ```terminal
 rm src/app.tsx
 rm -rf src/screens
 rm -rf src/navigators
+```
+
+In doing so, we'll need to fix some `Reacetotron` code for custom commands. We'll drop the `resetNavigation` one (logging out is really the same thing) and update the `navigateTo` and `goBack`. Open up `src/devtools/ReactotronConfig.ts` to edit these.
+
+```ts
+// error-line
+import {
+  goBack,
+  resetRoot,
+  navigate,
+} from "src/navigators/navigationUtilities";
+// success-line
+import { router } from "expo-router";
+// ...
+// error-line-start
+reactotron.onCustomCommand({
+  title: "Reset Navigation State",
+  description: "Resets the navigation state",
+  command: "resetNavigation",
+  handler: () => {
+    Reactotron.log("resetting navigation state");
+    resetRoot({ index: 0, routes: [] });
+  },
+});
+// error-line-end
+
+reactotron.onCustomCommand<[{ name: "route"; type: ArgType.String }]>({
+  command: "navigateTo",
+  handler: (args) => {
+    const { route } = args ?? {};
+    if (route) {
+      Reactotron.log(`Navigating to: ${route}`);
+      // error-line
+      navigate(route as any); // this should be tied to the navigator, but since this is for debugging, we can navigate to illegal routes
+      // success-line
+      router.push(route);
+    } else {
+      Reactotron.log("Could not navigate. No route provided.");
+    }
+  },
+  title: "Navigate To Screen",
+  description: "Navigates to a screen by name.",
+  args: [{ name: "route", type: ArgType.String }],
+});
+
+reactotron.onCustomCommand({
+  title: "Go Back",
+  description: "Goes back",
+  command: "goBack",
+  handler: () => {
+    Reactotron.log("Going back");
+    // error-line
+    goBack();
+    // success-line
+    router.back();
+  },
+});
 ```
 
 ## Summary
@@ -1738,7 +1800,7 @@ To go more in-depth on `expo-router`, check out the official documentation at [E
 
 You can also follow Evan Bacon, the author of Expo Router, on [GitHub](https://github.com/EvanBacon/expo-router-twitter/blob/main/app/_layout.tsx) and check out his applications or demos using the navigation library.
 
-- [Pillar Valley](https://github.com/EvanBacon/pillar-valley/) - a game built in Expo using expo-router
-- [Twitter routing demo](https://github.com/EvanBacon/expo-router-twitter/) - a demo of how an expo-router application would look if rebuilding Twitter's routes
+- [Pillar Valley](https://github.com/EvanBacon/pillar-valley/) - a game built in Expo using `expo-router``
+- [Twitter routing demo](https://github.com/EvanBacon/expo-router-twitter/) - a demo of how an `expo-router` application would look if rebuilding Twitter's routes
 
-Additionally, here is an Ignite repo with `expo-router` added in for reference on my [GitHub](https://github.com/frankcalise/ignite-expo-router)
+Additionally, here is an Ignite repo with `expo-router` added in for reference on my [GitHub](https://github.com/frankcalise/ignite-expo-router).
