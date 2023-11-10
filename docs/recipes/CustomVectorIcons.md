@@ -248,7 +248,7 @@ const {
 ## Conclusion
 
 Here's the modified `app/components/Icon.tsx`.
-It's fine to do it here but I would suggest to put the configuration under `app/theme.icons.ts` to keep things organized.
+
 
 ```typescript
 import * as React from "react"
