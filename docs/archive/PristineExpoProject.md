@@ -8,6 +8,12 @@ last_update:
 publish_date: 2022-10-11
 ---
 
+:::warning
+
+This recipe is for Ignite v8 only.
+
+:::
+
 # Pristine Expo Project
 
 Ignite sets your project up ready to run both a bare React Native project or with Expo.
