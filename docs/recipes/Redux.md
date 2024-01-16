@@ -12,21 +12,29 @@ publish_date: 2024-01-16
 
 # Redux
 
-This guide will show you how to migrate a Mobx-State-Tree project (Ignite's default) to use Redux.
-
-For simplicity, let's assume you _just_ created a new Ignite project.
+This guide will show you how to migrate a Mobx-State-Tree project (Ignite's default) to Redux, using a newly created Ignite project as our example:
 
 ```terminal
-npx ignite-cli new ReduxApp --yes
+npx ignite-cli new ReduxApp --yes --removeDemo
 ```
 
-If you are migrating a larger existing project these steps still apply, but you'll need to migrate your existing state tree and any other functionality needed.
+If you are migrating an existing project these steps still apply, but you may need to migrate your existing state tree and other additional functionality.
 
 ## Remove Mobx-State-Tree
 
-- Ignite will create boilerplate Mobx-State-Tree files in the `models/` directory. Remove this entire directory, and all files within it!
+- Remove all Mobx-related dependencies from `package.json`, then run `yarn` or `npm i`
 
-- In `devtools/ReactotronConfig.ts`, remove the `reactotron-mst` plugin. We'll come back and add a redux plugin later.
+```diff
+--"mobx": "6.10.2",
+--"mobx-react-lite": "4.0.5",
+--"mobx-state-tree": "5.3.0",
+
+--"reactotron-mst": "3.1.5",
+```
+
+- Ignite created default boilerplate Mobx-State-Tree files in the `models/` directory. Remove this entire directory and all files within it, these are not needed for Redux.
+
+- In `devtools/ReactotronConfig.ts` remove the `reactotron-mst` plugin. We can come back to [add a Redux plugin](#reactotron-support) later.
 
 ```diff
 --import { mst } from "reactotron-mst"
@@ -48,8 +56,7 @@ const reactotron = Reactotron.configure({
 ++})
 ```
 
-- Remove all `observer()` components and reformat as normal React components.
-- Do a project-wide search for `observer(` and replace each component instance with the following pattern:
+- Remove all `observer()` components and reformat as normal React components. Do a project-wide search for `observer(` and replace each component instance with the following pattern:
 
 ```diff
 --import { observer } from "mobx-react-lite"
@@ -61,17 +68,8 @@ const reactotron = Reactotron.configure({
 ++}
 ```
 
-- Remove all Mobx-related dependencies from `package.json`, then run `npm i` or `yarn`
-
-```diff
---"mobx": "6.10.2",
---"mobx-react-lite": "4.0.5",
---"mobx-state-tree": "5.3.0",
-
---"reactotron-mst": "3.1.5",
-```
-
-- Remove MST store initialization / hydration code in `app.tsx`
+- Remove old Mobx-State-Tree store initialization / hydration code in `app.tsx`.
+- Call `hideSplashScreen` in a `useEffect` so the app loads for now. We'll replace this code when we add [persistence](#persistence) below.
 
 ```diff
 --import { useInitialRootStore } from "./models"
@@ -79,6 +77,9 @@ const reactotron = Reactotron.configure({
 --const { rehydrated } = useInitialRootStore(() => {
 --setTimeout(hideSplashScreen, 500)
 --})
+++useEffect(() => {
+++    setTimeout(hideSplashScreen, 500)
+++}, [])
 
 --if (!rehydrated || !isNavigationStateRestored || !areFontsLoaded) return null
 ++if (!isNavigationStateRestored || !areFontsLoaded) return null
@@ -107,6 +108,7 @@ yarn add react-redux
 
 ```typescript
 import { configureStore } from "@reduxjs/toolkit";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import counterReducer from "./counterSlice";
 
 export const store = configureStore({
@@ -136,7 +138,6 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 ```typescript
 import { createSlice } from "@reduxjs/toolkit";
-import type { RootState } from "./store";
 
 // Define a type for the slice state
 interface CounterState {
@@ -191,20 +192,36 @@ You can now use selectors to grab data and `dispatch()` to execute actions withi
 
 - Remember to use our exported `useAppSelector` and `useAppDispatch` helpers for type safety
 
+`WelcomeScreen.tsx`
+
 ```typescript
+import React, { FC } from "react";
+import { View, ViewStyle } from "react-native";
+import { Button, Text } from "app/components";
+import { AppStackScreenProps } from "../navigators";
+import { colors } from "../theme";
+import { useSafeAreaInsetsStyle } from "../utils/useSafeAreaInsetsStyle";
 import { useAppDispatch, useAppSelector } from "app/store/store";
 import { decrement, increment } from "app/store/counterSlice";
 
-export const WelcomeScreen: FC<WelcomeScreenProps> = (props) => {
+interface WelcomeScreenProps extends AppStackScreenProps<"Welcome"> {}
+
+export const WelcomeScreen: FC<WelcomeScreenProps> = () => {
+  const $containerInsets = useSafeAreaInsetsStyle(["top", "bottom"]);
   const count = useAppSelector((state) => state.counter.value);
   const dispatch = useAppDispatch();
   return (
-    <View style={$container}>
+    <View style={[$containerInsets, $container]}>
       <Button text="Increment" onPress={() => dispatch(increment())} />
       <Button text="Decrement" onPress={() => dispatch(decrement())} />
       <Text text={`Count: ${count}`} />
     </View>
   );
+};
+
+const $container: ViewStyle = {
+  flex: 1,
+  backgroundColor: colors.background,
 };
 ```
 
@@ -274,7 +291,7 @@ export const useAppDispatch: DispatchFunc = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 ```
 
-3. Add a `PersistGate` to `app.tsx`
+3. Add a `PersistGate` to `app.tsx` and replace any existing `hideSplashScreen` calls with the `onBeforeLift` callback
 
 `app.tsx`
 
