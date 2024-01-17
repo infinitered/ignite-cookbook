@@ -100,7 +100,7 @@ yarn add react-redux
 
 #### Create Store
 
-- In a new file `store.ts`, create your Redux store.
+- In a new file `app/store.ts`, create your Redux store.
   - Create an initial store. We're using [Redux Toolkit's `configureStore`](https://redux-toolkit.js.org/usage/usage-guide#simplifying-store-setup-with-configurestore) here for simplicity.
   - Export Typescript helpers for the rest of your app to stay type safe
 
