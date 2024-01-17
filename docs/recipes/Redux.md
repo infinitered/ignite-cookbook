@@ -68,6 +68,20 @@ const reactotron = Reactotron.configure({
 ++}
 ```
 
+- (optional) Don't forget to update your [Ignite Generator Templates](https://docs.infinite.red/ignite-cli/concept/Generator-Templates/)!
+  - Follow the same pattern to replace `observer()`. This will allow you to quickly generate screens and components via `npx ignite-cli generate screen NewScreen` and `npx ignite-cli generate component NewComponent` and use your updated syntax. (You can customize these however you like!)
+  - Update `ignite/templates/component/NAME.tsx.ejs` and `ignite/templates/screen/NAMEScreen.tsx.ejs`
+
+```diff
+--import { observer } from "mobx-react-lite"
+
+--export const <%= props.pascalCaseName %> = observer(function <%= props.pascalCaseName %>(props: <%= props.pascalCaseName %>Props) {
+++export const <%= props.pascalCaseName %> = (props: <%= props.pascalCaseName %>Props) => {
+    ...
+--})
+++}
+```
+
 - Remove old Mobx-State-Tree store initialization / hydration code in `app.tsx`.
 - Call `hideSplashScreen` in a `useEffect` so the app loads for now. We'll replace this code when we add [persistence](#persistence) below.
 
