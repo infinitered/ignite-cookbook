@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap');
+
 /**
  * Any CSS included here will be global. The classic template
  * bundles Infima by default. Infima is a CSS framework designed to
@@ -6,20 +8,27 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #E78A64;
+  --ifm-font-family-base: 'Space Grotesk';
+  --ifm-color-primary: #e78a64;
   --ifm-color-primary-dark: #e37447;
   --ifm-color-primary-darker: #e06a39;
   --ifm-color-primary-darkest: #c9501f;
   --ifm-color-primary-light: #eba081;
   --ifm-color-primary-lighter: #eeaa8f;
   --ifm-color-primary-lightest: #f4cbba;
+  --ifm-color-background: #F4F2F1;
+  --ifm-color-button: #191015;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  background-color: var(--ifm-color-background)
 }
 
+
+
 /* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
-  --ifm-color-primary: #E78A64;
+/* Currently we aren't using the dark mode  */
+/* [data-theme="dark"] {
+  --ifm-color-primary: #e78a64;
   --ifm-color-primary-dark: #e37447;
   --ifm-color-primary-darker: #e06a39;
   --ifm-color-primary-darkest: #c9501f;
@@ -27,4 +36,351 @@
   --ifm-color-primary-lighter: #eeaa8f;
   --ifm-color-primary-lightest: #f4cbba;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+} */
+
+.code-block-error-line {
+  background-color: #ff000020;
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+  border-left: 3px solid #ff000080;
 }
+
+.code-block-success-line {
+  background-color: #00ff0020;
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+  border-left: 3px solid #00ff0080;
+}
+
+/* Navbar */
+.navbar {
+  background-color: rgb(255, 255, 255);
+  height: 96px;
+  padding: 12px 48px;
+  box-shadow: none;
+
+
+}
+.navbar__logo {
+  height: 48px;
+}
+
+
+.navbar__link {
+  color: #564E4A;
+  margin-right: 28px;
+  z-index: 300;
+}
+
+
+.navbar__link:hover {
+  color: #564E4A;
+
+}
+
+.hover-underline {
+  display: inline-block;
+  position: relative;
+}
+
+.hover-underline::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #DDA28E;
+}
+
+.hover-underline:hover::after {
+  transform: scaleX(1);
+}
+
+.dropdown {
+  z-index: 200;
+
+}
+
+.dropdown .navbar__link:after{
+  display: none;
+}
+
+.icon {
+  right: -30px;
+  position: absolute;
+}
+
+.dropdown__menu {
+  display: flex;
+  background-color: #FFFFFF;
+  border-color: #F4F2F1;
+  border-width: 1px;
+  border-radius: 0;
+  top: -10px;
+  right: -50px !important;
+  padding: 88px 48px 48px;
+  box-shadow: none;
+  flex-direction: row;
+  width: 600px ;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.dropdown__link {
+  white-space: normal;
+}
+
+.dropdown__link:hover {
+  background-color: #FFFFFF;
+}
+
+.dropdown-item {
+  color: #564E4A;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  margin-bottom: 4px;
+}
+
+.dropdown-item-description {
+  color: #564E4A;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.aa-DetachedSearchButton {
+  min-width: 150px !important;
+}
+
+.aa-DetachedContainer--modal {
+  top: 15% !important;
+}
+
+.aa-Form {
+  border-color: #41476E !important;
+}
+
+.aa-DetachedSearchButton {
+  border-color: #41476E !important;
+}
+
+
+.aa-Form:focus-within {
+  border-color: #41476E !important;
+  box-shadow: 0 0 0 2px rgba(65, 71, 110, 0.3), inset 0 0 0 2px rgba(65, 71, 110, 0.3) !important;
+}
+
+.aa-DetachedSearchButton:focus {
+  border-color: #41476E !important;
+  box-shadow: 0 0 0 2px rgba(65, 71, 110, 0.3), inset 0 0 0 2px rgba(65, 71, 110, 0.3) !important;
+}
+
+[class*='row footer__links'] {
+  margin-left: 25rem;
+  width: 75%;
+  margin-top: 220px;
+  margin-bottom: 220px;
+}
+
+
+.footer__bottom {
+  margin-left: -25rem;
+  margin-top: -435px;
+  margin-bottom: 10rem;
+  width: 75%;
+}
+
+[class*='footer footer--dark'] {
+  background-color: #292C46;
+}
+
+.footer__link-item {
+  display: flex !important;
+  flex-direction: row;
+}
+
+
+[class*='footer__links__custom'] {
+  margin-top: 4px;
+  margin-left: 4px;
+}
+
+[class*='theme-last-updated'] {
+  font-style: normal;
+}
+
+[class*='tag_node_modules-@docusaurus-theme-classic-lib-theme-Tag-styles-module tagRegular_node_modules-@docusaurus-theme-classic-lib-theme-Tag-styles-module'] {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 4px 12px;
+  gap: 10px;
+  background: #E8C1B4;
+  color: #692810;
+  border-radius: 0 !important;
+  border: none !important;
+}
+
+[class*='pagination-nav__sublabel'] {
+  color: #692810;
+  font-weight: 700;
+  font-family: "Space Grotesk";
+  margin-bottom: 25px;
+}
+
+[class*='pagination-nav__link'] {
+  color: #564E4A;
+  font-size: 20px;
+  border: none;
+}
+
+[class*='container'] {
+  padding-bottom: 2rem;
+}
+
+[class*='theme-doc-footer-tags-row'] .col {
+  padding: 0 !important;
+}
+
+
+[class*='theme-doc-footer-tags-row'] .col b {
+  display: none;
+}
+
+[class*='theme-doc-markdown'] {
+  border-bottom: 1px #D7CEC9 solid;
+  padding: 2rem 0;
+}
+
+[class*='table-of-contents__link toc-highlight'] {
+  padding-left: 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+[class*='table-of-contents__link toc-highlight table-of-contents__link--active']::before {
+  content: ">";
+  margin-right: 5px;
+  margin-left: -15px;
+}
+
+[class*='table-of-contents__link toc-highlight table-of-contents__link--active'] {
+  padding-left: 25px;
+}
+
+[class*='table-of-contents table-of-contents__left-border']::before {
+  content: "Jump to:";
+  padding-left: 18px;
+  font-size: 16px;
+  color: #564E4A;
+}
+
+
+[class*='menu__link--active'] {
+  background-color: #DDA28E !important;
+  color: #191015;
+}
+
+[class*='breadcrumbs__item breadcrumbs__item--active'] span {
+  border-bottom: 2px #C76542 solid;
+  background: inherit !important;
+  border-radius: 0;
+  padding: 0;
+  color: #191015 !important;
+  font-size: 16 !important;
+  font-weight: 700 !important;
+}
+
+[class*='menu__link'] {
+  color: #564E4A !important;
+}
+
+[class*='menu__link menu__link--active'] {
+  background-color: #DDA28E !important;
+  color: #191015 !important;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+[class*='clean-btn theme-back-to-top-button backToTopButton_node_modules-@docusaurus-theme-classic-lib-theme-BackToTopButton-styles-module backToTopButtonShow_node_modules-@docusaurus-theme-classic-lib-theme-BackToTopButton-styles-module'] {
+  background-color: #DCDDE9 !important;
+}
+
+[class*='clean-btn theme-back-to-top-button backToTopButton_node_modules-@docusaurus-theme-classic-lib-theme-BackToTopButton-styles-module backToTopButtonShow_node_modules-@docusaurus-theme-classic-lib-theme-BackToTopButton-styles-module']::after {
+  background-color: #191015 !important;
+}
+
+
+
+
+@media screen and (max-width: 1300px) {
+  .footer__bottom {
+    margin-top: -445px;
+    margin-left: -15rem;
+  }
+}
+
+@media screen and (max-width: 996px) {
+
+  .footer__bottom {
+    margin-top: 0px;
+    margin-left: 0rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0 !important;
+  }
+
+  [class*='row footer__links'] {
+    margin-left: 0;
+    width: 100%;
+    margin-top: 50px;
+    padding-left: 15rem;
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .footer__bottom {
+    display: block;
+    margin-top: 0;
+    margin-left: 0;
+    margin-bottom: 0 !important;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  [class*='row footer__links'] {
+    margin-left: 0;
+    width: 100%;
+    margin-top: 50px;
+    padding-left: 2rem;
+  }
+  .theme-doc-markdown {
+    padding: 2rem;
+  }
+  .theme-doc-footer {
+    padding: 2rem;
+  }
+
+  [class*='col col--6'] {
+    width: 90% !important;
+    padding: 0 !important;
+  }
+  
+  [class*='searchBox'] {
+    display: none !important;
+  }
+}
+
+#__docusaurus {
+  overflow: hidden;
+}
+

@@ -6,18 +6,16 @@ tags:
   - CI/CD
 last_update:
   author: Robin Heinze
+publish_date: 2022-10-09
 ---
 
 This document shows the steps necessary to set up CircleCI automatic continuous integration testing and automatic Fastlane beta builds upon successfully merging a pull request.
-
-Note: there is some experimental information about using Github Actions at the end of this article.
 
 ### First Things First
 
 1. Write Tests
 
 - If the project already has tests, great. If not, write some.
-- They better pass! Tests are important because you don't want to be deploying broken code.
 - See [this](https://github.com/infinitered/ChainReactApp2019) for an example of how Infinite Red typically sets up tests for a React Native app.
 
 ### CircleCI Setup
@@ -41,7 +39,7 @@ Note: there is some experimental information about using Github Actions at the e
 1. Create a folder in the project root named `.circleci`.
 2. Create a file inside that folder named `config.yml`
 3. Use the below template in that file.
-4. If needed, see [configuration docs](https://circleci.com/docs/2.0/config-intro/#section=configuration) for additional configuration options. (_Here is a complete [config.yml](https://github.com/infinitered/open-source/blob/master/config.example.yml) with CI and CD steps completed_)
+4. If needed, see [configuration docs](https://circleci.com/docs/2.0/config-intro/#section=configuration) for additional configuration options. (_Here is a complete [config.yml](https://github.com/YOUR_ORG/open-source/blob/master/config.example.yml) with CI and CD steps completed_)
 
 ```yaml
 defaults: &defaults
@@ -154,19 +152,19 @@ XCODE_PROJECT    = "#{PROJECT}.xcodeproj"
 4. If you prefer, you can also do these steps as separate fastlane commands, just make sure to include a `- run:` entry for each one in `config.yml`.
 
 **Setting up CircleCI to Run Fastlane**
-Check out [this blog](https://medium.com/@odedre/circle-ci-v2-react-native-project-build-release-setup-ce4ef31209d0) for lots of helpful tips.
+Check out [this blog post](https://medium.com/@odedre/circle-ci-v2-react-native-project-build-release-setup-ce4ef31209d0) for lots of helpful tips.
 
 1. Make sure CircleCI has all the credentials to run your fastlane scripts:
    - Go into the Settings screen for your project on CircleCI
-   - Under "Build Settings", click on "Environment Variables" ([https://circleci.com/gh/infinitered/YOURPROJECT/edit#env-vars](https://circleci.com/gh/infinitered/YOURPROJECT/edit#env-vars))
+   - Under "Build Settings", click on "Environment Variables" ([https://circleci.com/gh/YOUR_ORG/YOURPROJECT/edit#env-vars](https://circleci.com/gh/YOUR_ORG/YOURPROJECT/edit#env-vars))
    - Click "Add Variable"
    - Set `FASTLANE_USER` to the email address of your your Apple App Store Connect / Dev Portal user.
-   - Do this for all of the variables listed [here](https://github.com/fastlane/docs/blob/950c6f42231d86b5187d2cfdcab2a6c81d0f61dc/docs/best-practices/continuous-integration.md#environment-variables-to-set) **Note**: If your dev portal user does not have 2-Factor Auth turned on, you DO NOT need to set FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD. Including this variabe when your account does need it will result in errors during TestFlight upload. You can find more info from the Fastlane Docs, and from the CircleCI codesigning docs
-2. Add `GITHUB_TOKEN` to env vars on CircleCI ([https://circleci.com/gh/infinitered/YOURPROJECT/edit#env-vars](https://circleci.com/gh/infinitered/YOURPROJECT/edit#env-vars)). You should be able to find these in our team 1password under `CircleCI CI/CD Semantic Release Tokens`.
+   - Do this for all of the variables listed [here](https://github.com/fastlane/docs/blob/950c6f42231d86b5187d2cfdcab2a6c81d0f61dc/docs/best-practices/continuous-integration.md#environment-variables-to-set) **Note**: If your dev portal user does not have 2-Factor Auth turned on, you DO NOT need to set FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD. Including this variable when your account does need it will result in errors during TestFlight upload. You can find more info from the Fastlane Docs, and from the CircleCI codesigning docs
+2. Add `GITHUB_TOKEN` to env vars on CircleCI ([https://circleci.com/gh/YOUR_ORG/YOURPROJECT/edit#env-vars](https://circleci.com/gh/YOUR_ORG/YOURPROJECT/edit#env-vars)). Y
 
 - If you need to make a new `GITHUB_TOKEN`, go to [https://github.com/settings/tokens/new](https://github.com/settings/tokens/new) and create a new one with `repo` access.
 
-3. Add the `Circle CI` Github team to your repo (https://github.com/YOURORGANIZATION/YOURPROJECT/settings/collaboration) with write access.
+3. Add the `Circle CI` Github team to your repo (https://github.com/YOUR_ORG/YOURPROJECT/settings/collaboration) with write access.
 4. Add the `Circle CI` Github team as a read-only collaborator to the private match certificates repo.
 5. Log in to GitHub/CircleCI as the CI user. Then in CircleCI, go to Project Settings > Checkout SSH keys (https://circleci.com/gh/YOURORGANIZATION/YOURPROJECT/edit#checkout) and add a new user key. This will allow CircleCI to clone the certs repo in order to sign your app.
 6. Go to Project Settings > Checkout SSH Keys and add a new deploy key. You will copy the fingerprint and paste into the `config.yml` example below in the `add_ssh_keys` section (there should be `"`s around it)
@@ -213,7 +211,7 @@ jobs:
           fingerprints: — “SSH_FINGERPRINT_HERE”
       - run:
           name: Git configuration
-          command: git config user.email "ci@infinite.red" && git config user.name "CircleCI"
+          command: git config user.email "ci@your.domain" && git config user.name "CircleCI"
       - run:
           name: Set upstream branch
           command: git branch --set-upstream-to origin ${CIRCLE_BRANCH}
@@ -303,46 +301,3 @@ workflows:
 - Tip: make sure you are logged in to Github/CircleCI as yourself (not the CI user) when you hit the button to rebuild with SSH.
 - If you get a vague error saying `File main.jsbundle does not exist`, that means there was an error while building the app and you can view the more detailed message by inspecting the log files with the following command (while in SSH mode). Increase the number of lines from 50 as needed.
 - `tail -50 ios/output/buildlogs/gym/YourProject-YourProject.log`
-
-### Github Actions Setup - Maybe take this out
-
-Here is some experimental information for Github Actions CI.
-
-**Github Actions YML File**
-
-```yml
-name: RN App CI
-on: [push]
-jobs:
-  build:
-    runs-on: macos-latest
-    env:
-      CI: true
-      NODE_ENV: development
-    steps:
-      - uses: actions/checkout@v1
-      - name: Cache my-app node modules
-        uses: actions/cache@v1
-        with:
-          path: my-app/node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('**/my-app/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.OS }}-build-${{ env.cache-name }}-
-            ${{ runner.OS }}-build-
-            ${{ runner.OS }}-
-      - name: Install dependencies
-        run: |
-          yarn install
-      - name: Run unit tests
-        run: |
-          yarn test:unit
-      - name: Install cocoapods
-        run: |
-          cd my-app/ios
-          pod install --repo-update
-      - name: Run e2e tests
-        run: |
-          cd my-app
-          yarn test:e2e:build --configuration="ios.sim.debug"
-          yarn test:e2e --configuration="ios.sim.debug"
-```

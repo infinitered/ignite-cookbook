@@ -1,11 +1,561 @@
+
+
 .features {
   display: flex;
   align-items: center;
-  padding: 2rem 0;
-  width: 100%;
 }
 
-.featureSvg {
-  height: 200px;
-  width: 200px;
+.rowContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1400px;
+  margin: 100px auto;
+  padding: 0 2rem;  
+}
+
+
+.featureComponent {
+  height: 300px;
+  width: 300px;
+}
+
+.featureTitle {
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 54px;
+}
+
+.featureDescription {
+  font-style: "normal";
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 140%;
+}
+
+.featureTextContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 0 20px;
+}
+
+.featureComponentContainer {
+  display: flex;
+  margin: 0 30px;
+  justify-content: center;
+}
+
+.codeSnippet {
+  background: #191015;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 500;
+  height: 426px;
+  line-height: 130%;
+  margin-bottom: 12px;
+  overflow: hidden;
+  padding: 18px;
+  width: 504px;
+  overflow: hidden;
+}
+
+.codeSnippet pre {
+  background: #191015;
+  padding: 0;
+  transition: all 1s;
+  height: 90%;
+  overflow: hidden;
+}
+
+.scrollBar {
+  background: #F4F2F1;
+  height: 14px;
+  width: 6px;
+  left: 18px;
+  transition: all 0.5s;
+}
+
+.timeStamp {
+  background:#D7CEC9 ;
+  border-radius: 4px;
+  display: flex;
+  height: 32px;
+  padding: 6px 12px;
+  transition: all 3.3s;
+  width: fit-content;
+}
+
+.timeStampText {
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 150%;
+  text-align: center;
+  color: #191015;
+}
+
+.faceLookingDown{
+  position: relative;
+  width: 127px;
+  top: -12rem;
+  left: -6rem;
+}
+
+
+.imageTwoContainer {
+  padding-left: 70px;
+}
+
+.imageOneContainer {
+  position: relative;
+  height: 500px;
+  width: 500px;
+  margin-top: 70px;
+  margin-bottom: 120px;
+}
+
+.cardButtonsInitial {
+  position: absolute;
+  z-index: 10;
+  left: 480px;
+  top: 400px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.cardButtonsFinal {
+  left: 400px;
+  top: 350px;
+  opacity: 1;
+}
+
+.cardControlsInitial {
+  position: absolute;
+  z-index: 10;
+  left: 410px;
+  top: 220px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.cardControlsFinal {
+  left: 370px;
+  top: 160px;
+  opacity: 1;
+}
+
+.cardTextStylesInitial {
+  position: absolute;
+  z-index: 10;
+  left: 360px;
+  top: 75px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.cardTextStylesFinal {
+  left: 300px;
+  top: 0px;
+  opacity: 1;
+}
+
+.screenComponentsInitial {
+  position: absolute;
+  z-index: 10;
+  top: 150px;
+  left: 50px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.screenComponentsFinal {
+  left: 0px;
+  top: 100px;
+  opacity: 1;
+}
+
+.screenMenuInitial {
+  position: absolute;
+  z-index: 5;
+  top: 40px;
+  left: 220px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.screenMenuFinal {
+  top: -50px;
+  left: 150px;
+  opacity: 1;
+}
+
+.monocleInitial {
+  position: absolute;
+  z-index: 10;
+  left: 530px;
+  top: 200px;
+  opacity: 0;
+  transition: all 1s;
+}
+
+.monocleFinal {
+  opacity: 1;
+  left: 510px;
+}
+
+.imageThreeContainer {
+  position: relative;
+  width: 500px;
+  height: 400px;
+}
+
+.communityScreenOneInitial {
+  position: absolute;
+  top: 0px;
+  opacity: 0;
+  transition: all 1s;
+}
+
+.communityScreenOne {
+  top: 40px;
+  opacity: 1;
+}
+
+.communityScreenTwoInitial {
+  position: absolute;
+  top: 160px;
+  left: 30px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.communityScreenTwo {
+  top: 70px;
+  left: 40px;
+  opacity: 1;
+}
+
+.communityScreenThreeInitial {
+  position: absolute;
+  top: 115px;
+  left: 70px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.communityScreenThree {
+  top: 45px;
+  left: 80px;
+  opacity: 1;
+}
+
+.communityScreenFourInitial {
+  position: absolute;
+  top: 95px;
+  left: 100px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.communityScreenFour {
+  top: 15px;
+  left: 120px;
+  opacity: 1;
+}
+
+.communityScreenFiveInitial {
+  position: absolute;
+  top: 75px;
+  left: 120px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.communityScreenFive {
+  top: -15px;
+  left: 160px;
+  opacity: 1;
+}
+
+.communityScreenSixInitial {
+  position: absolute;
+  top: 45px;
+  left: 130px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.communityScreenSix {
+  top: 5px;
+  left: 220px;
+  opacity: 1;
+}
+
+.communityScreenSevenInitial {
+  position: absolute;
+  top: 105px;
+  left: 140px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.communityScreenSeven {
+  top: 75px;
+  left: 310px;
+  opacity: 1;
+}
+
+.communityScreenEightInitial {
+  position: absolute;
+  top: 115px;
+  left: 165px;
+  transition: all 1s;
+  opacity: 0;
+}
+
+.communityScreenEight {
+  top: 145px;
+  left: 425px;
+  opacity: 1;
+}
+
+.circleFaceOneInitial {
+  position: absolute;
+  top: -75px;
+  left: 400px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 1s;
+}
+
+.circleFaceOne {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.circleFaceTwoInitial {
+  position: absolute;
+  top: 10px;
+  left: 500px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 1s;
+}
+
+.circleFaceTwo {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+}
+
+.circleFaceThreeInitial {
+  position: absolute;
+  top: 375px;
+  left: 200px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 1s;
+}
+
+.circleFaceThree {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+}
+
+@media screen and (max-width: 1350px) {
+  .codeSnippet {
+    width: 400px;
+    height: 340px;
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  .codeSnippet {
+    width: 350px;
+    height: 297px;
+  }
+}
+
+
+@media screen and (max-width: 1350px) {
+  .codeSnippet {
+    width: 400px;
+    height: 340px;
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  .codeSnippet {
+    width: 350px;
+    height: 297px;
+  }
+}
+
+
+@media screen and (max-width: 996px) {
+  .rowContainer {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .featureComponentContainer {
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .rowContainer {
+    margin: 0 auto
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .imageOneContainer {
+    margin-top: 40%;
+    height: 300px;
+    width: 280px;
+  }
+
+  .imageTwoContainer {
+    margin-left: 10%;
+    margin-top: 10%;
+    padding-left: 10px;
+  }
+
+  .cardButtonsFinal {
+    left: 140px;
+    width: 150px;
+    top: 155px;
+  }
+
+  .cardControlsFinal {
+    width: 150px;
+    left: 120px;
+    top: 30px;
+  }
+
+  .cardTextStylesFinal {
+    left: 75px;
+    top: -60px;
+    width: 150px;
+  }
+
+  .screenComponentsFinal {
+    left: -100px;
+    top: 0px;
+  }
+
+  .screenMenuFinal {
+    top: -100px;
+    left: -30px;
+  }
+
+  .monocleFinal {
+    left: 236px;
+    width: 85px;
+    top: 80px;
+  }
+
+  .rowContainer {
+    margin: 0;
+    padding: 0;
+  }
+
+  .featureComponent {
+    height: 200px;
+    width: 200px;
+  }
+
+  .imageThreeContainer {
+    margin-top: 50px;
+    width: 280px;
+    height: 380px;
+  }
+
+  .circleFaceOneInitial {
+    width: 50px;
+    top: -25px;
+    left: 190px;
+  }
+  .circleFaceTwoInitial {
+    width: 50px;
+    top: 30px;
+    left: 220px;
+  }
+  .circleFaceThreeInitial {
+    width: 50px;
+    top: 275px;
+    left: 40px;
+  }
+  .communityScreenOneInitial {
+    width: 100px;
+    left: -40px;
+  }
+  .communityScreenOne {
+    left: -50px
+  }
+  .communityScreenTwoInitial {
+    width: 100px;
+    left: -40px;
+  }
+  .communityScreenTwo {
+    left: -30px;
+  }
+  .communityScreenThreeInitial {
+    width: 100px;
+    left: 30px;
+  }
+  .communityScreenThree {
+    left: 10px;
+    opacity: 1;
+  }
+  .communityScreenFourInitial {
+    width: 100px;
+    left: 60px;
+  }
+  .communityScreenFour {
+    left: 40px;
+  }
+  .communityScreenFiveInitial {
+    width: 100px;
+    left: 80px;
+  }
+  .communityScreenFive {
+    left: 80px;
+  }
+  .communityScreenSixInitial {
+    width: 100px;
+    left: 80px
+  }
+  .communityScreenSix {
+    left: 110px;
+  }
+  .communityScreenSevenInitial {
+    width: 100px;
+    left: 90px;
+  }
+  .communityScreenSeven {
+    left: 170px;
+  }
+  .communityScreenEightInitial {
+    width: 100px;
+    left: 115px;
+  }
+  .communityScreenEight {
+    left: 225px;
+    opacity: 1;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .codeSnippet {
+    width: 250px;
+    height: 350px;
+  }
+
+  .timeStampText {
+    font-size: 10px;
+  }
 }

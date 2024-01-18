@@ -1,0 +1,28 @@
+name: Recipe Idea
+description: For new recipe ideas
+labels: ['new recipe']
+
+body:
+  - type: textarea
+    attributes:
+      label: Describe your recipe idea
+      description: Also include a description of what is required to write the recipe
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        Required front-matter for recipe docs:
+        ```
+           ---
+             title: Recipe Title
+             description: Recipe Description
+             tags:
+               - Relevant Tag
+             last_update:
+               author: Author Name
+             publish_date: Date when the recipe PR is created
+           ---
+        ```
+        The above code block should be placed at the top of the recipe post.
+

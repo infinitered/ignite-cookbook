@@ -1,15 +1,19 @@
 ---
 title: Scrolling to a location that hasn't been rendered using FlatList or SectionList
-description: This article expains how to scroll to a location of a FlatList or SectionList that hasn't rendered yet
+description: This article explains how to scroll to a location of a FlatList or SectionList that hasn't rendered yet
 tags:
   - UI
+  - FlatList
+  - SectionList
+  - scrollTo
 last_update:
   author: Mark Rickert
+publish_date: 2022-10-09
 ---
 
-When calling `scrollViewRef.current.scrollToLocation()` on a React Native FlatList or SectionList will fail on occasion because it can't scroll to a location that hasn't been rendered yet.
+Calling `scrollViewRef.current.scrollToLocation()` on a React Native `FlatList` or `SectionList` will fail on occasion because it can't scroll to a location that hasn't been rendered yet.
 
-I ran into this problem on a LOT of the screens on a recent project so I wrote a HOC for SectionList that handles this case for us by implementing `onScrollToIndexFailed`.
+The solution to this is implementing `onScrollToIndexFailed` with some sort of recovery functionality to keep trying the scroll. This is a Higher Order Component (HOC) for `SectionList` that handles this for us.
 
 This component basically tries over and over to scroll to the requested location until it gets it right and no longer calls `onScrollToIndexFailed`.
 
@@ -26,7 +30,7 @@ interface SectionListHandle {
  * unknown (not rendered yet) location. This is useful for cases where the user wants to scroll to a
  * position very far down the list but we haven't rendered that far yet.
  *
- * This adds onScrollToIndexFailed property to SectionList so that if the scroll fails, we calculate the aproximate
+ * This adds onScrollToIndexFailed property to SectionList so that if the scroll fails, we calculate the approximate
  * scroll position, scroll there, and then try again to get the exact position requested.
  *
  * Essentially, it's a "guess the position and retry the operation" strategy until the list is scrolled to the
