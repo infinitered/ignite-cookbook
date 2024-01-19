@@ -1,49 +1,61 @@
-import React, { useEffect, useState } from 'react';
-import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
-import styles from './styles.module.css';
+import React, { useEffect, useState } from "react";
+import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
+import styles from "./styles.module.css";
+
+import * as ThumbsUp from "@site/static/img/thumbs-up.svg";
+import * as ThumbsDown from "@site/static/img/thumbs-down.svg";
 
 const VotedYes = () => {
-  return <span>Thanks for your feedback! We hope this recipe has been helpful.</span>;
+  return (
+    <span>Thanks for your feedback! We hope this recipe has been helpful.</span>
+  );
 };
 
 const VotedNo = () => {
-  return <span>Thanks for your feedback. We will update this recipe as soon as we can.</span>;
+  return (
+    <span>
+      Thanks for your feedback. We will update this recipe as soon as we can.
+    </span>
+  );
 };
 
 export default function Feedback({ resource }) {
   const [reaction, setReaction] = useState(null);
 
-  const isReacted = reaction === 'Yes' || reaction === 'No';
+  const isReacted = reaction === "yes" || reaction === "no";
 
-  const handleReaction = (params) => {
-    setReaction(params.icon);
+  const handleReaction = (reaction: string) => {
+    setReaction(reaction);
+
+    // track using Google Analytics custom event
+    // include the resource name and yes/no in the event name for tracking purposes
+    gtag("event", `feedback_${resource}_${reaction}`, {
+      event_category: "feedback",
+      event_label: resource,
+    });
   };
-
-  useEffect(() => {
-    if (ExecutionEnvironment.canUseDOM) {
-      window.HappyReact.init({
-        onReaction: handleReaction,
-      });
-    }
-  }, []);
 
   return (
     <div className={styles.root}>
-      <h3 className={styles.title}>Is this page still up to date? Did it work for you?</h3>
+      <h3 className={styles.title}>
+        Is this page still up to date? Did it work for you?
+      </h3>
       {!isReacted ? (
-        <div
-          className={styles.widget}
-          data-hr-token="4ab1ef36-87f3-4637-8c37-a80473d7505a"
-          data-hr-resource={resource}
-          data-hr-styles={JSON.stringify({
-            container: styles.container,
-            grid: styles.grid,
-            cell: styles.cell,
-            reaction: styles.reaction,
-            footer: styles.footer,
-          })}
-        />
-      ) : reaction === 'No' ? (
+        <div className={styles.grid}>
+          <button
+            className={styles.reactionButton}
+            onClick={() => handleReaction("yes")}
+          >
+            <ThumbsUp.default className={styles.reactionIcon} />
+          </button>
+          <button
+            className={styles.reactionButton}
+            onClick={() => handleReaction("no")}
+          >
+            <ThumbsDown.default className={styles.reactionIcon} />
+          </button>
+        </div>
+      ) : reaction === "no" ? (
         <VotedNo />
       ) : (
         <VotedYes />

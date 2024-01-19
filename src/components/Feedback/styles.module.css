@@ -1,29 +1,47 @@
 .root {
-    margin-top: 45px;
-  }
-  
-  .widget .grid {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    min-height: 50px;
-  }
-  
-  .widget .cell {
-    width: 50px;
-  }
-  
-  .widget .reaction {
-    width: 100%;
-    border: black 1px solid;
-  }
-  
-  .widget .reaction:hover {
-    border: black 1px solid;
-  }
-  
-  .widget .footer {
-    margin-top: 10px;
-    margin-left: 0;
-  }
-  
+  margin-top: 45px;
+}
+
+.grid {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.reactionButton {
+  all: unset;
+  cursor: pointer;
+  width: 50px;
+  height: 38px;
+  border: #d6d6d6 1px solid;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.reactionButton:hover {
+  background-color: #e3e3e3;
+}
+
+.reactionIcon {
+  width: 20px;
+  height: 20px;
+  color: "blue";
+  fill: "blue";
+}
+
+.reactionIcon.svg {
+  color: "blue";
+}
+
+.reactionIcon:hover {
+  color: "red";
+  fill: "red";
+}
+
+.footer {
+  margin-top: 10px;
+  margin-left: 0;
+}

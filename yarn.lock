@@ -2124,6 +2124,11 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
+"@types/gtag.js@^0.0.18":
+  version "0.0.18"
+  resolved "https://registry.yarnpkg.com/@types/gtag.js/-/gtag.js-0.0.18.tgz#d6bc7cb1acc64ff4f4e4be918d401c53fe9ccf20"
+  integrity sha512-GJxnIvuXuVhKaHfsOdzGipoOoXq72y3mdcncc9h6i6E7nlz89zBEj2wrLM7bqO5Xk9Lm2B94MwdQsSwRlaPSWw==
+
 "@types/hast@^2.0.0":
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/@types/hast/-/hast-2.3.4.tgz#8aa5ef92c117d20d974a82bdfb6a648b08c0bafc"
