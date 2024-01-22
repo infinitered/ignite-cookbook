@@ -146,6 +146,7 @@ const config = {
           customCss: require.resolve("./src/css/custom.css"),
         },
         gtag: {
+          // TODO: SWAP THIS OUT WITH LIVE GA4 TRACKING ID
           trackingID: "G-EBBQLBZYD2",
           anonymizeIP: true,
         },
