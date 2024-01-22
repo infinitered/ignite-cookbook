@@ -45,14 +45,18 @@ export default function Feedback({ resource }) {
           <button
             className={styles.reactionButton}
             onClick={() => handleReaction("yes")}
+            aria-label="Yes"
           >
             <ThumbsUp.default className={styles.reactionIcon} />
+            <div className={styles.reactionText}>Yes</div>
           </button>
           <button
             className={styles.reactionButton}
             onClick={() => handleReaction("no")}
+            aria-label="No"
           >
             <ThumbsDown.default className={styles.reactionIcon} />
+            <div className={styles.reactionText}>No</div>
           </button>
         </div>
       ) : reaction === "no" ? (

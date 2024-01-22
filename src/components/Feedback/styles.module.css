@@ -12,8 +12,9 @@
 .reactionButton {
   all: unset;
   cursor: pointer;
-  width: 50px;
-  height: 38px;
+  padding: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
   border: #d6d6d6 1px solid;
   border-radius: 4px;
   display: flex;
@@ -28,17 +29,13 @@
 .reactionIcon {
   width: 20px;
   height: 20px;
-  color: "blue";
-  fill: "blue";
 }
 
-.reactionIcon.svg {
-  color: "blue";
-}
-
-.reactionIcon:hover {
-  color: "red";
-  fill: "red";
+.reactionText {
+  margin-left: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a4a4a;
 }
 
 .footer {
