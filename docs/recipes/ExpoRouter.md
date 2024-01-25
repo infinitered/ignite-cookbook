@@ -6,15 +6,15 @@ tags:
   - expo-router
   - react-navigation
 last_update:
-  author: Frank Calise
-publish_date: 2023-11-03
+  author: Frank Calise & Justin Poliachik
+publish_date: 2024-01-25
 ---
 
 # Expo Router
 
 ## Overview
 
-Expo Router brings file-based routing to React Native and web applications allowing you to easily create universal apps. Whenever a file is added to your `app` directory, a new path is automatically added to your navigation.
+Expo Router brings file-based routing to React Native and web applications allowing you to easily create universal apps. Whenever a file is added to your `src/app` directory, a new path is automatically added to your navigation.
 
 For the full documentation by [Expo](https://expo.dev), head on over to the [Introduction to Expo Router](https://docs.expo.dev/routing/introduction/).
 
@@ -35,6 +35,17 @@ Add the missing dependencies `expo-router` needs:
 npx expo install expo-router expo-constants
 ```
 
+Add `expo-router` to `app.json` plugins list if necessary:
+
+```json
+"plugins": [
+   ...
+  "expo-font",
+  // success-line
+  "expo-router"
+],
+```
+
 Change the entry point that `expo-router` expects in `package.json`:
 
 ```json
@@ -44,36 +55,31 @@ Change the entry point that `expo-router` expects in `package.json`:
 "main": "expo-router/entry",
 ```
 
-Update the `babel.config.js` with the `expo-router/babel` plugin:
-
-```js
-const plugins = [
-  // success-line
-  "expo-router/babel",
-  /** react-native-reanimated web support @see https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation/#web */
-  "@babel/plugin-proposal-export-namespace-from",
-  /** NOTE: This must be last in the plugins @see https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation/#babel-plugin */
-  "react-native-reanimated/plugin",
-];
-```
-
-Version 2 of `expo-router` has much improved [TypeScript support](https://docs.expo.dev/router/reference/typed-routes/), so let's enable that in `app.json` under `experiments`.
+`expo-router` has great [TypeScript support](https://docs.expo.dev/router/reference/typed-routes/), so let's enable that in `app.json` under `experiments`.
 
 ```json
 {
   "expo": {
-    // ...
-    // success-line-start
     "experiments": {
-      "typedRoutes": true,
-      "tsconfigPaths": true
+      "tsconfigPaths": true,
+      // success-line
+      "typedRoutes": true
     }
-    // success-line-end
   }
 }
 ```
 
-And finally, let's update the TS alias and include paths over in `tsconfig.json`. More on this in the next section.
+## Reworking the Directory Structure
+
+Expo Router requires route files to live in either `app` or `src/app` directories. But since our Ignite project is already using `app`, we'll need to rename it to `src`. We'll create `src/app` to contain all the file-base routing files from here on out, and models, components and other shared files will be located in the `src` directory now. We'll also remove `App.tsx` as this is no longer the entry point of the application.
+
+```terminal
+rm App.tsx
+mv app src
+mkdir src/app
+```
+
+Let's update the TS alias and include paths over in `tsconfig.json`
 
 ```json
 {
@@ -87,27 +93,135 @@ And finally, let's update the TS alias and include paths over in `tsconfig.json`
       // ...
     },
   }
+  // error-line-start
+   "include": [
+    "index.js",
+    "App.tsx",
+    "app",
+    "types",
+    "plugins",
+    "app.config.ts",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ],
+  // error-line-end
+  // success-line
   "include": ["**/*.ts", "**/*.tsx"],
   // ...
 }
 ```
 
-## Reworking the Directory Structure
+### Fix Imports
 
-Due to some naming conventions forced by `expo-router`, we'll have to rename the `app` directory to `src` from Ignite's base boilerplate. The `app` directory will contain all the file-base routing files from here on out, so models, components and other shared files will be located in the `src` directory now. We'll also remove `App.tsx` as this is no longer the entry point of the application
+We also need to fix up a few imports to use `src/` instead of `app/`.
+Ignite's Demo App only contains a few files we need to update, but an existing app could contain more.
 
-```terminal
-rm App.tsx
-mv app src
-mv src/screens/ErrorBoundary src/components
-mkdir src/app
+**`package.json`**
+
+```json
+// error-line-start
+"format": "prettier --write \"app/**/*.{js,jsx,json,md,ts,tsx}\"",
+"lint": "eslint App.tsx app test --fix --ext .js,.ts,.tsx && npm run format",
+// error-line-end
+// success-line-start
+"format": "prettier --write \"src/**/*.{js,jsx,json,md,ts,tsx}\"",
+"lint": "eslint src test --fix --ext .js,.ts,.tsx && npm run format",
+// success-line-end
 ```
+
+**`src/devtools/ReactotronConfig.ts`**
+
+```ts
+// error-line-start
+import { clear } from "app/utils/storage";
+import { goBack, resetRoot, navigate } from "app/navigators/navigationUtilities";
+// error-line-end
+// success-line-start
+import { clear } from "src/utils/storage";
+import { goBack, resetRoot, navigate } from "src/navigators/navigationUtilities";
+// success-line-end
+```
+
+**`src/components/ListView.ts`**
+
+```ts
+// error-line
+import { isRTL } from "app/i18n";
+// success-line
+import { isRTL } from "src/i18n";
+```
+
+<details>
+  <summary>(optional) Additional files to update</summary>
+
+**`test/i18n.test.ts`**
+
+```ts
+// error-line
+import en from "../app/i18n/en";
+// success-line
+import en from "../src/i18n/en";
+import { exec } from "child_process";
+```
+
+**`ignite/templates/component/NAME.tsx.ejs`**
+
+```js
+---
+patch:
+  // error-line
+  path: "app/components/index.ts"
+  // success-line
+  path: "src/components/index.ts"
+  append: "export * from \"./<%= props.subdirectory %><%= props.pascalCaseName %>\"\n"
+  skip: <%= props.skipIndexFile %>
+---
+import * as React from "react"
+import { StyleProp, TextStyle, View, ViewStyle } from "react-native"
+import { observer } from "mobx-react-lite"
+// error-line-start
+import { colors, typography } from "app/theme"
+import { Text } from "app/components/Text"
+// error-line-end
+// success-line-start
+import { colors, typography } from "src/theme"
+import { Text } from "src/components/Text"
+// success-line-end
+```
+
+**`ignite/templates/model/NAME.tsx.ejs`**
+
+```js
+---
+patches:
+// error-line
+- path: "app/models/RootStore.ts"
+// success-line
+- path: "src/models/RootStore.ts"
+  after: "from \"mobx-state-tree\"\n"
+  insert: "import { <%= props.pascalCaseName %>Model } from \"./<%= props.pascalCaseName %>\"\n"
+  skip: <%= !props.pascalCaseName.endsWith('Store') %>
+// error-line
+- path: "app/models/RootStore.ts"
+// success-line
+- path: "src/models/RootStore.ts"
+  after: "types.model(\"RootStore\").props({\n"
+  insert: "  <%= props.camelCaseName %>: types.optional(<%= props.pascalCaseName %>Model, {} as any),\n"
+  skip: <%= !props.pascalCaseName.endsWith('Store') %>
+// error-line
+- path: "app/models/index.ts"
+// success-line
+- path: "src/models/index.ts"
+
+```
+
+</details>
 
 ## Creating File-based Routes
 
 ### src/app/\_layout.tsx
 
-We're now ready to start setting up the navigation for the app! If you're familiar with Ignite, `app.tsx` is where our root navigator lives, however, with `expo-router`, we'll use `src/app/_layout.tsx` for that. We'll add the providers here that any route would need within the app.
+We're now ready to start setting up navigation for the app! If you're familiar with Ignite, `app.tsx` is where our root navigator lives, however, with `expo-router`, we'll use `src/app/_layout.tsx` for that. We'll add the providers here that any route would need within the app.
 
 ```tsx
 // app/_layout.tsx
@@ -124,7 +238,7 @@ if (__DEV__) {
   require("src/devtools/ReactotronConfig.ts");
 }
 
-export { ErrorBoundary } from "src/components/ErrorBoundary/ErrorBoundary";
+export { ErrorBoundary } from "src/components/ErrorBoundary";
 
 export default function Root() {
   // Wait for stores to load and render our layout inside of it so we have access
@@ -136,6 +250,25 @@ export default function Root() {
 
   return <Slot />;
 }
+```
+
+Move `ErrorBoundary` out of `screens` and into `src/components`:
+
+```terminal
+mv src/screens/ErrorScreen/* src/components
+```
+
+And update imports in `ErrorDetails.tsx`
+
+```ts
+// error-line-start
+import { Button, Icon, Screen, Text } from "../../components";
+import { colors, spacing } from "../../theme";
+// error-line-end
+// success-line-start
+import { Button, Icon, Screen, Text } from ".";
+import { colors, spacing } from "../theme";
+// success-line-end
 ```
 
 For starters, this sets up our error boundary for the app and handles waiting on our stores to rehydrate. `<Slot />` comes from `expo-router`, you can think of it like the `children` prop in `React`. This component can be wrapped with others to help create a layout.
@@ -192,26 +325,12 @@ To redirect the user to the login form, create `src/app/log-in.tsx`. We'll copy 
   <summary>src/app/log-in.tsx</summary>
 
 ```tsx
+import { router } from "expo-router";
 import { observer } from "mobx-react-lite";
-import React, {
-  ComponentType,
-  FC,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { ComponentType, useEffect, useMemo, useRef, useState } from "react";
 import { TextInput, TextStyle, ViewStyle } from "react-native";
-import {
-  Button,
-  Icon,
-  Screen,
-  Text,
-  TextField,
-  TextFieldAccessoryProps,
-} from "src/components";
+import { Button, Icon, Screen, Text, TextField, TextFieldAccessoryProps } from "src/components";
 import { useStores } from "src/models";
-import { AppStackScreenProps } from "src/navigators";
 import { colors, spacing } from "src/theme";
 
 export default observer(function Login(_props) {
@@ -222,12 +341,7 @@ export default observer(function Login(_props) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [attemptsCount, setAttemptsCount] = useState(0);
   const {
-    authenticationStore: {
-      authEmail,
-      setAuthEmail,
-      setAuthToken,
-      validationError,
-    },
+    authenticationStore: { authEmail, setAuthEmail, setAuthToken, validationError },
   } = useStores();
 
   useEffect(() => {
@@ -259,45 +373,32 @@ export default observer(function Login(_props) {
 
     // We'll mock this with a fake token.
     setAuthToken(String(Date.now()));
+
+    // navigate to the main screen
+    router.replace("/");
   }
 
-  const PasswordRightAccessory: ComponentType<TextFieldAccessoryProps> =
-    useMemo(
-      () =>
-        function PasswordRightAccessory(props: TextFieldAccessoryProps) {
-          return (
-            <Icon
-              icon={isAuthPasswordHidden ? "view" : "hidden"}
-              color={colors.palette.neutral800}
-              containerStyle={props.style}
-              size={20}
-              onPress={() => setIsAuthPasswordHidden(!isAuthPasswordHidden)}
-            />
-          );
-        },
-      [isAuthPasswordHidden]
-    );
+  const PasswordRightAccessory: ComponentType<TextFieldAccessoryProps> = useMemo(
+    () =>
+      function PasswordRightAccessory(props: TextFieldAccessoryProps) {
+        return (
+          <Icon
+            icon={isAuthPasswordHidden ? "view" : "hidden"}
+            color={colors.palette.neutral800}
+            containerStyle={props.style}
+            size={20}
+            onPress={() => setIsAuthPasswordHidden(!isAuthPasswordHidden)}
+          />
+        );
+      },
+    [isAuthPasswordHidden]
+  );
 
   return (
-    <Screen
-      preset="auto"
-      contentContainerStyle={$screenContentContainer}
-      safeAreaEdges={["top", "bottom"]}
-    >
-      <Text
-        testID="login-heading"
-        tx="loginScreen.signIn"
-        preset="heading"
-        style={$signIn}
-      />
-      <Text
-        tx="loginScreen.enterDetails"
-        preset="subheading"
-        style={$enterDetails}
-      />
-      {attemptsCount > 2 && (
-        <Text tx="loginScreen.hint" size="sm" weight="light" style={$hint} />
-      )}
+    <Screen preset="auto" contentContainerStyle={$screenContentContainer} safeAreaEdges={["top", "bottom"]}>
+      <Text testID="login-heading" tx="loginScreen.signIn" preset="heading" style={$signIn} />
+      <Text tx="loginScreen.enterDetails" preset="subheading" style={$enterDetails} />
+      {attemptsCount > 2 && <Text tx="loginScreen.hint" size="sm" weight="light" style={$hint} />}
 
       <TextField
         value={authEmail}
@@ -329,13 +430,7 @@ export default observer(function Login(_props) {
         RightAccessory={PasswordRightAccessory}
       />
 
-      <Button
-        testID="login-button"
-        tx="loginScreen.tapToSignIn"
-        style={$tapButton}
-        preset="reversed"
-        onPress={login}
-      />
+      <Button testID="login-button" tx="loginScreen.tapToSignIn" style={$tapButton} preset="reversed" onPress={login} />
     </Screen>
   );
 });
@@ -422,24 +517,14 @@ export default observer(function WelcomeScreen() {
     <View style={$container}>
       <View style={$topContainer}>
         <Image style={$welcomeLogo} source={welcomeLogo} resizeMode="contain" />
-        <Text
-          testID="welcome-heading"
-          style={$welcomeHeading}
-          tx="welcomeScreen.readyForLaunch"
-          preset="heading"
-        />
+        <Text testID="welcome-heading" style={$welcomeHeading} tx="welcomeScreen.readyForLaunch" preset="heading" />
         <Text tx="welcomeScreen.exciting" preset="subheading" />
         <Image style={$welcomeFace} source={welcomeFace} resizeMode="contain" />
       </View>
 
       <View style={[$bottomContainer, $bottomContainerInsets]}>
         <Text tx="welcomeScreen.postscript" size="md" />
-        <Button
-          testID="next-screen-button"
-          preset="reversed"
-          tx="welcomeScreen.letsGo"
-          onPress={goNext}
-        />
+        <Button testID="next-screen-button" preset="reversed" tx="welcomeScreen.letsGo" onPress={goNext} />
       </View>
     </View>
   );
@@ -490,9 +575,13 @@ const $welcomeHeading: TextStyle = {
 
 </details>
 
+### Checkpoint
+
+Build and run your app using `yarn run ios`. You should see the log-in route, be able to authenticate, and navigate to the main "welcome" screen. But we aren't done yet - we still need to add the remaining screens in a Tab Navigator.
+
 ## Adding Tab Navigation
 
-Now that we can see the welcome screen, it's time to add the tab navigator. First, we'll create another route group to help contain where these routes live and set the layout for the tabs.
+First, we'll create another route group to help contain where these routes live and set the layout for the tabs.
 
 Create `src/app/(app)/(tabs)/_layout.tsx` and we'll convert Ignite's previous `app/navigators/DemoNavigator.tsx` to live here.
 
@@ -530,13 +619,7 @@ export default observer(function Layout() {
           href: "/showroom",
           headerShown: false,
           tabBarLabel: translate("demoNavigator.componentsTab"),
-          tabBarIcon: ({ focused }) => (
-            <Icon
-              icon="components"
-              color={focused ? colors.tint : undefined}
-              size={30}
-            />
-          ),
+          tabBarIcon: ({ focused }) => <Icon icon="components" color={focused ? colors.tint : undefined} size={30} />,
         }}
       />
       <Tabs.Screen
@@ -545,13 +628,7 @@ export default observer(function Layout() {
           href: "/community",
           headerShown: false,
           tabBarLabel: translate("demoNavigator.communityTab"),
-          tabBarIcon: ({ focused }) => (
-            <Icon
-              icon="community"
-              color={focused ? colors.tint : undefined}
-              size={30}
-            />
-          ),
+          tabBarIcon: ({ focused }) => <Icon icon="community" color={focused ? colors.tint : undefined} size={30} />,
         }}
       />
       <Tabs.Screen
@@ -561,13 +638,7 @@ export default observer(function Layout() {
           headerShown: false,
           tabBarAccessibilityLabel: translate("demoNavigator.podcastListTab"),
           tabBarLabel: translate("demoNavigator.podcastListTab"),
-          tabBarIcon: ({ focused }) => (
-            <Icon
-              icon="podcast"
-              color={focused ? colors.tint : undefined}
-              size={30}
-            />
-          ),
+          tabBarIcon: ({ focused }) => <Icon icon="podcast" color={focused ? colors.tint : undefined} size={30} />,
         }}
       />
       <Tabs.Screen
@@ -576,13 +647,7 @@ export default observer(function Layout() {
           href: "/debug",
           headerShown: false,
           tabBarLabel: translate("demoNavigator.debugTab"),
-          tabBarIcon: ({ focused }) => (
-            <Icon
-              icon="debug"
-              color={focused ? colors.tint : undefined}
-              size={30}
-            />
-          ),
+          tabBarIcon: ({ focused }) => <Icon icon="debug" color={focused ? colors.tint : undefined} size={30} />,
         }}
       />
     </Tabs>
@@ -630,11 +695,7 @@ const reactNativeNewsletterLogo = require("assets/images/demo/rnn-logo.png");
 
 export default function DemoCommunityScreen() {
   return (
-    <Screen
-      preset="scroll"
-      contentContainerStyle={$container}
-      safeAreaEdges={["top"]}
-    >
+    <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
       <Text preset="heading" tx="demoCommunityScreen.title" style={$title} />
       <Text tx="demoCommunityScreen.tagLine" style={$tagline} />
 
@@ -646,33 +707,17 @@ export default function DemoCommunityScreen() {
         rightIcon={isRTL ? "caretLeft" : "caretRight"}
         onPress={() => openLinkInBrowser("https://community.infinite.red/")}
       />
-      <Text
-        preset="subheading"
-        tx="demoCommunityScreen.makeIgniteEvenBetterTitle"
-        style={$sectionTitle}
-      />
-      <Text
-        tx="demoCommunityScreen.makeIgniteEvenBetter"
-        style={$description}
-      />
+      <Text preset="subheading" tx="demoCommunityScreen.makeIgniteEvenBetterTitle" style={$sectionTitle} />
+      <Text tx="demoCommunityScreen.makeIgniteEvenBetter" style={$description} />
       <ListItem
         tx="demoCommunityScreen.contributeToIgniteLink"
         leftIcon="github"
         rightIcon={isRTL ? "caretLeft" : "caretRight"}
-        onPress={() =>
-          openLinkInBrowser("https://github.com/infinitered/ignite")
-        }
+        onPress={() => openLinkInBrowser("https://github.com/infinitered/ignite")}
       />
 
-      <Text
-        preset="subheading"
-        tx="demoCommunityScreen.theLatestInReactNativeTitle"
-        style={$sectionTitle}
-      />
-      <Text
-        tx="demoCommunityScreen.theLatestInReactNative"
-        style={$description}
-      />
+      <Text preset="subheading" tx="demoCommunityScreen.theLatestInReactNativeTitle" style={$sectionTitle} />
+      <Text tx="demoCommunityScreen.theLatestInReactNative" style={$description} />
       <ListItem
         tx="demoCommunityScreen.reactNativeRadioLink"
         bottomSeparator
@@ -716,11 +761,7 @@ export default function DemoCommunityScreen() {
         }
         onPress={() => openLinkInBrowser("https://cr.infinite.red/")}
       />
-      <Text
-        preset="subheading"
-        tx="demoCommunityScreen.hireUsTitle"
-        style={$sectionTitle}
-      />
+      <Text preset="subheading" tx="demoCommunityScreen.hireUsTitle" style={$sectionTitle} />
       <Text tx="demoCommunityScreen.hireUs" style={$description} />
       <ListItem
         tx="demoCommunityScreen.hireUsLink"
@@ -794,17 +835,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import {
-  Button,
-  ButtonAccessoryProps,
-  Card,
-  EmptyState,
-  Icon,
-  ListView,
-  Screen,
-  Text,
-  Toggle,
-} from "src/components";
+import { Button, ButtonAccessoryProps, Card, EmptyState, Icon, ListView, Screen, Text, Toggle } from "src/components";
 import { isRTL, translate } from "src/i18n";
 import { useStores } from "src/models";
 import { Episode } from "src/models/Episode";
@@ -842,11 +873,7 @@ export default observer(function DemoPodcastListScreen(_props) {
   }
 
   return (
-    <Screen
-      preset="fixed"
-      safeAreaEdges={["top"]}
-      contentContainerStyle={$screenContentContainer}
-    >
+    <Screen preset="fixed" safeAreaEdges={["top"]} contentContainerStyle={$screenContentContainer}>
       <ListView<Episode>
         contentContainerStyle={$listContentContainer}
         data={episodeStore.episodesForList.slice()}
@@ -861,16 +888,8 @@ export default observer(function DemoPodcastListScreen(_props) {
             <EmptyState
               preset="generic"
               style={$emptyState}
-              headingTx={
-                episodeStore.favoritesOnly
-                  ? "demoPodcastListScreen.noFavoritesEmptyState.heading"
-                  : undefined
-              }
-              contentTx={
-                episodeStore.favoritesOnly
-                  ? "demoPodcastListScreen.noFavoritesEmptyState.content"
-                  : undefined
-              }
+              headingTx={episodeStore.favoritesOnly ? "demoPodcastListScreen.noFavoritesEmptyState.heading" : undefined}
+              contentTx={episodeStore.favoritesOnly ? "demoPodcastListScreen.noFavoritesEmptyState.content" : undefined}
               button={episodeStore.favoritesOnly ? "" : undefined}
               buttonOnPress={manualRefresh}
               imageStyle={$emptyStateImage}
@@ -881,24 +900,16 @@ export default observer(function DemoPodcastListScreen(_props) {
         ListHeaderComponent={
           <View style={$heading}>
             <Text preset="heading" tx="demoPodcastListScreen.title" />
-            {(episodeStore.favoritesOnly ||
-              episodeStore.episodesForList.length > 0) && (
+            {(episodeStore.favoritesOnly || episodeStore.episodesForList.length > 0) && (
               <View style={$toggle}>
                 <Toggle
                   value={episodeStore.favoritesOnly}
-                  onValueChange={() =>
-                    episodeStore.setProp(
-                      "favoritesOnly",
-                      !episodeStore.favoritesOnly
-                    )
-                  }
+                  onValueChange={() => episodeStore.setProp("favoritesOnly", !episodeStore.favoritesOnly)}
                   variant="switch"
                   labelTx="demoPodcastListScreen.onlyFavorites"
                   labelPosition="left"
                   labelStyle={$labelStyle}
-                  accessibilityLabel={translate(
-                    "demoPodcastListScreen.accessibility.switch"
-                  )}
+                  accessibilityLabel={translate("demoPodcastListScreen.accessibility.switch")}
                 />
               </View>
             )}
@@ -964,21 +975,16 @@ const EpisodeCard = observer(function EpisodeCard({
       Platform.select<AccessibilityProps>({
         ios: {
           accessibilityLabel: episode.title,
-          accessibilityHint: translate(
-            "demoPodcastListScreen.accessibility.cardHint",
-            {
-              action: isFavorite ? "unfavorite" : "favorite",
-            }
-          ),
+          accessibilityHint: translate("demoPodcastListScreen.accessibility.cardHint", {
+            action: isFavorite ? "unfavorite" : "favorite",
+          }),
         },
         android: {
           accessibilityLabel: episode.title,
           accessibilityActions: [
             {
               name: "longpress",
-              label: translate(
-                "demoPodcastListScreen.accessibility.favoriteAction"
-              ),
+              label: translate("demoPodcastListScreen.accessibility.favoriteAction"),
             },
           ],
           onAccessibilityAction: ({ nativeEvent }) => {
@@ -1005,13 +1011,7 @@ const EpisodeCard = observer(function EpisodeCard({
       function ButtonLeftAccessory() {
         return (
           <View>
-            <Animated.View
-              style={[
-                $iconContainer,
-                StyleSheet.absoluteFill,
-                animatedLikeButtonStyles,
-              ]}
-            >
+            <Animated.View style={[$iconContainer, StyleSheet.absoluteFill, animatedLikeButtonStyles]}>
               <Icon
                 icon="heart"
                 size={ICON_SIZE}
@@ -1039,18 +1039,10 @@ const EpisodeCard = observer(function EpisodeCard({
       onLongPress={handlePressFavorite}
       HeadingComponent={
         <View style={$metadata}>
-          <Text
-            style={$metadataText}
-            size="xxs"
-            accessibilityLabel={episode.datePublished.accessibilityLabel}
-          >
+          <Text style={$metadataText} size="xxs" accessibilityLabel={episode.datePublished.accessibilityLabel}>
             {episode.datePublished.textLabel}
           </Text>
-          <Text
-            style={$metadataText}
-            size="xxs"
-            accessibilityLabel={episode.duration.accessibilityLabel}
-          >
+          <Text style={$metadataText} size="xxs" accessibilityLabel={episode.duration.accessibilityLabel}>
             {episode.duration.textLabel}
           </Text>
         </View>
@@ -1189,8 +1181,7 @@ export default function DemoDebugScreen() {
     authenticationStore: { logout },
   } = useStores();
 
-  const usingHermes =
-    typeof HermesInternal === "object" && HermesInternal !== null;
+  const usingHermes = typeof HermesInternal === "object" && HermesInternal !== null;
   // @ts-expect-error
   const usingFabric = global.nativeFabricUIManager != null;
 
@@ -1214,17 +1205,11 @@ export default function DemoDebugScreen() {
   );
 
   return (
-    <Screen
-      preset="scroll"
-      safeAreaEdges={["top"]}
-      contentContainerStyle={$container}
-    >
+    <Screen preset="scroll" safeAreaEdges={["top"]} contentContainerStyle={$container}>
       <Text
         style={$reportBugsLink}
         tx="demoDebugScreen.reportBugs"
-        onPress={() =>
-          openLinkInBrowser("https://github.com/infinitered/ignite/issues")
-        }
+        onPress={() => openLinkInBrowser("https://github.com/infinitered/ignite/issues")}
       />
       <Text style={$title} preset="heading" tx="demoDebugScreen.title" />
       <View style={$itemsContainer}>
@@ -1278,15 +1263,8 @@ export default function DemoDebugScreen() {
         />
       </View>
       <View style={$buttonContainer}>
-        <Button
-          style={$button}
-          tx="demoDebugScreen.reactotron"
-          onPress={demoReactotron}
-        />
-        <Text
-          style={$hint}
-          tx={`demoDebugScreen.${Platform.OS}ReactotronHint` as const}
-        />
+        <Button style={$button} tx="demoDebugScreen.reactotron" onPress={demoReactotron} />
+        <Text style={$hint} tx={`demoDebugScreen.${Platform.OS}ReactotronHint` as const} />
       </View>
       <View style={$buttonContainer}>
         <Button style={$button} tx="common.logOut" onPress={logout} />
@@ -1363,6 +1341,10 @@ rm src/components/Showroom/DemoShowroomScreen.tsx
 > ```
 >
 > You'll need to update the imports in the `src/components/Showroom/demos/Demo*.ts` files.
+> A project-wide search and replace should do the trick:
+>
+> - Project-wide search for `from "../DemoShowroomScreen"`
+> - Replace with `from "."`
 
 We've deleted the screen file because we'll make a few `expo-router` specific changes to it over in the `app` directory. One improvement we can make to the Showroom screen is that we can reduce the platform specific code with regards to the `renderItem` of `SectionList`.
 
@@ -1381,10 +1363,7 @@ const WebListItem: FC<DemoListItem> = ({ item, sectionIndex }) => {
         const itemSlug = slugify(u);
 
         return (
-          <Link
-            key={`section${sectionIndex}-${u}`}
-            to={`/showroom/${sectionSlug}/${itemSlug}`}
-          >
+          <Link key={`section${sectionIndex}-${u}`} to={`/showroom/${sectionSlug}/${itemSlug}`}>
             <Text>{u}</Text>
           </Link>
         );
@@ -1393,17 +1372,9 @@ const WebListItem: FC<DemoListItem> = ({ item, sectionIndex }) => {
   );
 };
 
-const NativeListItem: FC<DemoListItem> = ({
-  item,
-  sectionIndex,
-  handleScroll,
-}) => (
+const NativeListItem: FC<DemoListItem> = ({ item, sectionIndex, handleScroll }) => (
   <View>
-    <Text
-      onPress={() => handleScroll?.(sectionIndex)}
-      preset="bold"
-      style={$menuContainer}
-    >
+    <Text onPress={() => handleScroll?.(sectionIndex)} preset="bold" style={$menuContainer}>
       {item.name}
     </Text>
     {item.useCases.map((u, index) => (
@@ -1460,14 +1431,7 @@ The snippet below contains the entire file for reference:
 
 ```tsx
 import React, { FC, useEffect, useRef, useState } from "react";
-import {
-  Image,
-  ImageStyle,
-  SectionList,
-  TextStyle,
-  View,
-  ViewStyle,
-} from "react-native";
+import { Image, ImageStyle, SectionList, TextStyle, View, ViewStyle } from "react-native";
 import { Drawer } from "react-native-drawer-layout";
 import { type ContentStyle } from "@shopify/flash-list";
 import { ListItem, ListView, ListViewRef, Screen, Text } from "src/components";
@@ -1533,16 +1497,12 @@ export default function DemoShowroomScreen() {
   React.useEffect(() => {
     if (Object.keys(params).length > 0) {
       const demoValues = Object.values(Demos);
-      const findSectionIndex = demoValues.findIndex(
-        (x) => x.name.toLowerCase() === params.sectionSlug
-      );
+      const findSectionIndex = demoValues.findIndex((x) => x.name.toLowerCase() === params.sectionSlug);
       let findItemIndex = 0;
       if (params.itemSlug) {
         try {
           findItemIndex =
-            demoValues[findSectionIndex].data.findIndex(
-              (u) => slugify(u.props.name) === params.itemSlug
-            ) + 1;
+            demoValues[findSectionIndex].data.findIndex((u) => slugify(u.props.name) === params.itemSlug) + 1;
         } catch (err) {
           console.error(err);
         }
@@ -1620,11 +1580,7 @@ export default function DemoShowroomScreen() {
         </View>
       )}
     >
-      <Screen
-        preset="fixed"
-        safeAreaEdges={["top"]}
-        contentContainerStyle={$screenContainer}
-      >
+      <Screen preset="fixed" safeAreaEdges={["top"]} contentContainerStyle={$screenContainer}>
         <DrawerIconButton onPress={toggleDrawer} {...{ open }} />
 
         <SectionList
@@ -1707,13 +1663,13 @@ const $demoUseCasesSpacer: ViewStyle = {
 
 If you head on over to the web app at `http://localhost:8081/showroom?itemSlug=variants&sectionSlug=toggle`, you'll see the Showroom screen will open and scroll down to the appropriate section.
 
-We can emulate this same deep link on an iOS simulator with the following command:
+We can emulate [deep links in Expo Go](https://docs.expo.dev/guides/linking/#testing-urls) with the command:
 
 ```terminal
-xcrun simctl openurl booted 'pizza-router://showroom?sectionSlug=toggle&itemSlug=variants'
+npx uri-scheme open exp://localhost:8081/--/showroom --ios
 ```
 
-Observe the simulator opens the mobile app and navigates to the Showroom screen, followed by scrolling to the Variants section of the Toggle component.
+Observe the simulator opens the mobile app and navigates to the Showroom screen.
 
 We get that universal linking for free with `expo-router`!
 
@@ -1731,11 +1687,7 @@ In doing so, we'll need to fix some `Reacetotron` code for custom commands. We'l
 
 ```ts
 // error-line
-import {
-  goBack,
-  resetRoot,
-  navigate,
-} from "src/navigators/navigationUtilities";
+import { goBack, resetRoot, navigate } from "src/navigators/navigationUtilities";
 // success-line
 import { router } from "expo-router";
 // ...
@@ -1759,8 +1711,10 @@ reactotron.onCustomCommand<[{ name: "route"; type: ArgType.String }]>({
       Reactotron.log(`Navigating to: ${route}`);
       // error-line
       navigate(route as any); // this should be tied to the navigator, but since this is for debugging, we can navigate to illegal routes
-      // success-line
+      // success-line-start
+      // @ts-ignore - bypass Expo Router Typed Routes
       router.push(route);
+      // success-line-end
     } else {
       Reactotron.log("Could not navigate. No route provided.");
     }
@@ -1793,6 +1747,8 @@ There you have it, a culinary masterpiece of Ignite and Expo Router, shipped in 
 - Examples of many aspects of `expo-router`, such as authentication, tab navigation, search params
 - Deep linking that Just Works<sup>TM</sup> on both web and mobile
 - Reduced Platform specific code
+
+[Full Example Repo](https://github.com/Jpoliachik/ignite-expo-router)
 
 ## Additional Resources
 
