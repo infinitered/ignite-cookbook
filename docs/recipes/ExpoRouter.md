@@ -238,7 +238,7 @@ if (__DEV__) {
   require("src/devtools/ReactotronConfig.ts");
 }
 
-export { ErrorBoundary } from "src/components/ErrorBoundary";
+export { ErrorBoundary } from "src/components/ErrorBoundary/ErrorBoundary";
 
 export default function Root() {
   // Wait for stores to load and render our layout inside of it so we have access
@@ -252,23 +252,11 @@ export default function Root() {
 }
 ```
 
-Move `ErrorBoundary` out of `screens` and into `src/components`:
+Move `ErrorBoundary` out of `screens/ErrorScreen` and into `src/components/ErrorBoundary`:
 
 ```terminal
-mv src/screens/ErrorScreen/* src/components
-```
-
-And update imports in `ErrorDetails.tsx`
-
-```ts
-// error-line-start
-import { Button, Icon, Screen, Text } from "../../components";
-import { colors, spacing } from "../../theme";
-// error-line-end
-// success-line-start
-import { Button, Icon, Screen, Text } from ".";
-import { colors, spacing } from "../theme";
-// success-line-end
+mkdir src/components/ErrorBoundary
+mv src/screens/ErrorScreen/* src/components/ErrorBoundary
 ```
 
 For starters, this sets up our error boundary for the app and handles waiting on our stores to rehydrate. `<Slot />` comes from `expo-router`, you can think of it like the `children` prop in `React`. This component can be wrapped with others to help create a layout.
