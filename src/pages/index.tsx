@@ -29,8 +29,8 @@ const NewSection = () => {
       new Date(b.publish_date).getTime() - new Date(a.publish_date).getTime()
   )[0];
 
-  const igniteReleaseVersion = "v8.8.7";
-  const igniteReleaseDate = moment("2023-08-07").diff(moment(), "days") * -1;
+  const igniteReleaseVersion = "v9.0.5";
+  const igniteReleaseDate = moment("2023-12-02").diff(moment(), "days") * -1;
 
   return (
     <div className={styles.newSection}>
@@ -55,7 +55,7 @@ const NewSection = () => {
       </div>
       <div className={styles.notificationSection}>
         <p className={styles.notificationTagText}>Releases</p>
-        <h3 className={styles.notificationTitle}>Ignite Maverick</h3>
+        <h3 className={styles.notificationTitle}>Ignite Exp[ress]o ☕️</h3>
         <p className={styles.notificationDate}>
           {igniteReleaseDate > 0 ? (
             <>
