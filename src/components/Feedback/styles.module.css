@@ -1,0 +1,44 @@
+.root {
+  margin-top: 45px;
+}
+
+.grid {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.reactionButton {
+  all: unset;
+  cursor: pointer;
+  padding: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border: #d6d6d6 1px solid;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.reactionButton:hover {
+  background-color: #e3e3e3;
+}
+
+.reactionIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.reactionText {
+  margin-left: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a4a4a;
+}
+
+.footer {
+  margin-top: 10px;
+  margin-left: 0;
+}
