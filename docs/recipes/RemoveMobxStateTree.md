@@ -77,7 +77,20 @@ const reactotron = Reactotron.configure({
 ++}
 ```
 
-5. Update the [Ignite Generator Templates](https://docs.infinite.red/ignite-cli/concept/Generator-Templates/)!
+5. Remove `useStores()` from components
+
+- Do a project-wide search for `useStores` and remove each instance.
+- If you're converting to a different state management solution, you'll need to swap the data we get from `useStores` to your new solution. Or you can swap in temporary hardcoded values to prevent crashes while you migrate. (just don't forget about it!)
+
+```diff
+--import { useStores } from "../models"
+
+const AppStack = () => {
+--  const { authenticationStore: { isAuthenticated } } = useStores()
+++  const isAuthenticated = false // TODO: TEMPORARY VALUE - replace with alternative state management solution
+```
+
+6. Update the [Ignite Generator Templates](https://docs.infinite.red/ignite-cli/concept/Generator-Templates/)!
 
 - Follow the same pattern to replace `observer()`. This will allow you to quickly generate screens and components via `npx ignite-cli generate screen NewScreen` and `npx ignite-cli generate component NewComponent` and use your updated syntax.
 - I also recommend customizing these however else you prefer!
@@ -95,7 +108,7 @@ const reactotron = Reactotron.configure({
 ++}
 ```
 
-6. Remove old Mobx-State-Tree store initialization & hydration code in `app.tsx`.
+7. Remove old Mobx-State-Tree store initialization & hydration code in `app.tsx`.
 
 - We still need to call `hideSplashScreen` in a `useEffect` so the app loads without needing to hydrate a store first.
 
