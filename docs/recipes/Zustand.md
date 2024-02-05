@@ -7,7 +7,7 @@ tags:
   - State Management
 last_update:
   author: Justin Poliachik
-publish_date: 2024-01-16
+publish_date: 2024-02-05
 ---
 
 # Zustand
@@ -22,6 +22,8 @@ npx ignite-cli new ZustandApp --yes
 ```
 
 If you are converting an existing project these steps still apply, but you may also need to migrate other related functionality.
+
+Check out the [Final Source Code](https://github.com/Jpoliachik/ignite-zustand) or follow along below!
 
 ## Convert Mobx-State-Tree Models to Zustand
 

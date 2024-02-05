@@ -6,7 +6,7 @@ tags:
   - State Management
 last_update:
   author: Justin Poliachik
-publish_date: 2024-02-01
+publish_date: 2024-02-05
 ---
 
 # Remove Mobx-State-Tree
