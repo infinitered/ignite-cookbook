@@ -17,10 +17,10 @@ publish_date: 2022-12-28
 
 In this recipe, we'll convert our the Ignite demo project from using `AsyncStorage` to `MMKV`.
 
-We'll get started by igniting a new application with the `prebuild` workflow. We must do this since `react-native-mmkv` contains native dependencies not included in the Expo SDK. Luckily with Ignite CLI, it's easy to jump into this workflow:
+We'll get started by igniting a new application with the `cng` workflow. We must do this since `react-native-mmkv` contains native dependencies not included in the Expo SDK. Luckily with Ignite CLI, it's easy to jump into this workflow:
 
 ```nodejs
-npx ignite-cli new PizzaApp --workflow=prebuild --yes
+npx ignite-cli new PizzaApp --workflow=cng --yes
 cd PizzaApp
 ```
 
@@ -33,7 +33,7 @@ yarn add react-native-mmkv
 yarn prebuild
 ```
 
-_Note: For more information on prebuild, you can read the [Expo docs here](https://docs.expo.dev/workflow/prebuild/)._
+_Note: For more information on Continuous Native Generation (CNG), you can read the [Expo docs here](https://docs.expo.dev/workflow/continuous-native-generation/)._
 
 ## Code Changes
 
