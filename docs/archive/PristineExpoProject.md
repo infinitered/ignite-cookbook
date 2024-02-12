@@ -8,6 +8,12 @@ last_update:
 publish_date: 2022-10-11
 ---
 
+:::warning
+
+This recipe is for Ignite v8 only.
+
+:::
+
 # Pristine Expo Project
 
 Ignite sets your project up ready to run both a bare React Native project or with Expo.
@@ -72,22 +78,7 @@ These changes are optional as you can continue to use the prefixed `expo:` comma
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web",
-    "build:detox": "detox build -c ios.sim.expo",
-    "test:detox": "./bin/downloadExpoApp.sh && detox test --configuration ios.sim.expo"
-  },
-  // ... more config ...
-  "detox": {
-    "test-runner": "jest",
-    "runnerConfig": "./detox/config.json",
-    "specs": "detox",
-    "configurations": {
-      "ios.sim.expo": {
-        "binaryPath": "bin/Exponent.app",
-        "type": "ios.simulator",
-        "name": "iPhone 14"
-      }
-    }
+    "web": "expo start --web"
   }
   // ... more config ...
 }

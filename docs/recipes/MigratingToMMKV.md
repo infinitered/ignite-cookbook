@@ -6,7 +6,7 @@ tags:
   - AsyncStorage
 last_update:
   author: Frank Calise
-publish_date: 2022-10-28
+publish_date: 2022-12-28
 ---
 
 # Migrating to MMKV
@@ -15,22 +15,25 @@ publish_date: 2022-10-28
 
 [MMKV](https://github.com/mrousavy/react-native-mmkv) is said to be the fastest key/value storage for React Native. It has encryption support for secure local storage and also uses synchronous storage to simplify your application code.
 
-In this recipe, we'll convert our the Ignite demo project from using `AsyncStorage` to `MMKV`:
+In this recipe, we'll convert our the Ignite demo project from using `AsyncStorage` to `MMKV`.
+
+We'll get started by igniting a new application with the `cng` workflow. We must do this since `react-native-mmkv` contains native dependencies not included in the Expo SDK. Luckily with Ignite CLI, it's easy to jump into this workflow:
 
 ```nodejs
-npx ignite-cli new PizzaApp --yes
+npx ignite-cli new PizzaApp --workflow=cng --yes
 cd PizzaApp
 ```
 
 ## Project Dependencies
 
-Install the `react-native-mmkv` dependency into the project
+Install the `react-native-mmkv` dependency into the project and run prebuild again to let Expo take care of the necessary adjustments to the native template.
 
 ```nodejs
 yarn add react-native-mmkv
+yarn prebuild
 ```
 
-_Note: No `pod install` was run here because the scripts set up in an Ignite project take care of that for you!_
+_Note: For more information on Continuous Native Generation (CNG), you can read the [Expo docs here](https://docs.expo.dev/workflow/continuous-native-generation/)._
 
 ## Code Changes
 
