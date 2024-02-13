@@ -1,6 +1,6 @@
 ---
 title: Redux
-description: How to migrate a Mobx-State-Tree project to Redux
+description: How to migrate a MobX-State-Tree project to Redux
 tags:
   - Redux
   - MobX
@@ -12,7 +12,7 @@ publish_date: 2024-01-16
 
 # Redux
 
-This guide will show you how to migrate a Mobx-State-Tree project (Ignite's default) to Redux, using a newly created Ignite project as our example:
+This guide will show you how to migrate a MobX-State-Tree project (Ignite's default) to Redux, using a newly created Ignite project as our example:
 
 ```terminal
 npx ignite-cli new ReduxApp --yes --removeDemo
@@ -20,9 +20,9 @@ npx ignite-cli new ReduxApp --yes --removeDemo
 
 If you are migrating an existing project these steps still apply, but you may need to migrate your existing state tree and other additional functionality.
 
-## Remove Mobx-State-Tree
+## Remove MobX-State-Tree
 
-First, follow our recipe to [Remove Mobx-State-Tree](./RemoveMobxStateTree.md) from your project. This will give you a blank slate to setup Redux.
+First, follow our recipe to [Remove MobX-State-Tree](./RemoveMobxStateTree.md) from your project. This will give you a blank slate to setup Redux.
 
 ## Add Redux
 
@@ -69,8 +69,8 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 #### Add State
 
 - Add your state reducers or [slices](https://redux-toolkit.js.org/usage/usage-guide#creating-slices-of-state). We'll create a simple `counter` slice for this example.
-- If you have an existing state tree with Mobx-State-Tree, you'll need to convert your tree into a series of Redux reducers.
-  - Note: Redux does not define or validate your models like Mobx-State-Tree does. It is up to you to ensure the correct data is being set in your reducers.
+- If you have an existing state tree with MobX-State-Tree, you'll need to convert your tree into a series of Redux reducers.
+  - Note: Redux does not define or validate your models like MobX-State-Tree does. It is up to you to ensure the correct data is being set in your reducers.
 
 **`app/store/counterSlice.ts`**
 
@@ -169,7 +169,7 @@ You're now using Redux!
 
 ## Persistence
 
-Ignite ships with built-in persistence support for Mobx-State-Tree. We can add similar support for Redux by:
+Ignite ships with built-in persistence support for MobX-State-Tree. We can add similar support for Redux by:
 
 1. Install [`redux-persist`](https://github.com/rt2zz/redux-persist)
 
