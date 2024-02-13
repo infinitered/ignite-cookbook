@@ -517,7 +517,7 @@ In the Ignite Demo App, we'll update the following components to use our exporte
 **`app/navigators/AppNavigator.tsx`**
 
 ```tsx
-import { useStore, isAuthenticatedSelector } from "../store";
+import { useStore, isAuthenticatedSelector } from "app/store";
 
 const AppStack = () => {
 
@@ -556,7 +556,17 @@ import {
 const episodeStore = useEpisodeStore();
 ```
 
-We also need to update how we get derived values from `Episode` now that we're working with a plain object in Zustand without custom getters. Instead of `episode.duration` we can use our util function `getDatePublished`. Add these lines to the render function of `EpisodeCard`, and replace a few spots those values are used.
+```diff
+<Toggle
+  value={episodeStore.favoritesOnly}
+  onValueChange={() =>
+--  episodeStore.setProp("favoritesOnly", !episodeStore.favoritesOnly)
+++  episodeStore.setFavoritesOnly(!episodeStore.favoritesOnly)
+  }
+
+```
+
+We also need to update how we get derived values from `Episode` now that we're working with a plain object in Zustand without custom getters. Instead of `episode.duration` we can use our util function `getDuration`. Add these lines to the render function of `EpisodeCard`, and replace a few spots those values are used.
 
 ```ts
 const datePublished = getDatePublished(episode);
@@ -581,6 +591,8 @@ A few additional updates to make in Ignite's Demo App:
 **`app/screens/WelcomeScreen.tsx`**
 
 ```diff
+++import { useStore } from "app/store"
+
 --const {
 --  authenticationStore: { logout },
 --} = useStores()
@@ -590,6 +602,8 @@ A few additional updates to make in Ignite's Demo App:
 **`app/screens/DemoDebugScreen.tsx`**
 
 ```diff
+++import { useStore } from "app/store"
+
 --const {
 --  authenticationStore: { logout },
 --} = useStores()
@@ -599,7 +613,7 @@ A few additional updates to make in Ignite's Demo App:
 **`app/services/api/api.ts`**
 
 ```diff
-+import { Episode } from "../../models/Episode";
++import { Episode } from "app/store/Episode";
 
 -const episodes: EpisodeSnapshotIn[] =
 +const episodes: Episode[] =
@@ -661,7 +675,7 @@ We added the `persist` middleware and created `_hasHydrated` property & action t
 **`app/app.tsx`**
 
 ```diff
-+import { useStore } from "./models"
++import { useStore } from "./store"
 
 ...
 
