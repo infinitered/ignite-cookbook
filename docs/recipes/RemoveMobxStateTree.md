@@ -1,6 +1,6 @@
 ---
-title: Remove Mobx-State-Tree
-description: How to remove Mobx-State-Tree from an Ignite project
+title: Remove MobX-State-Tree
+description: How to remove MobX-State-Tree from an Ignite project
 tags:
   - MobX
   - State Management
@@ -11,25 +11,19 @@ publish_date: 2024-02-05
 
 # Remove Mobx-State-Tree
 
-By default, Ignite uses [MobX-State-Tree](https://mobx-state-tree.js.org/) as the default state management solution. While we love [Mobx-State-Tree at Infinite Red](https://docs.infinite.red/ignite-cli/concept/MobX-State-Tree/), we understand the landscape is rich with great alternatives that you may want to use instead.
+By default, Ignite uses [MobX-State-Tree](https://mobx-state-tree.js.org/) as the default state management solution. While we love [MobX-State-Tree at Infinite Red](https://docs.infinite.red/ignite-cli/concept/MobX-State-Tree/), we understand the landscape is rich with great alternatives that you may want to use instead.
 
 This guide will show you how to remove Mobx-State-Tree from an Ignite-generated project and get to a "blank slate" with no state management at all.
 
 ## Steps
 
-1. Let's start by removing all Mobx-related dependencies from `package.json`, then run `yarn` or `npm i`
+1. Let's start by removing all MobX-related dependencies
 
-**package.json**
-
-```diff
---"mobx": "6.10.2",
---"mobx-react-lite": "4.0.5",
---"mobx-state-tree": "5.3.0",
-
---"reactotron-mst": "3.1.5",
+```bash
+yarn remove mobx mobx-react-lite mobx-state-tree reactotron-mst
 ```
 
-2. Ignite places all Mobx-State-Tree models in the `models/`. Remove this entire directory and all files within it, these are not needed anymore.
+2. Ignite places all MobX-State-Tree models in the `models/`. Remove this entire directory and all files within it, these are not needed anymore.
 
 ```terminal
 rm -rf ./app/models
@@ -66,6 +60,8 @@ const reactotron = Reactotron.configure({
 4. Remove `observer()` wrapped components and reformat as functional React components
 
 - Do a project-wide search for `observer(` and replace each component instance with the following pattern:
+
+**app/screens/WelcomeScreen.tsx**
 
 ```diff
 --import { observer } from "mobx-react-lite"
@@ -120,12 +116,36 @@ const AppStack = () => {
 --const { rehydrated } = useInitialRootStore(() => {
 --setTimeout(hideSplashScreen, 500)
 --})
-++useEffect(() => {
+++React.useEffect(() => {
 ++    setTimeout(hideSplashScreen, 500)
 ++}, [])
 
 --if (!rehydrated || !isNavigationStateRestored || !areFontsLoaded) return null
 ++if (!isNavigationStateRestored || !areFontsLoaded) return null
+```
+
+8. Remove any remaining `/models` imports
+
+Your app might have a few remaining references to replace. In the Ignite Demo App, we need to replace the `EpisodeSnapshotIn` type which was previously derived from the MST model. Instead, we'll use `EpisodeItem` from our API types.
+
+**app/services/api/api.ts**
+
+```diff
+--import type { ApiConfig, ApiFeedResponse } from "./api.types"
+--import type { EpisodeSnapshotIn } from "../../models/Episode"
+++import type { ApiConfig, ApiFeedResponse, EpisodeItem } from "./api.types"
+
+
+--async getEpisodes(): Promise<{ kind: "ok"; episodes: EpisodeSnapshotIn[] } | GeneralApiProblem> {
+++async getEpisodes(): Promise<{ kind: "ok"; episodes: EpisodeItem[] } | GeneralApiProblem> {
+// make the api call
+
+--// This is where we transform the data into the shape we expect for our MST model.
+--const episodes: EpisodeSnapshotIn[] =
+--  rawData?.items.map((raw) => ({
+--    ...raw,
+--  })) ?? []
+++const episodes = rawData?.items ?? []
 ```
 
 ## Conclusion
