@@ -76,19 +76,19 @@ const config = {
             let recordContents = false;
             for await (const line of rl) {
               // extract author
-              if (/author:/.test(line)) {
+              if (!author && /author:/.test(line)) {
                 author = line.split(":")[1].trim();
                 continue;
               }
 
               // extract title
-              if (/title:/.test(line)) {
+              if (!title && /title:/.test(line)) {
                 title = line.split(":")[1].trim();
                 continue;
               }
 
               // extract publish_date
-              if (/publish_date:/.test(line)) {
+              if (!publish_date && /publish_date:/.test(line)) {
                 publish_date = line.split(":")[1].trim();
                 continue;
               }
