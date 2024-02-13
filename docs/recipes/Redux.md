@@ -1,6 +1,6 @@
 ---
 title: Redux
-description: How to migrate a Mobx-State-Tree project to Redux
+description: How to migrate a MobX-State-Tree project to Redux
 tags:
   - Redux
   - MobX
@@ -12,7 +12,7 @@ publish_date: 2024-01-16
 
 # Redux
 
-This guide will show you how to migrate a Mobx-State-Tree project (Ignite's default) to Redux, using a newly created Ignite project as our example:
+This guide will show you how to migrate a MobX-State-Tree project (Ignite's default) to Redux, using a newly created Ignite project as our example:
 
 ```terminal
 npx ignite-cli new ReduxApp --yes --removeDemo
@@ -20,86 +20,9 @@ npx ignite-cli new ReduxApp --yes --removeDemo
 
 If you are migrating an existing project these steps still apply, but you may need to migrate your existing state tree and other additional functionality.
 
-## Remove Mobx-State-Tree
+## Remove MobX-State-Tree
 
-- Remove all Mobx-related dependencies from `package.json`, then run `yarn` or `npm i`
-
-```diff
---"mobx": "6.10.2",
---"mobx-react-lite": "4.0.5",
---"mobx-state-tree": "5.3.0",
-
---"reactotron-mst": "3.1.5",
-```
-
-- Ignite created default boilerplate Mobx-State-Tree files in the `models/` directory. Remove this entire directory and all files within it, these are not needed for Redux.
-
-- In `devtools/ReactotronConfig.ts` remove the `reactotron-mst` plugin. We can come back to [add a Redux plugin](#reactotron-support) later.
-
-```diff
---import { mst } from "reactotron-mst"
-
-...
-
-const reactotron = Reactotron.configure({
-  name: require("../../package.json").name,
-  onConnect: () => {
-    /** since this file gets hot reloaded, let's clear the past logs every time we connect */
-    Reactotron.clear()
-  },
---}).use(
---  mst({
---    /** ignore some chatty `mobx-state-tree` actions  */
---    filter: (event) => /postProcessSnapshot|@APPLY_SNAPSHOT/.test(event.name) === false,
---  }),
---)
-++})
-```
-
-- Remove all `observer()` components and reformat as normal React components. Do a project-wide search for `observer(` and replace each component instance with the following pattern:
-
-```diff
---import { observer } from "mobx-react-lite"
-
---export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen(props) {
-++export const WelcomeScreen: FC<WelcomeScreenProps> = (props) => {
-    ...
---})
-++}
-```
-
-- (optional) Don't forget to update your [Ignite Generator Templates](https://docs.infinite.red/ignite-cli/concept/Generator-Templates/)!
-  - Follow the same pattern to replace `observer()`. This will allow you to quickly generate screens and components via `npx ignite-cli generate screen NewScreen` and `npx ignite-cli generate component NewComponent` and use your updated syntax. (You can customize these however you like!)
-  - Update `ignite/templates/component/NAME.tsx.ejs` and `ignite/templates/screen/NAMEScreen.tsx.ejs`
-
-```diff
---import { observer } from "mobx-react-lite"
-
---export const <%= props.pascalCaseName %> = observer(function <%= props.pascalCaseName %>(props: <%= props.pascalCaseName %>Props) {
-++export const <%= props.pascalCaseName %> = (props: <%= props.pascalCaseName %>Props) => {
-    ...
---})
-++}
-```
-
-- Remove old Mobx-State-Tree store initialization / hydration code in `app.tsx`.
-- Call `hideSplashScreen` in a `useEffect` so the app loads for now. We'll replace this code when we add [persistence](#persistence) below.
-
-```diff
---import { useInitialRootStore } from "./models"
-
---const { rehydrated } = useInitialRootStore(() => {
---setTimeout(hideSplashScreen, 500)
---})
-++useEffect(() => {
-++    setTimeout(hideSplashScreen, 500)
-++}, [])
-
---if (!rehydrated || !isNavigationStateRestored || !areFontsLoaded) return null
-++if (!isNavigationStateRestored || !areFontsLoaded) return null
-```
-
-You should be able to build and run your app! It won't have any data...but it's a good idea to check that it successfully runs before we move on.
+First, follow our recipe to [Remove MobX-State-Tree](./RemoveMobxStateTree.md) from your project. This will give you a blank slate to setup Redux.
 
 ## Add Redux
 
@@ -114,11 +37,12 @@ yarn add react-redux
 
 #### Create Store
 
-- In a new file `app/store.ts`, create your Redux store.
+- In a new file `app/store/store.ts`, create your Redux store.
   - Create an initial store. We're using [Redux Toolkit's `configureStore`](https://redux-toolkit.js.org/usage/usage-guide#simplifying-store-setup-with-configurestore) here for simplicity.
-  - Export Typescript helpers for the rest of your app to stay type safe
+  - Export Typescript helpers for the rest of your app to stay type safe.
+  - We'll use `app/store` directory for all our Redux reducers and store, but feel free to use any directory structure you like. Another popular option is to use [feature folders](https://redux.js.org/faq/code-structure).
 
-`store.ts`
+**`app/store/store.ts`**
 
 ```typescript
 import { configureStore } from "@reduxjs/toolkit";
@@ -145,10 +69,10 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 #### Add State
 
 - Add your state reducers or [slices](https://redux-toolkit.js.org/usage/usage-guide#creating-slices-of-state). We'll create a simple `counter` slice for this example.
-- If you have an existing state tree with Mobx-State-Tree, you'll need to convert your tree into a series of Redux reducers.
-  - Note: Redux does not define or validate your models like Mobx-State-Tree does. It is up to you to ensure the correct data is being set in your reducers.
+- If you have an existing state tree with MobX-State-Tree, you'll need to convert your tree into a series of Redux reducers.
+  - Note: Redux does not define or validate your models like MobX-State-Tree does. It is up to you to ensure the correct data is being set in your reducers.
 
-`counterSlice.ts`
+**`app/store/counterSlice.ts`**
 
 ```typescript
 import { createSlice } from "@reduxjs/toolkit";
@@ -185,6 +109,8 @@ export default counterSlice.reducer;
 
 In `app.tsx`, wrap your `AppNavigator` with the react-redux Provider component
 
+**`app/app.tsx`**
+
 ```jsx
 import { Provider } from "react-redux";
 import { store } from "./store/store";
@@ -206,7 +132,7 @@ You can now use selectors to grab data and `dispatch()` to execute actions withi
 
 - Remember to use our exported `useAppSelector` and `useAppDispatch` helpers for type safety
 
-`WelcomeScreen.tsx`
+**`app/screens/WelcomeScreen.tsx`**
 
 ```typescript
 import React, { FC } from "react";
@@ -243,7 +169,7 @@ You're now using Redux!
 
 ## Persistence
 
-Ignite ships with built-in persistence support for Mobx-State-Tree. We can add similar support for Redux by:
+Ignite ships with built-in persistence support for MobX-State-Tree. We can add similar support for Redux by:
 
 1. Install [`redux-persist`](https://github.com/rt2zz/redux-persist)
 
@@ -253,22 +179,13 @@ yarn add redux-persist
 
 2. Modify `store.ts` to include `redux-persist`
 
-`store.ts`
+**`app/store/store.ts`**
 
 ```typescript
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import counterReducer from "./counterSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import {
-  persistStore,
-  persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from "redux-persist";
+import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const persistConfig = {
@@ -307,7 +224,7 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 3. Add a `PersistGate` to `app.tsx` and replace any existing `hideSplashScreen` calls with the `onBeforeLift` callback
 
-`app.tsx`
+**`app/app.tsx`**
 
 ```typescript
 ...
