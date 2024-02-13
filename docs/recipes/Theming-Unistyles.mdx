@@ -18,13 +18,11 @@ import TabItem from "@theme/TabItem";
 
 # Theming Ignite
 
+When it comes to styling we acknowledge the popularity and effectiveness of libraries like `styled-components`, `emotion.js` and `unistyles`. Our boilerplate is designed to work seamlessly with these styling solutions, offering you the flexibility to choose the one that aligns with your preferences and project requirements.
+
+The theming system in Ignite Boilerplate is crafted to be adaptable and easy to customize. By simply replacing colors and fonts through the designated theme files, you can tailor the look and feel of your application.
+
 ## Using `Unistyles`
-
-The ignite boilerplate comes with a powerful generic theming system that you can adapt to fit the needs of your own app by replacing colors and fonts using the built-in theme files.
-
-We recognize that many people like using pre-built components and design systems such as styled-components, emotion, and unistyles.
-
-styled-components is a popular library for react and react-native that
 
 :::warning
 
@@ -34,7 +32,7 @@ To do this with an newly ignited app, run `yarn expo prebuild --clean` and then 
 
 :::
 
-### 1. Add `react-native-unistyles to your app:
+### 1. Add `react-native-unistyles` to your app:
 
 <Tabs groupId="operating-systems">
   <TabItem value="yarn" label="Yarn">
@@ -55,6 +53,7 @@ Create a new file in you Ignited app's `types` folder called `react-native-unist
 ```tsx
 // Override UnistylesThemes to get accurate typings for your project.
 import type { Theme } from "app/theme";
+import "react-native-unistyles";
 
 type AppThemes = {
   light: Theme;
