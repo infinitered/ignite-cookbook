@@ -11,7 +11,7 @@ publish_date: 2024-02-05
 
 # Remove Mobx-State-Tree
 
-By default, Ignite uses [Mobx-State-Tree](https://mobx-state-tree.js.org/) as the default state management solution. While we love [Mobx-State-Tree at Infinite Red](https://docs.infinite.red/ignite-cli/concept/MobX-State-Tree/), we understand the landscape is rich with great alternatives that you may want to use instead.
+By default, Ignite uses [MobX-State-Tree](https://mobx-state-tree.js.org/) as the default state management solution. While we love [Mobx-State-Tree at Infinite Red](https://docs.infinite.red/ignite-cli/concept/MobX-State-Tree/), we understand the landscape is rich with great alternatives that you may want to use instead.
 
 This guide will show you how to remove Mobx-State-Tree from an Ignite-generated project and get to a "blank slate" with no state management at all.
 
@@ -108,7 +108,7 @@ const AppStack = () => {
 ++}
 ```
 
-7. Remove old Mobx-State-Tree store initialization & hydration code in `app.tsx`.
+7. Remove old MobX-State-Tree store initialization & hydration code in `app.tsx`.
 
 - We still need to call `hideSplashScreen` in a `useEffect` so the app loads without needing to hydrate a store first.
 

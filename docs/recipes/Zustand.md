@@ -15,7 +15,7 @@ publish_date: 2024-02-05
 [Zustand](https://github.com/pmndrs/zustand) is a "bearbones" state management solution (hence the cute bear mascot).
 Its a relatively simple and unopinionated option to manage application state, with a hooks-based API for easy use in a React app.
 
-This guide will show you how to migrate a Mobx-State-Tree project (Ignite's default) to Zustand, using a new Ignite project as an example:
+This guide will show you how to migrate a MobX-State-Tree project (Ignite's default) to Zustand, using a new Ignite project as an example:
 
 ```terminal
 npx ignite-cli new ZustandApp --yes
@@ -25,9 +25,9 @@ If you are converting an existing project these steps still apply, but you may a
 
 Check out the [Final Source Code](https://github.com/Jpoliachik/ignite-zustand) or follow along below!
 
-## Convert Mobx-State-Tree Models to Zustand
+## Convert MobX-State-Tree Models to Zustand
 
-Our Ignite Demo App includes a few Mobx-State-Tree models inside `app/models`. Before we remove those, let's convert them to Zustand!
+Our Ignite Demo App includes a few MobX-State-Tree models inside `app/models`. Before we remove those, let's convert them to Zustand!
 
 First, add `zustand`:
 
@@ -48,7 +48,7 @@ If you Ignited a demo-free project `npx ignite-cli new ZustandApp --yes --remove
 **AuthenticationStore**
 
 <details>
-<summary>For reference, here's the original AuthenticationStore with Mobx-State-Tree:</summary>
+<summary>For reference, here's the original AuthenticationStore with MobX-State-Tree:</summary>
 
 **`app/models/AuthenticationStore.ts`**
 
@@ -91,7 +91,7 @@ export interface AuthenticationStoreSnapshot extends SnapshotOut<typeof Authenti
 
 </details>
 
-Mobx-State-Tree models declare the data type, initial values, derived values, and actions all in one.  
+MobX-State-Tree models declare the data type, initial values, derived values, and actions all in one.  
 Zustand takes a "barebones" approach and defines a store as a basic state object with data and actions co-located.
 
 Create a new file `app/store/AuthenticationStore.ts` and convert the model to Zustand to look like this:
@@ -153,7 +153,7 @@ A few things to note:
 Follow the same pattern to convert `app/models/EpisodeStore.ts`
 
 <details>
-  <summary>Original Mobx-State-Tree EpisodeStore for reference:</summary>
+  <summary>Original MobX-State-Tree EpisodeStore for reference:</summary>
 
 **`app/models/EpisodeStore.ts`**
 
@@ -296,7 +296,7 @@ So far, `AuthenticationStore` and `EpisodeStore` converted cleanly into Zustand 
 - Another very popular method is to use [Zod](https://zod.dev/), which also enables data validation at runtime for better safety.
 
 <details>
-<summary>Original Mobx-State-Tree Episode.ts file for reference:</summary>
+<summary>Original MobX-State-Tree Episode.ts file for reference:</summary>
 
 **`app/models/Episode.ts`**
 
@@ -464,9 +464,9 @@ export const getDuration = (episode: Episode) => {
 
 </details>
 
-## Remove Mobx-State-Tree
+## Remove MobX-State-Tree
 
-Now that our models have been converted, follow our recipe to [Remove Mobx-State-Tree](./RemoveMobxStateTree.md) entirely from your project.
+Now that our models have been converted, follow our recipe to [Remove MobX-State-Tree](./RemoveMobxStateTree.md) entirely from your project.
 
 ## Create Store
 
