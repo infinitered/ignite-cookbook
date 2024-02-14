@@ -153,6 +153,7 @@
   line-height: 24px;
 }
 
+/* aa: Algolia autocomplete (search component) customization */
 .aa-DetachedSearchButton {
   min-width: 150px !important;
 }
@@ -169,7 +170,6 @@
   border-color: #41476E !important;
 }
 
-
 .aa-Form:focus-within {
   border-color: #41476E !important;
   box-shadow: 0 0 0 2px rgba(65, 71, 110, 0.3), inset 0 0 0 2px rgba(65, 71, 110, 0.3) !important;
@@ -178,6 +178,10 @@
 .aa-DetachedSearchButton:focus {
   border-color: #41476E !important;
   box-shadow: 0 0 0 2px rgba(65, 71, 110, 0.3), inset 0 0 0 2px rgba(65, 71, 110, 0.3) !important;
+}
+
+.aa-ItemContentTitle {
+ font-weight: bold;
 }
 
 [class*='row footer__links'] {
