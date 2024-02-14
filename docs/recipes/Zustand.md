@@ -17,7 +17,7 @@ Its a relatively simple and unopinionated option to manage application state, wi
 
 This guide will show you how to migrate a MobX-State-Tree project (Ignite's default) to Zustand, using a new Ignite project as an example:
 
-```terminal
+```bash
 npx ignite-cli new ZustandApp --yes
 ```
 
@@ -31,13 +31,13 @@ Our Ignite Demo App includes a few MobX-State-Tree models inside `app/models`. B
 
 First, add `zustand`:
 
-```terminal
+```bash
 yarn add zustand
 ```
 
 Create a directory for our new Zustand store files:
 
-```terminal
+```bash
 mkdir app/store
 ```
 

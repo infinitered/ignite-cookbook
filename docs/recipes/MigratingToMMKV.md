@@ -19,7 +19,7 @@ In this recipe, we'll convert our the Ignite demo project from using `AsyncStora
 
 We'll get started by igniting a new application with the `cng` workflow. We must do this since `react-native-mmkv` contains native dependencies not included in the Expo SDK. Luckily with Ignite CLI, it's easy to jump into this workflow:
 
-```nodejs
+```bash
 npx ignite-cli new PizzaApp --workflow=cng --yes
 cd PizzaApp
 ```
@@ -28,7 +28,7 @@ cd PizzaApp
 
 Install the `react-native-mmkv` dependency into the project and run prebuild again to let Expo take care of the necessary adjustments to the native template.
 
-```nodejs
+```bash
 yarn add react-native-mmkv
 yarn prebuild
 ```

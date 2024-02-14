@@ -18,13 +18,13 @@ This guide will teach you how to set up an [Expo development build](https://docs
 
 Start with a fresh Ignite app, but choose the `prebuild` workflow:
 
-```console
+```bash
 npx ignite-cli@latest new PizzaApp --workflow=prebuild --yes
 ```
 
 You'll also need `eas-cli` globally installed and and an [Expo account](https://expo.dev/signup) if you don't already have one.
 
-```console
+```bash
 npm install -g eas-cli
 ```
 
@@ -33,7 +33,7 @@ _Optional_: You can use EAS builds for free, however there is a queue time to wa
 <details>
 <summary><strong>iOS</strong></summary>
 
-```console
+```bash
 brew install cocoapods fastlane
 ```
 
@@ -52,19 +52,19 @@ SDK and NDK
 
 From within your project directory, run the following:
 
-```console
+```bash
 yarn add expo-dev-client
 ```
 
 Create or link an EAS project.
 
-```console
+```bash
 eas init
 ```
 
 You'll be asked to select your EAS account if you're linked to multiple and if you'd like to create a new project. Afterwards, you'll see a warning like this:
 
-```console
+```bash
 Warning: Your project uses dynamic app configuration, and the EAS project ID can't automatically be added to it.
 https://docs.expo.dev/workflow/configuration/#dynamic-configuration-with-appconfigjs
 
@@ -85,7 +85,7 @@ Simply open `app.json` and add the `extra` key somewhere under the `expo` key in
 
 Configure the project to support EAS Build.
 
-```console
+```bash
 eas build:configure
 ```
 
@@ -121,7 +121,7 @@ Ignite 9 comes with some build profiles already set up for you. You can view the
 
 **Using EAS build servers**
 
-```console
+```bash
 eas build --profile preview
 ```
 
@@ -129,13 +129,13 @@ Once complete, you can download the Android `apk` or iOS `tar` file.
 
 **Build Locally**
 
-```console
+```bash
 eas build --profile preview --local
 ```
 
 Your app will be saved in the root directory unless you specify the desired directory with the environment variable `EAS_LOCAL_BUILD_ARTIFACTS_DIR`, for example:
 
-```console
+```bash
 EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile preview --local
 ```
 

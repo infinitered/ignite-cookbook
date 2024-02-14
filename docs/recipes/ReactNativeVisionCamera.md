@@ -22,14 +22,14 @@ In this example, we'll take a look at wiring up a barcode scanner. This tutorial
 
 If you haven't already, spin up a new Ignite application:
 
-```terminal
+```bash
 npx ignite-cli@latest new PizzaApp --remove-demo --workflow=prebuild --yes
 cd PizzaApp
 ```
 
 Next, let's install the necessary dependencies. You can see complete installation instructions for `react-native-vision-camera` [here](https://react-native-vision-camera.com/docs/guides).
 
-```terminal
+```bash
 npx expo install react-native-vision-camera
 ```
 
@@ -63,7 +63,7 @@ Add the plugin to `app.json` as per the documentation. It'll look like the follo
 
 To get this native dependency working in our project, we'll need to run prebuild so Expo can execute the proper native code changes for us. Then we can boot up the app on a device.
 
-```terminal
+```bash
 npx expo prebuild
 yarn android
 ```
@@ -142,7 +142,7 @@ const $container: ViewStyle = {
 
 Before we get to displaying the camera for scanning, let's quickly set up a new store in MST for keeping our list of codes and a screen to view them. Generate the commands using the Ignite CLI:
 
-```terminal
+```bash
 npx ignite-cli@next g model CodeStore
 npx ignite-cli@next g screen Codes
 ```

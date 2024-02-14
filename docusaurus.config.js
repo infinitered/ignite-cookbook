@@ -1,9 +1,10 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require("prism-react-renderer/themes/github");
+const { themes } = require("prism-react-renderer");
+const lightCodeTheme = themes.github;
 const npm2yarn = require("@docusaurus/remark-plugin-npm2yarn");
-const darkCodeTheme = require("prism-react-renderer/themes/dracula");
+const darkCodeTheme = themes.dracula;
 const fs = require("fs");
 const readline = require("readline");
 const { gitlogPromise } = require("gitlog");
@@ -278,6 +279,14 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
+        additionalLanguages: [
+          "bash",
+          "ruby",
+          "json",
+          "ejs",
+          "diff",
+          "markup-templating",
+        ],
         magicComments: [
           // Remember to extend the default highlight class name as well!
           {

@@ -18,7 +18,7 @@ This guide will teach you how to set up over-the-air (OTA) updates with Expo and
 
 You'll also need `eas-cli` globally installed and and an [Expo account](https://expo.dev/signup) if you don't already have one.
 
-```console
+```bash
 npm install -g eas-cli
 ```
 
