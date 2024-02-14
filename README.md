@@ -1,5 +1,8 @@
 <p align="center">
-  <img src="./static/img/logo-reversed.svg" alt="Ignite Logo" width="200" />
+  <picture>
+    <source media="(prefers-color-scheme: light)" srcset="./static/img/logo.svg" />
+    <img src="./static/img/logo-reversed.svg" alt="Ignite Cookbook Logo" width="200" />
+  </picture>
   <a  href="https://infinitered.github.io/ignite-cookbook/">
     <h2 align="center">Ignite Cookbook for React Native</h2>
   </a>
