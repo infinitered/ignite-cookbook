@@ -38,6 +38,9 @@
     "gitlog": "^4.0.4",
     "typescript": "~5.2.2"
   },
+  "resolutions": {
+    "@types/react": "^18.2.55"
+  },
   "browserslist": {
     "production": [
       ">0.5%",
