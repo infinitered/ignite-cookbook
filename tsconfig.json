@@ -4,8 +4,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "types": ["@types/gtag.js"],
+    "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "strict": true,
+    "noUncheckedIndexedAccess": true
   }
 }

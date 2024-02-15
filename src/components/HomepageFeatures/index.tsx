@@ -29,6 +29,12 @@ type FeatureItem = {
   description: JSX.Element;
 };
 
+type Snippet = {
+  author: string;
+  content: string;
+  lastUpdated: string;
+};
+
 const FeatureList: FeatureItem[] = [
   {
     title: "Spin Up Your App In Record Time",
@@ -113,11 +119,7 @@ const FeatureList: FeatureItem[] = [
     title: "Find Quality Code When You Need It",
     Component: () => {
       const { snippets } = usePluginData("example-code-snippets") as {
-        snippets: {
-          author: string;
-          content: string;
-          lastUpdated: string;
-        }[];
+        snippets: Snippet[];
       };
 
       const [show, setShow] = useState(false);
@@ -131,9 +133,11 @@ const FeatureList: FeatureItem[] = [
         return () => clearInterval(interval);
       }, [snippets]);
 
-      const snippet = show
-        ? snippets[current]
-        : { author: "", content: "", lastUpdated: "..." };
+      const snippet = snippets[current] ?? {
+        author: "",
+        content: "",
+        lastUpdated: "...",
+      };
 
       return (
         <div className={styles.imageTwoContainer}>
@@ -334,8 +338,8 @@ const useIntersection = (
     if (observerRef.current === null && currentElement !== null) {
       const observer = new IntersectionObserver(
         ([entry]) => {
-          setState(entry.isIntersecting);
-          if (entry.isIntersecting) observer.unobserve(currentElement);
+          setState(!!entry?.isIntersecting);
+          if (!!entry?.isIntersecting) observer.unobserve(currentElement);
         },
         { rootMargin }
       );
