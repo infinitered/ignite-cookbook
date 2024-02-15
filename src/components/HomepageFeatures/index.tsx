@@ -329,9 +329,8 @@ const useIntersection = (
   const elementRef: MutableRefObject<Element | undefined> = useRef();
 
   useEffect(() => {
-    let observer: IntersectionObserver | undefined;
     if (observerRef.current === undefined && element.current !== undefined) {
-      observerRef.current = new IntersectionObserver(
+      const observer = new IntersectionObserver(
         ([entry]) => {
           setState(entry.isIntersecting);
           if (entry.isIntersecting) observer.unobserve(element.current);
@@ -339,9 +338,9 @@ const useIntersection = (
         { rootMargin }
       );
       elementRef.current = element.current;
+      observerRef.current = observer;
 
-      // TODO: why isn't typescript erroring when I don't include optional chaining here?
-      element.current && observer?.observe(element.current);
+      element.current && observer.observe(element.current);
     }
 
     return () => {
