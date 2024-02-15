@@ -33,7 +33,7 @@ const FeatureList: FeatureItem[] = [
   {
     title: "Spin Up Your App In Record Time",
     Component: () => {
-      const ref = useRef();
+      const ref = useRef(null);
       const inViewport = useIntersection(ref, "0px");
       const [transition, setTransition] = useState(false);
       const [monocleTransition, setMonocleTransition] = useState(false);
@@ -177,7 +177,7 @@ const FeatureList: FeatureItem[] = [
   {
     title: "Backed By A Community of React Native Experts",
     Component: () => {
-      const ref = useRef();
+      const ref = useRef(null);
       const inViewport = useIntersection(ref, "0px");
 
       const [transition, setTransition] = useState(false);
@@ -318,22 +318,24 @@ export default function HomepageFeatures(): JSX.Element {
 }
 
 const useIntersection = (
-  element: MutableRefObject<Element | undefined>,
+  element: MutableRefObject<Element | null>,
   rootMargin: string
 ) => {
   const [isVisible, setState] = useState(false);
-  const observerRef: MutableRefObject<IntersectionObserver | undefined> =
-    useRef();
+  const observerRef: MutableRefObject<IntersectionObserver | null> =
+    useRef(null);
   // store our own copy of element ref for un-observing, as it will be undefined
   // later when component is removed
-  const elementRef: MutableRefObject<Element | undefined> = useRef();
+  const elementRef: MutableRefObject<Element | null> = useRef(null);
 
   useEffect(() => {
-    if (observerRef.current === undefined && element.current !== undefined) {
+    // store in variable for typescript narrowing
+    const currentElement = element.current;
+    if (observerRef.current === null && currentElement !== null) {
       const observer = new IntersectionObserver(
         ([entry]) => {
           setState(entry.isIntersecting);
-          if (entry.isIntersecting) observer.unobserve(element.current);
+          if (entry.isIntersecting) observer.unobserve(currentElement);
         },
         { rootMargin }
       );
@@ -344,9 +346,9 @@ const useIntersection = (
     }
 
     return () => {
-      observerRef.current?.unobserve(elementRef.current);
-      observerRef.current = undefined;
-      elementRef.current = undefined;
+      currentElement && observerRef.current?.unobserve(currentElement);
+      observerRef.current = null;
+      elementRef.current = null;
     };
   }, []);
 
