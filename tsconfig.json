@@ -3,6 +3,9 @@
   "extends": "@docusaurus/tsconfig",
   "compilerOptions": {
     "baseUrl": ".",
-    "types": ["@types/gtag.js"]
+    "types": ["@types/gtag.js"],
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
   }
 }
