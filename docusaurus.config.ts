@@ -1,16 +1,14 @@
-// @ts-check
-// Note: type annotations allow type checking and IDEs autocompletion
-
+import type {Config} from '@docusaurus/types';
+import type * as Preset from '@docusaurus/preset-classic';
 const { themes } = require("prism-react-renderer");
 const lightCodeTheme = themes.github;
-const npm2yarn = require("@docusaurus/remark-plugin-npm2yarn");
 const darkCodeTheme = themes.dracula;
 const fs = require("fs");
 const readline = require("readline");
 const { gitlogPromise } = require("gitlog");
 
 /** @type {import('@docusaurus/types').Config} */
-const config = {
+const config: Config = {
   title: "Ignite Cookbook for React Native",
   tagline: "Cooking up some cool recipes in Ignite for React Native!",
   url: "https://infinitered.github.io",
@@ -45,7 +43,7 @@ const config = {
   //   ],
   // ],
   plugins: [
-    async function exampleCodeSnippets(context, options) {
+    async function exampleCodeSnippets(_context, _options) {
       return {
         name: "example-code-snippets",
         async loadContent() {
@@ -134,8 +132,7 @@ const config = {
   presets: [
     [
       "classic",
-      /** @type {import('@docusaurus/preset-classic').Options} */
-      ({
+      {
         docs: {
           path: "docs",
           showLastUpdateAuthor: true,
@@ -150,13 +147,12 @@ const config = {
           trackingID: "G-1NP64B0XVM",
           anonymizeIP: true,
         },
-      }),
+      } satisfies Preset.Options,
     ],
   ],
 
   themeConfig:
-    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
-    ({
+    {
       // Disabling dark mode for now until we have a better dark mode theme
       colorMode: {
         defaultMode: "light",
@@ -330,7 +326,7 @@ const config = {
 
       //   //... other Algolia params
       // },
-    }),
+    } satisfies Preset.ThemeConfig,
 };
 
 module.exports = config;
