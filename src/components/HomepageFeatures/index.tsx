@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import styles from "./styles.module.css";
 import { usePluginData } from "@docusaurus/useGlobalData";
 
@@ -317,21 +317,38 @@ export default function HomepageFeatures(): JSX.Element {
   );
 }
 
-const useIntersection = (element, rootMargin) => {
+const useIntersection = (
+  element: MutableRefObject<Element | undefined>,
+  rootMargin: string
+) => {
   const [isVisible, setState] = useState(false);
+  const observerRef: MutableRefObject<IntersectionObserver | undefined> =
+    useRef();
+  // store our own copy of element ref for un-observing, as it will be undefined
+  // later when component is removed
+  const elementRef: MutableRefObject<Element | undefined> = useRef();
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setState(entry.isIntersecting);
-        if (entry.isIntersecting) observer.unobserve(element.current);
-      },
-      { rootMargin }
-    );
+    let observer: IntersectionObserver | undefined;
+    if (observerRef.current === undefined && element.current !== undefined) {
+      observerRef.current = new IntersectionObserver(
+        ([entry]) => {
+          setState(entry.isIntersecting);
+          if (entry.isIntersecting) observer.unobserve(element.current);
+        },
+        { rootMargin }
+      );
+      elementRef.current = element.current;
 
-    element.current && observer.observe(element.current);
+      // TODO: why isn't typescript erroring when I don't include optional chaining here?
+      element.current && observer?.observe(element.current);
+    }
 
-    return () => observer.unobserve(element.current);
+    return () => {
+      observerRef.current?.unobserve(elementRef.current);
+      observerRef.current = undefined;
+      elementRef.current = undefined;
+    };
   }, []);
 
   return isVisible;
