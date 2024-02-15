@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
+import React, { useState } from "react";
 import styles from "./styles.module.css";
 
 import * as ThumbsUp from "@site/static/img/thumbs-up.svg";
@@ -29,6 +28,7 @@ export default function Feedback({ resource }) {
 
     // track using Google Analytics custom event
     // include the resource name and yes/no in the event name for tracking purposes
+    // gtag is not defined in dev, see https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-google-gtag
     gtag("event", `feedback_${resource}_${reaction}`, {
       event_category: "feedback",
       event_label: resource,
