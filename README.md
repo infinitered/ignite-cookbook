@@ -36,9 +36,9 @@
 
 ### Some of the recipes you'll find in the Ignite Cookbook:
 
-- [Staying With Expo](https://ignitecookbook.com/docs/recipes/StayingWithExpo)
-- [Pristine Expo Project](https://ignitecookbook.com/docs/recipes/PristineExpoProject)
+- [Expo Router](https://ignitecookbook.com/docs/recipes/ExpoRouter/)
+- [Prepping Ignite for EAS Build](https://ignitecookbook.com/docs/recipes/PrepForEASBuild)
 - [Add Component Tests to Component Generator](https://ignitecookbook.com/docs/recipes/GenerateComponentTests)
-- [Using Screen Readers](https://ignitecookbook.com/docs/recipes/UsingScreenReaders)
-- [CircleCI CD Setup](https://ignitecookbook.com/docs/recipes/CircleCIRNSetup)
+- [React Native Vision Camera](https://ignitecookbook.com/docs/recipes/ReactNativeVisionCamera)
+- [Migrating to MMKV](https://ignitecookbook.com/docs/recipes/MigratingToMMKV)
 - [And many more!!](https://ignitecookbook.com)
