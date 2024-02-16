@@ -38,7 +38,7 @@
 
 - [Expo Router](https://ignitecookbook.com/docs/recipes/ExpoRouter/)
 - [Prepping Ignite for EAS Build](https://ignitecookbook.com/docs/recipes/PrepForEASBuild)
-- [Add Component Tests to Component Generator](https://ignitecookbook.com/docs/recipes/GenerateComponentTests)
+- [Add Component Tests to Component Generator](https://ignitecookbook.com/docs/recipes/GeneratorComponentTests)
 - [React Native Vision Camera](https://ignitecookbook.com/docs/recipes/ReactNativeVisionCamera)
 - [Migrating to MMKV](https://ignitecookbook.com/docs/recipes/MigratingToMMKV)
 - [And many more!!](https://ignitecookbook.com)
