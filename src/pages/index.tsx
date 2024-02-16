@@ -9,6 +9,7 @@ import styles from "./index.module.css";
 import SVGImage from "../components/SVGImage";
 import { usePluginData } from "@docusaurus/useGlobalData";
 import * as Arrow from "@site/static/img/arrow.svg";
+import type { Snippet } from "../types";
 
 const heroImage = require("@site/static/img/hero-graphic.svg");
 const faceWinking = require("@site/static/img/face-winking.png");
@@ -16,12 +17,7 @@ const chefHat = require("@site/static/img/chef-hat.png");
 
 const NewSection = () => {
   const { snippets } = usePluginData("example-code-snippets") as {
-    snippets: {
-      author: string;
-      publish_date: string;
-      title: string;
-      doc_name: string;
-    }[];
+    snippets: Snippet[];
   };
 
   const mostRecentRecipe = snippets.sort(
@@ -34,25 +30,29 @@ const NewSection = () => {
 
   return (
     <div className={styles.newSection}>
-      <div className={styles.notificationSection}>
-        <div className={styles.notificationTag}>
-          <p className={styles.notificationTagText}>New Recipe</p>
+      {mostRecentRecipe && (
+        <div className={styles.notificationSection}>
+          <div className={styles.notificationTag}>
+            <p className={styles.notificationTagText}>New Recipe</p>
+          </div>
+          <h3 className={styles.notificationTitle}>{mostRecentRecipe.title}</h3>
+          <p className={styles.notificationDate}>
+            {`Published on `}
+            <b>
+              {moment(mostRecentRecipe.publish_date).format("MMMM Do, YYYY")}
+            </b>
+            {` by `}
+            <b>{mostRecentRecipe.author}</b>
+          </p>
+          <Link
+            className={styles.notificationLink}
+            to={`/docs/recipes/${mostRecentRecipe.doc_name.split(".")[0]}`}
+          >
+            <b className={styles.notificationLinkText}>View recipe</b>
+            <Arrow.default />
+          </Link>
         </div>
-        <h3 className={styles.notificationTitle}>{mostRecentRecipe.title}</h3>
-        <p className={styles.notificationDate}>
-          {`Published on `}
-          <b>{moment(mostRecentRecipe.publish_date).format("MMMM Do, YYYY")}</b>
-          {` by `}
-          <b>{mostRecentRecipe.author}</b>
-        </p>
-        <Link
-          className={styles.notificationLink}
-          to={`/docs/recipes/${mostRecentRecipe.doc_name.split(".")[0]}`}
-        >
-          <b className={styles.notificationLinkText}>View recipe</b>
-          <Arrow.default />
-        </Link>
-      </div>
+      )}
       <div className={styles.notificationSection}>
         <p className={styles.notificationTagText}>Releases</p>
         <h3 className={styles.notificationTitle}>Ignite Exp[ress]o ☕️</h3>

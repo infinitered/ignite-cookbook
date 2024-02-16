@@ -1,6 +1,7 @@
 import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import styles from "./styles.module.css";
 import { usePluginData } from "@docusaurus/useGlobalData";
+import type { Snippet } from "../../types";
 
 const faceLookingDown = require("@site/static/img/face-looking-down.png");
 const cardButtons = require("@site/static/img/card-buttons.png");
@@ -27,12 +28,6 @@ type FeatureItem = {
     | React.ComponentType
     | React.ComponentType<React.ComponentProps<"svg">>;
   description: JSX.Element;
-};
-
-type Snippet = {
-  author: string;
-  content: string;
-  lastUpdated: string;
 };
 
 const FeatureList: FeatureItem[] = [
