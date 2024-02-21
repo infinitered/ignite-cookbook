@@ -20,6 +20,12 @@ For the full documentation by [Expo](https://expo.dev), head on over to the [Int
 
 Ignite v9 is fully equipped to utilize `expo-router` after dependency installation and some directory structure updates! In this recipe, we'll convert the demo app's auth and tab navigators from `react-navigation` to use `expo-router`.
 
+:::tip
+
+This recipe is using Expo Router v3, which became available in Expo SDK 50. If you're using an older version of Expo, you can find more information about implementing it in your app in the [Expo Router documentation](https://docs.expo.dev/router/installation/).
+
+:::
+
 ## Installation and Project Configuration
 
 Bootstrap a new Ignite project:
@@ -1724,6 +1730,98 @@ reactotron.onCustomCommand({
     router.back();
   },
 });
+```
+
+When navigating to the showroom, you may notice an error in the console:
+  
+```terminal
+ERROR  Warning: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
+```
+
+This is because the `expo-router`'s `<Link>` component passes a ref to it's children. To address this we can update our `ListItem.tsx` to correctly handle the 
+ref passed to it.
+
+** src/components/ListItem.tsx **
+
+```tsx
+/**
+ * A styled row component that can be used in FlatList, SectionList, or by itself.
+ * @see [Documentation and Examples]{@link https://docs.infinite.red/ignite-cli/boilerplate/components/ListItem/}
+ * @param {ListItemProps} props - The props for the `ListItem` component.
+ * @returns {JSX.Element} The rendered `ListItem` component.
+ */
+// error-line
+  export function ListItem(props: ListItemProps) {
+// success-line-start
+  export const ListItem = React.forwardRef<View, ListItemProps>(function ListItem(
+  props: ListItemProps,
+  ref,
+) {
+// success-line-end
+  const {
+    bottomSeparator,
+    children,
+    height = 56,
+    LeftComponent,
+    leftIcon,
+    leftIconColor,
+    RightComponent,
+    rightIcon,
+    rightIconColor,
+    style,
+    text,
+    TextProps,
+    topSeparator,
+    tx,
+    txOptions,
+    textStyle: $textStyleOverride,
+    containerStyle: $containerStyleOverride,
+    ...TouchableOpacityProps
+  } = props
+
+  const $textStyles = [$textStyle, $textStyleOverride, TextProps?.style]
+
+  const $containerStyles = [
+    topSeparator && $separatorTop,
+    bottomSeparator && $separatorBottom,
+    $containerStyleOverride,
+  ]
+
+  const $touchableStyles = [$touchableStyle, { minHeight: height }, style]
+
+  return (
+    // error-line
+   <View style={$containerStyles}>
+    // success-line
+   <View ref={ref} style={$containerStyles}>
+      <TouchableOpacity {...TouchableOpacityProps} style={$touchableStyles}>
+        <ListItemAction
+          side="left"
+          size={height}
+          icon={leftIcon}
+          iconColor={leftIconColor}
+          Component={LeftComponent}
+        />
+
+        <Text {...TextProps} tx={tx} text={text} txOptions={txOptions} style={$textStyles}>
+          {children}
+        </Text>
+
+        <ListItemAction
+          side="right"
+          size={height}
+          icon={rightIcon}
+          iconColor={rightIconColor}
+          Component={RightComponent}
+        />
+      </TouchableOpacity>
+    </View>
+  )
+  //error-line
+}
+  //success-line
+})
+
 ```
 
 ## Summary
