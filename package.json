@@ -39,7 +39,10 @@
     "typescript": "~5.2.2"
   },
   "resolutions": {
-    "@types/react": "^18.2.55"
+    "@types/react": "^18.2.55",
+    "@babel/traverse": "^7.23.2",
+    "follow-redirects": "^1.15.4",
+    "semver": "7.5.2"
   },
   "browserslist": {
     "production": [
