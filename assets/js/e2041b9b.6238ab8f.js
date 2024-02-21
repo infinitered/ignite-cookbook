@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkignite_cookbook=self.webpackChunkignite_cookbook||[]).push([[9309],{7516:e=>{e.exports=JSON.parse('{"label":"Redux","permalink":"/docs/tags/redux","allTagsPath":"/docs/tags","count":1,"items":[{"id":"recipes/Redux","title":"Redux","description":"How to migrate a MobX-State-Tree project to Redux","permalink":"/docs/recipes/Redux"}]}')}}]);

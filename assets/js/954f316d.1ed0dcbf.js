@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkignite_cookbook=self.webpackChunkignite_cookbook||[]).push([[3215],{267:t=>{t.exports=JSON.parse('{"label":"Zustand","permalink":"/docs/tags/zustand","allTagsPath":"/docs/tags","count":1,"items":[{"id":"recipes/Zustand","title":"Zustand","description":"How to migrate a Mobx-State-Tree project to Zustand","permalink":"/docs/recipes/Zustand"}]}')}}]);
