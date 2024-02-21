@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import styles from "./styles.module.css";
 import { usePluginData } from "@docusaurus/useGlobalData";
+import type { Snippet } from "../../types";
 
 const faceLookingDown = require("@site/static/img/face-looking-down.png");
 const cardButtons = require("@site/static/img/card-buttons.png");
@@ -33,7 +34,7 @@ const FeatureList: FeatureItem[] = [
   {
     title: "Spin Up Your App In Record Time",
     Component: () => {
-      const ref = useRef();
+      const ref = useRef(null);
       const inViewport = useIntersection(ref, "0px");
       const [transition, setTransition] = useState(false);
       const [monocleTransition, setMonocleTransition] = useState(false);
@@ -113,11 +114,7 @@ const FeatureList: FeatureItem[] = [
     title: "Find Quality Code When You Need It",
     Component: () => {
       const { snippets } = usePluginData("example-code-snippets") as {
-        snippets: {
-          author: string;
-          content: string;
-          lastUpdated: string;
-        }[];
+        snippets: Snippet[];
       };
 
       const [show, setShow] = useState(false);
@@ -131,9 +128,11 @@ const FeatureList: FeatureItem[] = [
         return () => clearInterval(interval);
       }, [snippets]);
 
-      const snippet = show
-        ? snippets[current]
-        : { author: "", content: "", lastUpdated: "..." };
+      const snippet = snippets[current] ?? {
+        author: "",
+        content: "",
+        lastUpdated: "...",
+      };
 
       return (
         <div className={styles.imageTwoContainer}>
@@ -177,7 +176,7 @@ const FeatureList: FeatureItem[] = [
   {
     title: "Backed By A Community of React Native Experts",
     Component: () => {
-      const ref = useRef();
+      const ref = useRef(null);
       const inViewport = useIntersection(ref, "0px");
 
       const [transition, setTransition] = useState(false);
@@ -317,21 +316,39 @@ export default function HomepageFeatures(): JSX.Element {
   );
 }
 
-const useIntersection = (element, rootMargin) => {
+const useIntersection = (
+  element: MutableRefObject<Element | null>,
+  rootMargin: string
+) => {
   const [isVisible, setState] = useState(false);
+  const observerRef: MutableRefObject<IntersectionObserver | null> =
+    useRef(null);
+  // store our own copy of element ref for un-observing, as it will be undefined
+  // later when component is removed
+  const elementRef: MutableRefObject<Element | null> = useRef(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setState(entry.isIntersecting);
-        if (entry.isIntersecting) observer.unobserve(element.current);
-      },
-      { rootMargin }
-    );
+    // store in variable for typescript narrowing
+    const currentElement = element.current;
+    if (observerRef.current === null && currentElement !== null) {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          setState(!!entry?.isIntersecting);
+          if (!!entry?.isIntersecting) observer.unobserve(currentElement);
+        },
+        { rootMargin }
+      );
+      elementRef.current = element.current;
+      observerRef.current = observer;
 
-    element.current && observer.observe(element.current);
+      element.current && observer.observe(element.current);
+    }
 
-    return () => observer.unobserve(element.current);
+    return () => {
+      currentElement && observerRef.current?.unobserve(currentElement);
+      observerRef.current = null;
+      elementRef.current = null;
+    };
   }, []);
 
   return isVisible;

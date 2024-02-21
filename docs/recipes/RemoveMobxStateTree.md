@@ -25,7 +25,7 @@ yarn remove mobx mobx-react-lite mobx-state-tree reactotron-mst
 
 2. Ignite places all MobX-State-Tree models in the `models/`. Remove this entire directory and all files within it, these are not needed anymore.
 
-```terminal
+```bash
 rm -rf ./app/models
 ```
 

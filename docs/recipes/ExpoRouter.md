@@ -24,14 +24,14 @@ Ignite v9 is fully equipped to utilize `expo-router` after dependency installati
 
 Bootstrap a new Ignite project:
 
-```terminal
+```bash
 npx ignite-cli@next new pizza-router --yes
 cd pizza-router
 ```
 
 Add the missing dependencies `expo-router` needs:
 
-```terminal
+```bash
 npx expo install expo-router expo-constants
 ```
 
@@ -73,7 +73,7 @@ Change the entry point that `expo-router` expects in `package.json`:
 
 Expo Router requires route files to live in either `app` or `src/app` directories. But since our Ignite project is already using `app`, we'll need to rename it to `src`. We'll create `src/app` to contain all the file-base routing files from here on out, and models, components and other shared files will be located in the `src` directory now. We'll also remove `App.tsx` as this is no longer the entry point of the application.
 
-```terminal
+```bash
 rm App.tsx
 mv app src
 mkdir src/app
@@ -254,7 +254,7 @@ export default function Root() {
 
 Move `ErrorBoundary` out of `screens/ErrorScreen` and into `src/components/ErrorBoundary`:
 
-```terminal
+```bash
 mkdir src/components/ErrorBoundary
 mv src/screens/ErrorScreen/* src/components/ErrorBoundary
 ```
@@ -1311,7 +1311,7 @@ The Showroom screen has some supporting components it needs that only applies to
 
 To adhere to this, we'll move the supporting components to `src/components/Showroom` and import them from their in our `src/app/(app)/(tabs)/showroom.tsx`.
 
-```terminal
+```bash
 mv src/screens/DemoShowroomScreen src/components/Showroom
 rm src/components/Showroom/DemoShowroomScreen.tsx
 ```
@@ -1653,7 +1653,7 @@ If you head on over to the web app at `http://localhost:8081/showroom?itemSlug=v
 
 We can emulate [deep links in Expo Go](https://docs.expo.dev/guides/linking/#testing-urls) with the command:
 
-```terminal
+```bash
 npx uri-scheme open exp://localhost:8081/--/showroom --ios
 ```
 
@@ -1665,7 +1665,7 @@ We get that universal linking for free with `expo-router`!
 
 Now that we have the boilerplate up and running again, let's clean some of the screen and navigation files that are no longer needed.
 
-```terminal
+```bash
 rm src/app.tsx
 rm -rf src/screens
 rm -rf src/navigators

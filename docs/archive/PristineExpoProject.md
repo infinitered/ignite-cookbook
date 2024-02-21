@@ -28,14 +28,14 @@ Keep in mind you may have to adopt the following steps for a different package m
 
 ### Project Initialization
 
-```terminal
+```bash
 npx ignite-cli new PizzaApp --yes
 cd PizzaApp
 ```
 
 ### Filesystem Changes
 
-```terminal
+```bash
 rm -rf android
 rm -rf ios
 rm index.js          # Expo's entry point is App.js
@@ -44,13 +44,13 @@ rm metro.config.js   # Expo will use the default
 
 ### Package Changes
 
-```terminal
+```bash
 yarn remove react-native-bootsplash
 ```
 
 Removes a native library pertaining to the splash screen (this will be handled via `expo-splash-screen`)
 
-```terminal
+```bash
 yarn remove expo-modules-core
 ```
 

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
+import React, { useState } from "react";
 import styles from "./styles.module.css";
 
 import * as ThumbsUp from "@site/static/img/thumbs-up.svg";
@@ -19,19 +18,22 @@ const VotedNo = () => {
   );
 };
 
-export default function Feedback({ resource }) {
-  const [reaction, setReaction] = useState(null);
+type ReactionValue = "yes" | "no";
+
+export default function Feedback({ resourceId }: { resourceId: string }) {
+  const [reaction, setReaction] = useState<ReactionValue | null>(null);
 
   const isReacted = reaction === "yes" || reaction === "no";
 
-  const handleReaction = (reaction: string) => {
+  const handleReaction = (reaction: ReactionValue) => {
     setReaction(reaction);
 
     // track using Google Analytics custom event
     // include the resource name and yes/no in the event name for tracking purposes
-    gtag("event", `feedback_${resource}_${reaction}`, {
+    // gtag is not defined in dev, see https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-google-gtag
+    gtag("event", `feedback_${resourceId}_${reaction}`, {
       event_category: "feedback",
-      event_label: resource,
+      event_label: resourceId,
     });
   };
 

@@ -14,7 +14,7 @@ publish_date: 2024-01-16
 
 This guide will show you how to migrate a MobX-State-Tree project (Ignite's default) to Redux, using a newly created Ignite project as our example:
 
-```terminal
+```bash
 npx ignite-cli new ReduxApp --yes --removeDemo
 ```
 

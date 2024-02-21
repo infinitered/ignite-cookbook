@@ -90,6 +90,6 @@ In your `.gitignore`, remove the line which ignores the `/android/` directory. W
 _10 - Update Project's React-Native_
 
 Now that you have build and pushed your changes, you can reference that in your application's `package.json`.
-![package json](<../../static//img/PatchingBuildingAndroid
+![package json](<../../static//img/PatchingBuildingAndroid(4).jpg>)
 
 > Note: You'll most likely need to delete/re-install your node_modules as well as run `./android/gradlew clean`.
