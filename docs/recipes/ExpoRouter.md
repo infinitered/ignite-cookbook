@@ -1741,7 +1741,8 @@ ERROR  Warning: Function components cannot be given refs. Attempts to access thi
 This is because the `expo-router`'s `<Link>` component passes a ref to it's children. To address this we can update our `ListItem.tsx` to correctly handle the 
 ref passed to it.
 
-** src/components/ListItem.tsx **
+<details>
+  <summary>src/components/ListItem.tsx</summary>
 
 ```tsx
 /**
@@ -1823,6 +1824,7 @@ ref passed to it.
 })
 
 ```
+</details>
 
 ## Summary
 
