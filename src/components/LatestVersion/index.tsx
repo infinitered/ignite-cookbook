@@ -21,7 +21,7 @@ const LatestRelease = () => {
       .then((data: Release) => {
         setLatestReleaseDate(data.published_at);
         setLatestVersion(data.tag_name);
-        setLoading(false);
+        // setLoading(false);
       })
       .catch((error) => console.error("Error fetching latest release:", error));
   }, []);
@@ -31,12 +31,18 @@ const LatestRelease = () => {
 
   return (
     <div>
-      <p className={styles.notificationTagText}>Latest Release</p>
-      <h3 className={styles.notificationTitle}>Ignite Exp[ress]o ☕️</h3>
+      <p className={styles.notificationTagText}>Latest Ignite Release</p>
       {loading ? (
-        <b style={{ margin: 10 }}>Checking...</b>
+        <Link
+          className={styles.notificationLink}
+          href={`https://github.com/infinitered/ignite/releases/latest`}
+        >
+          <b className={styles.notificationLinkText}>View on Github</b>
+          <Arrow.default />
+        </Link>
       ) : (
         <>
+          <h3 className={styles.notificationTitle}>Ignite Exp[ress]o ☕️</h3>
           <p className={styles.notificationDate}>
             {daysSinceRelease === 0 ? (
               <>
