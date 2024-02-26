@@ -9,7 +9,7 @@ last_update:
 publish_date: 2022-10-09
 ---
 
-### Sampl YAML File
+### Sample YAML File
 
 ```yaml
 # Javascript Node CircleCI 2.0 configuration file
