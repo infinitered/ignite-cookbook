@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Link from "@docusaurus/Link";
 import moment from "moment";
 
+// Bringing in the styles from the `pages/index.module.css` file to not have to duplicate the styles (nothing is new in this component)
 import styles from "../../pages/index.module.css";
 import * as Arrow from "@site/static/img/arrow.svg";
 
