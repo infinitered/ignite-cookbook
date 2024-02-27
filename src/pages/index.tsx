@@ -110,10 +110,10 @@ function FreshRecipes() {
   return (
     <div className={styles.freshSection}>
       <p className={styles.freshSectionHeader}>Freshly added to the cookbook</p>
-      {mostRecentRecipes.slice(0, 4).map((recipe, index) => {
+      {mostRecentRecipes.slice(0, 4).map((recipe) => {
         return (
           <Link
-            key={index}
+            key={recipe.doc_name}
             to={`/docs/recipes/${recipe.doc_name.split(".")[0]}`}
             className={styles.recipeWrapper}
           >
