@@ -43,7 +43,7 @@ const LatestRelease = () => {
         </Link>
       ) : (
         <>
-          <h3 className={styles.notificationTitle}>Ignite Exp[ress]o ☕️</h3>
+          <h3 className={styles.notificationTitle}>Ignite</h3>
           <p className={styles.notificationDate}>
             {daysSinceRelease === 0 ? (
               <>
