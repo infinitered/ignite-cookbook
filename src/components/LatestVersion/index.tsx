@@ -11,6 +11,28 @@ interface Release {
   published_at: string;
 }
 
+interface ReleaseRemarkProps {
+  latestVersion: string;
+  latestReleaseDate: string;
+}
+
+const ReleaseRemark = ({
+  latestVersion,
+  latestReleaseDate,
+}: ReleaseRemarkProps) => {
+  const daysSinceRelease =
+    moment(latestReleaseDate).diff(moment(), "days") * -1;
+  const releaseString =
+    daysSinceRelease === 0
+      ? "today"
+      : `${daysSinceRelease} day${daysSinceRelease === 1 ? "" : "s"} ago`;
+  return (
+    <>
+      <b>{latestVersion}</b> released <b>{releaseString}</b>
+    </>
+  );
+};
+
 const LatestRelease = () => {
   const [latestVersion, setLatestVersion] = useState<string>("");
   const [latestReleaseDate, setLatestReleaseDate] = useState<string>("");
@@ -27,9 +49,6 @@ const LatestRelease = () => {
       .catch((error) => console.error("Error fetching latest release:", error));
   }, []);
 
-  const daysSinceRelease =
-    moment(latestReleaseDate).diff(moment(), "days") * -1;
-
   return (
     <>
       <p className={styles.notificationTagText}>Latest Ignite Release</p>
@@ -45,18 +64,10 @@ const LatestRelease = () => {
         <>
           <h3 className={styles.notificationTitle}>Ignite</h3>
           <p className={styles.notificationDate}>
-            {daysSinceRelease === 0 ? (
-              <>
-                <b>{latestVersion}</b> released today!
-              </>
-            ) : (
-              <>
-                <b>{latestVersion}</b> released{" "}
-                <b>
-                  {daysSinceRelease} day{daysSinceRelease === 1 ? "" : "s"} ago
-                </b>
-              </>
-            )}
+            <ReleaseRemark
+              latestVersion={latestVersion}
+              latestReleaseDate={latestReleaseDate}
+            />
           </p>
           <Link
             className={styles.notificationLink}
