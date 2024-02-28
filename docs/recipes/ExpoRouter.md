@@ -1677,7 +1677,7 @@ rm -rf src/screens
 rm -rf src/navigators
 ```
 
-In doing so, we'll need to fix some `Reacetotron` code for custom commands. We'll drop the `resetNavigation` one (logging out is really the same thing) and update the `navigateTo` and `goBack`. Open up `src/devtools/ReactotronConfig.ts` to edit these.
+In doing so, we'll need to fix some `Reactotron` code for custom commands. We'll drop the `resetNavigation` one (logging out is really the same thing) and update the `navigateTo` and `goBack`. Open up `src/devtools/ReactotronConfig.ts` to edit these.
 
 ```ts
 // error-line
@@ -1847,4 +1847,4 @@ You can also follow Evan Bacon, the author of Expo Router, on [GitHub](https://g
 - [Pillar Valley](https://github.com/EvanBacon/pillar-valley/) - a game built in Expo using `expo-router``
 - [Twitter routing demo](https://github.com/EvanBacon/expo-router-twitter/) - a demo of how an `expo-router` application would look if rebuilding Twitter's routes
 
-Additionally, here is an Ignite repo with `expo-router` added in for reference on my [GitHub](https://github.com/frankcalise/ignite-expo-router).
+Additionally, here is an Ignite repo with `expo-router` added in for reference on my [GitHub](https://github.com/Jpoliachik/ignite-expo-router)
