@@ -42,7 +42,9 @@ Open `app/utils/storage.tsx` and modify the imports:
 ```tsx
 // error-line
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// success-line
 import { MMKV } from "react-native-mmkv";
+// success-line
 const storage = new MMKV();
 ```
 
@@ -56,10 +58,12 @@ Now we'll remove any reference to `AsyncStorage` and replace it with the proper 
  */
 // error-line
 export async function loadString(key: string): Promise<string | null> {
+// success-line
 export function loadString(key: string): string | null {
   try {
     // error-line
     return await AsyncStorage.getItem(key)
+    // success-line
     return storage.getString(key);
   } catch {
     // not sure why this would fail... even reading the RN docs I'm unclear
@@ -75,10 +79,12 @@ export function loadString(key: string): string | null {
  */
 // error-line
 export async function saveString(key: string, value: string): Promise<boolean> {
+// success-line
 export function saveString(key: string, value: string): boolean {
   try {
     // error-line
     await AsyncStorage.setItem(key, value)
+    // success-line
     storage.set(key, value);
     return true;
   } catch {
@@ -93,10 +99,12 @@ export function saveString(key: string, value: string): boolean {
  */
 // error-line
 export async function load(key: string): Promise<any | null> {
+// success-line
 export function load(key: string): any | null {
   try {
     // error-line
     const almostThere = await AsyncStorage.getItem(key)
+    // success-line
     const almostThere = storage.getString(key);
     return JSON.parse(almostThere);
   } catch {
@@ -112,10 +120,12 @@ export function load(key: string): any | null {
  */
 // error-line
 export async function save(key: string, value: any): Promise<boolean> {
+// success-line
 export function save(key: string, value: any): boolean {
   try {
     // error-line
     await AsyncStorage.setItem(key, JSON.stringify(value))
+    // success-line
     saveString(key, JSON.stringify(value));
     return true;
   } catch {
@@ -130,10 +140,12 @@ export function save(key: string, value: any): boolean {
  */
 // error-line
 export async function remove(key: string): Promise<void> {
+// success-line
 export function remove(key: string): void {
   try {
     // error-line
     await AsyncStorage.removeItem(key)
+    // success-line
     storage.delete(key);
   } catch {}
 }
@@ -143,10 +155,12 @@ export function remove(key: string): void {
  */
 // error-line
 export async function clear(): Promise<void> {
+// success-line
 export function clear(): void {
   try {
     // error-line
     await AsyncStorage.clear()
+    // success-line
     storage.clearAll();
   } catch {}
 }
