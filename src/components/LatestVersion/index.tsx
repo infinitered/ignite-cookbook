@@ -23,7 +23,7 @@ const ReleaseRemark = ({
   const daysSinceRelease =
     moment(latestReleaseDate).diff(moment(), "days") * -1;
   const releaseString =
-    daysSinceRelease !== 0
+    daysSinceRelease === 0
       ? "today"
       : `${moment.duration(daysSinceRelease, "days").humanize()} ago`;
   return (
