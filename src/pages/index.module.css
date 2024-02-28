@@ -16,6 +16,8 @@
 
  .notificationSection {
   margin-bottom: 20px;
+  min-width: 220px !important;
+  min-height: 130px !important;
  }
 
  .notificationTag {
