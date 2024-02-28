@@ -34,11 +34,4 @@
 
 > The Ignite Cookbook isn’t just a random group of code snippets. It’s a curated collection of usable code samples that the Infinite Red team’s used in their own React Native projects. Having worked with some of the biggest clients in the tech industry, we know a thing or two about keeping our code to a high standard. You can code confidently!
 
-### Some of the recipes you'll find in the Ignite Cookbook:
-
-- [Staying With Expo](https://ignitecookbook.com/docs/recipes/StayingWithExpo)
-- [Pristine Expo Project](https://ignitecookbook.com/docs/recipes/PristineExpoProject)
-- [Add Component Tests to Component Generator](https://ignitecookbook.com/docs/recipes/GenerateComponentTests)
-- [Using Screen Readers](https://ignitecookbook.com/docs/recipes/UsingScreenReaders)
-- [CircleCI CD Setup](https://ignitecookbook.com/docs/recipes/CircleCIRNSetup)
-- [And many more!!](https://ignitecookbook.com)
+### [Accelerate your development and dive into the Ignite Cookbook for React Native today!](https://ignitecookbook.com)
