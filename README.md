@@ -34,11 +34,4 @@
 
 > The Ignite Cookbook isn’t just a random group of code snippets. It’s a curated collection of usable code samples that the Infinite Red team’s used in their own React Native projects. Having worked with some of the biggest clients in the tech industry, we know a thing or two about keeping our code to a high standard. You can code confidently!
 
-### Some of the recipes you'll find in the Ignite Cookbook:
-
-- [Expo Router](https://ignitecookbook.com/docs/recipes/ExpoRouter/)
-- [Prepping Ignite for EAS Build](https://ignitecookbook.com/docs/recipes/PrepForEASBuild)
-- [Add Component Tests to Component Generator](https://ignitecookbook.com/docs/recipes/GeneratorComponentTests)
-- [React Native Vision Camera](https://ignitecookbook.com/docs/recipes/ReactNativeVisionCamera)
-- [Migrating to MMKV](https://ignitecookbook.com/docs/recipes/MigratingToMMKV)
-- [And many more!!](https://ignitecookbook.com)
+### [Accelerate your development and dive into the Ignite Cookbook for React Native today!](https://ignitecookbook.com)
