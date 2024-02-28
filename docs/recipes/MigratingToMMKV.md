@@ -166,6 +166,14 @@ export function clear(): void {
 }
 ```
 
+::: info
+
+Now that you've moved the base storage functions over to MMKV, you might want to update Reactotron to use it as well!
+
+[Configuring Reactotron with MMKV](https://docs.infinite.red/reactotron/plugins/react-native-mmkv/)
+
+:::
+
 Run the app in the iOS simulator to test the changes with `yarn ios`. Navigate to the Podcast List screen:
 
 1. Press "Tap to sign in!"
