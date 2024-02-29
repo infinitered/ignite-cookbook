@@ -42,7 +42,7 @@ import {
   type IOSConfig,
 } from "@expo/config-plugins"
 
-// More info: https://developer.apple.com/documentation/bundleresources/information_property_list/uirequireddevicecapabilities/
+// More info: https://developer.android.com/guide/topics/manifest/uses-feature-element
 const validAndroidFeatures = [
   "android.hardware.audio.low_latency",
   "android.hardware.audio.output",
@@ -107,7 +107,7 @@ const validAndroidFeatures = [
   "android.hardware.wifi.direct",
 ] as const
 
-// More info: https://developer.android.com/guide/topics/manifest/uses-feature-element
+// More info: https://developer.apple.com/documentation/bundleresources/information_property_list/uirequireddevicecapabilities/
 const validIOSFeatures = [
   "accelerometer",
   "arkit",
