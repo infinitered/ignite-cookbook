@@ -254,8 +254,10 @@ You should see new entries in the `UIRequiredDeviceCapabilities` array:
 <key>UIRequiredDeviceCapabilities</key>
 <array>
   <string>armv7</string>
+  // success-line-start
   <string>front-facing-camera</string>
   <string>microphone</string>
+  // success-line-end
 </array>
 ```
 
@@ -266,7 +268,9 @@ In `./android/app/src/main/AndroidManifest.xml`
 You should see new `<uses-feature ` entries corresponding to the configuration:
 
 ```xml
+// success-line
 <uses-feature android:name="android.hardware.camera.front" android:required="true"/>
+// success-line
 <uses-feature android:name="android.hardware.microphone" android:required="true"/>
 ```
 
