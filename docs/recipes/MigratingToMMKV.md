@@ -42,7 +42,9 @@ Open `app/utils/storage.tsx` and modify the imports:
 ```tsx
 // error-line
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// success-line
 import { MMKV } from "react-native-mmkv";
+// success-line
 const storage = new MMKV();
 ```
 
@@ -56,10 +58,12 @@ Now we'll remove any reference to `AsyncStorage` and replace it with the proper 
  */
 // error-line
 export async function loadString(key: string): Promise<string | null> {
+// success-line
 export function loadString(key: string): string | null {
   try {
     // error-line
     return await AsyncStorage.getItem(key)
+    // success-line
     return storage.getString(key);
   } catch {
     // not sure why this would fail... even reading the RN docs I'm unclear
@@ -75,10 +79,12 @@ export function loadString(key: string): string | null {
  */
 // error-line
 export async function saveString(key: string, value: string): Promise<boolean> {
+// success-line
 export function saveString(key: string, value: string): boolean {
   try {
     // error-line
     await AsyncStorage.setItem(key, value)
+    // success-line
     storage.set(key, value);
     return true;
   } catch {
@@ -93,10 +99,12 @@ export function saveString(key: string, value: string): boolean {
  */
 // error-line
 export async function load(key: string): Promise<any | null> {
+// success-line
 export function load(key: string): any | null {
   try {
     // error-line
     const almostThere = await AsyncStorage.getItem(key)
+    // success-line
     const almostThere = storage.getString(key);
     return JSON.parse(almostThere);
   } catch {
@@ -112,10 +120,12 @@ export function load(key: string): any | null {
  */
 // error-line
 export async function save(key: string, value: any): Promise<boolean> {
+// success-line
 export function save(key: string, value: any): boolean {
   try {
     // error-line
     await AsyncStorage.setItem(key, JSON.stringify(value))
+    // success-line
     saveString(key, JSON.stringify(value));
     return true;
   } catch {
@@ -130,10 +140,12 @@ export function save(key: string, value: any): boolean {
  */
 // error-line
 export async function remove(key: string): Promise<void> {
+// success-line
 export function remove(key: string): void {
   try {
     // error-line
     await AsyncStorage.removeItem(key)
+    // success-line
     storage.delete(key);
   } catch {}
 }
@@ -143,13 +155,90 @@ export function remove(key: string): void {
  */
 // error-line
 export async function clear(): Promise<void> {
+// success-line
 export function clear(): void {
   try {
     // error-line
     await AsyncStorage.clear()
+    // success-line
     storage.clearAll();
   } catch {}
 }
+```
+
+::: info
+
+Now that you've moved the base storage functions over to MMKV, you might want to update Reactotron to use it as well!
+
+[Configuring Reactotron with MMKV](https://docs.infinite.red/reactotron/plugins/react-native-mmkv/)
+
+:::
+
+You may notice that the `storage.test.ts` test file will no longer pass. Replace the contents of this file with the following test data:
+
+```tsx
+import { load, loadString, save, saveString, clear, remove } from "./storage"
+import { storage } from "./mmkv" // <- wherever your global `new MMKV()` constant is
+
+const VALUE_OBJECT = { x: 1 }
+const VALUE_STRING = JSON.stringify(VALUE_OBJECT)
+
+describe("MMKV Storage", () => {
+  beforeEach(() => {
+    storage.clearAll()
+    storage.set("string", "string")
+    storage.set("object", JSON.stringify(VALUE_OBJECT))
+  })
+
+  it("should be defined", () => {
+    expect(storage).toBeDefined()
+  })
+
+  it("should have default keys", () => {
+    expect(storage.getAllKeys()).toEqual(["string", "object"])
+  })
+
+  it("should load data", () => {
+    expect(load("object")).toEqual(VALUE_OBJECT)
+    expect(loadString("object")).toEqual(VALUE_STRING)
+
+    expect(load("string")).toEqual("string")
+    expect(loadString("string")).toEqual("string")
+  })
+
+  it("should save strings", () => {
+    saveString("string", "new string")
+    expect(loadString("string")).toEqual("new string")
+  })
+
+  it("should save objects", () => {
+    save("object", { y: 2 })
+    expect(load("object")).toEqual({ y: 2 })
+    save("object", { z: 3, also: true })
+    expect(load("object")).toEqual({ z: 3, also: true })
+  })
+
+  it("should save strings and objects", () => {
+    saveString("object", "new string")
+    expect(loadString("object")).toEqual("new string")
+  })
+
+  it("should remove data", () => {
+    remove("object")
+    expect(load("object")).toBeUndefined()
+    expect(storage.getAllKeys()).toEqual(["string"])
+
+    remove("string")
+    expect(load("string")).toBeUndefined()
+    expect(storage.getAllKeys()).toEqual([])
+  })
+
+  it("should clear all data", () => {
+    expect(storage.getAllKeys()).toEqual(["string", "object"])
+    clear()
+    expect(storage.getAllKeys()).toEqual([])
+  })
+})
 ```
 
 Run the app in the iOS simulator to test the changes with `yarn ios`. Navigate to the Podcast List screen:
