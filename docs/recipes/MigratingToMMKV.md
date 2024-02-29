@@ -174,6 +174,73 @@ Now that you've moved the base storage functions over to MMKV, you might want to
 
 :::
 
+You may notice that the `storage.test.ts` test file will no longer pass. Replace the contents of this file with the following test data:
+
+```tsx
+import { load, loadString, save, saveString, clear, remove } from "./storage"
+import { storage } from "./mmkv" // <- wherever your global `new MMKV()` constant is
+
+const VALUE_OBJECT = { x: 1 }
+const VALUE_STRING = JSON.stringify(VALUE_OBJECT)
+
+describe("MMKV Storage", () => {
+  beforeEach(() => {
+    storage.clearAll()
+    storage.set("string", "string")
+    storage.set("object", JSON.stringify(VALUE_OBJECT))
+  })
+
+  it("should be defined", () => {
+    expect(storage).toBeDefined()
+  })
+
+  it("should have default keys", () => {
+    expect(storage.getAllKeys()).toEqual(["string", "object"])
+  })
+
+  it("should load data", () => {
+    expect(load("object")).toEqual(VALUE_OBJECT)
+    expect(loadString("object")).toEqual(VALUE_STRING)
+
+    expect(load("string")).toEqual("string")
+    expect(loadString("string")).toEqual("string")
+  })
+
+  it("should save strings", () => {
+    saveString("string", "new string")
+    expect(loadString("string")).toEqual("new string")
+  })
+
+  it("should save objects", () => {
+    save("object", { y: 2 })
+    expect(load("object")).toEqual({ y: 2 })
+    save("object", { z: 3, also: true })
+    expect(load("object")).toEqual({ z: 3, also: true })
+  })
+
+  it("should save strings and objects", () => {
+    saveString("object", "new string")
+    expect(loadString("object")).toEqual("new string")
+  })
+
+  it("should remove data", () => {
+    remove("object")
+    expect(load("object")).toBeUndefined()
+    expect(storage.getAllKeys()).toEqual(["string"])
+
+    remove("string")
+    expect(load("string")).toBeUndefined()
+    expect(storage.getAllKeys()).toEqual([])
+  })
+
+  it("should clear all data", () => {
+    expect(storage.getAllKeys()).toEqual(["string", "object"])
+    clear()
+    expect(storage.getAllKeys()).toEqual([])
+  })
+})
+```
+
 Run the app in the iOS simulator to test the changes with `yarn ios`. Navigate to the Podcast List screen:
 
 1. Press "Tap to sign in!"
