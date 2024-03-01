@@ -227,7 +227,7 @@ const config: Config = {
         ],
       },
       footer: {
-        copyright: 'From the team at <a href="https://infinite.red/" target="_blank" rel="noopener noreferrer">Infinite Red</a>',
+        copyright: 'From the team at <a href="https://infinite.red/" target="_blank" rel="noopener noreferrer" class="ir-footer-link">Infinite Red</a> <img width="32" height="32" src="/img/ir-mark.svg" alt="dropdown" class="ir-mark" />',
         style: "dark",
         links: [
           {

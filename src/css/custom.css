@@ -190,6 +190,7 @@
 
 [class*='footer footer--dark'] {
   background-color: #292C46;
+  padding-top: 5rem;
 }
 
 .footer__link-item {
@@ -243,6 +244,23 @@
 
 [class*='theme-doc-footer-tags-row'] .col b {
   display: none;
+}
+
+[class*='footer__copyright'] {
+  flex: 1;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.ir-footer-link {
+  margin-left: 0.4rem;
+
+}
+
+.ir-mark {
+  margin-left: 0.5rem;
 }
 
 [class*='theme-doc-markdown'] {
