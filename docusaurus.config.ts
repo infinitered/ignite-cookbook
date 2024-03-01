@@ -279,12 +279,6 @@ const config: Config = {
             ]
           }
         ],
-        logo: {
-          alt: "Ignite Cookbook Logo",
-          src: "img/footer__graphic.svg",
-          width: 310,
-          height: 250,
-        },
       },
       prism: {
         theme: lightCodeTheme,
