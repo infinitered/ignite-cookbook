@@ -102,7 +102,8 @@ const FeatureList: FeatureItem[] = [
     },
     description: (
       <>
-        Stop reinventing the wheel on every project. Use the Ignite CLI to get
+        Stop reinventing the wheel on every project. Use the{" "}
+        <a href={"https://docs.infinite.red/ignite-cli"}>Ignite CLI</a> to get
         your app started. Then, hop over to the Ignite Cookbook for React Native
         to browse for things like libraries in “cookie cutter” templates that
         work for almost any project. It’s the fastest way to get a React Native

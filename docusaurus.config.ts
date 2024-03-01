@@ -165,12 +165,6 @@ const config: Config = {
           src: "img/logo.svg",
         },
         items: [
-          // TODO: Add back in when we have content
-          // {
-          //   position: 'right',
-          //   html: '<div class="hover-underline">Get started</div>',
-          //   to: "https://ignitecookbook.com"
-          // },
           {
             type: "search",
             position: "right",
@@ -183,8 +177,13 @@ const config: Config = {
           },
           {
             position: "right",
-            html: '<div class="hover-underline">Boilerplate</div>',
+            html: '<div class="hover-underline">Ignite Boilerplate</div>',
             to: "https://github.com/infinitered/ignite",
+          },
+          {
+            position: "right",
+            html: '<div class="hover-underline">Infinite Red</div>',
+            to: "https://infinite.red",
           },
           {
             //override CSS only for this last item
@@ -228,6 +227,7 @@ const config: Config = {
         ],
       },
       footer: {
+        copyright: 'From the team at <a href="https://infinite.red/" target="_blank" rel="noopener noreferrer">Infinite Red</a>',
         style: "dark",
         links: [
           {
@@ -264,6 +264,20 @@ const config: Config = {
               },
             ],
           },
+          {
+            title: "Infinite Red",
+            items: [
+              {
+                html: '<a href="https://infinite.red/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Website<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
+              },
+              {
+                html: '<a href="https://docs.infinite.red/" target="_blank" rel="noopener noreferrer" class="footer__link-item">IR Docs<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
+              },
+              {
+                html: '<a href="https://chainreactconf.com" target="_blank" rel="noopener noreferrer" class="footer__link-item">Chain React Conf<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
+              }
+            ]
+          }
         ],
         logo: {
           alt: "Ignite Cookbook Logo",
