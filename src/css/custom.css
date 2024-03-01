@@ -60,9 +60,8 @@
   height: 96px;
   padding: 12px 48px;
   box-shadow: none;
-
-
 }
+
 .navbar__logo {
   height: 48px;
 }
@@ -121,7 +120,7 @@
   border-width: 1px;
   border-radius: 0;
   top: -10px;
-  right: -50px !important;
+  right: -48px !important;
   padding: 88px 48px 48px;
   box-shadow: none;
   flex-direction: row;
