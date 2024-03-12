@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkignite_cookbook=self.webpackChunkignite_cookbook||[]).push([[2464],{4684:e=>{e.exports=JSON.parse('{"name":"docusaurus-theme-search-algolia","id":"default"}')}}]);
