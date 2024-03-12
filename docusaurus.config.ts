@@ -122,12 +122,6 @@ const config: Config = {
         },
       };
     },
-    [
-      require.resolve("@cmfcmf/docusaurus-search-local"),
-      {
-        indexBlog: false,
-      },
-    ],
   ],
   presets: [
     [
@@ -310,30 +304,23 @@ const config: Config = {
           },
         ],
       },
-      // TO-DO: Once our repo is open source, we can fill out an application for Algolia DocSearch and get free search usage : https://docsearch.algolia.com/apply/
-      // algolia: {
-      //   // The application ID provided by Algolia
-      //   appId: 'YOUR_APP_ID',
+      algolia: {
+        // The application ID provided by Algolia
+        appId: 'MFHD60DIB5',
 
-      //   // Public API key: it is safe to commit it
-      //   apiKey: 'YOUR_SEARCH_API_KEY',
+        // Public API key: it is safe to commit it
+        apiKey: '4e924e740d603ec90f106067754ccf50',
 
-      //   indexName: 'YOUR_INDEX_NAME',
+        indexName: 'ignite-cookbook',
 
-      //   // Optional: see doc section below
-      //   contextualSearch: true,
+        // Optional: Algolia search parameters
+        searchParameters: {},
 
-      //   // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
-      //   externalUrlRegex: 'external\\.com|domain\\.com',
+        // Optional: path for search page that enabled by default (`false` to disable it)
+        searchPagePath: 'search',
 
-      //   // Optional: Algolia search parameters
-      //   searchParameters: {},
-
-      //   // Optional: path for search page that enabled by default (`false` to disable it)
-      //   searchPagePath: 'search',
-
-      //   //... other Algolia params
-      // },
+        //... other Algolia params
+      },
     } satisfies Preset.ThemeConfig,
 };
 

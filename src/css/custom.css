@@ -23,6 +23,10 @@
   background-color: var(--ifm-color-background)
 }
 
+.DocSearch {
+  /* default color is cool and looks odd with the warm theme */
+  --docsearch-searchbox-background: var(--ifm-color-background);
+}
 
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -152,35 +156,10 @@
   line-height: 24px;
 }
 
-/* aa: Algolia autocomplete (search component) customization */
-.aa-DetachedSearchButton {
-  min-width: 150px !important;
-}
-
-.aa-DetachedContainer--modal {
-  top: 15% !important;
-}
-
-.aa-Form {
-  border-color: #41476E !important;
-}
-
-.aa-DetachedSearchButton {
-  border-color: #41476E !important;
-}
-
-.aa-Form:focus-within {
-  border-color: #41476E !important;
-  box-shadow: 0 0 0 2px rgba(65, 71, 110, 0.3), inset 0 0 0 2px rgba(65, 71, 110, 0.3) !important;
-}
-
-.aa-DetachedSearchButton:focus {
-  border-color: #41476E !important;
-  box-shadow: 0 0 0 2px rgba(65, 71, 110, 0.3), inset 0 0 0 2px rgba(65, 71, 110, 0.3) !important;
-}
-
-.aa-ItemContentTitle {
- font-weight: bold;
+/* DocSearch: Algolia search customization */
+.DocSearch-Button{
+  /* match border radius of hero button for now, but this is arbitrary */
+  border-radius: 4px !important;
 }
 
 [class*='row footer__links'] {
@@ -323,10 +302,4 @@
 
 [class*='clean-btn theme-back-to-top-button backToTopButton_node_modules-@docusaurus-theme-classic-lib-theme-BackToTopButton-styles-module backToTopButtonShow_node_modules-@docusaurus-theme-classic-lib-theme-BackToTopButton-styles-module']::after {
   background-color: #191015 !important;
-}
-
-@media screen and (max-width: 500px) {
-  [class*='searchBox'] {
-    display: none !important;
-  }
 }
