@@ -157,6 +157,16 @@ import { isRTL } from "app/i18n";
 import { isRTL } from "src/i18n";
 ```
 
+**`src/components/Toggle.ts`**
+
+```ts
+// error-line
+import { isRTL } from "app/i18n";
+// success-line
+import { isRTL } from "src/i18n";
+```
+
+
 <details>
   <summary>(optional) Additional files to update</summary>
 
