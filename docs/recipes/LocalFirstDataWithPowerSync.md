@@ -14,7 +14,7 @@ last_update:
 publish_date: 2024-03-22
 ---
 
-# Integrating PowerSync with Supabase in an Ignite App
+# PowerSync for Local-First Data Management
 
 ## Introduction
 
