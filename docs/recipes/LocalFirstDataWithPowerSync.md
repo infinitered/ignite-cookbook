@@ -205,6 +205,7 @@ export const todoSchema = new Schema([
     // Define other tables as needed
 ]);
 
+// It's a good idea to export typescript types for your schema as well, and keep them near the schema types they describe.
 export interface Todo {
     id: string;
     title: string;
