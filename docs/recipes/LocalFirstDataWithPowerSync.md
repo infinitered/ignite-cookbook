@@ -174,15 +174,14 @@ reactotron configuration.
 Update `babel.config.js` to include the `transform-async-generator-functions` plugin:
 
 ```js
-module.exports = function (api) {
-    api.cache(true);
-    return {
-        presets: ['babel-preset-expo'],
-        plugins: [
-            '@babel/plugin-transform-async-generator-functions',
-        ],
-    };
-};
+/** @type {import('@babel/core').TransformOptions['plugins']} */
+const plugins = [
+        //... other plugins
+        '@babel/plugin-transform-async-generator-functions',  // <-- Add this
+        /** NOTE: This must be last in the plugins @see https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation/#babel-plugin */
+        "react-native-reanimated/plugin",
+    ]
+
 ```
 
 ## Defining Your Data Schema
