@@ -19,7 +19,7 @@ publish_date: 2024-03-22
 ## Introduction
 
 This guide helps you integrate PowerSync with Supabase in an Ignite app for efficient local-first data management. This
-setup allows your app to work smoothly offline while keeping the data in sync with your Supabase backend.
+setup allows your app to work smoothly offline while keeping the data in sync with your backend database.
 
 ### What is Powersync?
 
