@@ -664,6 +664,10 @@ add, update, and remove items from your PowerSync-backed database.
 
 ## Additional Resources
 
-- Links to PowerSync documentation.
-- Links to Ignite documentation.
-- Other useful resources for deep diving.
+- [PowerSync React Native + Expo Documentation](https://docs.powersync.com/client-sdk-references/react-native-and-expo)
+- [Supabase Docs](https://supabase.io/docs)
+- [PowerSync JS on GitHub](https://github.com/powersync-ja/powersync-js) 
+
+
+
+
