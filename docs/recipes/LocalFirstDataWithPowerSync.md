@@ -16,21 +16,19 @@ publish_date: 2024-03-22
 
 # PowerSync for Local-First Data Management
 
-## Introduction
+This guide helps you integrate PowerSync with Supabase in an Ignite app for efficient local-first data management.
 
-This guide helps you integrate PowerSync with Supabase in an Ignite app for efficient local-first data management. This
-setup allows your app to work smoothly offline while keeping the data in sync with your backend database.
+[PowerSync](https://www.powersync.com/) allows your app to work smoothly offline while keeping the data in sync with your backend database.
 
 ### What is Powersync?
 
-Powersync is a tool designed to synchronize local and remote data efficiently. It ensures that your application's local
-database is always up-to-date with the server, and vice versa, without requiring constant internet connectivity.
+A Postgres <-> SQLite sync layer consisting of a sync service and client SDK. It lets you work with a local SQLite 
+database in your app, which is automatically kept in sync with a Postgres database on a server. 
 
-The user is always working with their local data, which provides a fast and responsive experience. In the background,
-Powersync syncs the local data with the server.
+The application interacts with the data in a local instance of SQLite, which provides fast, responsive access -- no fetching, no spinners.
 
-If the user loses internet connectivity, they can continue to work with the local data and Powersync will sync the data
-with the server once the connection is restored.
+Then, in the background, Powersync syncs the local data with the server whenever an internet connection becomes available, 
+ensuring that the user's data stays up to date on all of their devices even if they go offline.
 
 ### Benefits of Using Powersync
 
@@ -66,13 +64,13 @@ This recipe uses a supabase backend as an example -- if you are following along 
 - **supabaseAnonKey**: Found through your Supabase dashboard under: **Project Settings** > **API** > **Project API
   keys**.
 
-2. **Configure or disable email verification in your Supabase project.** 
-    - by default, Supabase requires email verification for new users. This should be configured for any production apps.
-    - For testing and experimentation, you can disable this in the Supabase dashboard under
-      **Authentication** > **Providers** > **Email** >> **Confirm Email**
+2. **Configure or disable email verification in your Supabase project.**
+  - by default, Supabase requires email verification for new users. This should be configured for any production apps.
+  - For testing and experimentation, you can disable this in the Supabase dashboard under
+    **Authentication** > **Providers** > **Email** >> **Confirm Email**
 
 :::info **Authentication Required**
-To interact with Supabase and perform data synchronization through PowerSync, you must authenticate with Supabase and persist the session token, as PowerSync requires a valid session token to communicate with Supabase. 
+To interact with Supabase and perform data synchronization through PowerSync, you must authenticate with Supabase and persist the session token, as PowerSync requires a valid session token to communicate with Supabase.
 
 The sample code in this recipe contains basic methods for authentication with Supabase, but you will need to implement a basic sign in / sign up screens or additional authentication logic based on your app's requirements.
 
@@ -82,12 +80,13 @@ If you are using a different backend, you will need to implement a connector tha
 :::
 
 ### Other Databases
+
 This recipe uses Supabase as an example, but there will not be much difference for other types of Postgres backends.
 
 When the time comes, you will need to implement a `PowerSyncBackendConnector` for your database in place of the `SupabaseConnector` but everything else should be the same.
 
 ## Configuring the App
- 
+
 First, add any required config to your app's configuration. Here we are adding the Supabase URL and Anon Key, as well as the PowerSync URL. Other backend configurations can be added as needed.
 
 ```ts
@@ -111,11 +110,11 @@ export const APP_CONFIG: AppConfig = {
 ```
 
 :::danger
-These values are not secure, even inside a compiled app. You should **never** store sensitive information like API keys your app's config.
+These values are not secure, even inside a compiled app. You should **never
+** store sensitive information like API keys your app's config.
 
-Supabase implements [row-level security](https://supabase.com/docs/guides/auth/row-level-security), so sharing the anon key is not a security risk, but other backends may not have this feature. 
+Supabase implements [row-level security](https://supabase.com/docs/guides/auth/row-level-security), so sharing the anon key is not a security risk, but other backends may not have this feature.
 :::
-
 
 :::info **Environment-Specific Configurations**
 If you have different configurations for production, development, and testing environments, you can use `config.dev.ts` or `config.prod.ts` files to store these configurations.
@@ -128,7 +127,6 @@ If you have different configurations for production, development, and testing en
 Powersync [requires polyfills](https://github.com/powersync-ja/powersync-js/blob/main/packages/powersync-sdk-react-native/README.md#install-polyfills)
 to replace browser-specific APIs with their React Native equivalents. These are listed as peer-dependencies so we need
 to install them manually.
-
 
 ```shell
 npx expo install \
@@ -149,6 +147,7 @@ android project.
 :::
 
 ### Install necessary dependencies for Supabase
+
 If using Supabase also install that now
 
 ```shell
@@ -328,17 +327,17 @@ async function uploadData(database: AbstractPowerSyncDatabase) {
 
     // Basic methods for authentication with supabase - use these to manage authentication
     async function login(email: string, password: string) {
-         return await client.auth.signIn({email, password});
+        return await client.auth.signIn({email, password});
     }
 
     async function signUp(email: string, password: string) {
         return await client.auth.signUp({email, password});
     }
-    
+
     async function signOut() {
         return await client.auth.signOut();
     }
-    
+
 }
 
 export const supabaseConnector: PowerSyncBackendConnector = {fetchCredentials, uploadData};
