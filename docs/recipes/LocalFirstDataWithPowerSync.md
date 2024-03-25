@@ -142,6 +142,7 @@ npx expo install \
   text-encoding \
   web-streams-polyfill@^3.2.1 \
   base-64 \
+  @azure/core-asynciterator-polyfill \
   react-native-get-random-values
 ```
 
@@ -159,7 +160,7 @@ At the time of writing the PowerSync SDK is not compatible with `web-streams-pol
 If using Supabase also install that now
 
 ```shell
-npx expo intall @supabase/supabase-js
+npx expo install @supabase/supabase-js
 ```
 
 ## Configuring Babel and Polyfills
@@ -205,27 +206,38 @@ Here's an example for a todo app:
 
 ```ts
 // app/services/database/schema.ts
-import {Schema, Table, Column, ColumnType} from '@journeyapps/powersync-sdk-react-native';
+import {
+    Column,
+    ColumnType,
+    Index,
+    IndexedColumn,
+    Schema,
+    Table
+} from '@journeyapps/powersync-sdk-react-native';
 
-export const todoSchema = new Schema([
+export const AppSchema = new Schema([
     new Table({
         name: 'todos',
         columns: [
-            new Column({name: 'id', type: ColumnType.TEXT, primaryKey: true}),
-            new Column({name: 'title', type: ColumnType.TEXT}),
-            new Column({name: 'completed', type: ColumnType.BOOLEAN}),
-            // Add other columns as needed
+            new Column({name: 'list_id', type: ColumnType.TEXT}),
+            new Column({name: 'created_at', type: ColumnType.TEXT}),
+            new Column({name: 'completed_at', type: ColumnType.TEXT}),
+            new Column({name: 'description', type: ColumnType.TEXT}),
+            new Column({name: 'completed', type: ColumnType.INTEGER}),
+            new Column({name: 'created_by', type: ColumnType.TEXT}),
+            new Column({name: 'completed_by', type: ColumnType.TEXT})
         ],
+        indexes: [new Index({name: 'list', columns: [new IndexedColumn({name: 'list_id'})]})]
     }),
-    // Define other tables as needed
+    new Table({
+        name: 'lists',
+        columns: [
+            new Column({name: 'created_at', type: ColumnType.TEXT}),
+            new Column({name: 'name', type: ColumnType.TEXT}),
+            new Column({name: 'owner_id', type: ColumnType.TEXT})
+        ]
+    })
 ]);
-
-// It's a good idea to export typescript types for your schema as well, and keep them near the schema types they describe.
-export interface Todo {
-    id: string;
-    title: string;
-    completed: boolean;
-}
 ```
 
 :::tip Automated Schema Generation
@@ -233,7 +245,7 @@ export interface Todo {
 PowerSync can generate a Javascript version of your schema for you. To do this, run the following command in your
 project directory.
 
-1. Right click on your instance in the PowerSync dashboard
+1. Right-click on your instance in the PowerSync dashboard
 2. Select "Generate Client-Side Schema".
 
 This will generate a `schema.js` file which can still save you a lot of time as you get started.
@@ -263,17 +275,24 @@ fetchCredentials: () => Promise<PowerSyncCredentials | null>;
 uploadData: (database: AbstractPowerSyncDatabase) => Promise<void>;
 ```
 
-The Powersync docs provide [detailed instructions](https://docs.powersync.com/client-sdk-references/react-native-and-expo#id-2.-create-a-backend-connector) on how to implement the `PowerSyncBackendConnector` interface.
-
 #### Implementing a Database Connector for Supabase
 
-We Initialize the Supabase client with session persistence and custom storage for persisting keys. 
+We initialize the Supabase client with session persistence and custom storage for persisting keys. 
 
 Persisting the Supabase session is essential for maintaining user sessions across app restarts. Unlike web environments
 where `localStorage` is available, React Native requires a different approach for secure storage.
 
+You'll need to implement a simple key-value store to persist the session token and user ID. There are many options
+available for secure storage in React Native, such as `expo-secure-storage`, `react-native-keychain`, or `react-native-secure-key-store`.
+
+:::tip
 The`react-native-supabase-todolist` demo from PowerSync has a [simple implementation of a kv-store](https://github.com/powersync-ja/powersync-js/blob/main/demos/react-native-supabase-todolist/library/storage/KVStorage.ts)
-that works well for this. (imported below as `KVStorage`)
+based on `expo-secure-storage` that works well for this.
+
+Note that you'll need to install `expo-secure-storage` to use this implementation in your app.
+:::
+
+
 
 ```ts
 // app/services/database/supabase.ts
@@ -362,6 +381,12 @@ async function uploadData(database: AbstractPowerSyncDatabase) {
 
 }
 
+export interface SupabaseConnector extends PowerSyncBackendConnector {
+    fetchCredentials: typeof fetchCredentials
+    uploadData: typeof uploadData
+}
+
+
 export const supabaseConnector: PowerSyncBackendConnector = {fetchCredentials, uploadData};
 ```
 
@@ -369,18 +394,20 @@ export const supabaseConnector: PowerSyncBackendConnector = {fetchCredentials, u
 For more information on authentication with Supabase, refer to the [Supabase Auth documentation](https://supabase.io/docs/guides/auth).
 :::
 
+#### Implementing a DatabaseConnector for Other Backends
+
+The Powersync docs provide [detailed instructions](https://docs.powersync.com/client-sdk-references/react-native-and-expo#id-2.-create-a-backend-connector) on how to implement the `PowerSyncBackendConnector` interface.
+
 ### Initializing the PowerSync Instance, and providing it to the app
 
-We need a sinple point of connection to the PowerSync instance that we can interact with throughout the app. 
+We need a single point of connection to the PowerSync instance that we can interact with throughout the app. 
 
 To achieve this we create a `Database` class that encompasses both the PowerSync and Supabase configurations. 
 
 Then we provide a stable reference to the `Database` instance through a React Context.
 
 ```tsx
-// app/services/database.ts
-import '@azure/core-asynciterator-polyfill';
-import 'react-native-polyfill-globals/auto';
+// app/services/database.tsx
 import React, {PropsWithChildren} from "react";
 import {AbstractPowerSyncDatabase, RNQSPowerSyncDatabaseOpenFactory} from '@journeyapps/powersync-sdk-react-native';
 import {SupabaseConnector, supabaseConnector} from "./supabase"; // Adjust the path as needed
@@ -455,7 +482,7 @@ i.e. `useWatchedPowerSyncQuery` and `usePowerSyncQuery`).
 ### Add the Database Provider at the root of your app
 
 To ensure Database class is available throughout your app, wrap your app's root component with the
-`DatabaseProvider` component:
+`DatabaseProvider` component in:
 
 ```tsx
 // app/app.tsx
@@ -540,14 +567,11 @@ export const AppNavigator = observer(function App() {
     return (
         <NavigationContainer>
             <Stack.Navigator screenOptions={{headerShown: false}}>
-                // Public routes
-                <Stack.Screen name="Public" component={Screens.PublicNavigator}/>
                 // Only render the SignedInNavigator if the user is signed in
                 {isSignedIn 
                    ? <Stack.Screen name="Private" component={SignedInNavigator}/> 
-                   : null
+                   : <Stack.Screen name="Public" component={Screens.PublicNavigator}/>
                 }
-                // Add other routes as needed
             </Stack.Navigator>
         </NavigationContainer>
     )
@@ -559,7 +583,7 @@ are limited to authenticated users.
 
 ## Data Operations with PowerSync
 
-This section outlines how to effectively use PowerSync in a React Native app for various data operations. You can fetch
+This section outlines how to use PowerSync in a React Native app for various data operations. You can fetch
 static data, subscribe to live updates, fetch complex data using joins, or update data through a unified API.
 
 And with PowerSync, you can perform these operations locally for maximum speed and responsiveness, while still knowing
