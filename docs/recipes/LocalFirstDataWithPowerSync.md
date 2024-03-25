@@ -22,13 +22,12 @@ This guide helps you integrate PowerSync with Supabase in an Ignite app for effi
 
 ### What is Powersync?
 
-A Postgres <-> SQLite sync layer consisting of a sync service and client SDK. It lets you work with a local SQLite 
-database in your app, which is automatically kept in sync with a Postgres database on a server. 
+PowerSync is a service which synchronizes local data with your Postgres SQL back end. It lets your app work with a local copy of the users' data and automatically syncs changes to and from your backend. 
 
-The application interacts with the data in a local instance of SQLite, which provides fast, responsive access -- no fetching, no spinners.
+Because your application interacts with the data in a local instance of SQLite, it means you'll always have fast, responsive access -- no fetching, no spinners. It also means 
+your users will have a seamless, consistent experience even if they are offline.
 
-Then, in the background, Powersync syncs the local data with the server whenever an internet connection becomes available, 
-ensuring that the user's data stays up to date on all of their devices even if they go offline.
+In the background, Powersync queues any changes and syncs the local data with the server whenever an internet connection becomes available. That means the data stays up to date across all of their devices.
 
 ### Benefits of Using Powersync
 
@@ -50,16 +49,23 @@ ensuring that the user's data stays up to date on all of their devices even if t
    - PowerSync requires native modules, so you cannot use Expo Go
 2. **A Postgres SQL instance set up and connected to a PowerSync**
    - Instruction for connecting to a number of platforms are available in the [PowerSync documentation](https://docs.powersync.com/)
-   :::tip
-   If you don't have a database, you can follow the [PowerSync + Supabase Integration Guide](https://docs.powersync.com/integration-guides/supabase-+-powersync) to
-   get one set up -- both PowerSync and Supabase have free tiers that you can use to get started.
-   :::
+   - If you don't have a database, you can follow the [PowerSync + Supabase Integration Guide](https://docs.powersync.com/integration-guides/supabase-+-powersync) to
+     get one set up -- both PowerSync and Supabase have free tiers that you can use to get started.
 3. **Your PowerSync URL**
    - Found in your PowerSync dashboard. Click on the "Edit Instance" button for your instance and copy the URL from the "Instance URL" field in the dialog that appears.
 
-### Supabase
+:::info **Authentication Required**
+Powersync connects directly to your Postgres instance and will need a valid session token to do so. If your database has authentication enabled, you'll need to sign in and store a valid session token before PowerSync will be able to connect to your database.  
 
-This recipe uses a supabase backend as an example -- if you are following along you will need:
+**If you are using Supabase**, the recipe provides some basic methods for signing in and signing out, but you'll need to implement your own UI. refer to the [Supabase auth documentation](https://supabase.io/docs/guides/auth) for more information. 
+
+**If you are using a different backend**, you will need to implement your own UI and logic for connecting to and authenticating with your back end. We cover the exact requirements in [
+**Connecting to Your Database**](http://localhost:3000/docs/recipes/LocalFirstDataWithPowerSync#connecting-to-your-database).
+:::
+
+### Supabase (Optional)
+
+This recipe uses a supabase backend as an example -- if you want to follow along you will need:
 
 1. **Supabase project details:**
 
@@ -72,21 +78,14 @@ This recipe uses a supabase backend as an example -- if you are following along 
   - For testing and experimentation, you can disable this in the Supabase dashboard under
     **Authentication** > **Providers** > **Email** >> **Confirm Email**
 
-:::info **Authentication Required**
-To interact with Supabase and perform data synchronization through PowerSync, you must authenticate with Supabase and persist the session token, as PowerSync requires a valid session token to communicate with Supabase.
-
-The sample code in this recipe contains basic methods for authentication with Supabase, but you will need to implement a basic sign in / sign up screens or additional authentication logic based on your app's requirements.
-
-If you need help with Supabase authentication, refer to the [Supabase documentation](https://supabase.io/docs/guides/auth) for more information.
-
-If you are using a different backend, you will need to implement a connector that fetches credentials, persists a session token, and uploads data to your backend.
-:::
-
+    
 ### Other Databases
 
-This recipe uses Supabase as an example, but there will not be much difference for other types of Postgres backends.
+While this recipe uses Supabase in the example code, PowerSync can connect to almost any Postgres SQL backend and the process will be largely identical for other types of Postgres backends.
 
-When the time comes, you will need to implement a `PowerSyncBackendConnector` for your database in place of the `SupabaseConnector` but everything else should be the same.
+The major difference is that when the time comes, you will need to implement a `PowerSyncBackendConnector` for your database in place of the `SupabaseConnector`.
+
+Check the [PowerSync documentation](https://docs.powersync.com/) for more information on connecting your database to PowerSync.
 
 ## Configuring the App
 
@@ -113,10 +112,9 @@ export const APP_CONFIG: AppConfig = {
 ```
 
 :::danger
-These values are not secure, even inside a compiled app. You should **never
-** store sensitive information like API keys your app's config.
+These values are not secure, even inside a compiled app. You should **never** store sensitive information like API keys your app's config.
 
-Supabase implements [row-level security](https://supabase.com/docs/guides/auth/row-level-security), so sharing the anon key is not a security risk, but other backends may not have this feature.
+Supabase implements [row-level security](https://supabase.com/docs/guides/auth/row-level-security), so sharing the anon key is not a security risk, but other backends may not have this feature, so be careful!
 :::
 
 :::info **Environment-Specific Configurations**
@@ -129,7 +127,7 @@ If you have different configurations for production, development, and testing en
 
 Powersync [requires polyfills](https://github.com/powersync-ja/powersync-js/blob/main/packages/powersync-sdk-react-native/README.md#install-polyfills)
 to replace browser-specific APIs with their React Native equivalents. These are listed as peer-dependencies so we need
-to install them manually.
+to install them ourselves.
 
 ```shell
 npx expo install \
@@ -144,12 +142,16 @@ npx expo install \
   react-native-get-random-values
 ```
 
-:::tip
-These dependencies include native modules so be sure to run `npx pod-install` after installing, and/or rebuild your
+:::info Update your native dependencies  
+The PowerSync SDK includes native modules so be sure to run `npx pod-install` after installing, and/or rebuild your
 android project.
 :::
 
-### Install necessary dependencies for Supabase
+:::note
+At the time of writing the PowerSync SDK is not compatible with `web-streams-polyfill@4.0.0`, so we specify version `^3.2.1`. 
+:::
+
+### Optional - Install necessary dependencies for Supabase
 
 If using Supabase also install that now
 
@@ -168,8 +170,10 @@ import "react-native-polyfill-globals/auto";
 import "@azure/core-asynciterator-polyfill";
 ```
 
+:::tip
 In a fresh Ignite app, this would be in `app/app.tsx`. and placed at the top of the list of imports, right after
-reactotron configuration.
+the Reactotron config.
+:::
 
 ### Add Babel Plugin
 
@@ -188,7 +192,12 @@ const plugins = [
 
 ## Defining Your Data Schema
 
-Next, define your data schema and TypeScript types in `app/services/database/app-schema.ts`. Here's an example for a todo app:
+Next, define your data schema and TypeScript types in `app/services/database/app-schema.ts`.  
+
+From the [PowerSync docs](https://docs.powersync.com/usage/installation/client-side-setup/define-your-schema#react-native-and-expo):
+> The types available are `TEXT`, `INTEGER` and `REAL`. These should map directly to the values produced by the [Sync Rules](https://docs.powersync.com/usage/sync-rules). If a value doesn't match, it is cast automatically. 
+
+Here's an example for a todo app:
 
 ```ts
 // app/services/database/schema.ts
@@ -226,43 +235,41 @@ project directory.
 This will generate a `schema.js` file which can still save you a lot of time as you get started.
 :::
 
-## Setting Up the PowerSync Context and Database Connection
+## Setting Up the Database Connection and Context
 
-To seamlessly manage and synchronize data within your Ignite app, you'll integrate PowerSync and Supabase by setting up
-a database context. This context provides a convenient way to access your database throughout your application. Follow
-these steps to establish the database context and ensure your app is ready for offline-first functionality with
-real-time sync capabilities.
+Next we need to integrate PowerSync and Supabase by setting up the database connection, and then providing that connection to the app through a React Context.. 
 
 ### Connecting to Your Database
 
-You need to tell PowerSync how to connect to your database. This involves creating a `PowerSyncBackendConnector` that
+To tell PowerSync how to connect to the database we'll create a `PowerSyncBackendConnector` that
 has methods for fetching credentials and uploading data.
-
-As an example we'll use Supabase as our back end. You can replace this with a class that connects to your own back end.
 
 #### PowerSyncBackendConnector Interface
 
-The Supabase Connector is implemented according to the `PowerSyncBackendConnector` interface, ensuring it can seamlessly
-communicate with PowerSync for data synchronization:
+The Supabase Connector needs to implement the `PowerSyncBackendConnector` interface, ensuring it can seamlessly
+communicate with PowerSync for data synchronization. 
+
+The interface requires two methods:
 
 ```ts
-// Required methods for PowerSyncBackendConnector
+// fetches credentials for connecting to the backend
 fetchCredentials: () => Promise<PowerSyncCredentials | null>;
+
+// a method powersync will call to upload data to the backend
 uploadData: (database: AbstractPowerSyncDatabase) => Promise<void>;
 ```
 
 The Powersync docs provide [detailed instructions](https://docs.powersync.com/client-sdk-references/react-native-and-expo#id-2.-create-a-backend-connector) on how to implement the `PowerSyncBackendConnector` interface.
 
-#### Implementing a Supabase Connector
+#### Implementing a Database Connector for Supabase
 
-We Initialize the Supabase client with session persistence and custom storage for persisting keys.
+We Initialize the Supabase client with session persistence and custom storage for persisting keys. 
 
 Persisting the Supabase session is essential for maintaining user sessions across app restarts. Unlike web environments
 where `localStorage` is available, React Native requires a different approach for secure storage.
 
-The`react-native-supabase-todolist` demo from PowerSync has
-a [simple implementation of a kv-store](https://github.com/powersync-ja/powersync-js/blob/main/demos/react-native-supabase-todolist/library/storage/SupabaseStorageAdapter.ts)
-that you can use for this. (imported above as `KVStorage`)
+The`react-native-supabase-todolist` demo from PowerSync has a [simple implementation of a kv-store](https://github.com/powersync-ja/powersync-js/blob/main/demos/react-native-supabase-todolist/library/storage/SupabaseStorageAdapter.ts)
+that works well for this. (imported below as `KVStorage`)
 
 ```ts
 // app/services/database/supabase.ts
@@ -284,9 +291,12 @@ const client = createClient(Config.supabaseUrl, Config.supabaseAnonKey, {
     },
 });
 
+/**
+ * Called by PowerSync to fetch the credentials needed to connect to the backend.
+ * Here we use the Supabase client to get the session token and user ID.
+ */
 async function fetchCredentials() {
-    // NOTE: For client.auth.getSession() to work, the user needs to be signed in with Supabase
-    // see the supabase documentation for more information on how to do this
+    // NOTE: For client.auth.getSession() to work, the user needs to be signed in
     const {data: {session}, error} = await client.auth.getSession();
     if (!session || error) throw new Error(`Supabase credentials error: ${error?.message}`);
 
@@ -299,6 +309,11 @@ async function fetchCredentials() {
     };
 }
 
+/**
+ * Called by PowerSync to upload data to the backend. Changes to the database are stored in a transaction, which
+ * is a sequence of operations that are applied atomically to the backend, ensuring that the database remains
+ * consistent.
+ */
 async function uploadData(database: AbstractPowerSyncDatabase) {
     const transaction = await database.getNextCrudTransaction();
     if (!transaction) return;
@@ -328,7 +343,7 @@ async function uploadData(database: AbstractPowerSyncDatabase) {
         // Handle error based on your application's needs
     }
 
-    // Basic methods for authentication with supabase - use these to manage authentication
+    // Basic methods for authentication with supabase
     async function login(email: string, password: string) {
         return await client.auth.signIn({email, password});
     }
@@ -346,11 +361,17 @@ async function uploadData(database: AbstractPowerSyncDatabase) {
 export const supabaseConnector: PowerSyncBackendConnector = {fetchCredentials, uploadData};
 ```
 
+:::tip
+For more information on authentication with Supabase, refer to the [Supabase Auth documentation](https://supabase.io/docs/guides/auth).
+:::
+
 ### Initializing the PowerSync Instance, and providing it to the app
 
-We need a stable reference to the PowerSync instance throughout the app. We can achieve this by creating a `Database`
-class that encompasses both the PowerSync and Supabase configurations, and then providing it to the app using a React
-context.
+We need a sinple point of connection to the PowerSync instance that we can interact with throughout the app. 
+
+To achieve this we create a `Database` class that encompasses both the PowerSync and Supabase configurations. 
+
+Then we provide a stable reference to the `Database` instance through a React Context.
 
 ```tsx
 // app/services/database.ts
@@ -366,16 +387,24 @@ export class Database {
     powersync: AbstractPowerSyncDatabase;
     supabase: SupabaseConnector;
 
+    /**
+     * Initialize the Database class with a new PowerSync instance
+     */
     constructor() {
-        // This creates a new PowerSync instance using our schema and a database using the specified filename
         const factory = new RNQSPowerSyncDatabaseOpenFactory({
             schema: AppSchema,
             dbFilename: 'sqlite.db',
         });
         this.powersync = factory.getInstance();
+        // include the Supabase connector for easy access
         this.supabase = supabaseConnector;
     }
 
+    /**
+     * Initialize the PowerSync instance and connect it to the Supabase backend.
+     * This will call `fetchCredentials` on the Supabase connector to get the session token.
+     * So if your database requires authentication, the user will need to be signed in before this is called.
+     */
     async init() {
         await this.powersync.init();
         // Connect the PowerSync instance to the Supabase backend through the connector
@@ -386,10 +415,10 @@ export class Database {
 // Then we create an instance of the Database class and create a context for it to hold a stable reference
 export const database = new Database();
 
-export const DbContext = React.createContext<Database | undefined>(undefined);
+export const DatabaseContext = React.createContext<Database | undefined>(undefined);
 
 export const useDatabase = () => {
-    const context: Database | undefined = React.useContext(DbContext);
+    const context: Database | undefined = React.useContext(DatabaseContext);
     if (!context) {
         throw new Error("useDatabase must be used within a DatabaseProvider");
     }
@@ -403,11 +432,11 @@ export function DatabaseProvider({children}: PropsWithChildren<{}>) {
     }, []);
 
     return (
-        <DbContext.Provider value={database}>
+        <DatabaseContext.Provider value={database}>
             <PowerSyncContext.Provider value={database.powersync}>
                 {children}
             </PowerSyncContext.Provider>
-        </DbContext.Provider>
+        </DatabaseContext.Provider>
     );
 }
 ```
@@ -447,8 +476,7 @@ export default App;
 //...
 ```
 
-This gives us access to the powersync instance and the supabase connector throughout the app. This is very useful if you
-are using Supabase Auth, for instance.
+This gives us access to the powersync instance and the supabase connector throughout the app. 
 
 ### Example: Providing Database Context to Signed-In Routes
 
@@ -489,7 +517,8 @@ import {NavigationContainer} from "@react-navigation/native"
 import {createNativeStackNavigator} from "@react-navigation/native-stack"
 import {observer} from "mobx-react-lite"
 import * as Screens from "app/screens"
-import SignedInNavigator from "./SignedInNavigator" // Adjust the path as needed
+import SignedInNavigator from "./SignedInNavigator" // Adjust the path as needed 
+import {useAuth} from 'app/services/auth' 
 
 export type RootStackParamList = {
     Public: undefined
@@ -500,20 +529,29 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
 export const AppNavigator = observer(function App() {
+    
+    // Check if the user is signed in
+     const {isSignedIn} = useAuth()
+    
     return (
         <NavigationContainer>
             <Stack.Navigator screenOptions={{headerShown: false}}>
                 // Public routes
                 <Stack.Screen name="Public" component={Screens.PublicNavigator}/>
-
-                // Private routes
-                <Stack.Screen name="Private" component={SignedInNavigator}/>
+                // Only render the SignedInNavigator if the user is signed in
+                {isSignedIn 
+                   ? <Stack.Screen name="Private" component={SignedInNavigator}/> 
+                   : null
+                }
                 // Add other routes as needed
             </Stack.Navigator>
         </NavigationContainer>
     )
 })
 ```
+
+Now, only routes in the `PrivateNavigator` will have access to the PowerSync context, ensuring that database operations
+are limited to authenticated users.
 
 ## Data Operations with PowerSync
 
@@ -526,7 +564,7 @@ that your data will be safely and efficiently synchronized with your Supabase ba
 ### Fetching Data
 
 To fetch static data once without subscribing to updates, use the `usePowerSyncQuery` hook. This is useful for data that
-doesn't change often or where live updates aren't necessary.
+doesn't change often or where live updates aren't necessary. 
 
 ```tsx
 // app/components/StaticItemList.tsx
@@ -572,8 +610,8 @@ const LiveItemList = () => {
 
 ### Fetching Complex Data Using Joins
 
-When you need to fetch data from multiple tables and possibly remap fields for your UI, use joins within your query.
-The `usePowerSyncWatchedQuery` hook can be used for live updates on complex queries as well.
+The `usePowerSyncWatchedQuery` hook can be used for live updates on complex queries as well. Fetching data from
+multiple tables using joins is a common use case, and PowerSync makes it easy to handle.
 
 ```tsx
 // app/components/ItemsWithCategories.tsx
