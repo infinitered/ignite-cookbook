@@ -48,12 +48,15 @@ ensuring that the user's data stays up to date on all of their devices even if t
 
 1. **An Ignite app using `Expo CNG` or `Bare` workflow**
    - PowerSync requires native modules, so you cannot use Expo Go
-2. **A Postgres SQL instance set up and connected to a PowerSync** 
-   - If you don't have a database, you can follow the [PowerSync + Supabase Integration Guide](https://docs.powersync.com/integration-guides/supabase-+-powersync) to
+2. **A Postgres SQL instance set up and connected to a PowerSync**
+   - Instruction for connecting to a number of platforms are available in the [PowerSync documentation](https://docs.powersync.com/)
+   :::tip
+   If you don't have a database, you can follow the [PowerSync + Supabase Integration Guide](https://docs.powersync.com/integration-guides/supabase-+-powersync) to
    get one set up -- both PowerSync and Supabase have free tiers that you can use to get started.
+   :::
 3. **Your PowerSync URL**
-    - Found in your PowerSync dashboard. Click on the "Edit Instance" button for your instance and copy the URL from the "Instance URL" field in the dialog that appears.
- 
+   - Found in your PowerSync dashboard. Click on the "Edit Instance" button for your instance and copy the URL from the "Instance URL" field in the dialog that appears.
+
 ### Supabase
 
 This recipe uses a supabase backend as an example -- if you are following along you will need:
