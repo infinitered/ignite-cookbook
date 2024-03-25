@@ -1,5 +1,5 @@
 ---
-title: PowerSync for Local-First Data Management
+title: Sync your App with your Postgres database using PowerSync
 description: Enhance your app with PowerSync for efficient data synchronization between your app's local database and backend
 tags:
   - PowerSync
@@ -47,6 +47,9 @@ In the background, Powersync queues any changes and syncs the local data with th
 
 1. **An Ignite app using `Expo CNG` or `Bare` workflow**
    - PowerSync requires native modules, so you cannot use Expo Go
+   ```bash
+   npx ignite-cli@latest new PowerSyncIgnire --remove-demo --workflow=cng --yes
+   ```
 2. **A Postgres SQL instance set up and connected to a PowerSync**
    - Instruction for connecting to a number of platforms are available in the [PowerSync documentation](https://docs.powersync.com/)
    - If you don't have a database, you can follow the [PowerSync + Supabase Integration Guide](https://docs.powersync.com/integration-guides/supabase-+-powersync) to
@@ -74,7 +77,7 @@ This recipe uses a supabase backend as an example -- if you want to follow along
   keys**.
 
 2. **Configure or disable email verification in your Supabase project.**
-  - by default, Supabase requires email verification for new users. This should be configured for any production apps.
+  - By default, Supabase requires email verification for new users. This should be configured for any production apps.
   - For testing and experimentation, you can disable this in the Supabase dashboard under
     **Authentication** > **Providers** > **Email** >> **Confirm Email**
 
@@ -183,6 +186,7 @@ Update `babel.config.js` to include the `transform-async-generator-functions` pl
 /** @type {import('@babel/core').TransformOptions['plugins']} */
 const plugins = [
         //... other plugins
+        // success-line
         '@babel/plugin-transform-async-generator-functions',  // <-- Add this
         /** NOTE: This must be last in the plugins @see https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation/#babel-plugin */
         "react-native-reanimated/plugin",
@@ -268,7 +272,7 @@ We Initialize the Supabase client with session persistence and custom storage fo
 Persisting the Supabase session is essential for maintaining user sessions across app restarts. Unlike web environments
 where `localStorage` is available, React Native requires a different approach for secure storage.
 
-The`react-native-supabase-todolist` demo from PowerSync has a [simple implementation of a kv-store](https://github.com/powersync-ja/powersync-js/blob/main/demos/react-native-supabase-todolist/library/storage/SupabaseStorageAdapter.ts)
+The`react-native-supabase-todolist` demo from PowerSync has a [simple implementation of a kv-store](https://github.com/powersync-ja/powersync-js/blob/main/demos/react-native-supabase-todolist/library/storage/KVStorage.ts)
 that works well for this. (imported below as `KVStorage`)
 
 ```ts
