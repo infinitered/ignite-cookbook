@@ -21,20 +21,16 @@
  }
 
  .notificationTag {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  padding: 4px 12px;
-  gap: 10px;
-  width: 103px;
-  height: 29px;
+  display: inline-block;
+  padding: 0px 12px;
   background: #E8C1B4;
  }
 
  .notificationTagText {
   color: #692810;
   font-size: 14px;
-  line-height: 21px;
+  line-height: 29px;
+  margin: 0px;
  }
 
 .notificationTitle {
@@ -44,6 +40,15 @@
   font-size: 20px;
   line-height: 24px;
 } 
+
+.notificationTitleLink {
+  color: inherit;
+}
+
+.notificationTitleLink:hover {
+  color: inherit;
+  text-decoration: underline;
+}
 
 .notificationDate {
   color: #564E4A;
