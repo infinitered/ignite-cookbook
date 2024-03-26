@@ -23,7 +23,7 @@ In this example, we'll take a look at wiring up a barcode scanner. This tutorial
 If you haven't already, spin up a new Ignite application:
 
 ```bash
-npx ignite-cli@latest new PizzaApp --remove-demo --workflow=prebuild --yes
+npx ignite-cli@latest new PizzaApp --remove-demo --workflow=cng --yes
 cd PizzaApp
 ```
 
