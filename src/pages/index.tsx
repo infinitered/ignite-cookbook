@@ -1,30 +1,30 @@
-import React from "react";
-import Link from "@docusaurus/Link";
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import Layout from "@theme/Layout";
-import HomepageFeatures from "@site/src/components/HomepageFeatures";
-import moment from "moment";
+import React from "react"
+import Link from "@docusaurus/Link"
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext"
+import Layout from "@theme/Layout"
+import HomepageFeatures from "@site/src/components/HomepageFeatures"
+import moment from "moment"
 
-import styles from "./index.module.css";
-import SVGImage from "../components/SVGImage";
-import { usePluginData } from "@docusaurus/useGlobalData";
-import * as Arrow from "@site/static/img/arrow.svg";
-import type { Snippet } from "../types";
-import LatestRelease from "../components/LatestVersion";
+import styles from "./index.module.css"
+import SVGImage from "../components/SVGImage"
+import { usePluginData } from "@docusaurus/useGlobalData"
+import * as Arrow from "@site/static/img/arrow.svg"
+import type { Snippet } from "../types"
+import LatestRelease from "../components/LatestVersion"
 
-const heroImage = require("@site/static/img/hero-graphic.svg");
-const faceWinking = require("@site/static/img/face-winking.png");
-const chefHat = require("@site/static/img/chef-hat.png");
+const heroImage = require("@site/static/img/hero-graphic.svg")
+const faceWinking = require("@site/static/img/face-winking.png")
+const chefHat = require("@site/static/img/chef-hat.png")
 
 const NewSection = () => {
   const { snippets } = usePluginData("example-code-snippets") as {
-    snippets: Snippet[];
-  };
+    snippets: Snippet[]
+  }
 
   const mostRecentRecipe = snippets.sort(
     (a, b) =>
       new Date(b.publish_date).getTime() - new Date(a.publish_date).getTime()
-  )[0];
+  )[0]
 
   return (
     <div className={styles.newSection}>
@@ -33,7 +33,14 @@ const NewSection = () => {
           <div className={styles.notificationTag}>
             <p className={styles.notificationTagText}>New Recipe</p>
           </div>
-          <h3 className={styles.notificationTitle}>{mostRecentRecipe.title}</h3>
+          <h3 className={styles.notificationTitle}>
+            <Link
+              className={styles.notificationTitleLink}
+              to={`/docs/recipes/${mostRecentRecipe.doc_name.split(".")[0]}`}
+            >
+              {mostRecentRecipe.title}
+            </Link>
+          </h3>
           <p className={styles.notificationDate}>
             {`Published on `}
             <b>
@@ -55,12 +62,12 @@ const NewSection = () => {
         <LatestRelease />
       </div>
     </div>
-  );
-};
+  )
+}
 
-const title = "Proven Recipes for your React Native apps";
+const title = "Proven Recipes for your React Native apps"
 const description =
-  "Starting from scratch doesn’t always make sense. That’s why we made the Ignite Cookbook for React Native – an easy way for developers to browse and share code snippets (or “recipes”) that actually work. ";
+  "Starting from scratch doesn’t always make sense. That’s why we made the Ignite Cookbook for React Native – an easy way for developers to browse and share code snippets (or “recipes”) that actually work. "
 
 function HomepageHeader() {
   return (
@@ -89,23 +96,23 @@ function HomepageHeader() {
         </div>
       </div>
     </header>
-  );
+  )
 }
 
 function FreshRecipes() {
   const { snippets } = usePluginData("example-code-snippets") as {
     snippets: {
-      author: string;
-      publish_date: string;
-      title: string;
-      doc_name: string;
-    }[];
-  };
+      author: string
+      publish_date: string
+      title: string
+      doc_name: string
+    }[]
+  }
 
   const mostRecentRecipes = snippets.sort(
     (a, b) =>
       new Date(b.publish_date).getTime() - new Date(a.publish_date).getTime()
-  );
+  )
 
   return (
     <div className={styles.freshSection}>
@@ -130,17 +137,17 @@ function FreshRecipes() {
               <b>{recipe.author}</b>
             </p>
           </Link>
-        );
+        )
       })}
       <Link to="/docs/intro" className={styles.viewAllRecipes}>
         View all recipes
       </Link>
     </div>
-  );
+  )
 }
 
 export default function Home(): JSX.Element {
-  const { siteConfig } = useDocusaurusContext();
+  const { siteConfig } = useDocusaurusContext()
   return (
     <Layout
       title={siteConfig.title}
@@ -153,5 +160,5 @@ export default function Home(): JSX.Element {
         <FreshRecipes />
       </main>
     </Layout>
-  );
+  )
 }
