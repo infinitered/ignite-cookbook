@@ -95,7 +95,7 @@ First install the PowerSync SDK and its dependencies.
 npx expo install \
   @journeyapps/powersync-sdk-react-native \
   @journeyapps/react-native-quick-sqlite \
-````
+```
 
 Powersync [requires polyfills](https://github.com/powersync-ja/powersync-js/blob/main/packages/powersync-sdk-react-native/README.md#install-polyfills)
 to replace browser-specific APIs with their React Native equivalents. These are listed as peer-dependencies so we need
@@ -117,6 +117,10 @@ npx expo install \
 At the time of writing the PowerSync SDK is not compatible with `web-streams-polyfill@4.0.0`, so be sure to specify version `^3.2.1`.
 :::
 
+:::note
+These dependencies include native modules so you'll need to rebuild your app after installing.
+:::
+
 ### Install necessary dependencies for Supabase
 
 First we need to install the Supabase SDK.
@@ -130,10 +134,6 @@ and we'll also need to install `@react-native-async-storage/async-storage` for p
 ```shell
 npx expo install @react-native-async-storage/async-storage
 ```
-
-### Update your native dependencies
-
-These dependencies include native modules so you'll need to rebuild your app after installing.
 
 ### Configuring Babel and Polyfills
 
@@ -169,13 +169,11 @@ const plugins = [
 
 ## Authenticating with Supabase
 
-PowerSync requires a valid session token to connect to the Supabase backend.
-
-We'll need a hook and context to manage our authentication state.
+PowerSync requires a valid session token to connect to the Supabase backend, so we'll need to set up some basic authentication.
 
 ### Add Supabase Config Variables to Your App Config
 
-First add your Supabase config to your app's configuration.
+First add your Supabase config to your app's configuration.  In ignite apps, config is kept in `app/config/config.base.ts`. 
 
 ```ts
 // `app/config/config.base.ts`:
@@ -212,7 +210,7 @@ export const supabase = createClient(Config.supabaseUrl, Config.supabaseAnonKey,
         persistSession: true, storage: AsyncStorage,
     },
 })
-````
+```
 
 :::info Persisting the Supabase Session
 Unlike web environments where `localStorage` is available, in React Native Supabase requires us to provide a key-value store to hold the session token.
@@ -349,22 +347,26 @@ Wrap your app with the `AuthProvider` to provide the authentication state to you
 
 ```tsx
 // app/app.tsx
+// ...other imports
+// success-line
 import {AuthProvider} from "app/services/database/use-auth"
 
 // ...
 function App(props: AppProps) {
     // ...
     return (
+        // success-line
         <AuthProvider>
             <SafeAreaProvider>
                 {/* ... */}
             </SafeAreaProvider>
+            // success-line    
         </AuthProvider>
     );
 }
 
 
-````
+```
 
 ### Create a Sign-In Screen
 
@@ -463,17 +465,16 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({navigation}) => {
     )
 }
 
+// Styles
 const $container: ViewStyle = {
     backgroundColor: colors.background,
     flex: 1,
     justifyContent: "center",
     paddingHorizontal: spacing.lg,
 }
-
 const $inputContainer: TextStyle = {
     marginTop: spacing.md,
 }
-
 const $inputWrapper: TextStyle = {
     backgroundColor: colors.palette.neutral100,
 }
@@ -484,7 +485,6 @@ const $modalBackground: ViewStyle = {
     flexDirection: "column",
     justifyContent: "space-around",
 }
-
 const $error: TextStyle = {
     color: colors.error,
     marginVertical: spacing.md,
@@ -492,20 +492,18 @@ const $error: TextStyle = {
     width: "100%",
     fontSize: 20,
 }
-
 const $buttonContainer: ViewStyle = {
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
     marginVertical: spacing.md,
 }
-
 const $button: ViewStyle = {
     marginTop: spacing.xs,
 }
 
 
-````
+```
 
 ### Update the Welcome Screen
 
@@ -535,12 +533,12 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeSc
     }
 
     return (
-        <SafeAreaView style={$container}>
-            <Text preset="heading" text="Signed In"/>
-            <Button
-                text="Sign Out"
-                onPress={handleSignOut}/>
-        </SafeAreaView>
+          <SafeAreaView style={$container}>
+              <Text preset="heading" text="Signed In"/>
+              <Button
+                  text="Sign Out"
+                  onPress={handleSignOut}/>
+          </SafeAreaView>
     )
 })
 
@@ -567,9 +565,9 @@ We can ensure this by checking the user's authentication status in the `AppNavig
 const AppStack = observer(function AppStack() {
     // Fetch the user from the auth context
     // success-line
+    // success-line
     const {signedIn} = useAuth()
     return (
-        <DatabaseProvider>
             <Stack.Navigator
                 screenOptions={{headerShown: false, navigationBarColor: colors.background}}
             >
@@ -588,7 +586,6 @@ const AppStack = observer(function AppStack() {
                 <Stack.Screen name="Auth" component={Screens.AuthScreen}/>
                 {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
             </Stack.Navigator>
-        </DatabaseProvider>
     )
 })
 
@@ -611,6 +608,11 @@ If you are getting errors about an unverified email -- remember to disable email
 ## Connecting PowerSync to Supabase
 
 Now that we have a valid Supabase session, we can connect to PowerSync and start syncing data between the local database and the backend.
+
+We'll need to:
+1. Adding our PowerSync URL to the app configuration
+2. Defining our data schema
+3. Connecting to the database
 
 ### Add your PowerSync URL to your app config
 
@@ -638,9 +640,11 @@ const BaseConfig: ConfigBaseProps = {
 };
 ```
 
-## Defining Your Data Schema
+### Defining Your Schema
 
-Next, define your data schema and TypeScript types in `app/services/database/schema.ts`. The Schema defines the data that PowerSync will sync between the local SQLite database and the backend.
+First we need to define the schema for our database and TypeScript types in `app/services/database/schema.ts`.
+
+The Schema defines the data that PowerSync will sync between the local SQLite database and the backend.
 
 From the [PowerSync docs](https://docs.powersync.com/usage/installation/client-side-setup/define-your-schema#react-native-and-expo):
 > The types available are `TEXT`, `INTEGER` and `REAL`. These should map directly to the values produced by the [Sync Rules](https://docs.powersync.com/usage/sync-rules). If a value doesn't match, it is cast automatically.
@@ -691,10 +695,6 @@ PowerSync can generate a Javascript version of your schema for you.
 
 This will generate a schema definition in javascript that will give you a good starting point for building the rest of your schema.
 :::
-
-## Setting Up the Database Connection and Context
-
-Next we need to integrate PowerSync and Supabase by setting up the database connection, and then providing that connection to the app through a React Context..
 
 ### Connecting to Your Database
 
@@ -912,13 +912,7 @@ The `PowerSyncContext.Provider` is provided by the PowerSync SDK and is required
 i.e. `useWatchedPowerSyncQuery` and `usePowerSyncQuery`).
 :::
 
-## Working With Your Data
-
-Now that we have our database set up and connected to PowerSync, we can start reading and writing data to the database.
-
-Lets create a todo-list app that will let us manage multiple todo lists.
-
-### Managing Lists of Todos
+## Managing Lists of Todos
 
 In our app we'll want the ability to:
 
@@ -932,11 +926,11 @@ To manage this we'll create the following:
 * a `Lists` component to display the lists
 * an `AddList` component with a form to add a new list
 
-#### The `useLists` Hook
+### The `useLists` Hook
 
 The `useLists` hook will encapsulate the logic for fetching and managing the lists.
 
-##### usePowerSyncWatchedQuery
+#### usePowerSyncWatchedQuery
 
 This hook is used to fetch data from the database and watch for changes. It will automatically re-fetch the data when the database changes.
 
@@ -951,18 +945,22 @@ const lists = usePowerSyncWatchedQuery<ListItemRecord>(`
   `);
 ```
 
-##### PowerSync.execute
+:::note
+This hook needs to be inside a `PowerSyncContext.Provider` to work -- so it should be inside the `DatabaseProvider` component.
+:::
 
-This method is used to execute SQL queries against the database. It is used here to create and delete lists.
+#### PowerSync.execute()
+
+This method is used to execute SQL queries against the database. We'll be using it here to create and delete lists.
 
 ```ts
 const deleteList = useCallback(async (id: string) => {
     console.log('Deleting list', id);
     return powersync.execute(`DELETE FROM ${LIST_TABLE} WHERE id = ?`, [id]);
 }, [powersync]);
-````
+```
 
-##### Putting it all together
+#### Putting it all together
 
 When we put it all together we get a hook like this:
 
@@ -1018,13 +1016,14 @@ export const useLists = () => {
 };
 ```
 
-### Creating, Viewing, and Deleting Lists
+## Creating, Viewing, and Deleting Lists
 
 Now that we have the hook, lets create the components to display and manage the lists.
 
 #### Creating the components
 
 We're going to need several components to view and manage our todo lists:
+
 * `AddList` - displays form to add a new list
 * `Lists` - displays the list of todo lists and allows the user to delete them
 
@@ -1037,7 +1036,6 @@ npx ignite-cli generate component AddList
 ```shell
 npx ignite-cli generate component Lists
 ```
-
 
 #### Adding the components to the Welcome Screen
 
@@ -1086,8 +1084,6 @@ const $container: ViewStyle = {
     flexDirection: "column",
 }
 ```
-
-For now, it won't look like much, but we'll fix that pretty quickly!
 
 #### Creating Todo Lists in `AddList`
 
@@ -1288,290 +1284,677 @@ const $deleteListIcon: ViewStyle = {
 #### Checking In
 
 By this point you should be able to:
+
 * add new Todo lists,
 * see a list of all the Todo lists,
 * delete Todo lists from the database.
 
-### Creating, Viewing, and Deleting Todos inside of Lists
+## Sharing the Database Provider at the Navigator Level
 
+Next we'll want to create a screen to view/edit todos inside a list. Our new screen and `WelcomeScreen`  will both need to be inside a `DatabaseProvder` to have access to the database.
 
-# OLD STUFF
+We could just wrap every screen in the `DatabaseProvider`, like we did with `WelcomeScreen` but as our app gets larger this can become cumbersome.
 
-### Add Todo Form
+What we really want is for authenticated routes to have access to the database, and unauthenticated routes to not have access.
 
-use the Ignite CLI to generate a new component for adding todos:
+To do this we'll create two navigators, one for signed in routes and one for unauthenticated routes. Then we'll use the users authentication status to determine which navigator to render.
 
-```shell
-npx ignite-cli generate component AddTodo
-```
+### Creating the TodoList Screen
 
-:::info Generating Unique IDs on the Client
-Because PowerSync is a local-first database we need to generate and store our own unique IDs for each record. Auto-incrementing IDs would
-require a connection to the server. More information on generating unique IDs can be found in the [PowerSync documentation](https://docs.powersync.com/usage/sync-rules/client-id).
-:::
-
-We can use the `uuid` package to generate unique IDs for our todos.
+First lets create a new screen called `TodoList` that will eventually display the todos for a list. For now we'll just leave it as-is.
 
 ```shell
-npx expo install uuid
+npx ignite-cli generate screen TodoList
 ```
 
-Then open `app/components/AddTodo.tsx` and update the `AddTodo` component to add a new todo to the database:
+### Creating the `AuthNavigator` and `SignedInNavigator`
 
-```tsx
-import {Button, TextField} from "app/components"
-import {useDatabase} from "app/services/database"
-import React, {useState} from "react"
-import {View, ViewStyle} from "react-native"
-import {spacing} from "../theme"
+First lets create the `AuthNavigator` that will contain the `AuthScreen` and `PowerSyncScreen`.
 
-export const AddTodo = () => {
-    const {powersync} = useDatabase()
-    const [description, setDescription] = useState("")
+```shell
+npx ignite-cli generate navigator Auth
+```
 
-    const handleAddTodo = async () => {
-        // Assuming you've set created_by, and list_id
-        const created_at = new Date().toISOString();
-        const completed = 0; // not completed yet
-        const created_by = "user_id"; // replace with actual user id
-        const list_id = "list_id"; // replace with actual list id
-        const id = "unique_id";  // replace with actual unique id for the todo
+And then the `SignedInNavigator` that will contain the `WelcomeScreen` and `TodoListScreen`.
 
-        await powersync.execute(
-            `
-            INSERT INTO todos
-            (id, created_at, completed, description, created_by, list_id)
-            VALUES (?,?,?,?,?,?)
-            `,
-            [id, created_at, completed, description, created_by, list_id]
-        )
-        setDescription("")
+```shell
+npx ignite-cli generate navigator SignedIn
+```
+
+### Move the screens from `AppNavigator` into the appropriate navigators
+
+Moving screens between navigators is a multi-step process. We need to:
+
+1. move the `AuthScreen` into the `AuthNavigator`
+2. move the `WelcomeScreen` and `TodoListScreen` into the `SignedInNavigator`, and wrap the navigator in the `DatabaseProvider`
+3. update the `AppNavigator` to conditionally render the `AuthNavigator` or `SignedInNavigator` based on the user's authentication status.
+4. Update existing calls to `navigation.navigate()` to use the new routes
+
+For each screen we we move, we will need to:
+
+* update the types of the screen's props to reference the new navigator
+* move the `ParamsList` property that defines the screen's parameters to the new navigator
+* move the `Stack.Screen` component that points to the screen to the new navigator
+
+#### Moving  `AuthScreen` to the `AuthNavigator`
+
+* Move the params and screen from  `AppStackParamList` to `AuthStackParamList`
+
+  First remove them from `AppNavigator`:
+    ```tsx
+    // app/navigators/AppNavigator.tsx
+    
+    //...
+    export type AppStackParamList = {
+      Welcome: undefined
+      // highlight-next-line
+      Auth: undefined              // <---REMOVE THIS LINE
+      TodoList: { listId: string } 
+      // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
     }
-
-    return (
-        <View style={$container}>
-            <TextField
-                label={"Description"}
-                value={description}
-                onChangeText={setDescription}
-            />
-            <Button
-                text={"Add Todo"}
-                onPress={handleAddTodo}
-            />
-        </View>
-    )
-}
-```
-
-
-## Making the Database Available Throughout Your App
-
-This gives us access to the powersync instance and the supabase connector throughout the app.
-
-### Example: Providing Database Context to Signed-In Routes
-
-Consider a scenario where your app has both public (sign-in, sign-up) and private (user-specific content) routes. You
-might want to ensure that the PowerSync database is only accessible to the private, signed in parts of your app. This
-approach minimizes overhead and focuses database interactions where they are most needed.
-
-Here's how you can structure your app to provide the PowerSync context exclusively to signed in routes, by extracting
-the logic into a `SignedInNavigator` component:
-
-```tsx
-// app/navigation/SignedInNavigator.tsx
-import React from "react"
-import {PowerSyncContext} from "@journeyapps/powersync-sdk-react-native"
-import {useDatabase} from "app/services/database"
-import * as Screens from "app/screens"
-
-const SignedInNavigator = () => {
-    // Extract the PowerSync instance from our custom hook
-    const {powersync} = useDatabase()
-
-    return (
-        <PowerSyncContext.Provider value={powersync}>
-            <Screens.PrivateNavigator/>
-        </PowerSyncContext.Provider>
-    )
-}
-
-export default SignedInNavigator
-```
-
-And in your main app component, you integrate `SignedInNavigator` like so:
-
-```tsx
-// app/navigators/AppNavigator.tsx
-import React from "react"
-import {NavigationContainer} from "@react-navigation/native"
-import {createNativeStackNavigator} from "@react-navigation/native-stack"
-import {observer} from "mobx-react-lite"
-import * as Screens from "app/screens"
-import SignedInNavigator from "./SignedInNavigator" // Adjust the path as needed
-import {useAuth} from 'app/services/auth'
-
-export type RootStackParamList = {
-    Public: undefined
-    Private: undefined
-    // Other routes here
-}
-
-const Stack = createNativeStackNavigator<RootStackParamList>()
-
-export const AppNavigator = observer(function App() {
-
-    // Check if the user is signed in
-    const {isSignedIn} = useAuth()
-
-    return (
-        <NavigationContainer>
-            <Stack.Navigator screenOptions={{headerShown: false}}>
-                // Only render the SignedInNavigator if the user is signed in
-                {isSignedIn
-                 ? <Stack.Screen name="Private" component={SignedInNavigator}/>
-                 : <Stack.Screen name="Public" component={Screens.PublicNavigator}/>
-                }
+    //...
+    const AppStack = observer(function AppStack() {
+        //...
+        return (
+            <Stack.Navigator
+                screenOptions={{headerShown: false, navigationBarColor: colors.background}}
+            >
+                // ...
+                // highlight-next-line
+                <Stack.Screen name="Auth" component={Screens.AuthScreen}/> {/* <<--- REMOVE THIS LINE*/}  
+                //...
             </Stack.Navigator>
-        </NavigationContainer>
+        )
+    })
+    ```
+  and then add them to the `AuthNavigator`, replacing the screen put there by the template, and create a utility type to allow for type checking when navigating between navigators:
+
+    ```tsx
+    // app/navigators/AuthNavigator.tsx
+    
+    import React from "react"
+    import {createNativeStackNavigator} from "@react-navigation/native-stack"
+    import {
+        AuthScreen,
+    } from "app/screens"
+    
+    export type AuthNavigatorParamList = {
+        //success-line
+        Auth: undefined
+    }
+    
+    // This type is used combines the AuthNavigatorParamList with the AppStackParamList
+    // so we can have type checking when navigating between navigators
+    //success-line 
+     export type AuthNavigatorScreenProps<T extends keyof AuthNavigatorParamList> = CompositeScreenProps<
+       //success-line
+       NativeStackScreenProps<AuthNavigatorParamList, T>,
+        //success-line 
+       NativeStackScreenProps<AppStackParamList>
+        //success-line
+     >
+
+    const Stack = createNativeStackNavigator<AuthNavigatorParamList>()
+    export const AuthNavigator = () => {
+        return (
+            <Stack.Navigator>
+                //success-line
+                <Stack.Screen name="Auth" component={AuthScreen}/>
+            </Stack.Navigator>
+        )
+    }
+    ```
+
+* Update the Props Type of `AuthScreen`
+   ```tsx
+   interface AuthScreenProps extends AuthNavigatorScreenProps<"Auth"> {}
+   ```
+
+#### Moving `WelcomeScreen` and `TodoListScreen` to the `SignedInNavigator`** and wrapping it in the `DatabaseProvider`
+
+* Move the params and screens into the `SignedInNavigatorParamList`
+
+  First remove them from `AppNavigator`:
+    ```tsx
+    // app/navigators/AppNavigator.tsx
+    
+    //...
+    export type AppStackParamList = {
+      // highlight-next-line
+      Welcome: undefined           // <---REMOVE THIS LINE
+      // highlight-next-line              
+      TodoList: undefined // <---REMOVE THIS LINE
+      // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+    }
+    //...
+    const AppStack = observer(function AppStack() {
+        //...
+        return (
+            <Stack.Navigator
+                screenOptions={{headerShown: false, navigationBarColor: colors.background}}
+            >
+                // highlight-next-line
+                // Remove the Welcome and TodoList screens
+                // highlight-next-line
+                // leaving an empty Stack.Navigator
+                // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+            </Stack.Navigator>
+        )
+    })
+    ```
+
+  Then add them to the `SignedInNavigator`, replacing the screen put there by the template, and wrap the whole navigator in the `DatabaseProvider`:
+
+    ```tsx
+    import * as Screens from "app/screens"
+    import {colors} from "app/theme"
+    import React from "react"
+    import {createNativeStackNavigator} from "@react-navigation/native-stack"
+    //success-line
+    import {DatabaseProvider} from "app/services/database/database"
+  
+    export type SignedInNavigatorParamList = {
+      //success-line
+      Welcome: undefined
+      //success-line
+      TodoList: undefined
+    }
+  
+    // This type is used combines the SignedInNavigatorParamList with the AppStackParamList
+    // so we can have type checking when navigating between navigators 
+  //success-line
+    export type SignedInNavigatorScreenProps<T extends keyof AuthNavigatorParamList> = CompositeScreenProps<
+  //success-line
+      NativeStackScreenProps<SignedInNavigatorParamList, T>,
+  //success-line 
+      NativeStackScreenProps<AppStackParamList>
+  //success-line
+    >
+  
+    const Stack = createNativeStackNavigator<SignedInNavigatorParamList>()
+  
+    export const SignedInNavigator = () => {
+      return (
+          //success-line
+          <DatabaseProvider>
+            <Stack.Navigator screenOptions={{headerShown: false, navigationBarColor: colors.background}}>
+              //success-line
+              <Stack.Screen name="Welcome" component={Screens.WelcomeScreen}/>
+              //success-line
+              <Stack.Screen name="TodoList" component={Screens.TodoListScreen}/>
+            </Stack.Navigator>
+          //success-line
+          </DatabaseProvider>
+      )
+    }
+    ```
+
+* Update the Props Type of `WelcomeScreen` and `TodoListScreen` to use the new prop type
+   ```tsx
+  // app/screens/WelcomeScreen.tsx
+   interface WelcomeScreenProps extends SignedInNavigatorScreenProps<"Welcome"> {}
+   ```
+
+   ```tsx
+  // app/screens/TodoListScreen.tsx
+   interface TodoListScreenProps extends SignedInNavigatorScreenProps<"TodoList"> {}
+   ```
+
+#### Update the `AppNavigator` to only show signed in routes if the user is signed in.
+
+    Next we'll change AppNavigator so it conditionally renders the `AuthNavigator` or `SignedInNavigator` based on the user's authentication status.
+
+   ```tsx
+    // app/navigators/AppNavigator.tsx
+
+// ... other imports
+//success-line
+import {DarkTheme, DefaultTheme, NavigationContainer, NavigatorScreenParams} from "@react-navigation/native"
+//success-line
+import {createNativeStackNavigator, NativeStackScreenProps} from "@react-navigation/native-stack"
+//success-line
+import {AuthNavigator, AuthNavigatorParamList} from "app/navigators/AuthNavigator"
+//success-line
+import {SignedInNavigator, SignedInNavigatorParamList} from "app/navigators/SignedInNavigator"
+
+//..
+
+export type AppStackParamList = {
+    //success-line
+    AuthNavigator: NavigatorScreenParams<AuthNavigatorParamList>
+    //success-line
+    SignedInNavigator: NavigatorScreenParams<SignedInNavigatorParamList>
+    // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+}
+
+// ...
+
+const AppStack = observer(function AppStack() {
+    // Fetch the user from the auth context
+    const {signedIn} = useAuth()
+    return (
+        <Stack.Navigator
+            screenOptions={{headerShown: false, navigationBarColor: colors.background}}
+        >
+            //success-line
+            <Stack.Screen name={"AuthNavigator"} component={AuthNavigator}/>
+            {/* Only render the SignedIn Navigator if we are signed in */}
+            //success-line
+            {signedIn ? <Stack.Screen name={"SignedInNavigator"} component={SignedInNavigator}/> : null}
+            {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
+        </Stack.Navigator>
     )
 })
-```
 
-Now, only routes in the `PrivateNavigator` will have access to the PowerSync context, ensuring that database operations
-are limited to authenticated users.
+//...
+   ```
 
-## Data Operations with PowerSync
+**4. Update the existing `navigation.navigate()` calls to use the new routes**
+Because we've moved the screens into navigators, we've changed the paths that react-navigation uses to find them.
 
-This section outlines how to use PowerSync in a React Native app for various data operations. You can fetch
-static data, subscribe to live updates, fetch complex data using joins, or update data through a unified API.
+   ```tsx
+   // app/screens/AuthScreen.tsx
+useEffect(() => {
+    if (user) {
+        //success-line
+        navigation.navigate("SignedInNavigator", {screen: "Welcome"})
+    }
+}, [user])
+   ```
 
-And with PowerSync, you can perform these operations locally for maximum speed and responsiveness, while still knowing
-that your data will be safely and efficiently synchronized with your Supabase backend.
+## Fetching and Managing the Todos for a List
 
-### Fetching Data
+Now that our authenticated navigation is in place, we can navigate to the `TodoList` screen and display the todos for a list.
 
-To fetch static data once without subscribing to updates, use the `usePowerSyncQuery` hook. This is useful for data that
-doesn't change often or where live updates aren't necessary.
+#### Navigating to the `TodoList` screen, passing the list id as a parameter
+
+To do this we'll pass the list id as a parameter when we navigate to the screen.
+
+Open `app/navigators/SignedInNavigator.tsx` and update the `SignedInNavigatorParamList` type:
+
+We want to pass only the minimum required data in our params for performance reasons, so we'll only pass the list id.
 
 ```tsx
-// app/components/StaticTodoList.tsx
-import React from 'react';
-import {Text, View} from 'react-native';
-import {usePowerSyncQuery} from '@journeyapps/powersync-sdk-react-native';
 
-const StaticTodoList = () => {
-    const todos = usePowerSyncQuery(`SELECT * FROM ${TODO_TABLE}`);
+export type SignedInNavigatorParamList = {
+    Welcome: undefined
+    // success-line
+    TodoList: { listId: string }
+}
+```
+
+We'll update the `TodoListScreen` to accept the list id as a parameter -- for now we'll just display it to make sure we got it.
+
+```tsx
+
+// ...
+
+export const TodoListScreen: FC<TodoListScreenProps> = function TodoListScreen({
+    navigation,
+
+    // suucess-line
+    route: {params}
+}) {
+    // We get the listId from the route params
+    // success-line
+    const listId = params.listId;
+
     return (
-        <View>
-            {items.map((todo) => (
-                <Text key={todo.id}>{todo.name}</Text>
-            ))}
-        </View>
-    );
-};
-```
-
-### Fetching and Watching Data
-
-For data that changes frequently and where you want your component to automatically update, use
-the `usePowerSyncWatchedQuery` hook. This will subscribe to changes and re-render your component with the latest data.
-
-```tsx
-// app/components/LiveItemList.tsx
-import React from 'react';
-import {ScrollView, Text} from 'react-native';
-import {usePowerSyncWatchedQuery} from '@journeyapps/powersync-sdk-react-native';
-
-const LiveTodoList = () => {
-    const todos = usePowerSyncWatchedQuery(`SELECT * FROM ${TODO_TABLE}`);
-
-    return (
-        <ScrollView>
-            {todos.map((todo) => (
-                <Text key={todo.id}>{todo.name}</Text>
-            ))}
-        </ScrollView>
-    );
-};
-```
-
-## Data Update Operations in a React Native Component
-
-To integrate insert, update, and delete your data within a React Native component using PowerSync, you can define
-methods that execute the necessary SQL queries. These methods can be triggered by user interactions, such as button
-presses or form submissions.
-
-Call `powersync.execute()` with the SQL query and parameters to perform the desired operation. PowerSync will make the
-updates locally and then sync them with your Supabase backend at the next opportunity.
-
-Here's an example component that allows users to add, update, and delete items from a database:
-
-```tsx
-// app/components/UpdateDataComponent.tsx
-import {useDatabase} from "app/services/database"
-import {TODO_TABLE} from "app/services/database/schema" // Replace with actual path
-import React, {useState} from "react"
-import {Button, TextInput, View} from "react-native"
-
-interface UpdateDataComponentProps {
-    todoIdToUpdate: string;
+        <Screen style={$root} preset="scroll" safeAreaEdges={["top"]}>
+            // success-line
+            <Pressable onPress={() => navigation.goBack()}><Icon icon={"back"} size={50}></Icon></Pressable>
+            // success-line
+            <Text preset={"heading"} text={listId}/>
+        </Screen>
+    )
 }
 
-export function UpdateDataComponent({todoIdToUpdate}: UpdateDataComponentProps) {
+const $root: ViewStyle = {
+    flex: 1,
+}
+
+const $backButton: ViewStyle = {
+    height: 44,
+}
+
+
+```
+
+#### Navigating to the `TodoList` screen from the `Lists` component
+
+Now we can update the `Lists` component to navigate to the `TodoList` screen when a list is pressed.
+
+```tsx
+
+// ... other imports
+import {NavigationProp, useNavigation} from "@react-navigation/native"
+import {AppStackParamList} from "app/navigators"
+
+export function Lists() {
+
+    const {lists, deleteList} = useLists()
+    // We use the root param list, because this component might be reusing in other screens/navigators
+    // success-line
+    const navigation = useNavigation<NavigationProp<AppStackParamList>>()
+
+
+    const renderItem = useCallback(({item}: { item: ListItemRecord }) => {
+        return <ListItem
+            // ... other props
+            // Navigate to the TodoList screen, passing the list id as a parameter
+            onPress={() => {
+                // success-line
+                navigation.navigate("SignedInNavigator", {screen: "TodoList", params: {listId: item.id}})
+            }}
+        />
+    }, [])
+
+    return (
+        //... component body
+    )
+}
+```
+
+#### Checking In
+
+At this point you should be able to:
+
+* Touch a list in the `Lists` component and navigate to the `TodoList` screen
+* See the list id displayed on the `TodoList` screen
+
+### Fetching and managing todos for a list
+
+Now that we can navigate to the `TodoList` screen, we can start fetching and managing the todos for a list.
+
+Once again we'll create a hook to gather together the methods we'll likely use together.
+
+The hook will take a `listId` as a parameter, and return the list, the todos for that list, and functions to add and remove todos.
+
+:::note
+We are using `usePowerSyncQuery` to fetch the list and `usePowerSyncWatchedQuery` to fetch the todos, because the list itself won't change often, so we only need to watch the todos for changes.
+:::
+
+```tsx
+// app/services/database/use-list.ts
+
+import {usePowerSyncQuery, usePowerSyncWatchedQuery} from "@journeyapps/powersync-sdk-react-native"
+import {useDatabase} from "app/services/database/database"
+import {LIST_TABLE, ListRecord, TODO_TABLE, TodoRecord} from "app/services/database/schema"
+import {useAuth} from "app/services/database/use-auth"
+import {useCallback} from "react"
+import {v4 as uuid} from "uuid"
+
+
+export function useList(listId: string) {
+    const {user} = useAuth()
     const {powersync} = useDatabase()
-    const [todoName, setTodoName] = useState("")
-    const [newDescription, setNewDescription] = useState("")
 
-    const addTodo = async () => {
-        await powersync.execute(`INSERT INTO ${TODO_TABLE} (name)
-                             VALUES (?)`, [todoName])
-        setTodoName("")
-    }
 
-    const updateItemDescription = async () => {
-        await powersync.execute(`UPDATE ${TODO_TABLE}
-                             SET description = ?
-                             WHERE id = ?`, [newDescription, todoIdToUpdate])
-        setNewDescription("")
-    }
+    const listRecords = usePowerSyncQuery<ListRecord>(`
+      SELECT *
+      FROM ${LIST_TABLE}
+      WHERE id = ?;
+  `, [listId])
 
-    const deleteItem = async () => {
-        await powersync.execute(`DELETE
-                             FROM ${TODO_TABLE}
-                             WHERE id = ?`, [todoIdToUpdate])
-    }
+    // we only expect one list record
+    const list = listRecords[0]
 
-    return (<View>
-        <TextInput
-            value={todoName}
-            onChangeText={setTodoName}
-            placeholder="Todo Name"
-        />
-        <Button onPress={addTodo} title="Add Todo"/>
 
-        <TextInput
-            value={newDescription}
-            onChangeText={setNewDescription}
-            placeholder="New Description"
-        />
-        <Button onPress={updateItemDescription} title="Update Description"/>
+    const todos = usePowerSyncWatchedQuery<TodoRecord>(`
+      SELECT *
+      FROM ${TODO_TABLE}
+      WHERE list_id = ?;
+  `, [listId])
 
-        <Button onPress={deleteItem} title="Delete Item"/>
-    </View>)
+
+    const addTodo = useCallback(async (description: string): Promise<{ error: string | null }> => {
+        if (!user) {
+            throw new Error("Can't add todo -- user is undefined")
+        }
+        try {
+            await powersync.execute(
+                `INSERT INTO ${TODO_TABLE}
+             (id, description, created_at, list_id, created_by, completed)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+                [uuid(), description, new Date().toISOString(), listId, user?.id, 0],
+            )
+
+            return {error: null}
+        } catch (error: any) {
+            return {error: `Error adding todo: ${error?.message}`}
+        }
+    }, [user, powersync, listId])
+
+    const removeTodo = useCallback(async (id: string): Promise<{ error: string | null }> => {
+        try {
+            await powersync.execute(`DELETE
+                                FROM ${TODO_TABLE}
+                                WHERE id = ?`, [id])
+            return {error: null}
+        } catch (error: any) {
+            console.error("Error removing todo", error)
+            return {error: `Error removing todo: ${error?.message}`}
+        }
+
+    }, [
+        powersync,
+    ])
+
+    const setTodoCompleted = useCallback(async (id: string, completed: boolean): Promise<{ error: string | null }> => {
+
+        const completedAt = completed ? new Date().toISOString() : null;
+        const completedBy = completed ? user?.id : null;
+
+        try {
+            await powersync.execute(`
+            UPDATE ${TODO_TABLE}
+            SET completed = ?, completed_at = ?, completed_by = ?
+            WHERE id = ?
+        `, [completed, completedAt, completedBy, id]);
+
+            return {error: null}
+
+        } catch (error: any) {
+            console.error('Error toggling todo', error);
+            return {error: `Error toggling todo: ${error?.message}`};
+        }
+    }, [powersync]);
+
+
+    return {list, todos, addTodo, removeTodo, setTodoCompleted}
+
 }
 
 ```
 
-By defining these methods in your components, you can easily manage your app's data, responding to user interactions to
-add, update, and remove items from your PowerSync-backed database.
+Now in our `TodoList` screen we can use the `useList` hook to fetch the todos for a list:
 
-## Additional Resources
+:::note
+We're going to use expo-checkbox to show the completed state, so we'll need to install it:
 
-- [PowerSync React Native + Expo Documentation](https://docs.powersync.com/client-sdk-references/react-native-and-expo)
-- [Supabase Docs](https://supabase.io/docs)
-- [PowerSync JS on GitHub](https://github.com/powersync-ja/powersync-js)
+```shell
+npx expo add @react-native-community/checkbox
+```
+
+:::
+
+A lot of this should be familiar by now, we're using the `useList` hook to fetch the list and todos, and then rendering them in a FlatList.
+
+```tsx
+import {Button, Icon, ListItem, Screen, Text, TextField} from "app/components"
+import {SignedInNavigatorProp} from "app/navigators"
+import {TodoRecord} from "app/services/database/schema"
+import {useList} from "app/services/database/use-list"
+import {colors, spacing} from "app/theme"
+import React, {FC, useCallback} from "react"
+import {FlatList, Pressable, TextStyle, View, ViewStyle} from "react-native"
+import {SafeAreaView} from "react-native-safe-area-context"
+
+interface TodoListScreenProps extends SignedInNavigatorProp<"TodoList"> {}
+
+export const TodoListScreen: FC<TodoListScreenProps> = function TodoListScreen({
+    navigation,
+    route: {params: {listId}},
+}) {
+
+    // We use the hook to get the list and todos for the list
+    const {list, todos, addTodo, removeTodo, setTodoCompleted} = useList(listId)
+
+    // State for managing the new todo input and errors
+    const [newTodo, setNewTodo] = React.useState("")
+    const [error, setError] = React.useState<string | null>(null)
+
+    // We wrap the addTodo from the hook with a bit of error handling
+    const handleAddTodo = useCallback(async () => {
+        const {error} = await addTodo(newTodo)
+        if (error) {
+            setError(error)
+            return
+        }
+        setNewTodo("")
+    }, [newTodo])
+
+    // And do the same for removeTodo
+    const handleRemoveTodo = useCallback(async (id: string) => {
+        const {error} = await removeTodo(id)
+        if (error) {
+            setError(error)
+        }
+    }, [removeTodo, setError])
 
 
+    const DeleteButton = React.useCallback(({id}: { id: string }) => {
+        <View style={$deleteIcon}>
+            <Icon
+                icon={"x"}
+                onPress={() => handleRemoveTodo(item.id)}/>
+        </View>
+    }, [handleRemoveTodo])
 
+    // We'll use the ListItem component to display each todo, as we did with the lists
+    const renderItem = useCallback(({item}: { item: TodoRecord }) => {
+        return <ListItem
+            containerStyle={$listItemContainer}
+            textStyle={[$listItemText, item.completed && $strikeThrough]}
+            text={`${item.description}`}
+            RightComponent={(
+                <Pressable style={$deleteIcon}>
+                    <Icon icon={"x"} onPress={() => handleRemoveTodo(item.id)}/>
+                </Pressable>)}
+            onPress={() => setTodoCompleted(item.id, !item.completed)}
+        />
+    }, [
+        handleRemoveTodo,
+    ])
+
+    return (
+        <Screen style={$root} preset="fixed">
+            <SafeAreaView style={$header} edges={["top"]}>
+                <Pressable onPress={() => navigation.goBack()}><Icon icon={"back"} size={44}></Icon></Pressable>
+                <Text style={$listName} preset={"heading"} text={list?.name}/>
+            </SafeAreaView>
+            <View style={$addTodoContainer}>
+                <Text preset={"subheading"}>Add a list</Text>
+                <View style={$form}>
+                    <TextField
+                        placeholder="New todo..."
+                        containerStyle={$textField}
+                        inputWrapperStyle={$textInput}
+                        onChangeText={setNewTodo}
+                        value={newTodo}/>
+                    <Button text="ADD" style={$button} onPress={handleAddTodo}/>
+                </View>
+                {error && <Text style={$error}>{error}</Text>}
+            </View>
+            <View style={$container}>
+                <FlatList
+                    data={todos}
+                    renderItem={renderItem}
+                    ItemSeparatorComponent={() => <View style={$separator}/>}
+                    ListEmptyComponent={<Text style={$emptyList}>List is Empty</Text>}
+                />
+            </View>
+        </Screen>
+    )
+}
+
+const $root: ViewStyle = {
+    flex: 1,
+}
+const $listItemContainer: ViewStyle = {
+    alignItems: "center",
+}
+
+const $strikeThrough: TextStyle = {textDecorationLine: "line-through"}
+
+const $form: ViewStyle = {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+}
+
+const $separator: ViewStyle = {height: 1, backgroundColor: colors.border}
+const $emptyList: TextStyle = {
+    color: colors.textDim,
+    opacity: 0.5,
+    padding: spacing.lg,
+    fontSize: 24,
+}
+
+const $textField: ViewStyle = {
+    flex: 1,
+}
+
+const $textInput: ViewStyle = {
+    backgroundColor: colors.palette.neutral100,
+}
+
+
+const $button: ViewStyle = {
+    marginHorizontal: spacing.xs,
+    padding: 0,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: 0,
+}
+
+const $addTodoContainer: ViewStyle = {
+    padding: spacing.md,
+    backgroundColor: colors.palette.neutral300,
+}
+const $header: ViewStyle = {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: colors.palette.secondary200,
+    paddingBottom: spacing.md,
+}
+
+const $listName: TextStyle = {
+    marginLeft: spacing.sm,
+    flex: 1,
+}
+
+const $error: TextStyle = {
+    color: colors.error,
+    marginTop: spacing.sm,
+}
+
+const $container: ViewStyle = {
+    padding: spacing.md,
+}
+
+const $listItemText: TextStyle = {
+    height: 44,
+    verticalAlign: "middle"
+}
+
+const $deleteIcon: ViewStyle = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 44,
+    marginVertical: spacing.xxs,
+}
+
+```
 
