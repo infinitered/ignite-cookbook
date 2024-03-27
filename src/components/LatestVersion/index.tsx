@@ -62,7 +62,14 @@ const LatestRelease = () => {
         </Link>
       ) : (
         <>
-          <h3 className={styles.notificationTitle}>Ignite</h3>
+          <h3 className={styles.notificationTitle}>
+            <Link
+              className={styles.notificationTitleLink}
+              href={`https://github.com/infinitered/ignite/releases/tag/${latestVersion}`}
+            >
+              Ignite
+            </Link>
+          </h3>
           <p className={styles.notificationDate}>
             <ReleaseRemark
               latestVersion={latestVersion}

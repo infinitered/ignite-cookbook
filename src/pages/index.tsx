@@ -33,7 +33,14 @@ const NewSection = () => {
           <div className={styles.notificationTag}>
             <p className={styles.notificationTagText}>New Recipe</p>
           </div>
-          <h3 className={styles.notificationTitle}>{mostRecentRecipe.title}</h3>
+          <h3 className={styles.notificationTitle}>
+            <Link
+              className={styles.notificationTitleLink}
+              to={`/docs/recipes/${mostRecentRecipe.doc_name.split(".")[0]}`}
+            >
+              {mostRecentRecipe.title}
+            </Link>
+          </h3>
           <p className={styles.notificationDate}>
             {`Published on `}
             <b>
