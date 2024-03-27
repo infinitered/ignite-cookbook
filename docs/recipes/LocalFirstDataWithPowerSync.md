@@ -1065,11 +1065,10 @@ export const useLists = () => {
 
 
   const createList = useCallback(async (name: string) => {
-    if (!user) {
-      throw new Error("Can't add list -- user is undefined");
-    }
-    return powersync.execute(
-      `
+    
+    if (!user) {throw new Error("Can't add list -- user is undefined");}
+    
+    return powersync.execute(`
           INSERT INTO ${LIST_TABLE}
               (id, name, created_at, owner_id)
           VALUES (?, ?, ?, ?)`,
@@ -1170,7 +1169,7 @@ import {Button, Text, TextField} from "app/components"
 import {useLists} from "app/services/database/use-lists"
 import {colors, spacing} from "app/theme"
 import {observer} from "mobx-react-lite"
-import * as React from "react"
+import React from "react"
 import {TextStyle, View, ViewStyle} from "react-native"
 
 /**
