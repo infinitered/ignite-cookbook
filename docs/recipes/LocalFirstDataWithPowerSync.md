@@ -1088,10 +1088,6 @@ export const useLists = () => {
 
 ```
 
-## Creating, Viewing, and Deleting Lists
-
-Now that we have the hook, lets create the components to display and manage the lists.
-
 #### Creating the components
 
 We're going to need several components to view and manage our todo lists:
@@ -1342,7 +1338,7 @@ By this point you should be able to:
 * see a list of all the Todo lists,
 * delete Todo lists from the database.
 
-## Sharing the Database Provider at the Navigator Level
+## Sharing the Database Context with Multiple Screens
 
 To view and edit todos inside a list, we'll want to create a new Screen. 
 
@@ -1621,7 +1617,7 @@ useEffect(() => {
 }, [user])
    ```
 
-## Fetching and Managing the Todos for a List
+## Fetching and Managing Todos
 
 Now that our authenticated navigation is in place, we can navigate to the `TodoList` screen and display the todos for a list.
 
