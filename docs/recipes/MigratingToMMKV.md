@@ -29,6 +29,7 @@ cd PizzaApp
 Install the `react-native-mmkv` dependency into the project and run prebuild again to let Expo take care of the necessary adjustments to the native template.
 
 ```bash
+yarn remove @react-native-async-storage/async-storage
 yarn add react-native-mmkv
 yarn prebuild
 ```
@@ -37,7 +38,7 @@ _Note: For more information on Continuous Native Generation (CNG), you can read 
 
 ## Code Changes
 
-Open `app/utils/storage.tsx` and modify the imports:
+Open `app/utils/storage.ts` and modify the imports:
 
 ```tsx
 // error-line
@@ -45,7 +46,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // success-line
 import { MMKV } from "react-native-mmkv";
 // success-line
-const storage = new MMKV();
+export const storage = new MMKV();
 ```
 
 Now we'll remove any reference to `AsyncStorage` and replace it with the proper API from `MMKV`
@@ -62,7 +63,7 @@ export async function loadString(key: string): Promise<string | null> {
 export function loadString(key: string): string | null {
   try {
     // error-line
-    return await AsyncStorage.getItem(key)
+    return await AsyncStorage.getItem(key);
     // success-line
     return storage.getString(key);
   } catch {
@@ -83,7 +84,7 @@ export async function saveString(key: string, value: string): Promise<boolean> {
 export function saveString(key: string, value: string): boolean {
   try {
     // error-line
-    await AsyncStorage.setItem(key, value)
+    await AsyncStorage.setItem(key, value);
     // success-line
     storage.set(key, value);
     return true;
@@ -98,9 +99,9 @@ export function saveString(key: string, value: string): boolean {
  * @param key The key to fetch.
  */
 // error-line
-export async function load(key: string): Promise<any | null> {
+export async function load(key: string): Promise<unknown | null> {
 // success-line
-export function load(key: string): any | null {
+export function load(key: string): unknown | null {
   try {
     // error-line
     const almostThere = await AsyncStorage.getItem(key)
@@ -119,12 +120,12 @@ export function load(key: string): any | null {
  * @param value The value to store.
  */
 // error-line
-export async function save(key: string, value: any): Promise<boolean> {
+export async function save(key: string, value: unknown): Promise<boolean> {
 // success-line
-export function save(key: string, value: any): boolean {
+export function save(key: string, value: unknown): boolean {
   try {
     // error-line
-    await AsyncStorage.setItem(key, JSON.stringify(value))
+    await AsyncStorage.setItem(key, JSON.stringify(value));
     // success-line
     saveString(key, JSON.stringify(value));
     return true;
@@ -144,7 +145,7 @@ export async function remove(key: string): Promise<void> {
 export function remove(key: string): void {
   try {
     // error-line
-    await AsyncStorage.removeItem(key)
+    await AsyncStorage.removeItem(key);
     // success-line
     storage.delete(key);
   } catch {}
@@ -159,14 +160,14 @@ export async function clear(): Promise<void> {
 export function clear(): void {
   try {
     // error-line
-    await AsyncStorage.clear()
+    await AsyncStorage.clear();
     // success-line
     storage.clearAll();
   } catch {}
 }
 ```
 
-::: info
+:::info
 
 Now that you've moved the base storage functions over to MMKV, you might want to update Reactotron to use it as well!
 
@@ -177,68 +178,75 @@ Now that you've moved the base storage functions over to MMKV, you might want to
 You may notice that the `storage.test.ts` test file will no longer pass. Replace the contents of this file with the following test data:
 
 ```tsx
-import { load, loadString, save, saveString, clear, remove } from "./storage"
-import { storage } from "./mmkv" // <- wherever your global `new MMKV()` constant is
+import {
+  storage,
+  load,
+  loadString,
+  save,
+  saveString,
+  clear,
+  remove,
+} from "./storage";
 
-const VALUE_OBJECT = { x: 1 }
-const VALUE_STRING = JSON.stringify(VALUE_OBJECT)
+const VALUE_OBJECT = { x: 1 };
+const VALUE_STRING = JSON.stringify(VALUE_OBJECT);
 
 describe("MMKV Storage", () => {
   beforeEach(() => {
-    storage.clearAll()
-    storage.set("string", "string")
-    storage.set("object", JSON.stringify(VALUE_OBJECT))
-  })
+    storage.clearAll();
+    storage.set("string", "string");
+    storage.set("object", JSON.stringify(VALUE_OBJECT));
+  });
 
   it("should be defined", () => {
-    expect(storage).toBeDefined()
-  })
+    expect(storage).toBeDefined();
+  });
 
   it("should have default keys", () => {
-    expect(storage.getAllKeys()).toEqual(["string", "object"])
-  })
+    expect(storage.getAllKeys()).toEqual(["string", "object"]);
+  });
 
   it("should load data", () => {
-    expect(load("object")).toEqual(VALUE_OBJECT)
-    expect(loadString("object")).toEqual(VALUE_STRING)
+    expect(load("object")).toEqual(VALUE_OBJECT);
+    expect(loadString("object")).toEqual(VALUE_STRING);
 
-    expect(load("string")).toEqual("string")
-    expect(loadString("string")).toEqual("string")
-  })
+    expect(load("string")).toEqual("string");
+    expect(loadString("string")).toEqual("string");
+  });
 
   it("should save strings", () => {
-    saveString("string", "new string")
-    expect(loadString("string")).toEqual("new string")
-  })
+    saveString("string", "new string");
+    expect(loadString("string")).toEqual("new string");
+  });
 
   it("should save objects", () => {
-    save("object", { y: 2 })
-    expect(load("object")).toEqual({ y: 2 })
-    save("object", { z: 3, also: true })
-    expect(load("object")).toEqual({ z: 3, also: true })
-  })
+    save("object", { y: 2 });
+    expect(load("object")).toEqual({ y: 2 });
+    save("object", { z: 3, also: true });
+    expect(load("object")).toEqual({ z: 3, also: true });
+  });
 
   it("should save strings and objects", () => {
-    saveString("object", "new string")
-    expect(loadString("object")).toEqual("new string")
-  })
+    saveString("object", "new string");
+    expect(loadString("object")).toEqual("new string");
+  });
 
   it("should remove data", () => {
-    remove("object")
-    expect(load("object")).toBeUndefined()
-    expect(storage.getAllKeys()).toEqual(["string"])
+    remove("object");
+    expect(load("object")).toBeUndefined();
+    expect(storage.getAllKeys()).toEqual(["string"]);
 
-    remove("string")
-    expect(load("string")).toBeUndefined()
-    expect(storage.getAllKeys()).toEqual([])
-  })
+    remove("string");
+    expect(load("string")).toBeUndefined();
+    expect(storage.getAllKeys()).toEqual([]);
+  });
 
   it("should clear all data", () => {
-    expect(storage.getAllKeys()).toEqual(["string", "object"])
-    clear()
-    expect(storage.getAllKeys()).toEqual([])
-  })
-})
+    expect(storage.getAllKeys()).toEqual(["string", "object"]);
+    clear();
+    expect(storage.getAllKeys()).toEqual([]);
+  });
+});
 ```
 
 Run the app in the iOS simulator to test the changes with `yarn ios`. Navigate to the Podcast List screen:
