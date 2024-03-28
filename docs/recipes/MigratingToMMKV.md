@@ -99,9 +99,9 @@ export function saveString(key: string, value: string): boolean {
  * @param key The key to fetch.
  */
 // error-line
-export async function load(key: string): Promise<any | null> {
+export async function load(key: string): Promise<unknown | null> {
 // success-line
-export function load(key: string): any | null {
+export function load(key: string): unknown | null {
   try {
     // error-line
     const almostThere = await AsyncStorage.getItem(key)
@@ -120,9 +120,9 @@ export function load(key: string): any | null {
  * @param value The value to store.
  */
 // error-line
-export async function save(key: string, value: any): Promise<boolean> {
+export async function save(key: string, value: unknown): Promise<boolean> {
 // success-line
-export function save(key: string, value: any): boolean {
+export function save(key: string, value: unknown): boolean {
   try {
     // error-line
     await AsyncStorage.setItem(key, JSON.stringify(value))
