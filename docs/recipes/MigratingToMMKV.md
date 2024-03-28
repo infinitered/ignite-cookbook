@@ -63,7 +63,7 @@ export async function loadString(key: string): Promise<string | null> {
 export function loadString(key: string): string | null {
   try {
     // error-line
-    return await AsyncStorage.getItem(key)
+    return await AsyncStorage.getItem(key);
     // success-line
     return storage.getString(key);
   } catch {
@@ -84,7 +84,7 @@ export async function saveString(key: string, value: string): Promise<boolean> {
 export function saveString(key: string, value: string): boolean {
   try {
     // error-line
-    await AsyncStorage.setItem(key, value)
+    await AsyncStorage.setItem(key, value);
     // success-line
     storage.set(key, value);
     return true;
@@ -125,7 +125,7 @@ export async function save(key: string, value: unknown): Promise<boolean> {
 export function save(key: string, value: unknown): boolean {
   try {
     // error-line
-    await AsyncStorage.setItem(key, JSON.stringify(value))
+    await AsyncStorage.setItem(key, JSON.stringify(value));
     // success-line
     saveString(key, JSON.stringify(value));
     return true;
@@ -145,7 +145,7 @@ export async function remove(key: string): Promise<void> {
 export function remove(key: string): void {
   try {
     // error-line
-    await AsyncStorage.removeItem(key)
+    await AsyncStorage.removeItem(key);
     // success-line
     storage.delete(key);
   } catch {}
@@ -160,7 +160,7 @@ export async function clear(): Promise<void> {
 export function clear(): void {
   try {
     // error-line
-    await AsyncStorage.clear()
+    await AsyncStorage.clear();
     // success-line
     storage.clearAll();
   } catch {}
