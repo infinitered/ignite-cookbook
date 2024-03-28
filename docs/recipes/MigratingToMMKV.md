@@ -38,7 +38,7 @@ _Note: For more information on Continuous Native Generation (CNG), you can read 
 
 ## Code Changes
 
-Open `app/utils/storage.tsx` and modify the imports:
+Open `app/utils/storage.ts` and modify the imports:
 
 ```tsx
 // error-line
