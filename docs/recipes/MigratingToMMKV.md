@@ -46,7 +46,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // success-line
 import { MMKV } from "react-native-mmkv";
 // success-line
-const storage = new MMKV();
+export const storage = new MMKV();
 ```
 
 Now we'll remove any reference to `AsyncStorage` and replace it with the proper API from `MMKV`
@@ -178,8 +178,15 @@ Now that you've moved the base storage functions over to MMKV, you might want to
 You may notice that the `storage.test.ts` test file will no longer pass. Replace the contents of this file with the following test data:
 
 ```tsx
-import { load, loadString, save, saveString, clear, remove } from "./storage";
-import { storage } from "./mmkv"; // <- wherever your global `new MMKV()` constant is
+import {
+  storage,
+  load,
+  loadString,
+  save,
+  saveString,
+  clear,
+  remove,
+} from "./storage";
 
 const VALUE_OBJECT = { x: 1 };
 const VALUE_STRING = JSON.stringify(VALUE_OBJECT);
