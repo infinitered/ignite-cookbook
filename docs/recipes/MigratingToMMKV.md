@@ -167,7 +167,7 @@ export function clear(): void {
 }
 ```
 
-::: info
+:::info
 
 Now that you've moved the base storage functions over to MMKV, you might want to update Reactotron to use it as well!
 
