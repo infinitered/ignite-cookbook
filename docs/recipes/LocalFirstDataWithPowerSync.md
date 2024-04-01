@@ -22,27 +22,27 @@ This guide helps you integrate PowerSync with Supabase in an Ignite app for effi
 
 [PowerSync](https://www.powersync.com/) allows your app to work smoothly offline while keeping the data in sync with your backend database.
 
-### What is Powersync?
+### What is PowerSync?
 
 PowerSync is a service which synchronizes local data with your Postgres SQL back end. It lets your app work with a local copy of the users' data and automatically syncs changes to and from your backend.
 
 Because your application interacts with the data in a local instance of SQLite, it means you'll always have fast, responsive access -- no fetching, no spinners. It also means
 your users will have a seamless, consistent experience even if they are offline.
 
-In the background, Powersync queues any changes and syncs the local data with the server whenever an internet connection becomes available. That means the data stays up to date across all of their devices.
+In the background, PowerSync queues any changes and syncs the local data with the server whenever an internet connection becomes available. That means the data stays up to date across all of their devices.
 
-### Benefits of Using Powersync
+### Benefits of Using PowerSync
 
-* **Handles Intermittent Network Connectivity**: Powersync allows your app to remain operational even in areas with
+* **Handles Intermittent Network Connectivity**: PowerSync allows your app to remain operational even in areas with
   unreliable internet access. Users can continue their tasks without interruption, with automatic syncing when the
   connection is restored.
-* **Enables Offline Operation**: With Powersync, your application can fully function offline, allowing users to access
+* **Enables Offline Operation**: With PowerSync, your application can fully function offline, allowing users to access
   and interact with their data regardless of their internet connection status.
 * **Eliminates Loading Delays**: Leveraging local data minimizes the need for loading indicators, offering a smoother,
   faster experience for the user.
-* **Supports Multi-device Sync**: Powersync ensures data consistency across all of a user's devices, enabling seamless
+* **Supports Multi-device Sync**: PowerSync ensures data consistency across all of a user's devices, enabling seamless
   access and transition between different platforms.
-  By integrating Powersync into your Ignite project, you provide a more reliable and user-friendly experience, ensuring
+  By integrating PowerSync into your Ignite project, you provide a more reliable and user-friendly experience, ensuring
   your application remains functional and responsive under various network conditions.
 
 ### Using Other Backends
@@ -63,7 +63,7 @@ To complete this recipe you'll need:
 
    You can create a new Ignite app using the Ignite CLI::
    ```bash
-   npx ignite-cli@latest new PowerSyncIgnire --remove-demo --workflow=cng --yes
+   npx ignite-cli@latest new PowerSyncIgnite --remove-demo --workflow=cng --yes
    ```
 
 2. **A Supabase Project set up and connected to a PowerSync**
@@ -85,10 +85,10 @@ First install the PowerSync SDK and its dependencies.
 ```shell
 npx expo install \
   @journeyapps/powersync-sdk-react-native \
-  @journeyapps/react-native-quick-sqlite \
+  @journeyapps/react-native-quick-sqlite 
 ```
 
-Powersync [requires polyfills](https://github.com/powersync-ja/powersync-js/blob/main/packages/powersync-sdk-react-native/README.md#install-polyfills)
+PowerSync [requires polyfills](https://github.com/powersync-ja/powersync-js/blob/main/packages/powersync-sdk-react-native/README.md#install-polyfills)
 to replace browser-specific APIs with their React Native equivalents. These are listed as peer-dependencies so we need
 to install them ourselves.
 
@@ -199,8 +199,10 @@ If you have different configurations for different environments, you can add the
 Create `app/services/database/supabase.ts` and add the following code to initialize the Supabase client:
 
 ```ts
+// app/services/database/supabase.ts
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {createClient} from "@supabase/supabase-js"
+import {Config} from '../../config'; 
 
 export const supabase = createClient(Config.supabaseUrl, Config.supabaseAnonKey, {
   auth: {
@@ -217,7 +219,7 @@ We're using `AsyncStorage` here for simplicity, but for encrypted storage, supab
 
 ### Authenticating with Supabase
 
-Powersync needs a valid session token to connect to the Supabase, so We'll need a hook and context to manage our authentication state.
+PowerSync needs a valid session token to connect to the Supabase, so we'll need a hook and context to manage our authentication state.
 
 This is a basic example that uses a context to manage the authentication state and a hook to access that state in your components.
 
@@ -227,9 +229,9 @@ Add the following code to `app/services/database/use-auth.tsx`:
 // app/services/database/use-auth.tsx
 import {User} from "@supabase/supabase-js"
 import {supabase} from "app/services/database/supabase"
-import {createContext, PropsWithChildren, useCallback, useContext, useMemo, useState} from "react"
+import React, {createContext, PropsWithChildren, useCallback, useContext, useMemo, useState} from "react"
 
-type AuthContext = {
+type AuthContextType = {
   signIn: (email: string, password: string) => void
   signUp: (email: string, password: string) => void
   signOut: () => void
@@ -240,7 +242,7 @@ type AuthContext = {
 }
 
 // We initialize the context with null to ensure that it is not used outside of the provider
-const AuthContext = createContext<AuthContext | null>(null)
+const AuthContext = createContext<AuthContextType | null>(null)
 
 /**
  * AuthProvider manages the authentication state and provides the necessary methods to sign in, sign up and sign out.
@@ -386,9 +388,10 @@ Then open `app/screens/AuthScreen.tsx` and update the `AuthScreen` component to 
 When the user signs in successfully, the app will automatically navigate to the `Welcome` screen.
 
 ```tsx
+// app/screens/AuthScreen.tsx
 import {Button, Text, TextField} from "app/components"
 import {AppStackScreenProps} from "app/navigators"
-import {useAuth} from "app/services/auth/use-auth"
+import {useAuth} from "app/services/database/use-auth"
 import React, {useEffect, useState} from "react"
 import {ActivityIndicator, Modal, TextStyle, View, ViewStyle} from "react-native"
 import {colors, spacing} from "../theme"
@@ -507,13 +510,14 @@ const $button: ViewStyle = {
 We don't need any of the content on the Welcome screen, so for now lets clear it out and replace it with a simple screen to confirm that sign in is working.
 
 ```tsx
-import {useAuth} from "app/services/auth/use-auth"
+// app/screens/WelcomeScreen.tsx
+import {useAuth} from "app/services/database/use-auth"
 import {observer} from "mobx-react-lite"
 import React, {FC} from "react"
 import {ViewStyle} from "react-native"
-import {Text} from 'app/components'
 import {
-  Button,
+  Button, 
+  Text
 } from "app/components"
 import {SafeAreaView} from "react-native-safe-area-context"
 import {AppStackScreenProps} from "../navigators"
@@ -555,7 +559,7 @@ We don't want to allow users to navigate to the Welcome screen if they are not s
 We can ensure this by checking the user's authentication status in the `AppNavigator` and only allowing them to access the `Auth` screen if they are not signed in.
 
 ```tsx
-// app/navigation/AppNavigator.tsx
+// app/navigators/AppNavigator.tsx
 
 //...
 
@@ -602,6 +606,10 @@ At this point you should be able to:
 
 If you are getting errors about an unverified email -- remember to disable email verification in the Supabase dashboard as described in the [Prerequisites](#prerequisites) section.
 
+:::note
+This is a good time to commit your changes!
+:::
+
 ## Connecting PowerSync to Supabase
 
 Now that we have a valid Supabase session, we can connect to PowerSync and start syncing data between the local database and the backend.
@@ -622,7 +630,7 @@ Your PowerSync URL can be found in your **PowerSync dashboard**:
 2. Copy the **Instance URL** from the dialog that appears.
 
 ```ts
-// `app/config/config.base.ts`:
+// app/config/config.base.ts:
 
 // update the interface to include the new properties
 export interface ConfigBaseProps {
@@ -630,7 +638,7 @@ export interface ConfigBaseProps {
   supabaseUrl: string;
   supabaseAnonKey: string;
   //success-line
-  powerSyncUrl: string;
+  powersyncUrl: string;
 }
 
 // Add the new properties to the config object
@@ -639,7 +647,7 @@ const BaseConfig: ConfigBaseProps = {
   supabaseUrl: '<<YOUR_SUPABASE_URL>>',
   supabaseAnonKey: '<<YOUR_SUPABASE_ANON_KEY>>',
   // success-line
-  powerSyncUrl: '<<YOUR_POWER_SYNC_URL>>',
+  powersyncUrl: '<<YOUR_POWER_SYNC_URL>>',
 };
 ```
 
@@ -778,7 +786,7 @@ export interface PowerSyncBackendConnector {
 In `app/services/database/supabase.ts`, we'll add the two methods, and then export an object that implements the `PowerSyncBackendConnector` interface.
 
 ```ts
-
+// app/services/database/supabase.ts
 import {
   AbstractPowerSyncDatabase,
   CrudEntry, PowerSyncBackendConnector,
@@ -786,7 +794,7 @@ import {
 } from "@journeyapps/powersync-sdk-react-native"
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {createClient} from "@supabase/supabase-js"
-import Config from "app/config"
+import Config from "../../config"
 
 export const supabase = createClient(Config.supabaseUrl, Config.supabaseAnonKey, {
   auth: {
@@ -824,7 +832,7 @@ const FATAL_RESPONSE_CODES = [
   /^42501$/, // INSUFFICIENT PRIVILEGE
 ]
 
-// Powersync will call this function to upload data to the backend
+// PowerSync will call this function to upload data to the backend
 const uploadData: (database: AbstractPowerSyncDatabase) => Promise<void> = async (database) => {
   const transaction = await database.getNextCrudTransaction();
 
@@ -863,7 +871,7 @@ const uploadData: (database: AbstractPowerSyncDatabase) => Promise<void> = async
     await transaction.complete();
   } catch (ex: any) {
     console.debug(ex);
-    if (typeof ex.code == 'string' && FATAL_RESPONSE_CODES.some((regex) => regex.test(ex.code))) {
+    if (typeof ex.code === 'string' && FATAL_RESPONSE_CODES.some((regex) => regex.test(ex.code))) {
       /**
        * Instead of blocking the queue with these errors,
        * discard the (rest of the) transaction.
@@ -900,6 +908,7 @@ This is necessary because the hooks from the PowerSync SDK require the `PowerSyn
 :::
 
 ```tsx
+// app/services/database/database.tsx
 import {SupabaseClient} from "@supabase/supabase-js"
 import React, {PropsWithChildren, useEffect} from "react"
 import {
@@ -963,7 +972,7 @@ export function DatabaseProvider<T>({children}: PropsWithChildren<T>) {
 
   return (
     <DatabaseContext.Provider value={database}>
-      {/*The `PowerSyncContext.Provider` is provided by the PowerSync SDK and is required 
+      {/* The `PowerSyncContext.Provider` is provided by the PowerSync SDK and is required 
       for the PowerSync hooks (i.e. `useWatchedPowerSyncQuery` and `usePowerSyncQuery`) 
       to work, so we need to provide it as well as our own context provider. */}
       <PowerSyncContext.Provider value={database.powersync}>
@@ -996,6 +1005,7 @@ It will use:
 
 * `usePowerSyncWatchedQuery` to fetch the lists from the database and watch for changes
 * `PowerSync.execute` to create and delete lists
+* `expo-crypto` to generate cryptographically secure random UUIDs
 
 #### usePowerSyncWatchedQuery
 
@@ -1031,9 +1041,28 @@ const deleteList = useCallback(async (id: string) => {
 }, [powersync]);
 ```
 
+#### Generating unique IDs with `expo-crypto`
+
+Because PowerSync data is local-first, we can't rely on the database to generate auto-incrementing unique ids for us. 
+
+When we're offline, the server won't know how many items we've creating, or how many other devices are creating items. 
+
+So in this situation, the app needs to be responsible for generating unique ids for items locally.
+
+We'll use the `randomUUID()` method from `expo-crypto` for this. It generates UUIDs using cryptographically secure 
+random values. This provides extra security and ensures that the generated UUIDs are unique.
+
+```shell
+npx expo add expo-crypto
+```
+
+:::note
+`expo-crypto` contains native modules, so you'll need to rebuild your app after installing it
+:::
+
 #### Implementing the `useLists` Hook
 
-When we put it all together we get a hook like this:
+Now that we can generate random IDs, we can implement the `useLists` hook:
 
 ```ts
 // app/services/database/use-lists.ts
@@ -1042,7 +1071,7 @@ import {useAuth} from "app/services/database/use-auth"
 import {useCallback} from "react"
 import {useDatabase} from "app/services/database/database"
 import {LIST_TABLE, ListRecord, TODO_TABLE} from "app/services/database/schema"
-import {v4 as uuid} from 'uuid';
+import {randomUUID} from 'expo-crypto'
 
 // Extend the base type with the calculated fields from our query  
 export type ListItemRecord = ListRecord & { total_tasks: number; completed_tasks: number }
@@ -1072,7 +1101,7 @@ export const useLists = () => {
           INSERT INTO ${LIST_TABLE}
               (id, name, created_at, owner_id)
           VALUES (?, ?, ?, ?)`,
-      [uuid(), name, new Date().toISOString(), user?.id],
+      [randomUUID(), name, new Date().toISOString(), user?.id],
     );
   }, [user, powersync]);
 
@@ -1088,7 +1117,7 @@ export const useLists = () => {
 
 ```
 
-#### Creating the components
+### Creating the components
 
 We're going to need several components to view and manage our todo lists:
 
@@ -1097,19 +1126,17 @@ We're going to need several components to view and manage our todo lists:
 
 Let start by creating the components using the ignite CLI.
 
+First create the `AddList` and `Lists` components:
 ```shell
-# Create the AddList Component
 npx ignite-cli generate component AddList
 ```
-
 ```shell
-# Create the Lists Component
 npx ignite-cli generate component Lists
 ```
 
-#### Adding the components to the Welcome Screen
+### Adding the components to the Welcome Screen
 
-Lets update the Welcome Screen to display the components we just created. That way we can see them while we work on them:
+Let's update the Welcome Screen to display the components we just created. That way we can see them while we work on them:
 
 ```tsx
 // app/screens/WelcomeScreen.tsx
@@ -1156,11 +1183,12 @@ const $container: ViewStyle = {
 }
 ```
 
-#### Creating Todo Lists in `AddList`
+### Creating Todo Lists in `AddList`
 
 Open `app/components/AddList.tsx` and update the `AddList` component to display a simple form to add a new list.
 
 ```tsx
+// app/components/AddList.tsx
 import {Button, Text, TextField} from "app/components"
 import {useLists} from "app/services/database/use-lists"
 import {colors, spacing} from "app/theme"
@@ -1232,14 +1260,15 @@ const $error: TextStyle = {
 }
 ```
 
-#### Displaying and Deleting Todo Lists in `Lists`
+### Displaying and Deleting Todo Lists in `Lists`
 
-Now we can use our `useLists` hook in 0 `app/components/Lists.tsx` to display a list of our todo lists:
+Now we can use our `useLists` hook in `app/components/Lists.tsx` to display a list of our todo lists:
 
 ```tsx
+// app/components/Lists.tsx
 import {AddList, Icon, ListItem, Text} from "app/components"
 import {ListItemRecord, useLists} from "app/services/database/use-lists"
-import {useCallback} from "react"
+import React, {useCallback} from "react"
 import {FlatList, TextStyle, View, ViewStyle} from "react-native"
 import {colors, spacing} from "../theme"
 
@@ -1501,6 +1530,7 @@ For each screen we we move, we will need to:
   Then add them to the `SignedInNavigator`, replacing the screen put there by the template, and wrap the whole navigator in the `DatabaseProvider`:
 
     ```tsx
+    // app/navigators/SignedInNavigator.tsx
     import * as Screens from "app/screens"
     import {colors} from "app/theme"
     import React from "react"
@@ -1518,7 +1548,7 @@ For each screen we we move, we will need to:
     // This type is used combines the SignedInNavigatorParamList with the AppStackParamList
     // so we can have type checking when navigating between navigators 
   //success-line
-    export type SignedInNavigatorScreenProps<T extends keyof AuthNavigatorParamList> = CompositeScreenProps<
+    export type SignedInNavigatorScreenProps<T extends keyof SignedInNavigatorParamList> = CompositeScreenProps<
   //success-line
       NativeStackScreenProps<SignedInNavigatorParamList, T>,
   //success-line 
@@ -1561,47 +1591,47 @@ For each screen we we move, we will need to:
 
    ```tsx
     // app/navigators/AppNavigator.tsx
-
-// ... other imports
-//success-line
-import {DarkTheme, DefaultTheme, NavigationContainer, NavigatorScreenParams} from "@react-navigation/native"
-//success-line
-import {createNativeStackNavigator, NativeStackScreenProps} from "@react-navigation/native-stack"
-//success-line
-import {AuthNavigator, AuthNavigatorParamList} from "app/navigators/AuthNavigator"
-//success-line
-import {SignedInNavigator, SignedInNavigatorParamList} from "app/navigators/SignedInNavigator"
-
-//..
-
-export type AppStackParamList = {
-  //success-line
-  AuthNavigator: NavigatorScreenParams<AuthNavigatorParamList>
-  //success-line
-  SignedInNavigator: NavigatorScreenParams<SignedInNavigatorParamList>
-  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
-}
-
-// ...
-
-const AppStack = observer(function AppStack() {
-  // Fetch the user from the auth context
-  const {signedIn} = useAuth()
-  return (
-    <Stack.Navigator
-      screenOptions={{headerShown: false, navigationBarColor: colors.background}}
-    >
+    
+    // ... other imports
+    //success-line
+    import {DarkTheme, DefaultTheme, NavigationContainer, NavigatorScreenParams} from "@react-navigation/native"
+    //success-line
+    import {createNativeStackNavigator, NativeStackScreenProps} from "@react-navigation/native-stack"
+    //success-line
+    import {AuthNavigator, AuthNavigatorParamList} from "app/navigators/AuthNavigator"
+    //success-line
+    import {SignedInNavigator, SignedInNavigatorParamList} from "app/navigators/SignedInNavigator"
+    
+    //..
+    
+    export type AppStackParamList = {
       //success-line
-      <Stack.Screen name={"AuthNavigator"} component={AuthNavigator}/>
-      {/* Only render the SignedIn Navigator if we are signed in */}
+      AuthNavigator: NavigatorScreenParams<AuthNavigatorParamList>
       //success-line
-      {signedIn ? <Stack.Screen name={"SignedInNavigator"} component={SignedInNavigator}/> : null}
-      {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
-    </Stack.Navigator>
-  )
-})
-
-//...
+      SignedInNavigator: NavigatorScreenParams<SignedInNavigatorParamList>
+      // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+    }
+    
+    // ...
+    
+    const AppStack = observer(function AppStack() {
+      // Fetch the user from the auth context
+      const {signedIn} = useAuth()
+      return (
+        <Stack.Navigator
+          screenOptions={{headerShown: false, navigationBarColor: colors.background}}
+        >
+          //success-line
+          <Stack.Screen name={"AuthNavigator"} component={AuthNavigator}/>
+          {/* Only render the SignedIn Navigator if we are signed in */}
+          //success-line
+          {signedIn ? <Stack.Screen name={"SignedInNavigator"} component={SignedInNavigator}/> : null}
+          {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
+        </Stack.Navigator>
+      )
+    })
+    
+    //...
    ```
 
 **4. Update the existing `navigation.navigate()` calls to use the new routes**
@@ -1623,14 +1653,14 @@ Now that our authenticated navigation is in place, we can navigate to the `TodoL
 
 #### Make the `TodoList` screen take the `listId` as a parameter
 
-To do this we'll pass the list id as a parameter when we navigate to the screen.
+To do this we'll pass the `listId` as a parameter when we navigate to the screen.
 
 Open `app/navigators/SignedInNavigator.tsx` and update the `SignedInNavigatorParamList` type:
 
-We want to pass only the minimum required data in our params for performance reasons, so we'll only pass the list id.
+We want to pass only the minimum required data in our params for performance reasons, so we'll only pass the `listId`.
 
 ```tsx
-
+// app/navigators/SignedInNavigator.tsx
 export type SignedInNavigatorParamList = {
   Welcome: undefined
   // success-line
@@ -1638,16 +1668,16 @@ export type SignedInNavigatorParamList = {
 }
 ```
 
-We'll update the `TodoListScreen` to accept the list id as a parameter -- for now we'll just display it to make sure we got it.
+We'll update the `TodoListScreen` to accept the `listId` as a parameter -- for now we'll just display it to make sure we got it.
 
 ```tsx
-
+// app/screens/TodoListScreen.tsx
 // ...
 
 export const TodoListScreen: FC<TodoListScreenProps> = function TodoListScreen({
   navigation,
 
-  // suucess-line
+  // success-line
   route: {params}
 }) {
   // We get the listId from the route params
@@ -1680,7 +1710,7 @@ const $backButton: ViewStyle = {
 Now we can update the `Lists` component to navigate to the `TodoList` screen when a list is pressed.
 
 ```tsx
-
+// app/components/Lists.tsx
 // ... other imports
 import {NavigationProp, useNavigation} from "@react-navigation/native"
 import {AppStackParamList} from "app/navigators"
@@ -1696,7 +1726,7 @@ export function Lists() {
   const renderItem = useCallback(({item}: { item: ListItemRecord }) => {
     return <ListItem
       // ... other props
-      // Navigate to the TodoList screen, passing the list id as a parameter
+      // Navigate to the TodoList screen, passing the `listId` as a parameter
       onPress={() => {
         // success-line
         navigation.navigate("SignedInNavigator", {screen: "TodoList", params: {listId: item.id}})
@@ -1730,7 +1760,7 @@ import {useDatabase} from "app/services/database/database"
 import {LIST_TABLE, ListRecord, TODO_TABLE, TodoRecord} from "app/services/database/schema"
 import {useAuth} from "app/services/database/use-auth"
 import {useCallback} from "react"
-import {v4 as uuid} from "uuid"
+import {randomUUID} from 'expo-crypto'
 
 
 export function useList(listId: string) {
@@ -1764,7 +1794,7 @@ export function useList(listId: string) {
         `INSERT INTO ${TODO_TABLE}
              (id, description, created_at, list_id, created_by, completed)
          VALUES (?, ?, ?, ?, ?, ?)`,
-        [uuid(), description, new Date().toISOString(), listId, user?.id, 0],
+        [randomUUID(), description, new Date().toISOString(), listId, user?.id, 0],
       )
 
       return {error: null}
@@ -1819,20 +1849,12 @@ export function useList(listId: string) {
 
 Now in our `TodoList` screen we can use the `useList` hook to fetch the todos for a list:
 
-:::note
-We're going to use expo-checkbox to show the completed state, so we'll need to install it:
-
-```shell
-npx expo add @react-native-community/checkbox
-```
-
-:::
-
 A lot of this should be familiar by now, we're using the `useList` hook to fetch the list and todos, and then rendering them in a FlatList.
 
 ```tsx
+// app/screens/TodoListScreen.tsx
 import {Button, Icon, ListItem, Screen, Text, TextField} from "app/components"
-import {SignedInNavigatorProp} from "app/navigators"
+import {SignedInNavigatorScreenProps} from "app/navigators"
 import {TodoRecord} from "app/services/database/schema"
 import {useList} from "app/services/database/use-list"
 import {colors, spacing} from "app/theme"
@@ -1840,7 +1862,7 @@ import React, {FC, useCallback} from "react"
 import {FlatList, Pressable, TextStyle, View, ViewStyle} from "react-native"
 import {SafeAreaView} from "react-native-safe-area-context"
 
-interface TodoListScreenProps extends SignedInNavigatorProp<"TodoList"> {}
+interface TodoListScreenProps extends SignedInNavigatorScreenProps<"TodoList"> {}
 
 export const TodoListScreen: FC<TodoListScreenProps> = function TodoListScreen({
   navigation,
@@ -1871,16 +1893,7 @@ export const TodoListScreen: FC<TodoListScreenProps> = function TodoListScreen({
       setError(error)
     }
   }, [removeTodo, setError])
-
-
-  const DeleteButton = React.useCallback(({id}: { id: string }) => {
-    <View style={$deleteIcon}>
-      <Icon
-        icon={"x"}
-        onPress={() => handleRemoveTodo(item.id)}/>
-    </View>
-  }, [handleRemoveTodo])
-
+  
   // We'll use the ListItem component to display each todo, as we did with the lists
   const renderItem = useCallback(({item}: { item: TodoRecord }) => {
     return <ListItem
@@ -2018,7 +2031,7 @@ At this point you should be able to:
 * Toggle todos completed status by tapping them
 
 
-## Conclusion
+## Congratulations!
 
-That's it! Now you have all the tools you need use PowerSync and Supabase to build a local-first app with real-time sync!
+Now you have all the tools you need use PowerSync and Supabase to build a local-first app with real-time sync!
 
