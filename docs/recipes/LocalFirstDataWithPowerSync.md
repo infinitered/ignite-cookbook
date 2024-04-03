@@ -1685,6 +1685,33 @@ For each screen we we move, we will need to:
     }
     ```
 
+* Remove the `DatabaseProvider` from the `WelcomeScreen`
+
+    ```tsx
+    // app/screens/WelcomeScreen.tsx
+    
+    // ...
+    
+    // Remove the import
+    //highlight-next-line
+    import { DatabaseProvider } from "app/services/database/database"   // <-- REMOVE
+    
+    export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen() {
+      return (
+        //highlight-next-line
+        <DatabaseProvider>   {/* <-- Remove this */}
+          <SafeAreaView style={ $container }>
+            <Lists/>
+            <SignOutButton/>
+          </SafeAreaView>
+         //highlight-next-line
+        </DatabaseProvider>{/* <-- and this */}
+      )
+    })
+    
+    
+    ```
+
 * Update the Props Type of `WelcomeScreen` and `TodoListScreen` to use the new prop type
    ```tsx
   // app/screens/WelcomeScreen.tsx
