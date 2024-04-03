@@ -68,13 +68,13 @@ To complete this recipe you'll need:
 
 2. **A Supabase Project set up and connected to a PowerSync**
 
-  - Follow the [PowerSync + Supabase Integration Guide](https://docs.powersync.com/integration-guides/supabase-+-powersync) to get this set up -- both PowerSync and Supabase have free tiers that you can use to get started.
+- Follow the [PowerSync + Supabase Integration Guide](https://docs.powersync.com/integration-guides/supabase-+-powersync) to get this set up -- both PowerSync and Supabase have free tiers that you can use to get started.
 
 3. **Configure or Disable Supabase Email Verification**
 
-  - By default, Supabase requires email verification for new users. This should be configured for any production apps.
-  - For the purposes of this recipe, you can disable this in the Supabase dashboard under:
-    - **Authentication** > **Providers** > **Email** > **Confirm Email**
+- By default, Supabase requires email verification for new users. This should be configured for any production apps.
+- For the purposes of this recipe, you can disable this in the Supabase dashboard under:
+  - **Authentication** > **Providers** > **Email** > **Confirm Email**
 
 ## Installing SDK and Dependencies
 
@@ -102,6 +102,12 @@ npx expo install \
   base-64 \
   @azure/core-asynciterator-polyfill \
   react-native-get-random-values
+```
+
+and install `@babel/plugin-transform-async-generator-functions` as a dev dependency:
+
+```shell
+yarn add -D @babel/plugin-transform-async-generator-functions
 ```
 
 :::note
@@ -133,8 +139,8 @@ npx expo install @react-native-async-storage/async-storage
 Ensure polyfills are imported in your app's entry file, typically `App.tsx`:
 
 ```ts
-import "react-native-polyfill-globals/auto";
-import "@azure/core-asynciterator-polyfill";
+import "react-native-polyfill-globals/auto"
+import "@azure/core-asynciterator-polyfill"
 ```
 
 :::tip
@@ -178,8 +184,8 @@ You'll need:
 // update the interface to include the new properties
 export interface ConfigBaseProps {
   // Existing config properties
-  supabaseUrl: string;
-  supabaseAnonKey: string;
+  supabaseUrl: string
+  supabaseAnonKey: string
 }
 
 // Add the new properties to the config object
@@ -187,7 +193,7 @@ const BaseConfig: ConfigBaseProps = {
   // Existing config values
   supabaseUrl: '<<YOUR_SUPABASE_URL>>',
   supabaseAnonKey: '<<YOUR_SUPABASE_ANON_KEY>>',
-};
+}
 ```
 
 :::tip
@@ -201,8 +207,8 @@ Create `app/services/database/supabase.ts` and add the following code to initial
 ```ts
 // app/services/database/supabase.ts
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import {createClient} from "@supabase/supabase-js"
-import {Config} from '../../config'; 
+import { createClient } from "@supabase/supabase-js"
+import { Config } from '../../config'
 
 export const supabase = createClient(Config.supabaseUrl, Config.supabaseAnonKey, {
   auth: {
@@ -227,9 +233,9 @@ Add the following code to `app/services/database/use-auth.tsx`:
 
 ```tsx
 // app/services/database/use-auth.tsx
-import {User} from "@supabase/supabase-js"
-import {supabase} from "app/services/database/supabase"
-import React, {createContext, PropsWithChildren, useCallback, useContext, useMemo, useState} from "react"
+import { User } from "@supabase/supabase-js"
+import { supabase } from "app/services/database/supabase"
+import React, { createContext, PropsWithChildren, useCallback, useContext, useMemo, useState } from "react"
 
 type AuthContextType = {
   signIn: (email: string, password: string) => void
@@ -247,7 +253,7 @@ const AuthContext = createContext<AuthContextType | null>(null)
 /**
  * AuthProvider manages the authentication state and provides the necessary methods to sign in, sign up and sign out.
  */
-export const AuthProvider = ({children}: PropsWithChildren<any>) => {
+export const AuthProvider = ({ children }: PropsWithChildren<any>) => {
   const [signedIn, setSignedIn] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
@@ -260,7 +266,7 @@ export const AuthProvider = ({children}: PropsWithChildren<any>) => {
     setError("")
     setUser(null)
     try {
-      const {data: {session, user}, error} = await supabase.auth.signInWithPassword({email, password})
+      const { data: { session, user }, error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) {
         setSignedIn(false)
         setError(error.message)
@@ -283,7 +289,7 @@ export const AuthProvider = ({children}: PropsWithChildren<any>) => {
     setError("")
     setUser(null)
     try {
-      const {data, error} = await supabase.auth.signUp({email, password})
+      const { data, error } = await supabase.auth.signUp({ email, password })
       if (error) {
         setSignedIn(false)
         setError(error.message)
@@ -321,7 +327,7 @@ export const AuthProvider = ({children}: PropsWithChildren<any>) => {
   }), [
     signIn, signOut, signUp, signedIn, loading, error, user
   ])
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={ value }>{ children }</AuthContext.Provider>
 }
 
 export const useAuth = () => {
@@ -348,7 +354,7 @@ Wrap your app with the `AuthProvider` to provide the authentication state to you
 // app/app.tsx
 // ...other imports
 // success-line
-import {AuthProvider} from "app/services/database/use-auth"
+import { AuthProvider } from "app/services/database/use-auth"
 
 // ...
 function App(props: AppProps) {
@@ -357,11 +363,11 @@ function App(props: AppProps) {
     // success-line
     <AuthProvider>
       <SafeAreaProvider>
-        {/* ... */}
+        {/* ... */ }
       </SafeAreaProvider>
       // success-line
     </AuthProvider>
-  );
+  )
 }
 
 
@@ -389,17 +395,17 @@ When the user signs in successfully, the app will automatically navigate to the 
 
 ```tsx
 // app/screens/AuthScreen.tsx
-import {Button, Text, TextField} from "app/components"
-import {AppStackScreenProps} from "app/navigators"
-import {useAuth} from "app/services/database/use-auth"
-import React, {useEffect, useState} from "react"
-import {ActivityIndicator, Modal, TextStyle, View, ViewStyle} from "react-native"
-import {colors, spacing} from "../theme"
+import { Button, Text, TextField } from "app/components"
+import { AppStackScreenProps } from "app/navigators"
+import { useAuth } from "app/services/database/use-auth"
+import React, { useEffect, useState } from "react"
+import { ActivityIndicator, Modal, TextStyle, View, ViewStyle } from "react-native"
+import { colors, spacing } from "../theme"
 
 interface AuthScreenProps extends AppStackScreenProps<"Auth"> {}
 
-export const AuthScreen: React.FC<AuthScreenProps> = ({navigation}) => {
-  const {signUp, signIn, loading, error, user} = useAuth()
+export const AuthScreen: React.FC<AuthScreenProps> = ({ navigation }) => {
+  const { signUp, signIn, loading, error, user } = useAuth()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
@@ -418,47 +424,47 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({navigation}) => {
   }, [user])
 
   return (
-    <View style={$container}>
-      <Text preset={"heading"}>Sign in or Create Account</Text>
+    <View style={ $container }>
+      <Text preset={ "heading" }>Sign in or Create Account</Text>
       <TextField
-        inputWrapperStyle={$inputWrapper}
-        containerStyle={$inputContainer}
-        label={"Email"}
-        value={email}
-        inputMode={"email"}
-        onChangeText={setEmail}
+        inputWrapperStyle={ $inputWrapper }
+        containerStyle={ $inputContainer }
+        label={ "Email" }
+        value={ email }
+        inputMode={ "email" }
+        onChangeText={ setEmail }
         keyboardType="email-address"
-        autoCapitalize={"none"}
+        autoCapitalize={ "none" }
       />
       <TextField
-        containerStyle={$inputContainer}
-        inputWrapperStyle={$inputWrapper}
-        label={"Password"}
-        value={password}
-        onChangeText={setPassword}
+        containerStyle={ $inputContainer }
+        inputWrapperStyle={ $inputWrapper }
+        label={ "Password" }
+        value={ password }
+        onChangeText={ setPassword }
         secureTextEntry
       />
 
-      <View style={$buttonContainer}>
+      <View style={ $buttonContainer }>
         <Button
-          disabled={loading}
-          text={"Sign In"}
-          onPress={handleSignIn}
-          style={$button}
-          preset={"reversed"}
+          disabled={ loading }
+          text={ "Sign In" }
+          onPress={ handleSignIn }
+          style={ $button }
+          preset={ "reversed" }
         />
 
-        <Button disabled={loading}
-                text={"Register New Account"}
-                onPress={handleSignUp}
-                style={$button}
+        <Button disabled={ loading }
+                text={ "Register New Account" }
+                onPress={ handleSignUp }
+                style={ $button }
         /></View>
-      {error
-       ? <Text style={$error} text={error}/>
-       : null}
-      <Modal transparent visible={loading}>
-        <View style={$modalBackground}>
-          <ActivityIndicator size="large" color={colors.palette.primary500}/>
+      { error
+        ? <Text style={ $error } text={ error }/>
+        : null }
+      <Modal transparent visible={ loading }>
+        <View style={ $modalBackground }>
+          <ActivityIndicator size="large" color={ colors.palette.primary500 }/>
         </View>
       </Modal>
     </View>
@@ -509,46 +515,95 @@ const $button: ViewStyle = {
 
 We don't need any of the content on the Welcome screen, so for now lets clear it out and replace it with a simple screen to confirm that sign in is working.
 
+#### Create a SignOut Button
+
+First use the ignite CLI to generate a new screen for signing out:
+
+```shell
+npx ignite-cli generate component SignOutButton
+```
+
+Then, update the component to show a button that calls `signOut` from our `useAuth` when pressed.
+
 ```tsx
-// app/screens/WelcomeScreen.tsx
-import {useAuth} from "app/services/database/use-auth"
-import {observer} from "mobx-react-lite"
-import React, {FC} from "react"
-import {ViewStyle} from "react-native"
-import {
-  Button, 
-  Text
-} from "app/components"
-import {SafeAreaView} from "react-native-safe-area-context"
-import {AppStackScreenProps} from "../navigators"
-import {colors} from "../theme"
+// app/components/SignOutButton.tsx
 
-interface WelcomeScreenProps extends AppStackScreenProps<"Welcome"> {}
+import { Button } from "app/components/Button"
+import { useAuth } from "app/services/database/use-auth"
+import * as React from "react"
+import { StyleProp, View, ViewStyle } from "react-native"
+import { observer } from "mobx-react-lite"
+import { spacing } from "app/theme"
 
-export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen() {
+export interface SignOutButtonProps {
+  /**
+   * An optional style override useful for padding & margin.
+   */
+  style?: StyleProp<ViewStyle>
+}
 
-  const {signOut} = useAuth()
+/**
+ * Describe your component here
+ */
+export const SignOutButton = observer(function SignOutButton(props: SignOutButtonProps) {
+  const { style } = props
+  const $styles = [$container, style]
+
+  const { signOut } = useAuth()
 
   const handleSignOut = () => {
     signOut()
   }
 
   return (
-    <SafeAreaView style={$container}>
-      <Text preset="heading" text="Signed In"/>
-      <Button
-        text="Sign Out"
-        onPress={handleSignOut}/>
-    </SafeAreaView>
+    <View style={ $styles }>
+      <Button text="Sign Out" onPress={ handleSignOut }/>
+    </View>
+  )
+})
+
+const $container: ViewStyle = {
+  padding: spacing.md,
+}
+```
+
+#### Add it to the welcome screen
+
+Right now we just want to confirm that our authentication is working, so lets clear out the Welcome screen and add the `SignOutButton` to it.
+
+```tsx
+// app/screens/WelcomeScreen.tsx
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { Lists, SignOutButton } from "app/components"
+import { DatabaseProvider } from "app/services/database/database"
+import { observer } from "mobx-react-lite"
+import React, { FC } from "react"
+import { ViewStyle } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
+import { SignedInNavigatorParamList } from "../navigators"
+import { colors } from "../theme"
+
+interface WelcomeScreenProps
+  extends NativeStackScreenProps<SignedInNavigatorParamList, "Welcome"> {}
+
+export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen() {
+  return (
+    <DatabaseProvider>
+      <SafeAreaView style={ $container }>
+        <Lists/>
+        <SignOutButton/>
+      </SafeAreaView>
+    </DatabaseProvider>
   )
 })
 
 const $container: ViewStyle = {
   flex: 1,
-  backgroundColor: colors.background,
-  display: 'flex',
-  justifyContent: 'flex-start',
-  height: '100%',
+  backgroundColor: colors.palette.neutral300,
+  display: "flex",
+  justifyContent: "flex-start",
+  height: "100%",
+  flexDirection: "column",
 }
 ```
 
@@ -567,25 +622,25 @@ const AppStack = observer(function AppStack() {
   // Fetch the user from the auth context
   // success-line
   // success-line
-  const {signedIn} = useAuth()
+  const { signedIn } = useAuth()
   return (
     <Stack.Navigator
-      screenOptions={{headerShown: false, navigationBarColor: colors.background}}
+      screenOptions={ { headerShown: false, navigationBarColor: colors.background } }
     >
       {/**
        * by wrapping the Welcome screen in a conditional, we ensure that
        * the user can only access it if they are signed in
-       */}
+       */ }
       // success-line
-      {signedIn
+      { signedIn
         // success-line
-       ? <Stack.Screen name="Welcome" component={Screens.WelcomeScreen}/>
+        ? <Stack.Screen name="Welcome" component={ Screens.WelcomeScreen }/>
         // success-line
-       : null
+        : null
         // success-line
       }
-      <Stack.Screen name="Auth" component={Screens.AuthScreen}/>
-      {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
+      <Stack.Screen name="Auth" component={ Screens.AuthScreen }/>
+      {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */ }
     </Stack.Navigator>
   )
 })
@@ -635,10 +690,10 @@ Your PowerSync URL can be found in your **PowerSync dashboard**:
 // update the interface to include the new properties
 export interface ConfigBaseProps {
   // Existing config properties
-  supabaseUrl: string;
-  supabaseAnonKey: string;
-  //success-line
-  powersyncUrl: string;
+  supabaseUrl: string
+  supabaseAnonKey: string
+  // success-line
+  powersyncUrl: string
 }
 
 // Add the new properties to the config object
@@ -648,7 +703,7 @@ const BaseConfig: ConfigBaseProps = {
   supabaseAnonKey: '<<YOUR_SUPABASE_ANON_KEY>>',
   // success-line
   powersyncUrl: '<<YOUR_POWER_SYNC_URL>>',
-};
+}
 ```
 
 ### Defining Your Schema
@@ -679,58 +734,58 @@ import {
   IndexedColumn,
   Schema,
   Table
-} from '@journeyapps/powersync-sdk-react-native';
+} from '@journeyapps/powersync-sdk-react-native'
 
-export const TODO_TABLE = 'todos';
-export const LIST_TABLE = 'lists';
+export const TODO_TABLE = 'todos'
+export const LIST_TABLE = 'lists'
 
 export interface ListRecord {
-  id: string;
-  name: string;
-  created_at: string;
-  owner_id?: string;
+  id: string
+  name: string
+  created_at: string
+  owner_id?: string
 }
 
 export interface TodoRecord {
-  id: string;
-  created_at: string;
-  completed: boolean;
-  description: string;
-  completed_at?: string;
-  created_by: string;
-  completed_by?: string;
-  list_id: string;
-  photo_id?: string;
+  id: string
+  created_at: string
+  completed: boolean
+  description: string
+  completed_at?: string
+  created_by: string
+  completed_by?: string
+  list_id: string
+  photo_id?: string
 }
 
 export const AppSchema = new Schema([
   new Table({
     name: 'todos',
     columns: [
-      new Column({name: 'list_id', type: ColumnType.TEXT}),
-      new Column({name: 'created_at', type: ColumnType.TEXT}),
-      new Column({name: 'completed_at', type: ColumnType.TEXT}),
-      new Column({name: 'description', type: ColumnType.TEXT}),
-      new Column({name: 'completed', type: ColumnType.INTEGER}),
-      new Column({name: 'created_by', type: ColumnType.TEXT}),
-      new Column({name: 'completed_by', type: ColumnType.TEXT})
+      new Column({ name: 'list_id', type: ColumnType.TEXT }),
+      new Column({ name: 'created_at', type: ColumnType.TEXT }),
+      new Column({ name: 'completed_at', type: ColumnType.TEXT }),
+      new Column({ name: 'description', type: ColumnType.TEXT }),
+      new Column({ name: 'completed', type: ColumnType.INTEGER }),
+      new Column({ name: 'created_by', type: ColumnType.TEXT }),
+      new Column({ name: 'completed_by', type: ColumnType.TEXT })
     ],
     indexes: [
       new Index({
         name: 'list',
-        columns: [new IndexedColumn({name: 'list_id'})]
+        columns: [new IndexedColumn({ name: 'list_id' })]
       })
     ]
   }),
   new Table({
     name: 'lists',
     columns: [
-      new Column({name: 'created_at', type: ColumnType.TEXT}),
-      new Column({name: 'name', type: ColumnType.TEXT}),
-      new Column({name: 'owner_id', type: ColumnType.TEXT})
+      new Column({ name: 'created_at', type: ColumnType.TEXT }),
+      new Column({ name: 'name', type: ColumnType.TEXT }),
+      new Column({ name: 'owner_id', type: ColumnType.TEXT })
     ]
   }),
-]);
+])
 
 ```
 
@@ -769,7 +824,7 @@ export interface PowerSyncBackendConnector {
    *
    * This token is kept for the duration of a sync connection.
    */
-  fetchCredentials: () => Promise<PowerSyncCredentials | null>;
+  fetchCredentials: () => Promise<PowerSyncCredentials | null>
 
   /** Upload local changes to the app backend.
    *
@@ -777,7 +832,7 @@ export interface PowerSyncBackendConnector {
    *
    * Any thrown errors will result in a retry after the configured wait period (default: 5 seconds).
    */
-  uploadData: (database: AbstractPowerSyncDatabase) => Promise<void>;
+  uploadData: (database: AbstractPowerSyncDatabase) => Promise<void>
 }
 ```
 
@@ -793,7 +848,7 @@ import {
   UpdateType, PowerSyncCredentials
 } from "@journeyapps/powersync-sdk-react-native"
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import {createClient} from "@supabase/supabase-js"
+import { createClient } from "@supabase/supabase-js"
 import Config from "../../config"
 
 export const supabase = createClient(Config.supabaseUrl, Config.supabaseAnonKey, {
@@ -805,10 +860,10 @@ export const supabase = createClient(Config.supabaseUrl, Config.supabaseAnonKey,
 
 // This function fetches the session token from Supabase, it should return null if the user is not signed in, and the session token if they are.
 async function fetchCredentials(): Promise<PowerSyncCredentials | null> {
-  const {data: {session}, error} = await supabase.auth.getSession()
+  const { data: { session }, error } = await supabase.auth.getSession()
 
   if (error) {
-    throw new Error(`Could not fetch Supabase credentials: ${error}`)
+    throw new Error(`Could not fetch Supabase credentials: ${ error }`)
   }
 
   if (!session) {
@@ -834,43 +889,43 @@ const FATAL_RESPONSE_CODES = [
 
 // PowerSync will call this function to upload data to the backend
 const uploadData: (database: AbstractPowerSyncDatabase) => Promise<void> = async (database) => {
-  const transaction = await database.getNextCrudTransaction();
+  const transaction = await database.getNextCrudTransaction()
 
   if (!transaction) {
-    return;
+    return
   }
 
 
-  let lastOp: CrudEntry | null = null;
+  let lastOp: CrudEntry | null = null
   try {
     // Note: If transactional consistency is important, use database functions
     // or edge functions to process the entire transaction in a single call.
     for (const op of transaction.crud) {
-      lastOp = op;
-      const table = supabase.from(op.table);
-      let result: any = null;
+      lastOp = op
+      const table = supabase.from(op.table)
+      let result: any = null
       switch (op.op) {
         case UpdateType.PUT:
           // eslint-disable-next-line no-case-declarations
-          const record = {...op.opData, id: op.id};
-          result = await table.upsert(record);
-          break;
+          const record = { ...op.opData, id: op.id }
+          result = await table.upsert(record)
+          break
         case UpdateType.PATCH:
-          result = await table.update(op.opData).eq('id', op.id);
-          break;
+          result = await table.update(op.opData).eq('id', op.id)
+          break
         case UpdateType.DELETE:
-          result = await table.delete().eq('id', op.id);
-          break;
+          result = await table.delete().eq('id', op.id)
+          break
       }
 
       if (result?.error) {
-        throw new Error(`Could not ${op.op} data to Supabase error: ${JSON.stringify(result)}`);
+        throw new Error(`Could not ${ op.op } data to Supabase error: ${ JSON.stringify(result) }`)
       }
     }
 
-    await transaction.complete();
+    await transaction.complete()
   } catch (ex: any) {
-    console.debug(ex);
+    console.debug(ex)
     if (typeof ex.code === 'string' && FATAL_RESPONSE_CODES.some((regex) => regex.test(ex.code))) {
       /**
        * Instead of blocking the queue with these errors,
@@ -880,12 +935,12 @@ const uploadData: (database: AbstractPowerSyncDatabase) => Promise<void> = async
        * If protecting against data loss is important, save the failing records
        * elsewhere instead of discarding, and/or notify the user.
        */
-      console.error(`Data upload error - discarding ${lastOp}`, ex);
-      await transaction.complete();
+      console.error(`Data upload error - discarding ${ lastOp }`, ex)
+      await transaction.complete()
     } else {
       // Error may be retryable - e.g. network error or temporary server error.
       // Throwing an error here causes this call to be retried after a delay.
-      throw ex;
+      throw ex
     }
   }
 }
@@ -909,20 +964,20 @@ This is necessary because the hooks from the PowerSync SDK require the `PowerSyn
 
 ```tsx
 // app/services/database/database.tsx
-import {SupabaseClient} from "@supabase/supabase-js"
-import React, {PropsWithChildren, useEffect} from "react"
+import { SupabaseClient } from "@supabase/supabase-js"
+import React, { PropsWithChildren, useEffect } from "react"
 import {
   AbstractPowerSyncDatabase,
   PowerSyncContext,
   RNQSPowerSyncDatabaseOpenFactory
-} from '@journeyapps/powersync-sdk-react-native';
-import {supabase, supabaseConnector} from "./supabase"; // Adjust the path as needed
-import {AppSchema} from './schema'; // Adjust the path as needed
+} from '@journeyapps/powersync-sdk-react-native'
+import { supabase, supabaseConnector } from "./supabase" // Adjust the path as needed
+import { AppSchema } from './schema' // Adjust the path as needed
 
 export class Database {
   // We expose the PowerSync and Supabase instances for easy access elsewhere in the app
-  powersync: AbstractPowerSyncDatabase;
-  supabase: SupabaseClient;
+  powersync: AbstractPowerSyncDatabase
+  supabase: SupabaseClient
 
   /**
    * Initialize the Database class with a new PowerSync instance
@@ -931,9 +986,9 @@ export class Database {
     const factory = new RNQSPowerSyncDatabaseOpenFactory({
       schema: AppSchema,
       dbFilename: 'sqlite.db',
-    });
-    this.powersync = factory.getInstance();
-    this.supabase = supabase;
+    })
+    this.powersync = factory.getInstance()
+    this.supabase = supabase
   }
 
   /**
@@ -942,44 +997,44 @@ export class Database {
    * So if your database requires authentication, the user will need to be signed in before this is called.
    */
   async init() {
-    await this.powersync.init();
+    await this.powersync.init()
     // Connect the PowerSync instance to the Supabase backend through the connector
-    await this.powersync.connect(supabaseConnector);
+    await this.powersync.connect(supabaseConnector)
   }
 }
 
 // A singleton of the Database class
-const database = new Database();
+const database = new Database()
 
 // A context to provide our singleton to the rest of the app
-const DatabaseContext = React.createContext<Database | null>(null);
+const DatabaseContext = React.createContext<Database | null>(null)
 
 // A hook to access the database instance via the context
 export const useDatabase = () => {
-  const context: Database | null = React.useContext(DatabaseContext);
+  const context: Database | null = React.useContext(DatabaseContext)
   if (!context) {
-    throw new Error("useDatabase must be used within a DatabaseProvider");
+    throw new Error("useDatabase must be used within a DatabaseProvider")
   }
-  return context;
-};
+  return context
+}
 
 // Finally, a provider component that initializes the database and provides it to the app
-export function DatabaseProvider<T>({children}: PropsWithChildren<T>) {
+export function DatabaseProvider<T>({ children }: PropsWithChildren<T>) {
   useEffect(() => {
     // You'll likely want to handle errors here, but for simplicity we're just logging them
-    database.init().catch(console.error);
-  }, []);
+    database.init().catch(console.error)
+  }, [])
 
   return (
-    <DatabaseContext.Provider value={database}>
+    <DatabaseContext.Provider value={ database }>
       {/* The `PowerSyncContext.Provider` is provided by the PowerSync SDK and is required 
       for the PowerSync hooks (i.e. `useWatchedPowerSyncQuery` and `usePowerSyncQuery`) 
-      to work, so we need to provide it as well as our own context provider. */}
-      <PowerSyncContext.Provider value={database.powersync}>
-        {children}
+      to work, so we need to provide it as well as our own context provider. */ }
+      <PowerSyncContext.Provider value={ database.powersync }>
+        { children }
       </PowerSyncContext.Provider>
     </DatabaseContext.Provider>
-  );
+  )
 }
 ```
 
@@ -1015,16 +1070,16 @@ We'll implement our own in a second, but Here's an example of what that looks li
 
 ```ts
 const lists = usePowerSyncWatchedQuery<ListItemRecord>(`
-    SELECT ${LIST_TABLE}.*,
-         COUNT(${TODO_TABLE}.id) AS total_tasks,
-         SUM(CASE WHEN ${TODO_TABLE}.completed = true THEN 1 ELSE 0 END) AS completed_tasks
-    FROM ${LIST_TABLE}
-         LEFT JOIN ${TODO_TABLE} ON ${LIST_TABLE}.id = ${TODO_TABLE}.list_id
-    GROUP BY ${LIST_TABLE}.id;
+    SELECT ${ LIST_TABLE }.*,
+         COUNT(${ TODO_TABLE }.id) AS total_tasks,
+         SUM(CASE WHEN ${ TODO_TABLE }.completed = true THEN 1 ELSE 0 END) AS completed_tasks
+    FROM ${ LIST_TABLE }
+         LEFT JOIN ${ TODO_TABLE } ON ${ LIST_TABLE }.id = ${ TODO_TABLE }.list_id
+    GROUP BY ${ LIST_TABLE }.id;
   `);
 ```
 
-You can write complex queries to fetch data from the database, and the hook will automatically re-fetch the data when the database changes. 
+You can write complex queries to fetch data from the database, and the hook will automatically re-fetch the data when the database changes.
 
 :::note
 This hook needs to be inside a `PowerSyncContext.Provider` (or our `DatabaseProvider`) to work.
@@ -1036,20 +1091,20 @@ This method is used to execute SQL queries against the database. We'll be using 
 
 ```ts
 const deleteList = useCallback(async (id: string) => {
-  console.log('Deleting list', id);
-  return powersync.execute(`DELETE FROM ${LIST_TABLE} WHERE id = ?`, [id]);
-}, [powersync]);
+  console.log('Deleting list', id)
+  return powersync.execute(`DELETE FROM ${ LIST_TABLE } WHERE id = ?`, [id])
+}, [powersync])
 ```
 
 #### Generating unique IDs with `expo-crypto`
 
-Because PowerSync data is local-first, we can't rely on the database to generate auto-incrementing unique ids for us. 
+Because PowerSync data is local-first, we can't rely on the database to generate auto-incrementing unique ids for us.
 
-When we're offline, the server won't know how many items we've creating, or how many other devices are creating items. 
+When we're offline, the server won't know how many items we've creating, or how many other devices are creating items.
 
 So in this situation, the app needs to be responsible for generating unique ids for items locally.
 
-We'll use the `randomUUID()` method from `expo-crypto` for this. It generates UUIDs using cryptographically secure 
+We'll use the `randomUUID()` method from `expo-crypto` for this. It generates UUIDs using cryptographically secure
 random values. This provides extra security and ensures that the generated UUIDs are unique.
 
 ```shell
@@ -1060,60 +1115,97 @@ npx expo add expo-crypto
 `expo-crypto` contains native modules, so you'll need to rebuild your app after installing it
 :::
 
+#### Disconnecting PowerSync when we Sign Out
+
+When we sign out, we should disconnect the PowerSync instance from the backend to prevent any further data synchronization,
+and wipe the local database to ensure that no data is left behind.
+
+To do this we'll update our `SignOutButton` to call `powersync.disconnectAndClear()` before we sign out of supabase.
+
+```tsx
+// app/components/SignOutButton.tsx
+
+//...other imports
+import { useDatabase } from "app/services/database/database"
+
+// ...
+export const SignOutButton = observer(function SignOutButton(props: SignOutButtonProps) {
+  // ...
+
+  const { signOut } = useAuth()
+  // success-line
+  const { powersync } = useDatabase()
+
+  const handleSignOut = async () => {
+    // success-line
+    await powersync.disconnectAndClear()
+    signOut()
+  }
+
+  return (
+    <View style={ $styles }>
+      <Button text="Sign Out" onPress={ handleSignOut }/>
+    </View>
+  )
+})
+
+```
+
 #### Implementing the `useLists` Hook
 
 Now that we can generate random IDs, we can implement the `useLists` hook:
 
 ```ts
 // app/services/database/use-lists.ts
-import {usePowerSyncWatchedQuery} from "@journeyapps/powersync-sdk-react-native"
-import {useAuth} from "app/services/database/use-auth"
-import {useCallback} from "react"
-import {useDatabase} from "app/services/database/database"
-import {LIST_TABLE, ListRecord, TODO_TABLE} from "app/services/database/schema"
-import {randomUUID} from 'expo-crypto'
+import { usePowerSyncWatchedQuery } from "@journeyapps/powersync-sdk-react-native"
+import { useAuth } from "app/services/database/use-auth"
+import { useCallback } from "react"
+import { useDatabase } from "app/services/database/database"
+import { LIST_TABLE, ListRecord, TODO_TABLE } from "app/services/database/schema"
+import { randomUUID } from 'expo-crypto'
 
 // Extend the base type with the calculated fields from our query  
 export type ListItemRecord = ListRecord & { total_tasks: number; completed_tasks: number }
 
 export const useLists = () => {
   // Get the current user from the auth context 
-  const {user} = useAuth();
+  const { user } = useAuth()
   // Get the database instance from the context
-  const {powersync} = useDatabase();
+  const { powersync } = useDatabase()
 
   // List fetching logic here. You can modify it as per your needs.
   const lists = usePowerSyncWatchedQuery<ListItemRecord>(`
-      SELECT ${LIST_TABLE}.*,
-             COUNT(${TODO_TABLE}.id) AS total_tasks,
-             SUM(CASE WHEN ${TODO_TABLE}.completed = true THEN 1 ELSE 0 END) as completed_tasks
-      FROM ${LIST_TABLE}
-               LEFT JOIN ${TODO_TABLE} ON ${LIST_TABLE}.id = ${TODO_TABLE}.list_id
-      GROUP BY ${LIST_TABLE}.id;
+      SELECT ${ LIST_TABLE }.*,
+             COUNT(${ TODO_TABLE }.id) AS total_tasks,
+             SUM(CASE WHEN ${ TODO_TABLE }.completed = true THEN 1 ELSE 0 END) as completed_tasks
+      FROM ${ LIST_TABLE }
+               LEFT JOIN ${ TODO_TABLE } ON ${ LIST_TABLE }.id = ${ TODO_TABLE }.list_id
+      GROUP BY ${ LIST_TABLE }.id
   `)
 
 
   const createList = useCallback(async (name: string) => {
-    
-    if (!user) {throw new Error("Can't add list -- user is undefined");}
-    
-    return powersync.execute(`
-          INSERT INTO ${LIST_TABLE}
+
+    if (!user) {throw new Error("Can't add list -- user is undefined")}
+
+    return powersync.execute(
+      `
+          INSERT INTO ${ LIST_TABLE }
               (id, name, created_at, owner_id)
           VALUES (?, ?, ?, ?)`,
       [randomUUID(), name, new Date().toISOString(), user?.id],
-    );
-  }, [user, powersync]);
+    )
+  }, [user, powersync])
 
   const deleteList = useCallback(async (id: string) => {
-    console.log('Deleting list', id);
+    console.log('Deleting list', id)
     return powersync.execute(`DELETE
-                             FROM ${LIST_TABLE}
-                             WHERE id = ?`, [id]);
-  }, [powersync]);
+                             FROM ${ LIST_TABLE }
+                             WHERE id = ?`, [id])
+  }, [powersync])
 
-  return {lists, createList, deleteList};
-};
+  return { lists, createList, deleteList }
+}
 
 ```
 
@@ -1127,51 +1219,44 @@ We're going to need several components to view and manage our todo lists:
 Let start by creating the components using the ignite CLI.
 
 First create the `AddList` and `Lists` components:
+
 ```shell
 npx ignite-cli generate component AddList
 ```
+
 ```shell
 npx ignite-cli generate component Lists
 ```
 
-### Adding the components to the Welcome Screen
+### Adding the components and database provider to the Welcome Screen
 
-Let's update the Welcome Screen to display the components we just created. That way we can see them while we work on them:
+Lets add the `Lists` component to the `WelcomeScreen` and wrap them in the `DatabaseProvider`.
 
 ```tsx
 // app/screens/WelcomeScreen.tsx
-import {Button, Lists} from "app/components"
-import {DatabaseProvider} from "app/services/database/database"
-import {useAuth} from "app/services/database/use-auth"
-import {observer} from "mobx-react-lite"
-import React, {FC} from "react"
-import {View, ViewStyle} from "react-native"
-import {SafeAreaView} from "react-native-safe-area-context"
-import {AppStackScreenProps} from "../navigators"
-import {colors, spacing} from "../theme"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { Lists, SignOutButton } from "app/components"
+import { DatabaseProvider } from "app/services/database/database"
+import { observer } from "mobx-react-lite"
+import React, { FC } from "react"
+import { ViewStyle } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
+import { SignedInNavigatorParamList } from "../navigators"
+import { colors } from "../theme"
 
-interface WelcomeScreenProps extends AppStackScreenProps<"Welcome"> {}
+interface WelcomeScreenProps
+  extends NativeStackScreenProps<SignedInNavigatorParamList, "Welcome"> {}
 
 export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen() {
-  const {signOut} = useAuth()
-
   return (
     <DatabaseProvider>
-      <SafeAreaView style={$container}>
+      <SafeAreaView style={ $container }>
         <Lists/>
-        <View style={$signOut}>
-          <Button
-            text="Sign Out"
-            onPress={signOut}/>
-        </View>
+        <SignOutButton/>
       </SafeAreaView>
     </DatabaseProvider>
   )
 })
-
-const $signOut: ViewStyle = {
-  padding: spacing.md,
-}
 
 const $container: ViewStyle = {
   flex: 1,
@@ -1181,6 +1266,128 @@ const $container: ViewStyle = {
   height: "100%",
   flexDirection: "column",
 }
+
+```
+
+### Displaying and Deleting Todo Lists in `Lists`
+
+Now we can use our `useLists` hook in `app/components/Lists.tsx` to display a list of our todo lists -- we don't have any yet, but we'll add them soon!
+
+```tsx
+// app/components/Lists.tsx
+import { NavigationProp, useNavigation } from "@react-navigation/native"
+import { AddList, Icon, ListItem, Text } from "app/components"
+import { AppStackParamList } from "app/navigators"
+import { ListItemRecord, useLists } from "app/services/database/use-lists"
+import React, { useCallback } from "react"
+import { FlatList, TextStyle, View, ViewStyle } from "react-native"
+import { colors, spacing } from "../theme"
+
+export function Lists() {
+
+  // We call the useLists hook to get the lists and deleteList function
+  const { lists, deleteList } = useLists()
+
+  const navigation = useNavigation<NavigationProp<AppStackParamList>>()
+
+  // Render a single list item in our FlatList
+  const renderItem = useCallback(({ item }: { item: ListItemRecord }) => {
+    return (
+      <ListItem
+        textStyle={ $listItemText }
+        onPress={ () => {
+          // For now we'll just log the list name when it's pressed
+          console.log("Pressed", item.name)
+        } }
+        text={ `${ item.name }` }
+        RightComponent={
+          <View style={ $deleteListIcon }>
+            {/* Let our users delete lists if they need to */ }
+            <Icon icon={ "x" } onPress={ () => deleteList(item.id) }/>
+          </View>
+        }
+      />
+    )
+  }, [])
+
+  return (
+    <View style={ $container }>
+      <Text preset={ "heading" }>Lists</Text>
+      <View style={ $card }>
+        {/* We'll update this in our next step   */ }
+        <AddList/>
+      </View>
+      {/* List of Todo Lists */ }
+      <View style={ [$list, $card] }>
+        <Text preset={ "subheading" }>Your Lists</Text>
+        <FlatList
+          style={ $listContainer }
+          data={ lists }
+          renderItem={ renderItem }
+          keyExtractor={ (item) => item.id }
+          ItemSeparatorComponent={ () => <View style={ $separator }/> }
+          ListEmptyComponent={ <Text style={ $emptyList }>No lists found</Text> }
+        />
+      </View>
+    </View>
+  )
+}
+
+
+const $list: ViewStyle = {
+  flex: 1,
+  marginVertical: spacing.md,
+  backgroundColor: colors.palette.neutral200,
+  padding: spacing.md,
+}
+
+const $container: ViewStyle = {
+  flex: 1,
+  display: "flex",
+  flexGrow: 1,
+  padding: spacing.md,
+}
+
+const $card: ViewStyle = {
+  shadowColor: colors.palette.neutral800,
+  shadowOffset: { width: 0, height: 1 },
+  shadowRadius: 2,
+  shadowOpacity: 0.35,
+  borderRadius: 8,
+}
+
+const $listContainer: ViewStyle = {
+  backgroundColor: colors.palette.neutral100,
+  paddingHorizontal: spacing.md,
+  height: "100%",
+  borderColor: colors.border,
+  borderWidth: 1,
+}
+
+const $separator: ViewStyle = {
+  height: 1,
+  backgroundColor: colors.border
+}
+
+const $emptyList: TextStyle = {
+  textAlign: "center",
+  color: colors.textDim,
+  opacity: 0.5,
+  padding: spacing.lg,
+}
+
+const $listItemText: TextStyle = {
+  height: 44,
+  width: 44,
+}
+
+const $deleteListIcon: ViewStyle = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: 44,
+  marginVertical: spacing.xxs,
+}
 ```
 
 ### Creating Todo Lists in `AddList`
@@ -1189,22 +1396,21 @@ Open `app/components/AddList.tsx` and update the `AddList` component to display 
 
 ```tsx
 // app/components/AddList.tsx
-import {Button, Text, TextField} from "app/components"
-import {useLists} from "app/services/database/use-lists"
-import {colors, spacing} from "app/theme"
-import {observer} from "mobx-react-lite"
+import { Button, Text, TextField } from "app/components"
+import { useLists } from "app/services/database/use-lists"
+import { colors, spacing } from "app/theme"
+import { observer } from "mobx-react-lite"
 import React from "react"
-import {TextStyle, View, ViewStyle} from "react-native"
+import { TextStyle, View, ViewStyle } from "react-native"
 
-/**
- * Display a form to add a new list
- */
+
+// Display a form to add a new list 
 export const AddList = observer(function AddList(props: never) {
   const [newListName, setNewListName] = React.useState("")
   const [error, setError] = React.useState<string | null>(null)
 
   // Here we call the useLists hook to get the createList function
-  const {createList} = useLists()
+  const { createList } = useLists()
 
   // Then creating a list is as simple as calling the createList function with the name of the list.
   // We'll also handle any errors that occur when creating the list, because we're good developers like that.
@@ -1214,19 +1420,19 @@ export const AddList = observer(function AddList(props: never) {
       await createList(newListName)
       setNewListName("")
     } catch (e: any) {
-      setError(`Failed to create list: ${e?.message ?? "unknown error"}`)
+      setError(`Failed to create list: ${ e?.message ?? "unknown error" }`)
     }
   }, [createList, newListName])
 
   return (
-    <View style={$container}>
-      <Text preset={"subheading"}>Add a list</Text>
-      <View style={$form}>
-        <TextField placeholder="Enter a list name" containerStyle={$textField} inputWrapperStyle={$textInput}
-                   onChangeText={setNewListName} value={newListName}/>
-        <Button text="Add List" style={$button} onPress={handleAddList}/>
+    <View style={ $container }>
+      <Text preset={ "subheading" }>Add a list</Text>
+      <View style={ $form }>
+        <TextField placeholder="Enter a list name" containerStyle={ $textField } inputWrapperStyle={ $textInput }
+                   onChangeText={ setNewListName } value={ newListName }/>
+        <Button text="Add List" style={ $button } onPress={ handleAddList }/>
       </View>
-      {error && <Text style={$error}>{error}</Text>}
+      { error && <Text style={ $error }>{ error }</Text> }
     </View>
   )
 })
@@ -1260,105 +1466,6 @@ const $error: TextStyle = {
 }
 ```
 
-### Displaying and Deleting Todo Lists in `Lists`
-
-Now we can use our `useLists` hook in `app/components/Lists.tsx` to display a list of our todo lists:
-
-```tsx
-// app/components/Lists.tsx
-import {AddList, Icon, ListItem, Text} from "app/components"
-import {ListItemRecord, useLists} from "app/services/database/use-lists"
-import React, {useCallback} from "react"
-import {FlatList, TextStyle, View, ViewStyle} from "react-native"
-import {colors, spacing} from "../theme"
-
-export function Lists() {
-
-  // Again we can use the useLists hook to get the list of lists and `deleteList` function
-  const {lists, deleteList} = useLists()
-
-  // This tells FlatList how to render each item in the list
-  const renderItem = useCallback(({item}: { item: ListItemRecord }) => {
-    // We'll use Ignite's ListItem component to display each item, and it takes care of a lot of the formatting for us.
-    return <ListItem
-      textStyle={$listItemText}
-      onPress={() => {
-        // Later on we'll use this to navigate to view the todos, but for now we'll just log the name of the list
-        console.log(`Pressed: ${item.name}`)
-      }}
-      text={`${item.name}`}
-      // Pressing the "X" icon will delete the list
-      RightComponent={<View style={$deleteListIcon}><Icon icon={"x"} onPress={() => deleteList(item.id)}/></View>}
-    />
-  }, [])
-
-  return (
-    <View style={$container}>
-      <Text preset={"heading"}>Lists</Text>
-      <View style={$card}><AddList/></View>
-      <View style={[$list, $card]}>
-        <Text preset={"subheading"}>Your Lists</Text>
-        <FlatList
-          style={$listContainer}
-          // We can just pass our lists in and it'll render them for us, and because
-          // this is a watched query it'll update automatically when the database changes.
-          data={lists}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          ItemSeparatorComponent={() => <View style={{height: 1, backgroundColor: colors.border}}/>}
-          ListEmptyComponent={<Text style={$emptyList}>No lists found</Text>}
-        />
-      </View>
-    </View>
-  )
-}
-
-// Styles
-const $emptyList: TextStyle = {
-  textAlign: "center",
-  color: colors.textDim,
-  opacity: 0.5,
-  padding: spacing.lg,
-}
-const $card: ViewStyle = {
-  shadowColor: colors.palette.neutral800,
-  shadowOffset: {width: 0, height: 1},
-  shadowRadius: 2,
-  shadowOpacity: 0.35,
-  borderRadius: 8,
-}
-const $listContainer: ViewStyle = {
-  backgroundColor: colors.palette.neutral100,
-  paddingHorizontal: spacing.md,
-  height: "100%",
-  borderColor: colors.border,
-  borderWidth: 1,
-}
-const $list: ViewStyle = {
-  flex: 1,
-  marginVertical: spacing.md,
-  backgroundColor: colors.palette.neutral200,
-  padding: spacing.md,
-}
-const $container: ViewStyle = {
-  flex: 1,
-  display: "flex",
-  flexGrow: 1,
-  padding: spacing.md,
-}
-const $listItemText: TextStyle = {
-  height: 44,
-  width: 44,
-}
-const $deleteListIcon: ViewStyle = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  height: 44,
-  marginVertical: spacing.xxs
-}
-```
-
 ### Checking In
 
 By this point you should be able to:
@@ -1367,17 +1474,23 @@ By this point you should be able to:
 * see a list of all the Todo lists,
 * delete Todo lists from the database.
 
+:::note
+This is a good time to commit your changes!
+:::
+
 ## Sharing the Database Context with Multiple Screens
 
-To view and edit todos inside a list, we'll want to create a new Screen. 
+To view and edit todos inside a list, we'll want to create a new Screen.
 
-Our new screen and `WelcomeScreen`  will both need to be inside a `DatabaseProvder` to have access to the database.
+That new screen and `WelcomeScreen`  will both need to be inside a `DatabaseProvder` to have access to the database.
 
-Now we could just wrap every screen in the `DatabaseProvider`, like we did with `WelcomeScreen`, but as our app gets larger this can become cumbersome.
+We could just wrap every screen in the `DatabaseProvider`, the way we did with `WelcomeScreen`, but this would be repetitive and then we'd
+need to check every component to see which parts of the app have access to the database.
 
 What we really want is for authenticated routes to have access to the database, and unauthenticated routes to not have access.
 
-To do this we'll: 
+To accomplish this we'll:
+
 1. Create our new `TodoListScreen`
 2. Create two navigators, one for signed in routes that has access to the database and one for unauthenticated routes that doesn't
 3. Move our screens into the appropriate navigator
@@ -1463,26 +1576,26 @@ For each screen we we move, we will need to:
     } from "app/screens"
     
     export type AuthNavigatorParamList = {
-        //success-line
+        // success-line
         Auth: undefined
     }
     
     // This type is used combines the AuthNavigatorParamList with the AppStackParamList
     // so we can have type checking when navigating between navigators
-    //success-line 
+    // success-line 
      export type AuthNavigatorScreenProps<T extends keyof AuthNavigatorParamList> = CompositeScreenProps<
-       //success-line
+       // success-line
        NativeStackScreenProps<AuthNavigatorParamList, T>,
-        //success-line 
+        // success-line 
        NativeStackScreenProps<AppStackParamList>
-        //success-line
+        // success-line
      >
 
     const Stack = createNativeStackNavigator<AuthNavigatorParamList>()
     export const AuthNavigator = () => {
         return (
             <Stack.Navigator>
-                //success-line
+                // success-line
                 <Stack.Screen name="Auth" component={AuthScreen}/>
             </Stack.Navigator>
         )
@@ -1535,40 +1648,40 @@ For each screen we we move, we will need to:
     import {colors} from "app/theme"
     import React from "react"
     import {createNativeStackNavigator} from "@react-navigation/native-stack"
-    //success-line
+    // success-line
     import {DatabaseProvider} from "app/services/database/database"
   
     export type SignedInNavigatorParamList = {
-      //success-line
+      // success-line
       Welcome: undefined
-      //success-line
+      // success-line
       TodoList: undefined
     }
   
     // This type is used combines the SignedInNavigatorParamList with the AppStackParamList
     // so we can have type checking when navigating between navigators 
-  //success-line
+  // success-line
     export type SignedInNavigatorScreenProps<T extends keyof SignedInNavigatorParamList> = CompositeScreenProps<
-  //success-line
+  // success-line
       NativeStackScreenProps<SignedInNavigatorParamList, T>,
-  //success-line 
+  // success-line 
       NativeStackScreenProps<AppStackParamList>
-  //success-line
+  // success-line
     >
   
     const Stack = createNativeStackNavigator<SignedInNavigatorParamList>()
   
     export const SignedInNavigator = () => {
       return (
-          //success-line
+          // success-line
           <DatabaseProvider>
             <Stack.Navigator screenOptions={{headerShown: false, navigationBarColor: colors.background}}>
-              //success-line
+              // success-line
               <Stack.Screen name="Welcome" component={Screens.WelcomeScreen}/>
-              //success-line
+              // success-line
               <Stack.Screen name="TodoList" component={Screens.TodoListScreen}/>
             </Stack.Navigator>
-          //success-line
+          // success-line
           </DatabaseProvider>
       )
     }
@@ -1591,47 +1704,47 @@ For each screen we we move, we will need to:
 
    ```tsx
     // app/navigators/AppNavigator.tsx
-    
-    // ... other imports
-    //success-line
-    import {DarkTheme, DefaultTheme, NavigationContainer, NavigatorScreenParams} from "@react-navigation/native"
-    //success-line
-    import {createNativeStackNavigator, NativeStackScreenProps} from "@react-navigation/native-stack"
-    //success-line
-    import {AuthNavigator, AuthNavigatorParamList} from "app/navigators/AuthNavigator"
-    //success-line
-    import {SignedInNavigator, SignedInNavigatorParamList} from "app/navigators/SignedInNavigator"
-    
-    //..
-    
-    export type AppStackParamList = {
-      //success-line
-      AuthNavigator: NavigatorScreenParams<AuthNavigatorParamList>
-      //success-line
-      SignedInNavigator: NavigatorScreenParams<SignedInNavigatorParamList>
-      // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
-    }
-    
-    // ...
-    
-    const AppStack = observer(function AppStack() {
-      // Fetch the user from the auth context
-      const {signedIn} = useAuth()
-      return (
-        <Stack.Navigator
-          screenOptions={{headerShown: false, navigationBarColor: colors.background}}
-        >
-          //success-line
-          <Stack.Screen name={"AuthNavigator"} component={AuthNavigator}/>
-          {/* Only render the SignedIn Navigator if we are signed in */}
-          //success-line
-          {signedIn ? <Stack.Screen name={"SignedInNavigator"} component={SignedInNavigator}/> : null}
-          {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
-        </Stack.Navigator>
-      )
-    })
-    
-    //...
+
+// ... other imports
+// success-line
+import { DarkTheme, DefaultTheme, NavigationContainer, NavigatorScreenParams } from "@react-navigation/native"
+// success-line
+import { createNativeStackNavigator, NativeStackScreenProps } from "@react-navigation/native-stack"
+// success-line
+import { AuthNavigator, AuthNavigatorParamList } from "app/navigators/AuthNavigator"
+// success-line
+import { SignedInNavigator, SignedInNavigatorParamList } from "app/navigators/SignedInNavigator"
+
+//..
+
+export type AppStackParamList = {
+  // success-line
+  AuthNavigator: NavigatorScreenParams<AuthNavigatorParamList>
+  // success-line
+  SignedInNavigator: NavigatorScreenParams<SignedInNavigatorParamList>
+  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+}
+
+// ...
+
+const AppStack = observer(function AppStack() {
+  // Fetch the user from the auth context
+  const { signedIn } = useAuth()
+  return (
+    <Stack.Navigator
+      screenOptions={ { headerShown: false, navigationBarColor: colors.background } }
+    >
+      // success-line
+      <Stack.Screen name={ "AuthNavigator" } component={ AuthNavigator }/>
+      {/* Only render the SignedIn Navigator if we are signed in */ }
+      // success-line
+      { signedIn ? <Stack.Screen name={ "SignedInNavigator" } component={ SignedInNavigator }/> : null }
+      {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */ }
+    </Stack.Navigator>
+  )
+})
+
+//...
    ```
 
 **4. Update the existing `navigation.navigate()` calls to use the new routes**
@@ -1641,8 +1754,8 @@ Because we've moved the screens into navigators, we've changed the paths that re
    // app/screens/AuthScreen.tsx
 useEffect(() => {
   if (user) {
-    //success-line
-    navigation.navigate("SignedInNavigator", {screen: "Welcome"})
+    // success-line
+    navigation.navigate("SignedInNavigator", { screen: "Welcome" })
   }
 }, [user])
    ```
@@ -1678,18 +1791,18 @@ export const TodoListScreen: FC<TodoListScreenProps> = function TodoListScreen({
   navigation,
 
   // success-line
-  route: {params}
+  route: { params }
 }) {
   // We get the listId from the route params
   // success-line
-  const listId = params.listId;
+  const listId = params.listId
 
   return (
-    <Screen style={$root} preset="scroll" safeAreaEdges={["top"]}>
+    <Screen style={ $root } preset="scroll" safeAreaEdges={ ["top"] }>
       // success-line
-      <Pressable onPress={() => navigation.goBack()}><Icon icon={"back"} size={50}></Icon></Pressable>
+      <Pressable onPress={ () => navigation.goBack() }><Icon icon={ "back" } size={ 50 }></Icon></Pressable>
       // success-line
-      <Text preset={"heading"} text={listId}/>
+      <Text preset={ "heading" } text={ listId }/>
     </Screen>
   )
 }
@@ -1712,25 +1825,25 @@ Now we can update the `Lists` component to navigate to the `TodoList` screen whe
 ```tsx
 // app/components/Lists.tsx
 // ... other imports
-import {NavigationProp, useNavigation} from "@react-navigation/native"
-import {AppStackParamList} from "app/navigators"
+import { NavigationProp, useNavigation } from "@react-navigation/native"
+import { AppStackParamList } from "app/navigators"
 
 export function Lists() {
 
-  const {lists, deleteList} = useLists()
+  const { lists, deleteList } = useLists()
   // We use the root param list, because this component might be reusing in other screens/navigators
   // success-line
   const navigation = useNavigation<NavigationProp<AppStackParamList>>()
 
 
-  const renderItem = useCallback(({item}: { item: ListItemRecord }) => {
+  const renderItem = useCallback(({ item }: { item: ListItemRecord }) => {
     return <ListItem
       // ... other props
       // Navigate to the TodoList screen, passing the `listId` as a parameter
-      onPress={() => {
+      onPress={ () => {
         // success-line
-        navigation.navigate("SignedInNavigator", {screen: "TodoList", params: {listId: item.id}})
-      }}
+        navigation.navigate("SignedInNavigator", { screen: "TodoList", params: { listId: item.id } })
+      } }
     />
   }, [])
 
@@ -1740,7 +1853,7 @@ export function Lists() {
 }
 ```
 
-### Creating a `useList` hook to view and manage Todos for a List 
+### Creating a `useList` hook to view and manage Todos for a List
 
 Now that we can navigate to the `TodoList` screen, we can start fetching and managing the todos for a list.
 
@@ -1755,23 +1868,23 @@ We are using `usePowerSyncQuery` to fetch the list and `usePowerSyncWatchedQuery
 ```tsx
 // app/services/database/use-list.ts
 
-import {usePowerSyncQuery, usePowerSyncWatchedQuery} from "@journeyapps/powersync-sdk-react-native"
-import {useDatabase} from "app/services/database/database"
-import {LIST_TABLE, ListRecord, TODO_TABLE, TodoRecord} from "app/services/database/schema"
-import {useAuth} from "app/services/database/use-auth"
-import {useCallback} from "react"
-import {randomUUID} from 'expo-crypto'
+import { usePowerSyncQuery, usePowerSyncWatchedQuery } from "@journeyapps/powersync-sdk-react-native"
+import { useDatabase } from "app/services/database/database"
+import { LIST_TABLE, ListRecord, TODO_TABLE, TodoRecord } from "app/services/database/schema"
+import { useAuth } from "app/services/database/use-auth"
+import { useCallback } from "react"
+import { randomUUID } from 'expo-crypto'
 
 
 export function useList(listId: string) {
-  const {user} = useAuth()
-  const {powersync} = useDatabase()
+  const { user } = useAuth()
+  const { powersync } = useDatabase()
 
 
   const listRecords = usePowerSyncQuery<ListRecord>(`
       SELECT *
-      FROM ${LIST_TABLE}
-      WHERE id = ?;
+      FROM ${ LIST_TABLE }
+      WHERE id = ?
   `, [listId])
 
   // we only expect one list record
@@ -1780,8 +1893,8 @@ export function useList(listId: string) {
 
   const todos = usePowerSyncWatchedQuery<TodoRecord>(`
       SELECT *
-      FROM ${TODO_TABLE}
-      WHERE list_id = ?;
+      FROM ${ TODO_TABLE }
+      WHERE list_id = ?
   `, [listId])
 
 
@@ -1791,27 +1904,27 @@ export function useList(listId: string) {
     }
     try {
       await powersync.execute(
-        `INSERT INTO ${TODO_TABLE}
+        `INSERT INTO ${ TODO_TABLE }
              (id, description, created_at, list_id, created_by, completed)
          VALUES (?, ?, ?, ?, ?, ?)`,
         [randomUUID(), description, new Date().toISOString(), listId, user?.id, 0],
       )
 
-      return {error: null}
+      return { error: null }
     } catch (error: any) {
-      return {error: `Error adding todo: ${error?.message}`}
+      return { error: `Error adding todo: ${ error?.message }` }
     }
   }, [user, powersync, listId])
 
   const removeTodo = useCallback(async (id: string): Promise<{ error: string | null }> => {
     try {
       await powersync.execute(`DELETE
-                                FROM ${TODO_TABLE}
+                                FROM ${ TODO_TABLE }
                                 WHERE id = ?`, [id])
-      return {error: null}
+      return { error: null }
     } catch (error: any) {
       console.error("Error removing todo", error)
-      return {error: `Error removing todo: ${error?.message}`}
+      return { error: `Error removing todo: ${ error?.message }` }
     }
 
   }, [
@@ -1820,26 +1933,26 @@ export function useList(listId: string) {
 
   const setTodoCompleted = useCallback(async (id: string, completed: boolean): Promise<{ error: string | null }> => {
 
-    const completedAt = completed ? new Date().toISOString() : null;
-    const completedBy = completed ? user?.id : null;
+    const completedAt = completed ? new Date().toISOString() : null
+    const completedBy = completed ? user?.id : null
 
     try {
       await powersync.execute(`
-            UPDATE ${TODO_TABLE}
+            UPDATE ${ TODO_TABLE }
             SET completed = ?, completed_at = ?, completed_by = ?
             WHERE id = ?
-        `, [completed, completedAt, completedBy, id]);
+        `, [completed, completedAt, completedBy, id])
 
-      return {error: null}
+      return { error: null }
 
     } catch (error: any) {
-      console.error('Error toggling todo', error);
-      return {error: `Error toggling todo: ${error?.message}`};
+      console.error('Error toggling todo', error)
+      return { error: `Error toggling todo: ${ error?.message }` }
     }
-  }, [powersync]);
+  }, [powersync])
 
 
-  return {list, todos, addTodo, removeTodo, setTodoCompleted}
+  return { list, todos, addTodo, removeTodo, setTodoCompleted }
 
 }
 
@@ -1853,24 +1966,24 @@ A lot of this should be familiar by now, we're using the `useList` hook to fetch
 
 ```tsx
 // app/screens/TodoListScreen.tsx
-import {Button, Icon, ListItem, Screen, Text, TextField} from "app/components"
-import {SignedInNavigatorScreenProps} from "app/navigators"
-import {TodoRecord} from "app/services/database/schema"
-import {useList} from "app/services/database/use-list"
-import {colors, spacing} from "app/theme"
-import React, {FC, useCallback} from "react"
-import {FlatList, Pressable, TextStyle, View, ViewStyle} from "react-native"
-import {SafeAreaView} from "react-native-safe-area-context"
+import { Button, Icon, ListItem, Screen, Text, TextField } from "app/components"
+import { SignedInNavigatorScreenProps } from "app/navigators"
+import { TodoRecord } from "app/services/database/schema"
+import { useList } from "app/services/database/use-list"
+import { colors, spacing } from "app/theme"
+import React, { FC, useCallback } from "react"
+import { FlatList, Pressable, TextStyle, View, ViewStyle } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 interface TodoListScreenProps extends SignedInNavigatorScreenProps<"TodoList"> {}
 
 export const TodoListScreen: FC<TodoListScreenProps> = function TodoListScreen({
   navigation,
-  route: {params: {listId}},
+  route: { params: { listId } },
 }) {
 
   // We use the hook to get the list and todos for the list
-  const {list, todos, addTodo, removeTodo, setTodoCompleted} = useList(listId)
+  const { list, todos, addTodo, removeTodo, setTodoCompleted } = useList(listId)
 
   // State for managing the new todo input and errors
   const [newTodo, setNewTodo] = React.useState("")
@@ -1878,7 +1991,7 @@ export const TodoListScreen: FC<TodoListScreenProps> = function TodoListScreen({
 
   // We wrap the addTodo from the hook with a bit of error handling
   const handleAddTodo = useCallback(async () => {
-    const {error} = await addTodo(newTodo)
+    const { error } = await addTodo(newTodo)
     if (error) {
       setError(error)
       return
@@ -1888,53 +2001,53 @@ export const TodoListScreen: FC<TodoListScreenProps> = function TodoListScreen({
 
   // And do the same for removeTodo
   const handleRemoveTodo = useCallback(async (id: string) => {
-    const {error} = await removeTodo(id)
+    const { error } = await removeTodo(id)
     if (error) {
       setError(error)
     }
   }, [removeTodo, setError])
-  
+
   // We'll use the ListItem component to display each todo, as we did with the lists
-  const renderItem = useCallback(({item}: { item: TodoRecord }) => {
+  const renderItem = useCallback(({ item }: { item: TodoRecord }) => {
     return <ListItem
-      containerStyle={$listItemContainer}
-      textStyle={[$listItemText, item.completed && $strikeThrough]}
-      text={`${item.description}`}
-      RightComponent={(
-        <Pressable style={$deleteIcon}>
-          <Icon icon={"x"} onPress={() => handleRemoveTodo(item.id)}/>
-        </Pressable>)}
-      onPress={() => setTodoCompleted(item.id, !item.completed)}
+      containerStyle={ $listItemContainer }
+      textStyle={ [$listItemText, item.completed && $strikeThrough] }
+      text={ `${ item.description }` }
+      RightComponent={ (
+        <Pressable style={ $deleteIcon }>
+          <Icon icon={ "x" } onPress={ () => handleRemoveTodo(item.id) }/>
+        </Pressable>) }
+      onPress={ () => setTodoCompleted(item.id, !item.completed) }
     />
   }, [
     handleRemoveTodo,
   ])
 
   return (
-    <Screen style={$root} preset="fixed">
-      <SafeAreaView style={$header} edges={["top"]}>
-        <Pressable onPress={() => navigation.goBack()}><Icon icon={"back"} size={44}></Icon></Pressable>
-        <Text style={$listName} preset={"heading"} text={list?.name}/>
+    <Screen style={ $root } preset="fixed">
+      <SafeAreaView style={ $header } edges={ ["top"] }>
+        <Pressable onPress={ () => navigation.goBack() }><Icon icon={ "back" } size={ 44 }></Icon></Pressable>
+        <Text style={ $listName } preset={ "heading" } text={ list?.name }/>
       </SafeAreaView>
-      <View style={$addTodoContainer}>
-        <Text preset={"subheading"}>Add a list</Text>
-        <View style={$form}>
+      <View style={ $addTodoContainer }>
+        <Text preset={ "subheading" }>Add a list</Text>
+        <View style={ $form }>
           <TextField
             placeholder="New todo..."
-            containerStyle={$textField}
-            inputWrapperStyle={$textInput}
-            onChangeText={setNewTodo}
-            value={newTodo}/>
-          <Button text="ADD" style={$button} onPress={handleAddTodo}/>
+            containerStyle={ $textField }
+            inputWrapperStyle={ $textInput }
+            onChangeText={ setNewTodo }
+            value={ newTodo }/>
+          <Button text="ADD" style={ $button } onPress={ handleAddTodo }/>
         </View>
-        {error && <Text style={$error}>{error}</Text>}
+        { error && <Text style={ $error }>{ error }</Text> }
       </View>
-      <View style={$container}>
+      <View style={ $container }>
         <FlatList
-          data={todos}
-          renderItem={renderItem}
-          ItemSeparatorComponent={() => <View style={$separator}/>}
-          ListEmptyComponent={<Text style={$emptyList}>List is Empty</Text>}
+          data={ todos }
+          renderItem={ renderItem }
+          ItemSeparatorComponent={ () => <View style={ $separator }/> }
+          ListEmptyComponent={ <Text style={ $emptyList }>List is Empty</Text> }
         />
       </View>
     </Screen>
@@ -1948,7 +2061,7 @@ const $listItemContainer: ViewStyle = {
   alignItems: "center",
 }
 
-const $strikeThrough: TextStyle = {textDecorationLine: "line-through"}
+const $strikeThrough: TextStyle = { textDecorationLine: "line-through" }
 
 const $form: ViewStyle = {
   display: "flex",
@@ -1956,7 +2069,8 @@ const $form: ViewStyle = {
   alignItems: "center",
 }
 
-const $separator: ViewStyle = {height: 1, backgroundColor: colors.border}
+const $separator: ViewStyle = { height: 1, backgroundColor: colors.border }
+
 const $emptyList: TextStyle = {
   color: colors.textDim,
   opacity: 0.5,
@@ -2029,7 +2143,6 @@ At this point you should be able to:
 * See the list of todos in the list on the `TodoList` screen
 * Add and remove todos from the list
 * Toggle todos completed status by tapping them
-
 
 ## Congratulations!
 
