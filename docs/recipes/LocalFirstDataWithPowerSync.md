@@ -395,8 +395,8 @@ When the user signs in successfully, the app will automatically navigate to the 
 
 ```tsx
 // app/screens/AuthScreen.tsx
-import { Button, Text, TextField } from "app/components"
 import { AppStackScreenProps } from "app/navigators"
+import { Button, Screen, Text, TextField } from "app/components"
 import { useAuth } from "app/services/database/use-auth"
 import React, { useEffect, useState } from "react"
 import { ActivityIndicator, Modal, TextStyle, View, ViewStyle } from "react-native"
@@ -424,7 +424,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ navigation }) => {
   }, [user])
 
   return (
-    <View style={ $container }>
+    <Screen style={ $container } safeAreaEdges={ ["top"] }>
       <Text preset={ "heading" }>Sign in or Create Account</Text>
       <TextField
         inputWrapperStyle={ $inputWrapper }
@@ -454,33 +454,34 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ navigation }) => {
           preset={ "reversed" }
         />
 
-        <Button disabled={ loading }
-                text={ "Register New Account" }
-                onPress={ handleSignUp }
-                style={ $button }
-        /></View>
-      { error
-        ? <Text style={ $error } text={ error }/>
-        : null }
+        <Button
+          disabled={ loading }
+          text={ "Register New Account" }
+          onPress={ handleSignUp }
+          style={ $button }
+        />
+      </View>
+      { error ? <Text style={ $error } text={ error }/> : null }
       <Modal transparent visible={ loading }>
         <View style={ $modalBackground }>
           <ActivityIndicator size="large" color={ colors.palette.primary500 }/>
         </View>
       </Modal>
-    </View>
+    </Screen>
   )
 }
 
-// Styles
 const $container: ViewStyle = {
   backgroundColor: colors.background,
   flex: 1,
   justifyContent: "center",
   paddingHorizontal: spacing.lg,
 }
+
 const $inputContainer: TextStyle = {
   marginTop: spacing.md,
 }
+
 const $inputWrapper: TextStyle = {
   backgroundColor: colors.palette.neutral100,
 }
@@ -491,6 +492,7 @@ const $modalBackground: ViewStyle = {
   flexDirection: "column",
   justifyContent: "space-around",
 }
+
 const $error: TextStyle = {
   color: colors.error,
   marginVertical: spacing.md,
@@ -498,17 +500,17 @@ const $error: TextStyle = {
   width: "100%",
   fontSize: 20,
 }
+
 const $buttonContainer: ViewStyle = {
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
   marginVertical: spacing.md,
 }
+
 const $button: ViewStyle = {
   marginTop: spacing.xs,
 }
-
-
 ```
 
 ### Update the Welcome Screen
@@ -583,14 +585,10 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { SignedInNavigatorParamList } from "../navigators"
 import { colors } from "../theme"
 
-interface WelcomeScreenProps
-  extends NativeStackScreenProps<SignedInNavigatorParamList, "Welcome"> {}
-
 export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen() {
   return (
     <DatabaseProvider>
       <SafeAreaView style={ $container }>
-        <Lists/>
         <SignOutButton/>
       </SafeAreaView>
     </DatabaseProvider>
