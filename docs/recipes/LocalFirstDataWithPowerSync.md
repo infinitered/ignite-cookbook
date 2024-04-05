@@ -164,6 +164,35 @@ const plugins = [
 
 ```
 
+### Disable the Expo Dev Client Network Inspector
+
+The network inspector in the Expo Dev Client can interfere with PowerSync's network requests. To disable it, edit the project's `app.json` and in the `expo.plugins` find `expo-build-properties` and add `"networkInspector": false`:
+
+:::tip
+Leave the rest of the config as is! Only add the `networkInspector` property.
+:::
+
+```json
+{
+  "expo": {
+    // ...
+    "plugins": [
+      //...
+      ["expo-build-properties", {
+        // ...
+        "android": {
+          // ...
+          // success-line
+          "networkInspector": false
+        }
+      }]
+    //...
+    ], 
+  //...
+  }
+}
+```
+
 ## Authenticating with Supabase
 
 PowerSync requires a valid session token to connect to the Supabase backend, so we'll need to set up some basic authentication.
