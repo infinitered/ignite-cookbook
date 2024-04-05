@@ -454,6 +454,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ navigation }) => {
 
   return (
     <Screen style={ $container } safeAreaEdges={ ["top"] }>
+      <Text preset={"subheading"}>PowerSync + Supabase</Text>
       <Text preset={ "heading" }>Sign in or Create Account</Text>
       <TextField
         inputWrapperStyle={ $inputWrapper }
@@ -1163,7 +1164,8 @@ export const SignOutButton = observer(function SignOutButton(props: SignOutButto
   // success-line
   const { powersync } = useDatabase()
 
-  const handleSignOut = async () => {
+  // success-line
+  const handleSignOut = async () => {  // make this async
     // success-line
     await powersync.disconnectAndClear()
     signOut()
