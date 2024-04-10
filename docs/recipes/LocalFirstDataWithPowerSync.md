@@ -162,9 +162,9 @@ the Reactotron config.
     
     ```
 
-### Disable the Expo Dev Client Network Inspector
+### Tell Expo to Disable the Expo Dev Client Network Inspector
 
-The network inspector in the Expo Dev Client can interfere with PowerSync's network requests.
+The network inspector in the Expo Dev Client can [interfere with PowerSync's network requests](https://docs.powersync.com/client-sdk-references/react-native-and-expo#android).
 
 Because our app uses [Expo CNG](https://docs.expo.dev/workflow/continuous-native-generation/) we shouldn't edit the project's native files directly.
 
@@ -200,6 +200,10 @@ Instead we can use the `expo-build-properties` plugin to tell expo to disable th
   }
 }
 ```
+
+:::note
+If you are not using Expo CNG, you can manually edit `/android/gradle.properties` and set `EXPO_DEV_CLIENT_NETWORK_INSPECTOR=false` 
+:::
 
 ## Authenticating with Supabase
 
