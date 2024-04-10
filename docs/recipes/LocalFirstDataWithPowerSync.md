@@ -132,77 +132,80 @@ and we'll also need to install `@react-native-async-storage/async-storage` for p
 npx expo install @react-native-async-storage/async-storage
 ```
 
-### Configuring Babel and Polyfills
+### Configure Babel and Polyfills
 
-#### Import polyfills at App entry
+**1. Ensure polyfills are imported in your app's entry file, typically `App.tsx`:**
 
-Ensure polyfills are imported in your app's entry file, typically `App.tsx`:
-
-```ts
-import "react-native-polyfill-globals/auto"
-import "@azure/core-asynciterator-polyfill"
-```
-
+    ```ts
+    import "react-native-polyfill-globals/auto"
+    import "@azure/core-asynciterator-polyfill"
+    ```
+    
 :::tip
 In a fresh Ignite app, this would be in `app/app.tsx`. and placed at the top of the list of imports, right after
 the Reactotron config.
 :::
 
-#### Add Babel Plugin
+**2. Add Babel Plugin**
 
-Update `babel.config.js` to include the `transform-async-generator-functions` plugin:
-
-```js
-/** @type {import('@babel/core').TransformOptions['plugins']} */
-const plugins = [
-        //... other plugins
-        // success-line
-        '@babel/plugin-transform-async-generator-functions',  // <-- Add this
-        /** NOTE: This must be last in the plugins @see https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation/#babel-plugin */
-        "react-native-reanimated/plugin",
-    ]
-
-```
+    Update `babel.config.js` to include the `transform-async-generator-functions` plugin:
+    
+    ```js
+    /** @type {import('@babel/core').TransformOptions['plugins']} */
+    const plugins = [
+            //... other plugins
+            // success-line
+            '@babel/plugin-transform-async-generator-functions',  // <-- Add this
+            /** NOTE: This must be last in the plugins @see https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation/#babel-plugin */
+            "react-native-reanimated/plugin",
+        ]
+    
+    ```
 
 ### Disable the Expo Dev Client Network Inspector
 
-The network inspector in the Expo Dev Client can interfere with PowerSync's network requests. To disable it:
+The network inspector in the Expo Dev Client can interfere with PowerSync's network requests.
+
+Because our app uses [Expo CNG](https://docs.expo.dev/workflow/continuous-native-generation/) we shouldn't edit the project's native files directly.
+
+Instead we can use the `expo-build-properties` plugin to tell expo to disable the network inspector when building the android project.
 
 1. Open the project's `app.json`
 2. In `expo.plugins` find `expo-build-properties`
-3. In the config object set `android.networkInspector` to `false`
+3. In the config object for the plugin, set `android.networkInspector` to `false`
 4. Run `expo prebuild` to apply the changes to your android project
 
 ```json
 {
   "expo": {
-    // ...
     "plugins": [
-      //...
-      ["expo-build-properties", {
-        // ...
-        "android": {
-          // ...
-          // success-line
-          "networkInspector": false
+      // ...
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "newArchEnabled": false,
+            "flipper": false
+          },
+          "android": {
+            "newArchEnabled": false,
+            // success-line
+            "networkInspector": false
+          }
         }
-      }]
+      ]
+      //...
+    ]
     //...
-    ], 
-  //...
   }
 }
 ```
-
-:::tip
-Leave the rest of the config as is! Only add the `networkInspector` property.
-:::
 
 ## Authenticating with Supabase
 
 PowerSync requires a valid session token to connect to the Supabase backend, so we'll need to set up some basic authentication.
 
-### Add Supabase Config Variables to Your App Config
+### Add Supabase Config Variables to `BaseConfig`
 
 First add your Supabase config to your app's configuration. In ignite apps, config is kept in `app/config/config.base.ts`.
 
@@ -218,14 +221,19 @@ You'll need:
 // update the interface to include the new properties
 export interface ConfigBaseProps {
   // Existing config properties
+
+  // success-line
   supabaseUrl: string
+  // success-line
   supabaseAnonKey: string
 }
 
 // Add the new properties to the config object
 const BaseConfig: ConfigBaseProps = {
   // Existing config values
+  // success-line
   supabaseUrl: '<<YOUR_SUPABASE_URL>>',
+  // success-line
   supabaseAnonKey: '<<YOUR_SUPABASE_ANON_KEY>>',
 }
 ```
@@ -234,7 +242,7 @@ const BaseConfig: ConfigBaseProps = {
 If you have different configurations for different environments, you can add these properties to `config.dev.ts` and `config.prod.ts` as needed.
 :::
 
-### Initializing the Supabase Client
+### Initialize the Supabase Client
 
 Create `app/services/database/supabase.ts` and add the following code to initialize the Supabase client:
 
@@ -254,10 +262,10 @@ export const supabase = createClient(Config.supabaseUrl, Config.supabaseAnonKey,
 :::info Persisting the Supabase Session
 Unlike web environments where `localStorage` is available, in React Native Supabase requires us to provide a key-value store to hold the session token.
 
-We're using `AsyncStorage` here for simplicity, but for encrypted storage, supabase provides an example of encrypting the session token using `expo-secure-storage` in their [React Native Auth example](https://supabase.com/docs/guides/getting-started/tutorials/with-expo-react-native?auth-store=secure-store#initialize-a-react-native-app)
+We're using `AsyncStorage` here for simplicity, but if you need more security, Supabase provides an example of encrypting the session token using `expo-secure-storage` in their [React Native Auth example](https://supabase.com/docs/guides/getting-started/tutorials/with-expo-react-native?auth-store=secure-store#initialize-a-react-native-app)
 :::
 
-### Authenticating with Supabase
+### Authenticate with Supabase
 
 PowerSync needs a valid session token to connect to the Supabase, so we'll need a hook and context to manage our authentication state.
 
@@ -274,7 +282,7 @@ import React, { createContext, PropsWithChildren, useCallback, useContext, useMe
 type AuthContextType = {
   signIn: (email: string, password: string) => void
   signUp: (email: string, password: string) => void
-  signOut: () => void
+  signOut: () => Promise<void>
   signedIn: boolean
   loading: boolean
   error: string
@@ -299,17 +307,28 @@ export const AuthProvider = ({ children }: PropsWithChildren<any>) => {
     setLoading(true)
     setError("")
     setUser(null)
+    
     try {
-      const { data: { session, user }, error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) {
-        setSignedIn(false)
-        setError(error.message)
-      } else if (session && user) {
+      // get the session and user from supabase
+      const { 
+        data: {session, user}, 
+        error 
+      } = await supabase.auth.signInWithPassword({ email, password })
+      
+      // if we have a session and user, sign them in
+      if (session && user) {
         setSignedIn(true)
         setUser(user)
+      // otherwise sign them out and set an error
+      } else {
+        throw new Error(error?.message);
+        setSignedIn(false)
+        setUser(null)
       }
     } catch (error: any) {
       setError(error?.message ?? "Unknown error")
+      setSignedIn(false)
+      setUser(null)
     } finally {
       setLoading(false)
     }
@@ -376,11 +395,15 @@ export const useAuth = () => {
 
 ```
 
-:::tip
+:::info
 For more information on setting up authentication with Supabase (including setting up for OAuth providers like Github, Google and Facebook), refer to the [Supabase Auth documentation](https://supabase.com/docs/guides/auth).
 :::
 
-### Providing Auth State to Your Application
+:::tip
+If authentication starts acting up, try refreshing your app from the Debug menu. Auth state is managed at the app level and that can cause issues with hot reloading. 
+:::
+
+### Provide Auth State to Your Application
 
 Wrap your app with the `AuthProvider` to provide the authentication state to your app:
 
@@ -407,9 +430,9 @@ function App(props: AppProps) {
 
 ```
 
-### Create a Sign-In Screen
+### Create `AuthScreen` for signing in /  registering
 
-First use the Ignite CLI to generate a new screen for signing in:
+Use the Ignite CLI to generate a new screen for signing in:
 
 ```shell
 npx ignite-cli generate screen Auth
@@ -459,7 +482,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ navigation }) => {
 
   return (
     <Screen style={ $container } safeAreaEdges={ ["top"] }>
-      <Text preset={"subheading"}>PowerSync + Supabase</Text>
+      <Text preset={ "subheading" }>PowerSync + Supabase</Text>
       <Text preset={ "heading" }>Sign in or Create Account</Text>
       <TextField
         inputWrapperStyle={ $inputWrapper }
@@ -548,11 +571,7 @@ const $button: ViewStyle = {
 }
 ```
 
-### Update the Welcome Screen
-
-We don't need any of the content on the Welcome screen, so for now lets clear it out and replace it with a simple screen to confirm that sign in is working.
-
-#### Create a SignOut Button
+### Create the `SignOutButton` component
 
 First use the ignite CLI to generate a new screen for signing out:
 
@@ -588,8 +607,8 @@ export const SignOutButton = observer(function SignOutButton(props: SignOutButto
 
   const { signOut } = useAuth()
 
-  const handleSignOut = () => {
-    signOut()
+  const handleSignOut = async () => {
+    await signOut()
   }
 
   return (
@@ -604,7 +623,7 @@ const $container: ViewStyle = {
 }
 ```
 
-#### Add it to the welcome screen
+### Add `SignOutButton` to `WelcomeScreen`
 
 Right now we just want to confirm that our authentication is working, so lets clear out the Welcome screen and add the `SignOutButton` to it.
 
@@ -640,7 +659,7 @@ const $container: ViewStyle = {
 }
 ```
 
-### Update the App Navigator
+### Update the `AppNavigator`
 
 We don't want to allow users to navigate to the Welcome screen if they are not signed in.
 
@@ -739,7 +758,7 @@ const BaseConfig: ConfigBaseProps = {
 }
 ```
 
-### Defining Your Schema
+### Define Your Schema
 
 First we need to define the schema for our database and TypeScript types in `app/services/database/schema.ts`.
 
@@ -831,7 +850,7 @@ PowerSync can generate a Javascript version of your schema for you.
 This will generate a schema definition in javascript that will give you a good starting point for building the rest of your schema.
 :::
 
-### Implementing the SupabaseConnector
+### Implement the SupabaseConnector
 
 To tell PowerSync how to connect to the database we'll create a `SupabaseConnector`, which implements the `PowerSyncBackendConnector` interface with methods for fetching credentials and uploading data.
 
@@ -843,8 +862,7 @@ communicate with PowerSync for data synchronization.
 The interface is straightforward and only requires two methods:
 
 ```ts
-// from @journeyapps/powersync-sdk-common
-// see: https://github.com/powersync-ja/powersync-js/blob/main/packages/powersync-sdk-common/src/client/connection/PowerSyncBackendConnector.ts
+// from @journeyapps/powersync-sdk-common 
 export interface PowerSyncBackendConnector {
   /** Allows the PowerSync client to retrieve an authentication token from your backend
    * which is used to authenticate against the PowerSync service.
@@ -869,7 +887,7 @@ export interface PowerSyncBackendConnector {
 }
 ```
 
-#### SupabaseConnector
+#### Implement SupabaseConnector
 
 In `app/services/database/supabase.ts`, we'll add the two methods, and then export an object that implements the `PowerSyncBackendConnector` interface.
 
@@ -913,7 +931,7 @@ async function fetchCredentials(): Promise<PowerSyncCredentials | null> {
 }
 
 
-// Response codes indicating unrecoverable errors.
+// Regexes for response codes indicating unrecoverable errors.
 const FATAL_RESPONSE_CODES = [
   /^22...$/, // Data Exception
   /^23...$/, // Integrity Constraint Violation
@@ -983,34 +1001,37 @@ export const supabaseConnector: PowerSyncBackendConnector = {
 }
 ```
 
-### Creating the DatabaseContext
+### Create the DatabaseContext
 
 We need a single point of connection to the PowerSync instance that we can interact with throughout the app.
 
 To achieve this we create a `Database` singleton and provide a stable reference to that instance through our `DatabaseContext`.
 
-:::note
-The `DatabaseProvider` component wraps its children in both the `DatabaseContext.Provider` that we create, and also the `PowerSyncContext.Provider` provided by the PowerSync SDK.
+We'll check if the user is signed in or not before we initialize the database, as we need a valid session token to connect to the backend.
 
-This is necessary because the hooks from the PowerSync SDK require the `PowerSyncContext` to be present in the component tree, while the DatabaseContext gives us access to the powersync instance.
+:::note
+The `DatabaseProvider` component wraps its children in both the `DatabaseContext.Provider`, and also the `PowerSyncContext.Provider` provided by the PowerSync SDK.
+
+This is necessary because the hooks from the PowerSync SDK require the `PowerSyncContext` to be present in the component tree, but we'll still need the DatabaseContext to get access to the powersync instance directly.
 :::
 
 ```tsx
 // app/services/database/database.tsx
 import { SupabaseClient } from "@supabase/supabase-js"
+import { useAuth } from "./use-auth"
 import React, { PropsWithChildren, useEffect } from "react"
 import {
   AbstractPowerSyncDatabase,
   PowerSyncContext,
-  RNQSPowerSyncDatabaseOpenFactory
-} from '@journeyapps/powersync-sdk-react-native'
+  RNQSPowerSyncDatabaseOpenFactory,
+} from "@journeyapps/powersync-sdk-react-native"
 import { supabase, supabaseConnector } from "./supabase" // Adjust the path as needed
-import { AppSchema } from './schema' // Adjust the path as needed
+import { AppSchema } from "./schema" // Adjust the path as needed
 
 export class Database {
   // We expose the PowerSync and Supabase instances for easy access elsewhere in the app
   powersync: AbstractPowerSyncDatabase
-  supabase: SupabaseClient
+  supabase: SupabaseClient = supabase
 
   /**
    * Initialize the Database class with a new PowerSync instance
@@ -1018,57 +1039,100 @@ export class Database {
   constructor() {
     const factory = new RNQSPowerSyncDatabaseOpenFactory({
       schema: AppSchema,
-      dbFilename: 'sqlite.db',
+      dbFilename: "sqlite.db",
     })
     this.powersync = factory.getInstance()
-    this.supabase = supabase
   }
 
   /**
    * Initialize the PowerSync instance and connect it to the Supabase backend.
    * This will call `fetchCredentials` on the Supabase connector to get the session token.
-   * So if your database requires authentication, the user will need to be signed in before this is called.
+   * So if your database requires authentication, the user will need to be signed in before this is
+   * called.
    */
   async init() {
     await this.powersync.init()
-    // Connect the PowerSync instance to the Supabase backend through the connector
     await this.powersync.connect(supabaseConnector)
+  }
+
+  async disconnect() {
+    await this.powersync.disconnectAndClear()
   }
 }
 
-// A singleton of the Database class
 const database = new Database()
 
 // A context to provide our singleton to the rest of the app
 const DatabaseContext = React.createContext<Database | null>(null)
 
-// A hook to access the database instance via the context
 export const useDatabase = () => {
   const context: Database | null = React.useContext(DatabaseContext)
   if (!context) {
     throw new Error("useDatabase must be used within a DatabaseProvider")
   }
+
   return context
 }
 
-// Finally, a provider component that initializes the database and provides it to the app
+// Finally, we create a provider component that initializes the database and provides it to the app
 export function DatabaseProvider<T>({ children }: PropsWithChildren<T>) {
+  const { user } = useAuth()
   useEffect(() => {
-    // You'll likely want to handle errors here, but for simplicity we're just logging them
-    database.init().catch(console.error)
-  }, [])
-
+    if (user) {
+      database.init().catch(console.error)
+    }
+  }, [database, user])
   return (
     <DatabaseContext.Provider value={ database }>
-      {/* The `PowerSyncContext.Provider` is provided by the PowerSync SDK and is required 
-      for the PowerSync hooks (i.e. `useWatchedPowerSyncQuery` and `usePowerSyncQuery`) 
-      to work, so we need to provide it as well as our own context provider. */ }
       <PowerSyncContext.Provider value={ database.powersync }>
         { children }
       </PowerSyncContext.Provider>
     </DatabaseContext.Provider>
   )
 }
+```
+
+### Wrap the app in the DatabaseProvider
+
+Now that we have our `DatabaseProvider` set up, we can wrap our app in it to provide the database instance to the rest of the app.
+
+Remember that the DatabaseProvider needs access to the users authentication state, so it should be wrapped in the `AuthProvider` we created earlier.
+
+```tsx
+// app/app.tsx
+
+
+//... other imports
+// success-line
+// Import the provder
+// success-line
+import { DatabaseProvider } from "app/services/database/database"
+
+// ...
+
+function App(props: AppProps) {
+  // ...
+  return (
+    <AuthProvider>
+      // success-line
+      {/* Add the Database Provider inside the AuthProvider */ }
+      // success-line
+      <DatabaseProvider>
+        <SafeAreaProvider initialMetrics={ initialWindowMetrics }>
+          // ...
+        </SafeAreaProvider>
+        // success-line
+      </DatabaseProvider>
+    </AuthProvider>
+  )
+}
+
+export default App
+
+const $container: ViewStyle = {
+  flex: 1,
+}
+
 ```
 
 ## Managing Lists of Todos
@@ -1129,26 +1193,7 @@ const deleteList = useCallback(async (id: string) => {
 }, [powersync])
 ```
 
-#### Generating unique IDs with `expo-crypto`
-
-Because PowerSync data is local-first, we can't rely on the database to generate auto-incrementing unique ids for us.
-
-When we're offline, the server won't know how many items we've creating, or how many other devices are creating items.
-
-So in this situation, the app needs to be responsible for generating unique ids for items locally.
-
-We'll use the `randomUUID()` method from `expo-crypto` for this. It generates UUIDs using cryptographically secure
-random values. This provides extra security and ensures that the generated UUIDs are unique.
-
-```shell
-npx expo add expo-crypto
-```
-
-:::note
-`expo-crypto` contains native modules, so you'll need to rebuild your app after installing it
-:::
-
-#### Disconnecting PowerSync when we Sign Out
+#### Disconnect PowerSync when we Sign Out
 
 When we sign out, we should disconnect the PowerSync instance from the backend to prevent any further data synchronization,
 and wipe the local database to ensure that no data is left behind.
@@ -1173,7 +1218,7 @@ export const SignOutButton = observer(function SignOutButton(props: SignOutButto
   const handleSignOut = async () => {  // make this async
     // success-line
     await powersync.disconnectAndClear()
-    signOut()
+    await signOut()
   }
 
   return (
@@ -1184,6 +1229,27 @@ export const SignOutButton = observer(function SignOutButton(props: SignOutButto
 })
 
 ```
+
+#### install `expo-crypto` to generate UUIDs
+
+Because PowerSync data is local-first, we can't rely on the database to generate auto-incrementing unique ids for us.
+
+When we're offline, the server won't know how many items we've creating, or how many other devices are creating items.
+
+So in this situation, the app needs to be responsible for generating unique ids for items locally.
+
+We'll use the `randomUUID()` method from `expo-crypto` for this. It generates UUIDs using cryptographically secure
+random values. This provides extra security and ensures that the generated UUIDs are unique.
+
+Install `expo-crypto` by running this command in your terminal:
+
+```shell
+npx expo add expo-crypto
+```
+
+:::note
+`expo-crypto` contains native modules, so you'll need to rebuild your app after installing it
+:::
 
 #### Implementing the `useLists` Hook
 
@@ -1243,7 +1309,7 @@ export const useLists = () => {
 
 ```
 
-### Creating the components
+### Create the Lists and AddLists Components
 
 We're going to need several components to view and manage our todo lists:
 
@@ -1262,15 +1328,14 @@ npx ignite-cli generate component AddList
 npx ignite-cli generate component Lists
 ```
 
-### Adding the components and database provider to the Welcome Screen
+### Add Lists to the Welcome Screen
 
-Lets add the `Lists` component to the `WelcomeScreen` and wrap them in the `DatabaseProvider`.
+Add the `Lists` component to the `WelcomeScreen`
 
 ```tsx
 // app/screens/WelcomeScreen.tsx
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { Lists, SignOutButton } from "app/components"
-import { DatabaseProvider } from "app/services/database/database"
 import { observer } from "mobx-react-lite"
 import React, { FC } from "react"
 import { ViewStyle } from "react-native"
@@ -1283,12 +1348,10 @@ interface WelcomeScreenProps
 
 export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen() {
   return (
-    <DatabaseProvider>
-      <SafeAreaView style={ $container }>
-        <Lists/>
-        <SignOutButton/>
-      </SafeAreaView>
-    </DatabaseProvider>
+    <SafeAreaView style={ $container }>
+      <Lists/>
+      <SignOutButton/>
+    </SafeAreaView>
   )
 })
 
@@ -1301,11 +1364,12 @@ const $container: ViewStyle = {
   flexDirection: "column",
 }
 
+
 ```
 
-### Displaying and Deleting Todo Lists in `Lists`
+### Display Todo Lists in `Lists`
 
-Now we can use our `useLists` hook in `app/components/Lists.tsx` to display a list of our todo lists -- we don't have any yet, but we'll add them soon!
+Now we can use our `useLists` hook in `app/components/Lists.tsx` to display a list of our todo lists -- we don't have any in our database yet, but we'll add some soon!
 
 ```tsx
 // app/components/Lists.tsx
@@ -1318,25 +1382,24 @@ import { FlatList, TextStyle, View, ViewStyle } from "react-native"
 import { colors, spacing } from "../theme"
 
 export function Lists() {
-
-  // We call the useLists hook to get the lists and deleteList function
+  
+  // use our hook to fetch the lists
   const { lists, deleteList } = useLists()
-
   const navigation = useNavigation<NavigationProp<AppStackParamList>>()
 
-  // Render a single list item in our FlatList
+  // This function tells FlatList how to render each item
   const renderItem = useCallback(({ item }: { item: ListItemRecord }) => {
     return (
       <ListItem
         textStyle={ $listItemText }
         onPress={ () => {
-          // For now we'll just log the list name when it's pressed
-          console.log("Pressed", item.name)
+          // Eventually  this si where we'll navigate to the todo, but for now we'll just log the list name
+          console.log('Pressed: ', item.name)
         } }
         text={ `${ item.name }` }
         RightComponent={
           <View style={ $deleteListIcon }>
-            {/* Let our users delete lists if they need to */ }
+            {/* Let users delete lists */}
             <Icon icon={ "x" } onPress={ () => deleteList(item.id) }/>
           </View>
         }
@@ -1348,18 +1411,19 @@ export function Lists() {
     <View style={ $container }>
       <Text preset={ "heading" }>Lists</Text>
       <View style={ $card }>
-        {/* We'll update this in our next step   */ }
         <AddList/>
       </View>
-      {/* List of Todo Lists */ }
       <View style={ [$list, $card] }>
         <Text preset={ "subheading" }>Your Lists</Text>
         <FlatList
           style={ $listContainer }
+          // pass in our lists
           data={ lists }
+          // pass in our renderItem function
           renderItem={ renderItem }
           keyExtractor={ (item) => item.id }
           ItemSeparatorComponent={ () => <View style={ $separator }/> }
+          // show a message if the list is empty
           ListEmptyComponent={ <Text style={ $emptyList }>No lists found</Text> }
         />
       </View>
@@ -1367,21 +1431,14 @@ export function Lists() {
   )
 }
 
-
-const $list: ViewStyle = {
-  flex: 1,
-  marginVertical: spacing.md,
-  backgroundColor: colors.palette.neutral200,
-  padding: spacing.md,
+// STYLES
+const $separator: ViewStyle = { height: 1, backgroundColor: colors.border }
+const $emptyList: TextStyle = {
+  textAlign: "center",
+  color: colors.textDim,
+  opacity: 0.5,
+  padding: spacing.lg,
 }
-
-const $container: ViewStyle = {
-  flex: 1,
-  display: "flex",
-  flexGrow: 1,
-  padding: spacing.md,
-}
-
 const $card: ViewStyle = {
   shadowColor: colors.palette.neutral800,
   shadowOffset: { width: 0, height: 1 },
@@ -1389,7 +1446,6 @@ const $card: ViewStyle = {
   shadowOpacity: 0.35,
   borderRadius: 8,
 }
-
 const $listContainer: ViewStyle = {
   backgroundColor: colors.palette.neutral100,
   paddingHorizontal: spacing.md,
@@ -1397,24 +1453,22 @@ const $listContainer: ViewStyle = {
   borderColor: colors.border,
   borderWidth: 1,
 }
-
-const $separator: ViewStyle = {
-  height: 1,
-  backgroundColor: colors.border
+const $list: ViewStyle = {
+  flex: 1,
+  marginVertical: spacing.md,
+  backgroundColor: colors.palette.neutral200,
+  padding: spacing.md,
 }
-
-const $emptyList: TextStyle = {
-  textAlign: "center",
-  color: colors.textDim,
-  opacity: 0.5,
-  padding: spacing.lg,
+const $container: ViewStyle = {
+  flex: 1,
+  display: "flex",
+  flexGrow: 1,
+  padding: spacing.md,
 }
-
 const $listItemText: TextStyle = {
   height: 44,
   width: 44,
 }
-
 const $deleteListIcon: ViewStyle = {
   display: "flex",
   justifyContent: "center",
@@ -1424,7 +1478,7 @@ const $deleteListIcon: ViewStyle = {
 }
 ```
 
-### Creating Todo Lists in `AddList`
+### Create Todo Lists with `AddList`
 
 Open `app/components/AddList.tsx` and update the `AddList` component to display a simple form to add a new list.
 
@@ -1435,35 +1489,45 @@ import { useLists } from "app/services/database/use-lists"
 import { colors, spacing } from "app/theme"
 import { observer } from "mobx-react-lite"
 import React from "react"
-import { TextStyle, View, ViewStyle } from "react-native"
+import { Keyboard, TextStyle, View, ViewStyle } from "react-native"
 
-
-// Display a form to add a new list 
-export const AddList = observer(function AddList(props: never) {
+/**
+ * Display a form to add a new list
+ */
+export const AddList = observer(function AddList() {
   const [newListName, setNewListName] = React.useState("")
   const [error, setError] = React.useState<string | null>(null)
 
-  // Here we call the useLists hook to get the createList function
+  // we use the function from  our hook to create a new list
   const { createList } = useLists()
 
-  // Then creating a list is as simple as calling the createList function with the name of the list.
-  // We'll also handle any errors that occur when creating the list, because we're good developers like that.
   const handleAddList = React.useCallback(async () => {
-    if (!newListName) { return }
+    if (!newListName) {
+      Keyboard.dismiss()
+      return
+    }
     try {
       await createList(newListName)
       setNewListName("")
     } catch (e: any) {
       setError(`Failed to create list: ${ e?.message ?? "unknown error" }`)
+    } finally {
+      Keyboard.dismiss()
     }
   }, [createList, newListName])
 
   return (
     <View style={ $container }>
-      <Text preset={ "subheading" }>Add a list</Text>
+      <Text preset={ "subheading" }>Add a List</Text>
       <View style={ $form }>
-        <TextField placeholder="Enter a list name" containerStyle={ $textField } inputWrapperStyle={ $textInput }
-                   onChangeText={ setNewListName } value={ newListName }/>
+        <TextField
+          placeholder="Enter a list name"
+          containerStyle={ $textField }
+          inputWrapperStyle={ $textInput }
+          onChangeText={ setNewListName }
+          value={ newListName }
+          onSubmitEditing={ handleAddList }
+        />
         <Button text="Add List" style={ $button } onPress={ handleAddList }/>
       </View>
       { error && <Text style={ $error }>{ error }</Text> }
@@ -1471,22 +1535,25 @@ export const AddList = observer(function AddList(props: never) {
   )
 })
 
-// Styles
 const $container: ViewStyle = {
   padding: spacing.md,
   backgroundColor: colors.palette.neutral200,
 }
+
 const $form: ViewStyle = {
   display: "flex",
   flexDirection: "row",
   alignItems: "center",
 }
+
 const $textField: ViewStyle = {
   flex: 1,
 }
+
 const $textInput: ViewStyle = {
   backgroundColor: colors.palette.neutral100,
 }
+
 const $button: ViewStyle = {
   marginHorizontal: spacing.xs,
   padding: 0,
@@ -1494,10 +1561,13 @@ const $button: ViewStyle = {
   paddingVertical: 0,
   minHeight: 44,
 }
+
 const $error: TextStyle = {
   color: colors.error,
   marginTop: spacing.sm,
 }
+
+
 ```
 
 ### Checking In
@@ -1506,385 +1576,121 @@ By this point you should be able to:
 
 * add new Todo lists,
 * see a list of all the Todo lists,
-* delete Todo lists from the database.
+* delete Todo lists from the list of lists.
 
 :::note
 This is a good time to commit your changes!
 :::
 
-## Sharing the Database Context with Multiple Screens
+## Viewing and Editing Individual TodoLists
 
-To view and edit todos inside a list, we'll want to create a new Screen.
+To view and edit todos inside a list, we'll want to create a new Screen, and add it to the navigator so we can navigate to it.
 
-That new screen and `WelcomeScreen`  will both need to be inside a `DatabaseProvder` to have access to the database.
+### Create the TodoList Screen
 
-We could just wrap every screen in the `DatabaseProvider`, the way we did with `WelcomeScreen`, but this would be repetitive and then we'd
-need to check every component to see which parts of the app have access to the database.
-
-What we really want is for authenticated routes to have access to the database, and unauthenticated routes to not have access.
-
-To accomplish this we'll:
-
-1. Create our new `TodoListScreen`
-2. Create two navigators, one for signed in routes that has access to the database and one for unauthenticated routes that doesn't
-3. Move our screens into the appropriate navigator
-4. Use the users authentication status to determine which navigator to render.
-
-### Creating the TodoList Screen
-
-First lets create a new screen called `TodoList` that will eventually display the todos for a list. For now we'll just leave it as-is.
+First lets create a new screen called `TodoList`.
 
 ```shell
 npx ignite-cli generate screen TodoList
 ```
 
-### Creating the `AuthNavigator` and `SignedInNavigator`
+This will eventually display the todos for a list. For now we'll just leave it as-is.
 
-First lets create the `AuthNavigator` that will contain the `AuthScreen` and `PowerSyncScreen`.
+### Update the AppNavigator to include the `TodoList` screen
 
-```shell
-npx ignite-cli generate navigator Auth
-```
+Open `app/navigators/SignedInNavigator.tsx` and add the `TodoList` screen to the navigator.
 
-And then the `SignedInNavigator` that will contain the `WelcomeScreen` and `TodoListScreen`.
+1. Find the `TodoList` screen in `AppStackParamList`, and update it to take a `listId` parameter.
 
-```shell
-npx ignite-cli generate navigator SignedIn
-```
-
-### Move the screens from `AppNavigator` into the appropriate navigators
-
-Moving screens between navigators is a multi-step process. We need to:
-
-1. move the `AuthScreen` into the `AuthNavigator`
-2. move the `WelcomeScreen` and `TodoListScreen` into the `SignedInNavigator`, and wrap the navigator in the `DatabaseProvider`
-3. update the `AppNavigator` to conditionally render the `AuthNavigator` or `SignedInNavigator` based on the user's authentication status.
-4. Update existing calls to `navigation.navigate()` to use the new routes
-
-For each screen we we move, we will need to:
-
-* update the types of the screen's props to reference the new navigator
-* move the `ParamsList` property that defines the screen's parameters to the new navigator
-* move the `Stack.Screen` component that points to the screen to the new navigator
-
-#### Moving  `AuthScreen` to the `AuthNavigator`
-
-* Move the params and screen from  `AppStackParamList` to `AuthStackParamList`
-
-  First remove them from `AppNavigator`:
     ```tsx
     // app/navigators/AppNavigator.tsx
-    
-    //...
     export type AppStackParamList = {
       Welcome: undefined
-      // highlight-next-line
-      Auth: undefined              // <---REMOVE THIS LINE
-      TodoList: { listId: string } 
+      Auth: undefined
+      // success-line
+      TodoList: { listId: string }  // add this line
       // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
     }
-    //...
-    const AppStack = observer(function AppStack() {
-        //...
-        return (
-            <Stack.Navigator
-                screenOptions={{headerShown: false, navigationBarColor: colors.background}}
-            >
-                // ...
-                // highlight-next-line
-                <Stack.Screen name="Auth" component={Screens.AuthScreen}/> {/* <<--- REMOVE THIS LINE*/}  
-                //...
-            </Stack.Navigator>
-        )
-    })
-    ```
-  and then add them to the `AuthNavigator`, replacing the screen put there by the template, and create a utility type to allow for type checking when navigating between navigators:
-
-    ```tsx
-    // app/navigators/AuthNavigator.tsx
-    
-    import React from "react"
-    import {createNativeStackNavigator} from "@react-navigation/native-stack"
-    import {
-        AuthScreen,
-    } from "app/screens"
-    
-    export type AuthNavigatorParamList = {
-        // success-line
-        Auth: undefined
-    }
-    
-    // This type is used combines the AuthNavigatorParamList with the AppStackParamList
-    // so we can have type checking when navigating between navigators
-    // success-line 
-     export type AuthNavigatorScreenProps<T extends keyof AuthNavigatorParamList> = CompositeScreenProps<
-       // success-line
-       NativeStackScreenProps<AuthNavigatorParamList, T>,
-        // success-line 
-       NativeStackScreenProps<AppStackParamList>
-        // success-line
-     >
-
-    const Stack = createNativeStackNavigator<AuthNavigatorParamList>()
-    export const AuthNavigator = () => {
-        return (
-            <Stack.Navigator>
-                // success-line
-                <Stack.Screen name="Auth" component={AuthScreen}/>
-            </Stack.Navigator>
-        )
-    }
     ```
 
-* Update the Props Type of `AuthScreen`
-   ```tsx
-   interface AuthScreenProps extends AuthNavigatorScreenProps<"Auth"> {}
-   ```
+2. Wrap `WelcomeScreen` in a fragment (`<>...</>`) and move the `TodoList` screen inside the fragment.
 
-#### Moving `WelcomeScreen` and `TodoListScreen` to the `SignedInNavigator`** and wrapping it in the `DatabaseProvider`
-
-* Move the params and screens into the `SignedInNavigatorParamList`
-
-  First remove them from `AppNavigator`:
-    ```tsx
-    // app/navigators/AppNavigator.tsx
-    
-    //...
-    export type AppStackParamList = {
-      // highlight-next-line
-      Welcome: undefined           // <---REMOVE THIS LINE
-      // highlight-next-line              
-      TodoList: undefined // <---REMOVE THIS LINE
-      // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
-    }
-    //...
-    const AppStack = observer(function AppStack() {
-        //...
-        return (
-            <Stack.Navigator
-                screenOptions={{headerShown: false, navigationBarColor: colors.background}}
-            >
-                // highlight-next-line
-                // Remove the Welcome and TodoList screens
-                // highlight-next-line
-                // leaving an empty Stack.Navigator
-                // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
-            </Stack.Navigator>
-        )
-    })
-    ```
-
-  Then add them to the `SignedInNavigator`, replacing the screen put there by the template, and wrap the whole navigator in the `DatabaseProvider`:
+   Because the fragment is wrapped in the conditional, it will only be rendered if the user is signed in.
 
     ```tsx
-    // app/navigators/SignedInNavigator.tsx
-    import * as Screens from "app/screens"
-    import {colors} from "app/theme"
-    import React from "react"
-    import {createNativeStackNavigator} from "@react-navigation/native-stack"
-    // success-line
-    import {DatabaseProvider} from "app/services/database/database"
-  
-    export type SignedInNavigatorParamList = {
-      // success-line
-      Welcome: undefined
-      // success-line
-      TodoList: undefined
-    }
-  
-    // This type is used combines the SignedInNavigatorParamList with the AppStackParamList
-    // so we can have type checking when navigating between navigators 
-  // success-line
-    export type SignedInNavigatorScreenProps<T extends keyof SignedInNavigatorParamList> = CompositeScreenProps<
-  // success-line
-      NativeStackScreenProps<SignedInNavigatorParamList, T>,
-  // success-line 
-      NativeStackScreenProps<AppStackParamList>
-  // success-line
-    >
-  
-    const Stack = createNativeStackNavigator<SignedInNavigatorParamList>()
-  
-    export const SignedInNavigator = () => {
-      return (
-          // success-line
-          <DatabaseProvider>
-            <Stack.Navigator screenOptions={{headerShown: false, navigationBarColor: colors.background}}>
-              // success-line
-              <Stack.Screen name="Welcome" component={Screens.WelcomeScreen}/>
-              // success-line
-              <Stack.Screen name="TodoList" component={Screens.TodoListScreen}/>
-            </Stack.Navigator>
-          // success-line
-          </DatabaseProvider>
-      )
-    }
-    ```
-
-* Remove the `DatabaseProvider` from the `WelcomeScreen`
-
-    ```tsx
-    // app/screens/WelcomeScreen.tsx
-    
     // ...
     
-    // Remove the import
-    //highlight-next-line
-    import { DatabaseProvider } from "app/services/database/database"   // <-- REMOVE
-    
-    export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen() {
+    const AppStack = observer(function AppStack() {
+      // Fetch the user from the auth context
+      const { signedIn } = useAuth()
       return (
-        //highlight-next-line
-        <DatabaseProvider>   {/* <-- Remove this */}
-          <SafeAreaView style={ $container }>
-            <Lists/>
-            <SignOutButton/>
-          </SafeAreaView>
-         //highlight-next-line
-        </DatabaseProvider>{/* <-- and this */}
+        <Stack.Navigator screenOptions={ { headerShown: false, navigationBarColor: colors.background } }>
+          <Stack.Screen name={ "Auth" } component={ AuthScreen }/>
+          // success-line
+          { signedIn ? (
+            // success-line
+            <>
+              // success-line
+              <Stack.Screen name="Welcome" component={ Screens.WelcomeScreen }/>
+              // success-line
+              <Stack.Screen name="TodoList" component={ Screens.TodoListScreen }/>
+              // success-line
+            </>
+            // success-line
+          ) : null }
+          {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */ }
+        </Stack.Navigator>
       )
     })
+ 
+    export const AppNavigator = observer(function AppNavigator(props: NavigationProps) {
+      // ...   
+    })
+    ```
+
+3. Open `app/screens/TodoListScreen.tsx` and update the screen to receive the `listId` parameter -- for now we'll just display it to make sure we got it.
+
+    ```tsx
+    // app/screens/TodoListScreen.tsx
+    // ...
+    
+    export const TodoListScreen: FC<TodoListScreenProps> = function TodoListScreen({
+      navigation,
+      // success-line
+      // We get the listId from the route params
+      // success-line
+      route: { params: {listId} }
+    }) {
+      return (
+        <Screen style={ $root } preset="scroll" safeAreaEdges={ ["top"] }>
+          // success-line
+          <Pressable onPress={ () => navigation.goBack() }>
+            <Icon icon={ "back" } size={ 50 }/>
+          </Pressable>
+          // success-line
+          <Text preset={ "heading" } text={ listId }/>
+        </Screen>
+      )
+    }
+    
+    const $root: ViewStyle = {
+      flex: 1,
+    }
+    
+    const $backButton: ViewStyle = {
+      height: 44,
+    }
     
     
     ```
 
-* Update the Props Type of `WelcomeScreen` and `TodoListScreen` to use the new prop type
-   ```tsx
-  // app/screens/WelcomeScreen.tsx
-   interface WelcomeScreenProps extends SignedInNavigatorScreenProps<"Welcome"> {}
-   ```
-
-   ```tsx
-  // app/screens/TodoListScreen.tsx
-   interface TodoListScreenProps extends SignedInNavigatorScreenProps<"TodoList"> {}
-   ```
-
-#### Update the `AppNavigator` to only show signed in routes if the user is signed in.
-
-    Next we'll change AppNavigator so it conditionally renders the `AuthNavigator` or `SignedInNavigator` based on the user's authentication status.
-
-   ```tsx
-    // app/navigators/AppNavigator.tsx
-
-// ... other imports
-// success-line
-import { DarkTheme, DefaultTheme, NavigationContainer, NavigatorScreenParams } from "@react-navigation/native"
-// success-line
-import { createNativeStackNavigator, NativeStackScreenProps } from "@react-navigation/native-stack"
-// success-line
-import { AuthNavigator, AuthNavigatorParamList } from "app/navigators/AuthNavigator"
-// success-line
-import { SignedInNavigator, SignedInNavigatorParamList } from "app/navigators/SignedInNavigator"
-
-//..
-
-export type AppStackParamList = {
-  // success-line
-  AuthNavigator: NavigatorScreenParams<AuthNavigatorParamList>
-  // success-line
-  SignedInNavigator: NavigatorScreenParams<SignedInNavigatorParamList>
-  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
-}
-
-// ...
-
-const AppStack = observer(function AppStack() {
-  // Fetch the user from the auth context
-  const { signedIn } = useAuth()
-  return (
-    <Stack.Navigator
-      screenOptions={ { headerShown: false, navigationBarColor: colors.background } }
-    >
-      // success-line
-      <Stack.Screen name={ "AuthNavigator" } component={ AuthNavigator }/>
-      {/* Only render the SignedIn Navigator if we are signed in */ }
-      // success-line
-      { signedIn ? <Stack.Screen name={ "SignedInNavigator" } component={ SignedInNavigator }/> : null }
-      {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */ }
-    </Stack.Navigator>
-  )
-})
-
-//...
-   ```
-
-**4. Update the existing `navigation.navigate()` calls to use the new routes**
-Because we've moved the screens into navigators, we've changed the paths that react-navigation uses to find them.
-
-   ```tsx
-   // app/screens/AuthScreen.tsx
-useEffect(() => {
-  if (user) {
-    // success-line
-    navigation.navigate("SignedInNavigator", { screen: "Welcome" })
-  }
-}, [user])
-   ```
-
-## Fetching and Managing Todos
-
-Now that our authenticated navigation is in place, we can navigate to the `TodoList` screen and display the todos for a list.
-
-#### Make the `TodoList` screen take the `listId` as a parameter
-
-To do this we'll pass the `listId` as a parameter when we navigate to the screen.
-
-Open `app/navigators/SignedInNavigator.tsx` and update the `SignedInNavigatorParamList` type:
-
-We want to pass only the minimum required data in our params for performance reasons, so we'll only pass the `listId`.
-
-```tsx
-// app/navigators/SignedInNavigator.tsx
-export type SignedInNavigatorParamList = {
-  Welcome: undefined
-  // success-line
-  TodoList: { listId: string }
-}
-```
-
-We'll update the `TodoListScreen` to accept the `listId` as a parameter -- for now we'll just display it to make sure we got it.
-
-```tsx
-// app/screens/TodoListScreen.tsx
-// ...
-
-export const TodoListScreen: FC<TodoListScreenProps> = function TodoListScreen({
-  navigation,
-
-  // success-line
-  route: { params }
-}) {
-  // We get the listId from the route params
-  // success-line
-  const listId = params.listId
-
-  return (
-    <Screen style={ $root } preset="scroll" safeAreaEdges={ ["top"] }>
-      // success-line
-      <Pressable onPress={ () => navigation.goBack() }><Icon icon={ "back" } size={ 50 }></Icon></Pressable>
-      // success-line
-      <Text preset={ "heading" } text={ listId }/>
-    </Screen>
-  )
-}
-
-const $root: ViewStyle = {
-  flex: 1,
-}
-
-const $backButton: ViewStyle = {
-  height: 44,
-}
-
-
-```
-
-#### Navigating to the `TodoList` screen and passing the parameter
+### Update `Lists` so touching a list navigated to `TodoListScreen` and passes the `listId` param 
 
 Now we can update the `Lists` component to navigate to the `TodoList` screen when a list is pressed.
 
 ```tsx
 // app/components/Lists.tsx
+
 // ... other imports
 import { NavigationProp, useNavigation } from "@react-navigation/native"
 import { AppStackParamList } from "app/navigators"
@@ -1896,14 +1702,13 @@ export function Lists() {
   // success-line
   const navigation = useNavigation<NavigationProp<AppStackParamList>>()
 
-
   const renderItem = useCallback(({ item }: { item: ListItemRecord }) => {
     return <ListItem
       // ... other props
       // Navigate to the TodoList screen, passing the `listId` as a parameter
       onPress={ () => {
         // success-line
-        navigation.navigate("SignedInNavigator", { screen: "TodoList", params: { listId: item.id } })
+        navigation.navigate("TodoList", { listId: item.id })
       } }
     />
   }, [])
@@ -1914,7 +1719,7 @@ export function Lists() {
 }
 ```
 
-### Creating a `useList` hook to view and manage Todos for a List
+### Implement a `useList` hook to view and manage Todos for a List
 
 Now that we can navigate to the `TodoList` screen, we can start fetching and managing the todos for a list.
 
@@ -2019,7 +1824,7 @@ export function useList(listId: string) {
 
 ```
 
-### Displaying the Todos on our `TodoListScreen`
+### Implement `TodoListScreen` to Display and Edit Todos in a List
 
 Now in our `TodoList` screen we can use the `useList` hook to fetch the todos for a list:
 
@@ -2087,7 +1892,9 @@ export const TodoListScreen: FC<TodoListScreenProps> = function TodoListScreen({
   return (
     <Screen style={ $root } preset="fixed">
       <SafeAreaView style={ $header } edges={ ["top"] }>
-        <Pressable onPress={ () => navigation.goBack() }><Icon icon={ "back" } size={ 44 }></Icon></Pressable>
+        <Pressable onPress={ () => navigation.goBack() }>
+          <Icon icon={ "back" } size={ 44 }/>
+        </Pressable>
         <Text style={ $listName } preset={ "heading" } text={ list?.name }/>
       </SafeAreaView>
       <View style={ $addTodoContainer }>
