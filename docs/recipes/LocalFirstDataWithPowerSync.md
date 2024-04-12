@@ -57,14 +57,18 @@ Check the [PowerSync documentation](https://docs.powersync.com/) for more inform
 
 To complete this recipe you'll need:
 
-1. **An Ignite app using `Expo CNG` or `Bare` workflow**
+1. **An Ignite app using `Expo CNG` workflow**
 
-   PowerSync requires native modules, so you cannot use Expo Go
-
-   You can create a new Ignite app using the Ignite CLI::
+   Create a new Ignite app using the Ignite CLI::
    ```bash
    npx ignite-cli@latest new PowerSyncIgnite --remove-demo --workflow=cng --yes
    ```
+   :::info
+   PowerSync requires native modules, so we need to use [Expo with Continuous Native Generation (CNG)](https://docs.expo.dev/workflow/continuous-native-generation/).
+   
+   If you are adding PowerSync to an app that currently uses Expo GO, you'll need to update your project to use either CNG or a [development build](https://docs.expo.dev/develop/development-builds/introduction/).
+   :::
+
 
 2. **A Supabase Project set up and connected to a PowerSync**
 
@@ -207,7 +211,7 @@ If you are not using Expo CNG, you can manually edit `/android/gradle.properties
 
 ## Authenticating with Supabase
 
-PowerSync requires a valid session token to connect to the Supabase backend, so we'll need to set up some basic authentication.
+PowerSync needs a valid session token to authenticate your Supabase users. In the next section we'll implement a basic authentication flow that will let us sign in and out of Supabase.
 
 ### Add Supabase Config Variables to `BaseConfig`
 
@@ -269,13 +273,11 @@ Unlike web environments where `localStorage` is available, in React Native Supab
 We're using `AsyncStorage` here for simplicity, but if you need more security, Supabase provides an example of encrypting the session token using `expo-secure-storage` in their [React Native Auth example](https://supabase.com/docs/guides/getting-started/tutorials/with-expo-react-native?auth-store=secure-store#initialize-a-react-native-app)
 :::
 
-### Authenticate with Supabase
+### Create `useAuth` Hook and `AuthContext`
 
-PowerSync needs a valid session token to connect to the Supabase, so we'll need a hook and context to manage our authentication state.
+Next we'll create a hook and context to manage the authentication state and make it accessible to our components. 
 
-This is a basic example that uses a context to manage the authentication state and a hook to access that state in your components.
-
-Add the following code to `app/services/database/use-auth.tsx`:
+Create `app/services/database/use-auth.tsx` and add the following code:
 
 ```tsx
 // app/services/database/use-auth.tsx
@@ -727,9 +729,9 @@ Now that we have a valid Supabase session, we can connect to PowerSync and start
 
 We'll need to:
 
-1. Adding our PowerSync URL to the app configuration
-2. Defining our data schema
-3. Connecting to the database
+1. Add our PowerSync URL to the app configuration
+2. Define our data schema, and
+3. Connect to the database
 
 ### Add your PowerSync URL to your app config
 
@@ -776,6 +778,10 @@ From the [PowerSync docs](https://docs.powersync.com/usage/installation/client-s
 It's good to also define TypeScript types for your records, as this will help with type checking and autocompletion in your code.
 
 Keeping them with the schema will help keep your code organized and easy to maintain.
+
+:::tip
+PowerSync supports [Kysely](https://kysely.dev/), which enables automatically generation of typescript types for your database. See [this announcement](https://releases.powersync.com/announcements/kysely-orm-integration-for-react-native-and-js-web-beta-release) for more information on how to set that up for your project.
+::: 
 
 #### The Schema for our Todo App
 
