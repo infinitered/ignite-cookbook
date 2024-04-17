@@ -15,7 +15,7 @@ If you get a bunch of warnings in the git command output about vulnerabilities, 
 
 Usage:
 
-```console
+```bash
 yarn audit
 ```
 
@@ -25,7 +25,7 @@ yarn audit
 
 Usage:
 
-```console
+```bash
 yarn outdated
 ```
 
@@ -35,7 +35,7 @@ yarn outdated
 
 Usage:
 
-```console
+```bash
 yarn upgrade-interactive
 yarn upgrade-interactive --latest
 ```

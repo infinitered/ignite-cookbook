@@ -68,7 +68,7 @@ We're using a few different actions and assertions in this flow. Let's take a lo
 `assertVisible` - This assertion checks to see if the text we pass in is visible on the screen.
 `tapOn` - This action taps on the specified element. In our case, we're tapping on the text we pass in.
 
-To run our flow, first make sure the app is loaded on the simulator (or running via metro through `yarn ios`, for example). Then execute maestro from its test directory with the following command:
+To run our flow, first make sure the app is loaded on the simulator or running via metro through `yarn ios`. If you're using Expo Go, you'll need to do a development build in [Expo CNG](./SwitchBetweenExpoGoCNG.md) first. Then execute maestro from its test directory with the following command:
 
 ```bash
 cd .maestro

@@ -16,11 +16,9 @@ This guide will teach you how to set up over-the-air (OTA) updates with Expo and
 
 ## Appetizer
 
-Follow the [Pristine Expo Project](./PristineExpoProject.md) recipe first to make sure you're starting with an Expo only project.
-
 You'll also need `eas-cli` globally installed and and an [Expo account](https://expo.dev/signup) if you don't already have one.
 
-```console
+```bash
 npm install -g eas-cli
 ```
 

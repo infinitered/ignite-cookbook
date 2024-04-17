@@ -23,6 +23,10 @@
   background-color: var(--ifm-color-background)
 }
 
+.DocSearch {
+  /* default color is cool and looks odd with the warm theme */
+  --docsearch-searchbox-background: var(--ifm-color-background);
+}
 
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -60,9 +64,8 @@
   height: 96px;
   padding: 12px 48px;
   box-shadow: none;
-
-
 }
+
 .navbar__logo {
   height: 48px;
 }
@@ -121,7 +124,7 @@
   border-width: 1px;
   border-radius: 0;
   top: -10px;
-  right: -50px !important;
+  right: -48px !important;
   padding: 88px 48px 48px;
   box-shadow: none;
   flex-direction: row;
@@ -153,50 +156,19 @@
   line-height: 24px;
 }
 
-.aa-DetachedSearchButton {
-  min-width: 150px !important;
-}
-
-.aa-DetachedContainer--modal {
-  top: 15% !important;
-}
-
-.aa-Form {
-  border-color: #41476E !important;
-}
-
-.aa-DetachedSearchButton {
-  border-color: #41476E !important;
-}
-
-
-.aa-Form:focus-within {
-  border-color: #41476E !important;
-  box-shadow: 0 0 0 2px rgba(65, 71, 110, 0.3), inset 0 0 0 2px rgba(65, 71, 110, 0.3) !important;
-}
-
-.aa-DetachedSearchButton:focus {
-  border-color: #41476E !important;
-  box-shadow: 0 0 0 2px rgba(65, 71, 110, 0.3), inset 0 0 0 2px rgba(65, 71, 110, 0.3) !important;
+/* DocSearch: Algolia search customization */
+.DocSearch-Button{
+  /* match border radius of hero button for now, but this is arbitrary */
+  border-radius: 4px !important;
 }
 
 [class*='row footer__links'] {
-  margin-left: 25rem;
-  width: 75%;
-  margin-top: 220px;
-  margin-bottom: 220px;
-}
-
-
-.footer__bottom {
-  margin-left: -25rem;
-  margin-top: -435px;
-  margin-bottom: 10rem;
-  width: 75%;
+  margin-bottom: 5rem;
 }
 
 [class*='footer footer--dark'] {
   background-color: #292C46;
+  padding-top: 5rem;
 }
 
 .footer__link-item {
@@ -250,6 +222,23 @@
 
 [class*='theme-doc-footer-tags-row'] .col b {
   display: none;
+}
+
+[class*='footer__copyright'] {
+  flex: 1;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.ir-footer-link {
+  margin-left: 0.4rem;
+
+}
+
+.ir-mark {
+  margin-left: 0.5rem;
 }
 
 [class*='theme-doc-markdown'] {
@@ -314,73 +303,3 @@
 [class*='clean-btn theme-back-to-top-button backToTopButton_node_modules-@docusaurus-theme-classic-lib-theme-BackToTopButton-styles-module backToTopButtonShow_node_modules-@docusaurus-theme-classic-lib-theme-BackToTopButton-styles-module']::after {
   background-color: #191015 !important;
 }
-
-
-
-
-@media screen and (max-width: 1300px) {
-  .footer__bottom {
-    margin-top: -445px;
-    margin-left: -15rem;
-  }
-}
-
-@media screen and (max-width: 996px) {
-
-  .footer__bottom {
-    margin-top: 0px;
-    margin-left: 0rem;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 0 !important;
-  }
-
-  [class*='row footer__links'] {
-    margin-left: 0;
-    width: 100%;
-    margin-top: 50px;
-    padding-left: 15rem;
-    margin-bottom: 50px;
-    display: flex;
-    justify-content: center;
-  }
-}
-
-@media screen and (max-width: 750px) {
-  .footer__bottom {
-    display: block;
-    margin-top: 0;
-    margin-left: 0;
-    margin-bottom: 0 !important;
-  }
-}
-
-@media screen and (max-width: 500px) {
-  [class*='row footer__links'] {
-    margin-left: 0;
-    width: 100%;
-    margin-top: 50px;
-    padding-left: 2rem;
-  }
-  .theme-doc-markdown {
-    padding: 2rem;
-  }
-  .theme-doc-footer {
-    padding: 2rem;
-  }
-
-  [class*='col col--6'] {
-    width: 90% !important;
-    padding: 0 !important;
-  }
-  
-  [class*='searchBox'] {
-    display: none !important;
-  }
-}
-
-#__docusaurus {
-  overflow: hidden;
-}
-
