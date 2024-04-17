@@ -23,14 +23,14 @@ In this example, we will be implementing FontAwesome 6. This tutorial is written
 
 If you haven't already, spin up a new Ignite application:
 
-```terminal
+```sh
 npx ignite-cli@next new PizzaApp --remove-demo --workflow=prebuild --yes
 cd PizzaApp
 ```
 
 Next, let's install the necessary dependencies. You can see complete installation instructions for `@expo/vector-icons` [here](https://docs.expo.dev/guides/icons/).
 
-```terminal
+```sh
 npx expo install @expo/vector-icons
 ```
 
@@ -79,7 +79,7 @@ First, open `app/components/Icon.tsx` and then import `createMultiStyleIconSet` 
 
 Next, we will re-define our `iconRegistry` and create our own custom `Icon` component. We have our handy function to do it below.
 
-```typescript
+```ts
 const iconFonts = {
   thin: require('../../assets/fonts/fa-thin-100.ttf'),
   light: require('../../assets/fonts/fa-light-300.ttf'),
@@ -149,7 +149,7 @@ const createFontAwesomeStyle = (style: IconStyle, fontWeight: string) => {
 
 Now, it's time to create our custom `VectorIcon` component. Take note of the available styles for our icon. These are specific to FontAwesome, and we're defining the theme here.
 
-```typescript
+```ts
 export type IconStyle = keyof typeof iconFonts
 interface VectorIconProps extends TextProps, Partial<Record<IconStyle, boolean>> {
   name?: IconTypes
@@ -238,7 +238,6 @@ const {
 +        regular={regular}
 +        solid={solid}
 +        brand={brand}
-+
        />
      </Wrapper>
   )
@@ -250,7 +249,7 @@ const {
 Here's the modified `app/components/Icon.tsx`.
 
 
-```typescript
+```ts
 import * as React from "react"
 import { ComponentType } from "react"
 import {
@@ -421,15 +420,15 @@ export const VectorIcon: ComponentType<VectorIconProps> & {
   // Default font style
   { defaultStyle: 'regular' },
 )
-````
+```
 
 That's all there is to it! We only added the optional styles prop so if you're using Ignite, things should work.
 
-```typescript
+```ts
 <Icon solid icon="community" color={colors.tint} size={24} />
 ```
 
-```typescript
+```ts
 <Icon light icon="check" color={colors.tint} size={24} />
 ```
 
@@ -442,6 +441,6 @@ It is recommend to put the config under `app/themes/icons.ts` to keep things org
 ### How about `@expo/vector-icons` built-in icons?
 
 Instead of our custom `VectorIcon`, we just need to use the default exported vector icon like so.
-```typescript
+```ts
 import VectorIcon from '@expo/vector-icons/Ionicons'
 ```
