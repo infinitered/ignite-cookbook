@@ -75,6 +75,7 @@ First, open `app/components/Icon.tsx` and then import `createMultiStyleIconSet` 
 // success-line-start
 +  TextProps,
 +  Platform,
+// success-line-end
  } from "react-native"
 +import { createMultiStyleIconSet } from '@expo/vector-icons'
 ```
