@@ -200,6 +200,7 @@ Let's modify our `app/app.tsx ` to pre-load our fonts during hyrdration. You can
 Now that we have our `VectorIcon`, it's time to use it within our `Icon` component! Let's modify our `IconProps` to include the styles extension, making it easier to set when using the component.
 
 ```patch
+// error-line
 -interface IconProps extends TouchableOpacityProps
 +interface IconProps extends TouchableOpacityProps, Partial<Record<IconStyle, boolean>>
 ```
