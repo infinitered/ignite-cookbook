@@ -64,6 +64,7 @@ First, open `app/components/Icon.tsx` and then import `createMultiStyleIconSet` 
 
 ```patch
  import {
+// error-line
 -  Image,
    ImageStyle,
    StyleProp,
