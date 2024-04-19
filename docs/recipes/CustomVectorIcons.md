@@ -24,7 +24,7 @@ In this example, we will be implementing FontAwesome 6. This tutorial is written
 If you haven't already, spin up a new Ignite application:
 
 ```sh
-npx ignite-cli@next new PizzaApp --remove-demo --workflow=prebuild --yes
+npx ignite-cli@next new PizzaApp --remove-demo --workflow=cng --yes
 cd PizzaApp
 ```
 
