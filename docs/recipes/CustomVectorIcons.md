@@ -211,6 +211,7 @@ const {
    icon,
    color,
    size,
+// error-line
 -    style: $imageStyleOverride,
 +    style: $iconStyleOverride,
    containerStyle: $containerStyleOverride,
