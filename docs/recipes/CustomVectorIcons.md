@@ -235,6 +235,8 @@ const {
 -          $imageStyleOverride,
 -        ]}
 -        source={iconRegistry[icon]}
+// error-line-end
+// success-line-start
 +      <VectorIcon
 +        name={icon}
 +        size={size}
