@@ -209,6 +209,7 @@ const {
 -    style: $imageStyleOverride,
 +    style: $iconStyleOverride,
    containerStyle: $containerStyleOverride,
+// success-line-start
 +    thin,
 +    light,
 +    regular,
