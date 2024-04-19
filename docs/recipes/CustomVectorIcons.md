@@ -202,6 +202,7 @@ Now that we have our `VectorIcon`, it's time to use it within our `Icon` compone
 ```patch
 // error-line
 -interface IconProps extends TouchableOpacityProps
+// success-line
 +interface IconProps extends TouchableOpacityProps, Partial<Record<IconStyle, boolean>>
 ```
 
