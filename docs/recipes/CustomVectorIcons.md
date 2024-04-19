@@ -72,6 +72,7 @@ First, open `app/components/Icon.tsx` and then import `createMultiStyleIconSet` 
    TouchableOpacityProps,
    View,
    ViewStyle,
+// success-line-start
 +  TextProps,
 +  Platform,
  } from "react-native"
