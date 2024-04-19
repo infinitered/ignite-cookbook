@@ -192,6 +192,7 @@ Let's modify our `app/app.tsx ` to pre-load our fonts during hyrdration. You can
 +    ...customFontsToLoad,
 +    ...VectorIcon.font,
 +  })
+// success-line-end
 ```
 
 
