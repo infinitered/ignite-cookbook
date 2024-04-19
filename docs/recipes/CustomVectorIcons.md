@@ -187,6 +187,7 @@ Let's modify our `app/app.tsx ` to pre-load our fonts during hyrdration. You can
 
 // error-line
 -  const [areFontsLoaded] = useFonts(customFontsToLoad)
+// success-line-start
 +  const [areFontsLoaded] = useFonts({
 +    ...customFontsToLoad,
 +    ...VectorIcon.font,
