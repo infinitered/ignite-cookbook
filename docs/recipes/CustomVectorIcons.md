@@ -214,6 +214,7 @@ const {
 +    regular,
 +    solid,
 +    brand,
+// success-line-end
    ...WrapperProps
  } = props
 ```
