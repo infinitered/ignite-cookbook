@@ -247,6 +247,7 @@ const {
 +        regular={regular}
 +        solid={solid}
 +        brand={brand}
+// success-line-end
        />
      </Wrapper>
   )
