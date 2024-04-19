@@ -213,6 +213,7 @@ const {
    size,
 // error-line
 -    style: $imageStyleOverride,
+// success-line
 +    style: $iconStyleOverride,
    containerStyle: $containerStyleOverride,
 // success-line-start
