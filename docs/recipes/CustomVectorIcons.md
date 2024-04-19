@@ -17,7 +17,7 @@ publish_date: 2023-11-10
 
 As trendy as it is these days, not every app has to use emojis for all icons. Perhaps you want to incorporate a popular set through an icon font, such as FontAwesome, Glyphicons, or Ionicons, or maybe even use your own custom icons.
 
-In this example, we will be implementing FontAwesome 6. This tutorial is written for the Ignite v9 Prebuild workflow; however, it generally still applies to a DIY or even a bare React Native project
+In this example, we will be implementing FontAwesome 6. This tutorial is written for the Ignite v9 CNG workflow; however, it generally still applies to a DIY or even a bare React Native project
 
 ## Installation
 
