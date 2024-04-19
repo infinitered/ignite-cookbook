@@ -226,6 +226,7 @@ const {
       {...WrapperProps}
       style={$containerStyleOverride}
     >
+// error-line-start
 -      <Image
 -        style={[
 -          $imageStyle,
