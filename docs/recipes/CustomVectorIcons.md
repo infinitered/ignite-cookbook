@@ -182,6 +182,7 @@ export const VectorIcon: ComponentType<VectorIconProps> & {
 Let's modify our `app/app.tsx ` to pre-load our fonts during hyrdration. You can learn more [here](https://docs.expo.dev/guides/icons/#custom-icon-fonts)
 
 ```patch
+// success-line
 +import { VectorIcon } from "./components"
 
 -  const [areFontsLoaded] = useFonts(customFontsToLoad)
