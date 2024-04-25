@@ -139,7 +139,8 @@ import React, { FC } from "react";
 import { View, ViewStyle } from "react-native";
 import { Button, Text } from "app/components";
 import { AppStackScreenProps } from "../navigators";
-import { colors } from "../theme";
+import type { ThemedStyle } from "app/theme";
+import { useAppTheme } from "app/utils/useAppTheme";
 import { useSafeAreaInsetsStyle } from "../utils/useSafeAreaInsetsStyle";
 import { useAppDispatch, useAppSelector } from "app/store/store";
 import { decrement, increment } from "app/store/counterSlice";
@@ -147,11 +148,12 @@ import { decrement, increment } from "app/store/counterSlice";
 interface WelcomeScreenProps extends AppStackScreenProps<"Welcome"> {}
 
 export const WelcomeScreen: FC<WelcomeScreenProps> = () => {
+  const { themed } = useAppTheme();
   const $containerInsets = useSafeAreaInsetsStyle(["top", "bottom"]);
   const count = useAppSelector((state) => state.counter.value);
   const dispatch = useAppDispatch();
   return (
-    <View style={[$containerInsets, $container]}>
+    <View style={themed([$containerInsets, $container])}>
       <Button text="Increment" onPress={() => dispatch(increment())} />
       <Button text="Decrement" onPress={() => dispatch(decrement())} />
       <Text text={`Count: ${count}`} />
@@ -159,10 +161,10 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = () => {
   );
 };
 
-const $container: ViewStyle = {
+const $container: ThemedStyle<ViewStyle> = ({ colors }) => ({
   flex: 1,
   backgroundColor: colors.background,
-};
+});
 ```
 
 You're now using Redux!
