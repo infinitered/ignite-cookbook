@@ -1,6 +1,6 @@
 ---
 title: Authentication with Supabase
-description: Here we use Supabase as our backend to show out to implement authentication with your React Native project.
+description: How to implement authentication with your React Native project using Supabase as the backend.
 tags:
   - authentication
   - supabase
