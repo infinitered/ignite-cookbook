@@ -314,7 +314,9 @@ bunx expo install @supabase/supabase-js react-native-mmkv
 Since `react-native-mmkv` has a host platform dependency, we'll need to also rebuild the application with:
 
 ```bash title="Terminal"
-bun run ios
+bun ios
+# or
+bun android
 ```
 
 ## Session Storage
@@ -412,6 +414,14 @@ We'll also need to add Expo SecureStorage to our [plugin configuration](https://
     ],
   }
 }
+```
+
+Rebuild the application with:
+
+```bash title="Terminal"
+bun ios
+# or
+bun android
 ```
 
 Now, we can use Expo SecureStore and Expo Crypto to securely generate and store our encrypting key for MMKV:
