@@ -238,7 +238,7 @@ We're going to take the project URL and the anonymous public key that we gathere
 
 ```bash title="/.env"
 EXPO_PUBLIC_SUPABASE_URL="https://<your-project-id>.supabase.co"
-EXPO_PUBLIC_ANON_KEY="<your-anon-public-key>"
+EXPO_PUBLIC_SUPABASE_ANON_KEY="<your-anon-public-key>"
 ```
 
 :::tip
@@ -289,7 +289,7 @@ const BaseConfig: ConfigBaseProps = {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL!,
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  supabaseAnonKey: process.env.EXPO_PUBLIC_ANON_KEY!,
+  supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY!,
   // success-line-end
 }
 
