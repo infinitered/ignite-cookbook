@@ -16,7 +16,7 @@ last_update:
 
 Many applications require an external service to authenticate the user. Setting up authentication for your application can feel daunting. Where do I start? What data do I need from my users? What service(s) should or could I use? What are the signup, signin, and other user flows that I'll need?
 
-This recipe is going to use [Supabase](https://supabase.com) as the backend. We'll build some primatives that will allow you to customize the authentication to your needs or existing backend service as well.
+This recipe is going to use [Supabase](https://supabase.com) as the backend. We'll build some primitives that will allow you to customize the authentication to your needs or existing backend service as well.
 
 ## Requirements
 
