@@ -27,7 +27,7 @@ Since we're using [Supabase](https://supabase.com) for our backend, it is assume
 We're going to start from a freshly ignited project without any of the boilerplate screens:
 
 ```bash title="Terminal"
-bunx ignite-cli@latest new AuthRecipe --workflow=cng --remove-demo --git --install-deps
+bunx ignite-cli@latest new AuthRecipe --workflow=cng --remove-demo --git --install-deps --packager=bun
 ```
 
 :::info
@@ -45,11 +45,15 @@ bun run ios
 
 ## Build Initial Sign In Screen
 
-We'll use the ignite generators to generate the Sign In screen:
+We'll use the [ignite generators](https://docs.infinite.red/ignite-cli/concept/Generators/) to generate the Sign In screen:
 
 ```bash title="Terminal"
 bunx ignite-cli@latest generate screen SignIn
 ```
+
+:::info
+`bunx` auto-installs and runs packages from npm. It's Bun's equivalent of `npx` or `yarn dlx`.
+:::
 
 Replace the contents of that screen with the following:
 
@@ -402,18 +406,27 @@ bunx expo install expo-secure-store expo-crypto
 
 We'll also need to add Expo SecureStorage to our [plugin configuration](https://docs.expo.dev/versions/latest/sdk/securestore/#configuration-in-appjsonappconfigjs):
 
-```typescript title="/app.config.ts"
-  return {
-    ...config,
-    plugins: [
-      ...existingPlugins,
+```typescript title="/app.json"
+...
+    "plugins": [
+      "expo-localization",
       // success-line
       "expo-secure-store",
-      require("./plugins/withSplashScreen").withSplashScreen,
-      require("./plugins/withFlipperDisabled").withFlipperDisabled,
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "newArchEnabled": false,
+            "flipper": false
+          },
+          "android": {
+            "newArchEnabled": false
+          }
+        }
+      ],
+      "expo-font"
     ],
-  }
-}
+...
 ```
 
 Rebuild the application with:
