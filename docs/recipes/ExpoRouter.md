@@ -1451,7 +1451,7 @@ const logo = require("assets/images/logo.png");
 interface DemoListItem {
   item: { name: string; useCases: string[] };
   sectionIndex: number;
-  handleScroll?: (sectionIndex: number, itemIndex?: number) => void;
+  onPress?: () => void;
 }
 
 const slugify = (str: string) =>
@@ -1462,12 +1462,12 @@ const slugify = (str: string) =>
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-const ShowroomListItem: FC<DemoListItem> = ({ item, sectionIndex }) => {
+const ShowroomListItem: FC<DemoListItem> = ({ item, sectionIndex, onPress }) => {
   const sectionSlug = item.name.toLowerCase();
 
   return (
     <View>
-      <Link href={{ pathname: "/showroom", params: { sectionSlug } }}>
+      <Link href={{ pathname: "/showroom", params: { sectionSlug } }} onPress={onPress}>
         <Text preset="bold">{item.name}</Text>
       </Link>
       {item.useCases.map((u) => {
@@ -1476,6 +1476,7 @@ const ShowroomListItem: FC<DemoListItem> = ({ item, sectionIndex }) => {
           <Link
             key={`section${sectionIndex}-${u}`}
             href={{ pathname: "/showroom", params: { sectionSlug, itemSlug } }}
+            onPress={onPress}
             asChild
           >
             <ListItem text={u} rightIcon={isRTL ? "caretLeft" : "caretRight"} />
@@ -1529,7 +1530,6 @@ export default function DemoShowroomScreen() {
       itemIndex,
       sectionIndex,
     });
-    toggleDrawer();
   };
 
   const scrollToIndexFailed = (info: {
@@ -1578,7 +1578,7 @@ export default function DemoShowroomScreen() {
             }))}
             keyExtractor={(item) => item.name}
             renderItem={({ item, index: sectionIndex }) => (
-              <ShowroomListItem {...{ item, sectionIndex, handleScroll }} />
+              <ShowroomListItem {...{ item, sectionIndex, onPress }} />
             )}
           />
         </View>

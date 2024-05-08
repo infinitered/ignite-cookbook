@@ -88,11 +88,11 @@ First install the PowerSync SDK and its dependencies.
 
 ```shell
 npx expo install \
-  @journeyapps/powersync-sdk-react-native \
+  @powersync/react-native \
   @journeyapps/react-native-quick-sqlite 
 ```
 
-PowerSync [requires polyfills](https://github.com/powersync-ja/powersync-js/blob/main/packages/powersync-sdk-react-native/README.md#install-polyfills)
+PowerSync [requires polyfills](https://github.com/powersync-ja/powersync-js/blob/main/packages/react-native/README.md#install-polyfills)
 to replace browser-specific APIs with their React Native equivalents. These are listed as peer-dependencies so we need
 to install them ourselves.
 
@@ -796,7 +796,7 @@ import {
   IndexedColumn,
   Schema,
   Table
-} from '@journeyapps/powersync-sdk-react-native'
+} from '@powersync/react-native'
 
 export const TODO_TABLE = 'todos'
 export const LIST_TABLE = 'lists'
@@ -866,7 +866,7 @@ To tell PowerSync how to connect to the database we'll create a `SupabaseConnect
 
 #### PowerSyncBackendConnector Interface
 
-The Supabase Connector needs to implement the `PowerSyncBackendConnector` interface ([declared here](https://github.com/powersync-ja/powersync-js/blob/main/packages/powersync-sdk-common/src/client/connection/PowerSyncBackendConnector.ts)), ensuring it can seamlessly
+The Supabase Connector needs to implement the `PowerSyncBackendConnector` interface ([declared here](https://github.com/powersync-ja/powersync-js/blob/main/packages/common/src/client/connection/PowerSyncBackendConnector.ts)), ensuring it can seamlessly
 communicate with PowerSync for data synchronization.
 
 The interface is straightforward and only requires two methods:
@@ -907,7 +907,7 @@ import {
   AbstractPowerSyncDatabase,
   CrudEntry, PowerSyncBackendConnector,
   UpdateType, PowerSyncCredentials
-} from "@journeyapps/powersync-sdk-react-native"
+} from "@powersync/react-native"
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { createClient } from "@supabase/supabase-js"
 import Config from "../../config"
@@ -1034,7 +1034,7 @@ import {
   AbstractPowerSyncDatabase,
   PowerSyncContext,
   RNQSPowerSyncDatabaseOpenFactory,
-} from "@journeyapps/powersync-sdk-react-native"
+} from "@powersync/react-native"
 import { supabase, supabaseConnector } from "./supabase" // Adjust the path as needed
 import { AppSchema } from "./schema" // Adjust the path as needed
 
@@ -1267,7 +1267,7 @@ Now that we can generate random IDs, we can implement the `useLists` hook:
 
 ```ts
 // app/services/database/use-lists.ts
-import { usePowerSyncWatchedQuery } from "@journeyapps/powersync-sdk-react-native"
+import { usePowerSyncWatchedQuery } from "@powersync/react-native"
 import { useAuth } from "app/services/database/use-auth"
 import { useCallback } from "react"
 import { useDatabase } from "app/services/database/database"
@@ -1744,7 +1744,7 @@ We are using `usePowerSyncQuery` to fetch the list and `usePowerSyncWatchedQuery
 ```tsx
 // app/services/database/use-list.ts
 
-import { usePowerSyncQuery, usePowerSyncWatchedQuery } from "@journeyapps/powersync-sdk-react-native"
+import { usePowerSyncQuery, usePowerSyncWatchedQuery } from "@powersync/react-native"
 import { useDatabase } from "app/services/database/database"
 import { LIST_TABLE, ListRecord, TODO_TABLE, TodoRecord } from "app/services/database/schema"
 import { useAuth } from "app/services/database/use-auth"
