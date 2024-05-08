@@ -17,7 +17,7 @@ publish_date: 2023-11-10
 
 As trendy as it is these days, not every app has to use emojis for all icons. Perhaps you want to incorporate a popular set through an icon font, such as FontAwesome, Glyphicons, or Ionicons, or maybe even use your own custom icons.
 
-In this example, we will be implementing FontAwesome 6. This tutorial is written for the Ignite v9 CNG workflow; however, it generally still applies to a DIY or even a bare React Native project
+In this example, we will be implementing **FontAwesome 6**. This tutorial is written for the Ignite v9 CNG workflow; however, it generally still applies to a DIY or even a bare React Native project
 
 ## Installation
 
@@ -33,6 +33,12 @@ Next, let's install the necessary dependencies. You can see complete installatio
 ```sh
 npx expo install @expo/vector-icons
 ```
+
+:::info
+The goal of this recipe is to utilize custom icon fonts such as **FontAwesome 6**, which you will need to download from elsewhere.
+
+For built-in icon fonts from `@expo/vector-icons`, you can skip the following setup and proceed directly to [modifying the Icon component section](#modify-the-icon-component).
+:::
 
 ## Font Assets
 
@@ -83,7 +89,7 @@ First, open `app/components/Icon.tsx` and then import `createMultiStyleIconSet` 
 
 Next, we will re-define our `iconRegistry` and create our own custom `Icon` component. We have our handy function to do it below.
 
-```ts
+```tsx
 const iconFonts = {
   thin: require('../../assets/fonts/fa-thin-100.ttf'),
   light: require('../../assets/fonts/fa-light-300.ttf'),
@@ -153,7 +159,7 @@ const createFontAwesomeStyle = (style: IconStyle, fontWeight: string) => {
 
 Now, it's time to create our custom `VectorIcon` component. Take note of the available styles for our icon. These are specific to FontAwesome, and we're defining the theme here.
 
-```ts
+```tsx
 export type IconStyle = keyof typeof iconFonts
 interface VectorIconProps extends TextProps, Partial<Record<IconStyle, boolean>> {
   name?: IconTypes
@@ -179,6 +185,7 @@ export const VectorIcon: ComponentType<VectorIconProps> & {
 ```
 
 ### Preloading our Fonts
+
 Let's modify our `app/app.tsx ` to pre-load our fonts during hyrdration. You can learn more [here](https://docs.expo.dev/guides/icons/#custom-icon-fonts)
 
 ```patch
@@ -196,8 +203,19 @@ Let's modify our `app/app.tsx ` to pre-load our fonts during hyrdration. You can
 ```
 
 
-## Icon Component
+## Modify the Icon Component
+
 Now that we have our `VectorIcon`, it's time to use it within our `Icon` component! Let's modify our `IconProps` to include the styles extension, making it easier to set when using the component.
+
+:::note
+If you only need to use a built-in icon from `@expo/vector-icons`, simply replace `VectorIcon` with the specific icon you need.
+
+```tsx
+import VectorIcon from "@expo/vector-icons/Ionicons"
+```
+
+Make a few adjustments to the props here and there, and you'll be all set!
+:::
 
 ```patch
 // error-line
@@ -267,7 +285,7 @@ const {
 Here's the modified `app/components/Icon.tsx`.
 
 
-```ts
+```tsx
 import * as React from "react"
 import { ComponentType } from "react"
 import {
@@ -394,7 +412,6 @@ export function Icon(props: IconProps) {
         regular={regular}
         solid={solid}
         brand={brand}
-
       />
     </Wrapper>
   )
@@ -442,23 +459,14 @@ export const VectorIcon: ComponentType<VectorIconProps> & {
 
 That's all there is to it! We only added the optional styles prop so if you're using Ignite, things should work.
 
-```ts
+```tsx
 <Icon solid icon="community" color={colors.tint} size={24} />
 ```
 
-```ts
+```tsx
 <Icon light icon="check" color={colors.tint} size={24} />
 ```
 
 
 ### Pro tip
 It is recommend to put the config under `app/themes/icons.ts` to keep things organized.
-
-## FAQ
-
-### How about `@expo/vector-icons` built-in icons?
-
-Instead of our custom `VectorIcon`, we just need to use the default exported vector icon like so.
-```ts
-import VectorIcon from '@expo/vector-icons/Ionicons'
-```
