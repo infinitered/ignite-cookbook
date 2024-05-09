@@ -268,7 +268,7 @@ function FavoriteNBATeamsScreen() {
         placeholder="e.g. Trail Blazers"
         value={["POR", "MEM", "NOP", "CHI", "CLE", "SAS", "MIL", "LAL", "PHX", "WAS"]}
         options={teams}
-        containerStyle={{ marginBottom: spacing.large }}
+        containerStyle={{ marginBottom: spacing.lg }}
       />
 
       <SelectField
@@ -277,7 +277,7 @@ function FavoriteNBATeamsScreen() {
         placeholder="e.g. Trail Blazers"
         value={["POR", "MEM", "NOP", "CHI", "CLE", "SAS", "MIL", "LAL", "PHX", "WAS"]}
         options={teams}
-        containerStyle={{ marginBottom: spacing.large }}
+        containerStyle={{ marginBottom: spacing.lg }}
         multiline
       />
 
@@ -287,7 +287,7 @@ function FavoriteNBATeamsScreen() {
         placeholder="e.g. Trail Blazers"
         value={["POR", "MEM", "NOP", "CHI", "CLE", "SAS", "MIL", "LAL", "PHX", "WAS"]}
         options={teams}
-        containerStyle={{ marginBottom: spacing.large }}
+        containerStyle={{ marginBottom: spacing.lg }}
         renderValue={(value) => `Selected ${value.length} Teams`}
       />
     </>
@@ -484,11 +484,11 @@ export const SelectField = forwardRef(function SelectField(
 
 // success-line-start
 const $bottomSheetFooter: ViewStyle = {
-  paddingHorizontal: spacing.large,
+  paddingHorizontal: spacing.lg,
 };
 
 const $listItem: ViewStyle = {
-  paddingHorizontal: spacing.large,
+  paddingHorizontal: spacing.lg,
 };
 // success-line-end
 ```
@@ -655,11 +655,11 @@ export const SelectField = forwardRef(function SelectField(
 });
 
 const $bottomSheetFooter: ViewStyle = {
-  paddingHorizontal: spacing.large,
+  paddingHorizontal: spacing.lg,
 };
 
 const $listItem: ViewStyle = {
-  paddingHorizontal: spacing.large,
+  paddingHorizontal: spacing.lg,
 };
 ```
 
@@ -688,12 +688,12 @@ function FavoriteNBATeamsScreen() {
       <SelectField
         label="NBA Team(s)"
         helper="Select your team(s)"
-        placeholder="e.g. Trail Blazers"
+        placeholder="e.g. Knicks"
         value={selectedTeam}
         onSelect={setSelectedTeam}
         options={teams}
         multiple={false}
-        containerStyle={{ marginBottom: spacing.large }}
+        containerStyle={{ marginBottom: spacing.lg }}
       />
 
       <SelectField
@@ -703,7 +703,7 @@ function FavoriteNBATeamsScreen() {
         value={selectedTeams}
         onSelect={setSelectedTeams}
         options={teams}
-        containerStyle={{ marginBottom: spacing.large }}
+        containerStyle={{ marginBottom: spacing.lg }}
         renderValue={(value) => `Selected ${value.length} Teams`}
       />
     </>
