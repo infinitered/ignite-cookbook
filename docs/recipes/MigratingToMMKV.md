@@ -28,6 +28,10 @@ cd PizzaApp
 
 Install the `react-native-mmkv` dependency into the project and run prebuild again to let Expo take care of the necessary adjustments to the native template.
 
+:::warning
+If you're working in the [New Architecture](https://reactnative.dev/docs/the-new-architecture/landing-page), you'll want to specifically install `react-native-mmkv@beta`, which at the time of this writing is major version 3 and up.
+:::
+
 ```bash
 yarn remove @react-native-async-storage/async-storage
 yarn add react-native-mmkv
