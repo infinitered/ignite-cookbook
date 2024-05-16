@@ -332,7 +332,7 @@ If you're already using Async Storage in your application, you can take advantag
 We need a place to store the user's session after they login. This will allow us to log them back in after they close the application or refresh their access token after it has expired. Supabase's client is already setup for Async Storage's API. (e.g. `getItem`, `setItem`, and `removeItem`) We're going to use `react-native-mmkv` as it is not only faster, but has some additional features that we can utilize.
 
 <details>
-  <summary>Example session storage implementation</summary>
+  <summary>Initial session storage implementation</summary>
 
 ```typescript title="/app/utils/storage/SessionStorage.ts"
 import { MMKV } from "react-native-mmkv"
@@ -463,6 +463,8 @@ const storage = new MMKV({
   // success-line
   encryptionKey: fetchOrGenerateEncryptionKey(),
 })
+
+...
 ```
 
 :::note
