@@ -1009,7 +1009,7 @@ export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScree
             // error-line
             <Button preset="reversed" onPress={onSignUp}>Sign Up</Button>
             // success-line-start
-            <Button preset="reversed" onPress={onSignIn}>
+            <Button preset="reversed" onPress={onSignUp}>
               {isSigningUp ? "Signing Up..." : "Sign Up"}
             </Button>
             // success-line-end
