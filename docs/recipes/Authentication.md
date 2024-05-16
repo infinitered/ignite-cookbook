@@ -1143,6 +1143,19 @@ export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScree
           {error && <Text style={$errorText}>{error}</Text>}
           <View>
 ...
+
+const $logo: ImageStyle = {
+  height: 88,
+  width: "100%",
+  marginBottom: spacing.xxl,
+}
+
+// success-line-start
+const $errorText: TextStyle = {
+  color: colors.error,
+}
+// success-line-end
+
 ```
 
 Now if there is an issue with our authentication request, the user will be one step closer to understanding why. But why would we send authentication requests that we **know** are going to fail? We shouldn't and we'll fix that next. We're going to add some simple form validation to validate the values of our text inputs. We not only want to make sure that both text inputs have values, but that they are also valid values. (e.g. an email address)
