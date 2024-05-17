@@ -259,6 +259,27 @@ Typically `.env` is not commited to version control so let's update our `.gitign
 Expo has great documentation on [using environment variables](https://docs.expo.dev/guides/environment-variables/) if you'd like to know more about how that works.
 :::
 
+:::warning
+If you're using EAS build to create builds in the cloud, you'll need to make sure the environment variables are available for the profile you want to use. Below the environment variables have been added for the `preview:device` profile:
+
+```json title="eas.json"
+...
+    "preview:device": {
+      "env": {
+        "EXPO_PUBLIC_SUPABASE_URL": "https://<your-project-id>.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "<your-anon-public-key>"
+      },
+      "extends": "preview",
+      "ios": {
+        "simulator": false
+      }
+    },
+    ...
+```
+
+There are multiple options for how to configure your environment variables depending on the sensitivity, profiles, and environments you have. [Read more about environment variables with EAS build.](https://docs.expo.dev/build-reference/variables/#setting-plaintext-environment-variables-in-easjson)
+:::
+
 This allows us to have different configurations for our development, staging, testing, and production environments. For our purposes, we're going to add these values to the base configuration as these props are required for every environment.
 
 ```typescript title="/app/config/config.base.ts"
