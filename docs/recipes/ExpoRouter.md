@@ -242,7 +242,9 @@ We're now ready to start setting up navigation for the app! If you're familiar w
 ```tsx
 // app/_layout.tsx
 import React from "react";
+import { ViewStyle } from "react-native"
 import { Slot, SplashScreen } from "expo-router";
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useInitialRootStore } from "src/models";
 
 SplashScreen.preventAutoHideAsync();
@@ -264,8 +266,14 @@ export default function Root() {
     return null;
   }
 
-  return <Slot />;
+  return (
+    <GestureHandlerRootView style={$root}>
+        <Slot />
+    </GestureHandlerRootView>
+  )
 }
+
+const $root: ViewStyle = { flex: 1 }
 ```
 
 Move `ErrorBoundary` out of `screens/ErrorScreen` and into `src/components/ErrorBoundary`:
