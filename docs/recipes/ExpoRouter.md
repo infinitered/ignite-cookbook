@@ -1585,7 +1585,7 @@ export default function DemoShowroomScreen() {
               useCases: d.data.map((u) => u.props.name as string),
             }))}
             keyExtractor={(item) => item.name}
-            renderItem={({ item, index: sectionIndex }) => (
+            renderItem={({ item, index: sectionIndex, onPress }) => (
               <ShowroomListItem {...{ item, sectionIndex, onPress }} />
             )}
           />
