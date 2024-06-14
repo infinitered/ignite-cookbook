@@ -85,6 +85,6 @@ It's totally fine to swizzle components, even "unsafe" ones, but take care to mi
 
 ## License
 
-This project is licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0) - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0) - see the [LICENSE](./LICENSE.md) file for details.
 
 By contributing to this project, you agree that your contributions will be licensed under the same Creative Commons license.
