@@ -35,3 +35,7 @@
 > The Ignite Cookbook isn’t just a random group of code snippets. It’s a curated collection of usable code samples that the Infinite Red team’s used in their own React Native projects. Having worked with some of the biggest clients in the tech industry, we know a thing or two about keeping our code to a high standard. You can code confidently!
 
 ### [Accelerate your development and dive into the Ignite Cookbook for React Native today!](https://ignitecookbook.com)
+
+---
+
+Contributions are welcome! Read the [Contributing Guide](./CONTRIBUTING.md) for more information.

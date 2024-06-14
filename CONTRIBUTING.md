@@ -82,3 +82,9 @@ export default ExampleCodeBlock = () => (
 To allow customization of pre-built theme components, Docusaurus has a feature called [swizzling](https://docusaurus.io/docs/swizzling), which either allows creating a wrapper around the existing component, or creating a copy of it that can be modified.
 
 It's totally fine to swizzle components, even "unsafe" ones, but take care to minimize changes so that it's easy to upgrade components to their latest versions later on.
+
+## License
+
+This project is licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0) - see the [LICENSE](LICENSE) file for details.
+
+By contributing to this project, you agree that your contributions will be licensed under the same Creative Commons license.
