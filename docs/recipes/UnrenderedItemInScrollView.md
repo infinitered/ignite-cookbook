@@ -17,7 +17,7 @@ The solution to this is implementing `onScrollToIndexFailed` with some sort of r
 
 This component basically tries over and over to scroll to the requested location until it gets it right and no longer calls `onScrollToIndexFailed`.
 
-```jsx
+```tsx
 import * as React from 'react';
 import { SectionList, SectionListProps, SectionListScrollParams } from 'react-native';
 
