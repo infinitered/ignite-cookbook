@@ -122,9 +122,7 @@ Let's update the TS alias and include paths over in `tsconfig.json`
 We also need to fix up a few imports to use `src/` instead of `app/`.
 Ignite's Demo App only contains a few files we need to update, but an existing app could contain more.
 
-**`package.json`**
-
-```json
+```json title="/package.json"
 // error-line-start
 "format": "prettier --write \"app/**/*.{js,jsx,json,md,ts,tsx}\"",
 "lint": "eslint App.tsx app test --fix --ext .js,.ts,.tsx && npm run format",
@@ -135,9 +133,7 @@ Ignite's Demo App only contains a few files we need to update, but an existing a
 // success-line-end
 ```
 
-**`src/devtools/ReactotronConfig.ts`**
-
-```ts
+```ts title="/src/devtools/ReactotronConfig.ts"
 // error-line-start
 import { clear } from "app/utils/storage";
 import { goBack, resetRoot, navigate } from "app/navigators/navigationUtilities";
@@ -148,18 +144,14 @@ import { goBack, resetRoot, navigate } from "src/navigators/navigationUtilities"
 // success-line-end
 ```
 
-**`src/components/ListView.ts`**
-
-```ts
+```ts title="/src/components/ListView.ts"
 // error-line
 import { isRTL } from "app/i18n";
 // success-line
 import { isRTL } from "src/i18n";
 ```
 
-**`src/components/Toggle.ts`**
-
-```ts
+```ts title="/src/components/Toggle.ts"
 // error-line
 import { isRTL } from "app/i18n";
 // success-line
@@ -170,9 +162,7 @@ import { isRTL } from "src/i18n";
 <details>
   <summary>(optional) Additional files to update</summary>
 
-**`test/i18n.test.ts`**
-
-```ts
+```ts title="/test/i18n.test.ts"
 // error-line
 import en from "../app/i18n/en";
 // success-line
@@ -180,9 +170,7 @@ import en from "../src/i18n/en";
 import { exec } from "child_process";
 ```
 
-**`ignite/templates/component/NAME.tsx.ejs`**
-
-```js
+```js title="/ignite/templates/component/NAME.tsx.ejs"
 ---
 patch:
   // error-line
@@ -205,9 +193,7 @@ import { Text } from "src/components/Text"
 // success-line-end
 ```
 
-**`ignite/templates/model/NAME.tsx.ejs`**
-
-```js
+```js title="/ignite/templates/model/NAME.tsx.ejs"
 ---
 patches:
 // error-line
@@ -239,8 +225,7 @@ patches:
 
 We're now ready to start setting up navigation for the app! If you're familiar with Ignite, `app.tsx` is where our root navigator lives, however, with `expo-router`, we'll use `src/app/_layout.tsx` for that. We'll add the providers here that any route would need within the app.
 
-```tsx
-// app/_layout.tsx
+```tsx title="/src/app/_layout.tsx"
 import React from "react";
 import { ViewStyle } from "react-native"
 import { Slot, SplashScreen } from "expo-router";
@@ -293,7 +278,7 @@ Create another `_layout.tsx` but this time inside of a new directory, `src/app/(
 
 In this layout is where we'll determine if the user is authenticated by checking our MST store. We'll also wait here while assets are loaded and then hide the splash screen when finished.
 
-```tsx
+```tsx title="/src/app/(app)/_layout.tsx"
 import React from "react";
 import { Redirect, SplashScreen, Stack } from "expo-router";
 import { observer } from "mobx-react-lite";
@@ -1697,7 +1682,7 @@ rm -rf src/navigators
 
 In doing so, we'll need to fix some `Reactotron` code for custom commands. We'll drop the `resetNavigation` one (logging out is really the same thing) and update the `navigateTo` and `goBack`. Open up `src/devtools/ReactotronConfig.ts` to edit these.
 
-```ts
+```ts title="/src/devtools/ReactotronConfig.ts"
 // error-line
 import { goBack, resetRoot, navigate } from "src/navigators/navigationUtilities";
 // success-line

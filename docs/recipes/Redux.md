@@ -42,9 +42,7 @@ yarn add react-redux
   - Export Typescript helpers for the rest of your app to stay type safe.
   - We'll use `app/store` directory for all our Redux reducers and store, but feel free to use any directory structure you like. Another popular option is to use [feature folders](https://redux.js.org/faq/code-structure).
 
-**`app/store/store.ts`**
-
-```typescript
+```typescript title="/app/store/store.ts"
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import counterReducer from "./counterSlice";
@@ -72,9 +70,7 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 - If you have an existing state tree with MobX-State-Tree, you'll need to convert your tree into a series of Redux reducers.
   - Note: Redux does not define or validate your models like MobX-State-Tree does. It is up to you to ensure the correct data is being set in your reducers.
 
-**`app/store/counterSlice.ts`**
-
-```typescript
+```typescript title="/app/store/counterSlice.ts"
 import { createSlice } from "@reduxjs/toolkit";
 
 // Define a type for the slice state
@@ -109,9 +105,7 @@ export default counterSlice.reducer;
 
 In `app.tsx`, wrap your `AppNavigator` with the react-redux Provider component
 
-**`app/app.tsx`**
-
-```jsx
+```jsx title="/app/app.tsx"
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 
@@ -132,9 +126,7 @@ You can now use selectors to grab data and `dispatch()` to execute actions withi
 
 - Remember to use our exported `useAppSelector` and `useAppDispatch` helpers for type safety
 
-**`app/screens/WelcomeScreen.tsx`**
-
-```typescript
+```typescript title="/app/screens/WelcomeScreen.tsx"
 import React, { FC } from "react";
 import { View, ViewStyle } from "react-native";
 import { Button, Text } from "app/components";
@@ -179,9 +171,7 @@ yarn add redux-persist
 
 2. Modify `store.ts` to include `redux-persist`
 
-**`app/store/store.ts`**
-
-```typescript
+```typescript title="/app/store/store.ts"
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import counterReducer from "./counterSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
@@ -224,9 +214,7 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 3. Add a `PersistGate` to `app.tsx` and replace any existing `hideSplashScreen` calls with the `onBeforeLift` callback
 
-**`app/app.tsx`**
-
-```typescript
+```typescript title="/app/app.tsx"
 ...
 
 import { persistor, store } from "./store/store"

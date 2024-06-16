@@ -50,9 +50,7 @@ If you Ignited a demo-free project `npx ignite-cli new ZustandApp --yes --remove
 <details>
 <summary>For reference, here's the original AuthenticationStore with MobX-State-Tree:</summary>
 
-**`app/models/AuthenticationStore.ts`**
-
-```ts
+```ts title="/app/models/AuthenticationStore.ts"
 import { Instance, SnapshotOut, types } from "mobx-state-tree";
 
 export const AuthenticationStoreModel = types
@@ -96,9 +94,7 @@ Zustand takes a "barebones" approach and defines a store as a basic state object
 
 Create a new file `app/store/AuthenticationStore.ts` and convert the model to Zustand to look like this:
 
-**`app/store/AuthenticationStore.ts`**
-
-```ts
+```ts title="/app/store/AuthenticationStore.ts"
 import { StateCreator } from "zustand";
 import { RootStore } from "./RootStore";
 
@@ -155,9 +151,7 @@ Follow the same pattern to convert `app/models/EpisodeStore.ts`
 <details>
   <summary>Original MobX-State-Tree EpisodeStore for reference:</summary>
 
-**`app/models/EpisodeStore.ts`**
-
-```ts
+```ts title="/app/models/EpisodeStore.ts"
 import { Instance, SnapshotOut, types } from "mobx-state-tree";
 import { api } from "../services/api";
 import { Episode, EpisodeModel } from "./Episode";
@@ -215,9 +209,7 @@ export interface EpisodeStoreSnapshot extends SnapshotOut<typeof EpisodeStoreMod
 <details>
 <summary>Converted EpisodeStore using Zustand:</summary>
 
-**`app/store/EpisodeStore.ts`**
-
-```ts
+```ts title="/app/store/EpisodeStore.ts"
 import { api } from "../services/api";
 import { Episode } from "./Episode";
 import { StateCreator } from "zustand";
@@ -298,9 +290,7 @@ So far, `AuthenticationStore` and `EpisodeStore` converted cleanly into Zustand 
 <details>
 <summary>Original MobX-State-Tree Episode.ts file for reference:</summary>
 
-**`app/models/Episode.ts`**
-
-```ts
+```ts title="/app/models/Episode.ts"
 import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree";
 import { withSetPropAction } from "./helpers/withSetPropAction";
 import { formatDate } from "../utils/formatDate";
@@ -389,9 +379,7 @@ export interface EpisodeSnapshotIn extends SnapshotIn<typeof EpisodeModel> {}
 Updated Episode.ts model using Typescript types and util functions
 </summary>
 
-**`app/store/Episode.ts`**
-
-```ts
+```ts title="/app/store/Episode.ts"
 import { formatDate } from "../utils/formatDate";
 import { translate } from "../i18n";
 
@@ -472,9 +460,7 @@ Now that our models have been converted, follow our recipe to [Remove MobX-State
 
 Let's create our main Zustand store. Create a new file `app/store/RootStore.ts`:
 
-**`app/store/RootStore.ts`**
-
-```ts
+```ts title="/app/store/RootStore.ts"
 import { create } from "zustand";
 import { useShallow } from "zustand/react/shallow";
 import { AuthenticationStore, authenticationStoreSelector, createAuthenticationSlice } from "./AuthenticationStore";
@@ -499,9 +485,7 @@ export const useEpisodeStore = () => useStore(useShallow(episodeStoreSelector));
 
 Create `store/index.ts` file to export our hooks and selectors for easy use across our app:
 
-**`app/store/index.ts`**
-
-```ts
+```ts title="/app/store/index.ts"
 export * from "./RootStore";
 export * from "./AuthenticationStore";
 export * from "./EpisodeStore";
@@ -514,9 +498,7 @@ Zustand's hooks-based API makes it easy to pull data into components.
 
 In the Ignite Demo App, we'll update the following components to use our exported Zustand hooks and selectors:
 
-**`app/navigators/AppNavigator.tsx`**
-
-```tsx
+```tsx title="/app/navigators/AppNavigator.tsx"
 import { useStore, isAuthenticatedSelector } from "app/store";
 
 const AppStack = () => {
@@ -529,20 +511,16 @@ const AppStack = () => {
     ...
 ```
 
-**`app/screens/LoginScreen.tsx`**
-
-```tsx
+```tsx title="/app/screens/LoginScreen.tsx"
 // pick several values & actions from the AuthenticationStore
 const { authEmail, setAuthEmail, setAuthToken } = useAuthenticationStore();
 // we can also use multiple hooks
 const validationError = useStore(validationErrorSelector);
 ```
 
-**`app/screens/DemoPodcastListScreen.tsx`**
-
 Several changes are needed here. We'll use `useEpisodeStore` to select all the data and actions we need from EpisodeStore:
 
-```ts
+```ts title="/app/screens/DemoPodcastListScreen.tsx"
 import {
   useEpisodeStore,
   Episode,
@@ -588,9 +566,7 @@ const parsedTitleAndSubtitle = getParsedTitleAndSubtitle(episode);
 
 A few additional updates to make in Ignite's Demo App:
 
-**`app/screens/WelcomeScreen.tsx`**
-
-```diff
+```diff title="/app/screens/WelcomeScreen.tsx"
 ++import { useStore } from "app/store"
 
 --const {
@@ -599,9 +575,7 @@ A few additional updates to make in Ignite's Demo App:
 ++const logout = useStore((state) => state.logout)
 ```
 
-**`app/screens/DemoDebugScreen.tsx`**
-
-```diff
+```diff title="/app/screens/DemoDebugScreen.tsx"
 ++import { useStore } from "app/store"
 
 --const {
@@ -610,9 +584,7 @@ A few additional updates to make in Ignite's Demo App:
 ++const logout = useStore((state) => state.logout)
 ```
 
-**`app/services/api/api.ts`**
-
-```diff
+```diff title="/app/services/api/api.ts"
 +import { Episode } from "app/store/Episode";
 
 -const episodes: EpisodeSnapshotIn[] =
@@ -625,9 +597,7 @@ Zustand ships with [persistence middlware](https://github.com/pmndrs/zustand/blo
 
 Update `RootStore` to look like this:
 
-**`app/store/RootStore.ts`**
-
-```ts
+```ts title="/app/store/RootStore.ts"
 import { create } from "zustand";
 import { useShallow } from "zustand/react/shallow";
 import { persist, createJSONStorage } from "zustand/middleware";
@@ -672,9 +642,7 @@ export const useEpisodeStore = () => useStore(useShallow(episodeStoreSelector));
 
 We added the `persist` middleware and created `_hasHydrated` property & action to track `AsyncStorage` hydration. This will automatically persist and hydrate your Zustand store! We just need to handle the loading state during initial hydration:
 
-**`app/app.tsx`**
-
-```diff
+```diff title="/app/app.tsx"
 +import { useStore } from "./store"
 
 ...
