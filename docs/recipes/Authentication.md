@@ -260,24 +260,13 @@ Expo has great documentation on [using environment variables](https://docs.expo.
 :::
 
 :::warning
-If you're using EAS build to create builds in the cloud, you'll need to make sure the environment variables are available for the profile you want to use. Below the environment variables have been added for the `preview:device` profile:
+If you're using EAS build to create builds in the cloud, you'll need to make sure the environment variables are available for the profile you want to use. Below the environment variables are added as secrets to EAS from the local `.env`:
 
-```json title="eas.json"
-...
-    "preview:device": {
-      "env": {
-        "EXPO_PUBLIC_SUPABASE_URL": "https://<your-project-id>.supabase.co",
-        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "<your-anon-public-key>"
-      },
-      "extends": "preview",
-      "ios": {
-        "simulator": false
-      }
-    },
-    ...
+```bash title="Terminal"
+bunx eas secret:push --scope project --env-file .env
 ```
 
-There are multiple options for how to configure your environment variables depending on the sensitivity, profiles, and environments you have. [Read more about environment variables with EAS build.](https://docs.expo.dev/build-reference/variables/#setting-plaintext-environment-variables-in-easjson)
+There are multiple options for how to configure your environment variables depending on the sensitivity, profiles, and environments you have. [Read more about environment variables with EAS build.](https://docs.expo.dev/build-reference/variables/)
 :::
 
 This allows us to have different configurations for our development, staging, testing, and production environments. For our purposes, we're going to add these values to the base configuration as these props are required for every environment.
