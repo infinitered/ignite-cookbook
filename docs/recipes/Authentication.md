@@ -60,7 +60,7 @@ Replace the contents of that screen with the following:
 <details>
   <summary>SignInScreen.tsx</summary>
 
-```typescript title="/app/screens/SignInScreen.tsx"
+```tsx title="/app/screens/SignInScreen.tsx"
 import React, { FC, useState } from "react"
 import { observer } from "mobx-react-lite"
 import {

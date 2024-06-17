@@ -12,7 +12,7 @@ publish_date: 2022-10-09
 
 Modern phones have a lot of accessibility options. Users can make the font size on Android GIGANTIC. This is a way you can allow users to scale their fonts larger and smaller, but only to a certain point. We wanted the accessibility but not the extreme ends of it, just to keep things readable without turning off font scaling completely.
 
-```jsx
+```tsx
 import * as React from "react";
 import { View, TextProps, PixelRatio, AppState } from "react-native";
 import { MaterialTopTabNavigationOptions } from "@react-navigation/material-top-tabs";
