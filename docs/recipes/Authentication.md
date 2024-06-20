@@ -259,6 +259,16 @@ Typically `.env` is not commited to version control so let's update our `.gitign
 Expo has great documentation on [using environment variables](https://docs.expo.dev/guides/environment-variables/) if you'd like to know more about how that works.
 :::
 
+:::warning
+If you're using EAS build to create builds in the cloud, you'll need to make sure the environment variables are available for the profile you want to use. Below the environment variables are added as secrets to EAS from the local `.env`:
+
+```bash title="Terminal"
+bunx eas secret:push --scope project --env-file .env
+```
+
+There are multiple options for how to configure your environment variables depending on the sensitivity, profiles, and environments you have. [Read more about environment variables with EAS build.](https://docs.expo.dev/build-reference/variables/)
+:::
+
 This allows us to have different configurations for our development, staging, testing, and production environments. For our purposes, we're going to add these values to the base configuration as these props are required for every environment.
 
 ```typescript title="/app/config/config.base.ts"
@@ -332,7 +342,7 @@ If you're already using Async Storage in your application, you can take advantag
 We need a place to store the user's session after they login. This will allow us to log them back in after they close the application or refresh their access token after it has expired. Supabase's client is already setup for Async Storage's API. (e.g. `getItem`, `setItem`, and `removeItem`) We're going to use `react-native-mmkv` as it is not only faster, but has some additional features that we can utilize.
 
 <details>
-  <summary>Example session storage implementation</summary>
+  <summary>Initial session storage implementation</summary>
 
 ```typescript title="/app/utils/storage/SessionStorage.ts"
 import { MMKV } from "react-native-mmkv"
@@ -463,6 +473,8 @@ const storage = new MMKV({
   // success-line
   encryptionKey: fetchOrGenerateEncryptionKey(),
 })
+
+...
 ```
 
 :::note
@@ -1009,7 +1021,7 @@ export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScree
             // error-line
             <Button preset="reversed" onPress={onSignUp}>Sign Up</Button>
             // success-line-start
-            <Button preset="reversed" onPress={onSignIn}>
+            <Button preset="reversed" onPress={onSignUp}>
               {isSigningUp ? "Signing Up..." : "Sign Up"}
             </Button>
             // success-line-end
@@ -1141,6 +1153,19 @@ export const SignInScreen: FC<SignInScreenProps> = observer(function SignInScree
           {error && <Text style={$errorText}>{error}</Text>}
           <View>
 ...
+
+const $logo: ImageStyle = {
+  height: 88,
+  width: "100%",
+  marginBottom: spacing.xxl,
+}
+
+// success-line-start
+const $errorText: TextStyle = {
+  color: colors.error,
+}
+// success-line-end
+
 ```
 
 Now if there is an issue with our authentication request, the user will be one step closer to understanding why. But why would we send authentication requests that we **know** are going to fail? We shouldn't and we'll fix that next. We're going to add some simple form validation to validate the values of our text inputs. We not only want to make sure that both text inputs have values, but that they are also valid values. (e.g. an email address)
