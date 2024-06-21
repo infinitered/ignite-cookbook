@@ -102,7 +102,7 @@ reactotron.onCustomCommand({
     Reactotron.display({
       name: "Apollo Cache",
       preview: "Cache Snapshot",
-      value: client.cache.extract(),
+      value: apolloClient.cache.extract(),
     });
   },
 });
