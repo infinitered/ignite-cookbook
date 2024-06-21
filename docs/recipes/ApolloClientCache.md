@@ -53,7 +53,7 @@ export const client = new ApolloClient({
 
 Now we need to pass this client into the provider at the root app level, so open `app/app.tsx` and wrap the return value that is already there:
 
-```tsx
+```tsx title="app/app.tsx"
 // success-line-start
 import { ApolloProvider } from "@apollo/client";
 import { client as apolloClient } from "app/stores/apollo";
