@@ -143,7 +143,7 @@ To make this easier, we'll first create a helper function to extract a specific 
 
 We could directly request the value `parent.child.someProp` to be logged out via this Custom Command. Here's a helper function that'll get you started, customize it how you like! This one will be able to access array value via their index in addition to a key directly.
 
-```tsx
+```tsx title="app/devtools/ReactogronConfig.ts"
 function getNestedCacheValue(keyPath: string): any {
   // Extract the entire cache
   const cache: NormalizedCacheObject = client.cache.extract();
