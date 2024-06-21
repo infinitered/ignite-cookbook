@@ -25,7 +25,7 @@ You'll need the following to get going with this recipe:
 ## Install Commands
 
 ```bash
-npx ignite-cli@latest ignite-apollo-cmds --yes
+npx ignite-cli@latest new ignite-apollo-cmds --yes
 cd ignite-apollo-cmds
 npx expo install @apollo/client graphql
 mkdir app/stores/apollo
