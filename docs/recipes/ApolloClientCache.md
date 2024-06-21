@@ -37,7 +37,6 @@ touch app/stores/apollo/index.tsx
 Open up `app/stores/apollo/index.tsx` and initialize your Apollo Client, feel free to customize this to your liking:
 
 ```tsx title="app/stores/apollo/index.tsx"
-// app/stores/apollo/index.tsx
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 
 const cache = new InMemoryCache();
