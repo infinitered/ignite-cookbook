@@ -93,7 +93,7 @@ Both of these modifications will be added to `app/devtools/ReactotronConfig.ts`.
 
 Somewhere after the `Reactotron.configure` statement (below or above the existing custom commands will work fine), add the following code
 
-```tsx
+```tsx title="app/devtools/ReactotronConfig.ts"
 reactotron.onCustomCommand({
   title: "Extract Apollo Client Cache",
   description: "Gets the updated InMemory cache from Apollo Client",
