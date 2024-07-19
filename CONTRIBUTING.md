@@ -16,6 +16,8 @@ $ yarn start
 
 This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
+For contributions from members of the Ignite community, please nest the recipe in the `docs/communityRecipes` directory. This will allow us to easily identify and promote community contributions.
+
 ### Recipe Template
 
 When creating a recipe there are a few needed elements (front-matter) for Docusaurus:
@@ -82,3 +84,9 @@ export default ExampleCodeBlock = () => (
 To allow customization of pre-built theme components, Docusaurus has a feature called [swizzling](https://docusaurus.io/docs/swizzling), which either allows creating a wrapper around the existing component, or creating a copy of it that can be modified.
 
 It's totally fine to swizzle components, even "unsafe" ones, but take care to minimize changes so that it's easy to upgrade components to their latest versions later on.
+
+## License
+
+This project is licensed under the MIT - see the [LICENSE](./LICENSE.md) file for details.
+
+Any contributions you make to this project will be made under the Creative Commons Attribution 4.0 International (CC BY 4.0) license: https://creativecommons.org/licenses/by/4.0/
