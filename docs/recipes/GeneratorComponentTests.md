@@ -26,7 +26,7 @@ Ignite will look in the `ignite/templates/*` directory for what templates to run
 
 By default, Ignite provides a `ignite/templates/component/NAME.tsx.ejs` template for creating a component file.
 
-- We use ejs and frontmatter to write our templates, you can read more about syntax [in the Ignite docs](https://github.com/infinitered/ignite/blob/master/docs/Generator-Templates.md).
+- We use ejs and front matter to write our templates, you can read more about syntax [in the Ignite docs](https://github.com/infinitered/ignite/blob/master/docs/Generator-Templates.md).
 - `NAME` in `ignite/templates/component/NAME.tsx.ejs` is replaced with the first argument passed to our generator. So `npx ignite-cli generate component Profile` would create `app/components/Profile.tsx`
 
 ## Customizing Component Generators
