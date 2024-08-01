@@ -1881,10 +1881,10 @@ We get that universal linking for free with `expo-router`!
 
 ## Code Cleanup
 
-Now that we have the boilerplate up and running again, let's clean some of the screen and navigation files that are no longer needed. We'll also remove the screen generator since there will not be one main directory for screens any longer
+Now that we have the boilerplate up and running again, let's clean some of the screen and navigation files that are no longer needed. We'll also remove the screen generator, since there will not be one main directory for screens any longer.
 
 :::note
-Currently the Ignite CLI doesn't have support for dynamic paths which would help generate screens in a filed-based routing system such as expo-router. We're currently looking into what it would take to support such functionality.
+The screen generator is currently limited to generating files in a single destination directory, which means you'll still have to move screens manually when using expo-router. We're investigating ways to improve this experience.
 :::
 
 ```bash
