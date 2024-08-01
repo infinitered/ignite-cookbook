@@ -136,11 +136,19 @@ Ignite's Demo App only contains a few files we need to update, but an existing a
 ```ts title="/src/devtools/ReactotronConfig.ts"
 // error-line-start
 import { clear } from "app/utils/storage";
-import { goBack, resetRoot, navigate } from "app/navigators/navigationUtilities";
+import {
+  goBack,
+  resetRoot,
+  navigate,
+} from "app/navigators/navigationUtilities";
 // error-line-end
 // success-line-start
 import { clear } from "src/utils/storage";
-import { goBack, resetRoot, navigate } from "src/navigators/navigationUtilities";
+import {
+  goBack,
+  resetRoot,
+  navigate,
+} from "src/navigators/navigationUtilities";
 // success-line-end
 ```
 
@@ -158,9 +166,8 @@ import { isRTL } from "app/i18n";
 import { isRTL } from "src/i18n";
 ```
 
-
 <details>
-  <summary>(optional) Additional files to update</summary>
+  <summary>(optional) Additional test and generator files to update</summary>
 
 ```ts title="/test/i18n.test.ts"
 // error-line
@@ -172,6 +179,10 @@ import { exec } from "child_process";
 
 ```js title="/ignite/templates/component/NAME.tsx.ejs"
 ---
+// error-line
+destinationDir: app/components
+// success-line
+destinationDir: src/components
 patch:
   // error-line
   path: "app/components/index.ts"
@@ -195,6 +206,10 @@ import { Text } from "src/components/Text"
 
 ```js title="/ignite/templates/model/NAME.tsx.ejs"
 ---
+// error-line
+destinationDir: app/models
+// success-line
+destinationDir: src/models
 patches:
 // error-line
 - path: "app/models/RootStore.ts"
@@ -227,9 +242,9 @@ We're now ready to start setting up navigation for the app! If you're familiar w
 
 ```tsx title="/src/app/_layout.tsx"
 import React from "react";
-import { ViewStyle } from "react-native"
+import { ViewStyle } from "react-native";
 import { Slot, SplashScreen } from "expo-router";
-import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useInitialRootStore } from "src/models";
 
 SplashScreen.preventAutoHideAsync();
@@ -253,12 +268,12 @@ export default function Root() {
 
   return (
     <GestureHandlerRootView style={$root}>
-        <Slot />
+      <Slot />
     </GestureHandlerRootView>
-  )
+  );
 }
 
-const $root: ViewStyle = { flex: 1 }
+const $root: ViewStyle = { flex: 1 };
 ```
 
 Move `ErrorBoundary` out of `screens/ErrorScreen` and into `src/components/ErrorBoundary`:
@@ -324,9 +339,22 @@ To redirect the user to the login form, create `src/app/log-in.tsx`. We'll copy 
 ```tsx
 import { router } from "expo-router";
 import { observer } from "mobx-react-lite";
-import React, { ComponentType, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  ComponentType,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { TextInput, TextStyle, ViewStyle } from "react-native";
-import { Button, Icon, Screen, Text, TextField, TextFieldAccessoryProps } from "src/components";
+import {
+  Button,
+  Icon,
+  Screen,
+  Text,
+  TextField,
+  TextFieldAccessoryProps,
+} from "src/components";
 import { useStores } from "src/models";
 import { colors, spacing } from "src/theme";
 
@@ -338,7 +366,12 @@ export default observer(function Login(_props) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [attemptsCount, setAttemptsCount] = useState(0);
   const {
-    authenticationStore: { authEmail, setAuthEmail, setAuthToken, validationError },
+    authenticationStore: {
+      authEmail,
+      setAuthEmail,
+      setAuthToken,
+      validationError,
+    },
   } = useStores();
 
   useEffect(() => {
@@ -375,27 +408,43 @@ export default observer(function Login(_props) {
     router.replace("/");
   }
 
-  const PasswordRightAccessory: ComponentType<TextFieldAccessoryProps> = useMemo(
-    () =>
-      function PasswordRightAccessory(props: TextFieldAccessoryProps) {
-        return (
-          <Icon
-            icon={isAuthPasswordHidden ? "view" : "hidden"}
-            color={colors.palette.neutral800}
-            containerStyle={props.style}
-            size={20}
-            onPress={() => setIsAuthPasswordHidden(!isAuthPasswordHidden)}
-          />
-        );
-      },
-    [isAuthPasswordHidden]
-  );
+  const PasswordRightAccessory: ComponentType<TextFieldAccessoryProps> =
+    useMemo(
+      () =>
+        function PasswordRightAccessory(props: TextFieldAccessoryProps) {
+          return (
+            <Icon
+              icon={isAuthPasswordHidden ? "view" : "hidden"}
+              color={colors.palette.neutral800}
+              containerStyle={props.style}
+              size={20}
+              onPress={() => setIsAuthPasswordHidden(!isAuthPasswordHidden)}
+            />
+          );
+        },
+      [isAuthPasswordHidden]
+    );
 
   return (
-    <Screen preset="auto" contentContainerStyle={$screenContentContainer} safeAreaEdges={["top", "bottom"]}>
-      <Text testID="login-heading" tx="loginScreen.signIn" preset="heading" style={$signIn} />
-      <Text tx="loginScreen.enterDetails" preset="subheading" style={$enterDetails} />
-      {attemptsCount > 2 && <Text tx="loginScreen.hint" size="sm" weight="light" style={$hint} />}
+    <Screen
+      preset="auto"
+      contentContainerStyle={$screenContentContainer}
+      safeAreaEdges={["top", "bottom"]}
+    >
+      <Text
+        testID="login-heading"
+        tx="loginScreen.signIn"
+        preset="heading"
+        style={$signIn}
+      />
+      <Text
+        tx="loginScreen.enterDetails"
+        preset="subheading"
+        style={$enterDetails}
+      />
+      {attemptsCount > 2 && (
+        <Text tx="loginScreen.hint" size="sm" weight="light" style={$hint} />
+      )}
 
       <TextField
         value={authEmail}
@@ -427,7 +476,13 @@ export default observer(function Login(_props) {
         RightAccessory={PasswordRightAccessory}
       />
 
-      <Button testID="login-button" tx="loginScreen.tapToSignIn" style={$tapButton} preset="reversed" onPress={login} />
+      <Button
+        testID="login-button"
+        tx="loginScreen.tapToSignIn"
+        style={$tapButton}
+        preset="reversed"
+        onPress={login}
+      />
     </Screen>
   );
 });
@@ -514,14 +569,24 @@ export default observer(function WelcomeScreen() {
     <View style={$container}>
       <View style={$topContainer}>
         <Image style={$welcomeLogo} source={welcomeLogo} resizeMode="contain" />
-        <Text testID="welcome-heading" style={$welcomeHeading} tx="welcomeScreen.readyForLaunch" preset="heading" />
+        <Text
+          testID="welcome-heading"
+          style={$welcomeHeading}
+          tx="welcomeScreen.readyForLaunch"
+          preset="heading"
+        />
         <Text tx="welcomeScreen.exciting" preset="subheading" />
         <Image style={$welcomeFace} source={welcomeFace} resizeMode="contain" />
       </View>
 
       <View style={[$bottomContainer, $bottomContainerInsets]}>
         <Text tx="welcomeScreen.postscript" size="md" />
-        <Button testID="next-screen-button" preset="reversed" tx="welcomeScreen.letsGo" onPress={goNext} />
+        <Button
+          testID="next-screen-button"
+          preset="reversed"
+          tx="welcomeScreen.letsGo"
+          onPress={goNext}
+        />
       </View>
     </View>
   );
@@ -616,7 +681,13 @@ export default observer(function Layout() {
           href: "/showroom",
           headerShown: false,
           tabBarLabel: translate("demoNavigator.componentsTab"),
-          tabBarIcon: ({ focused }) => <Icon icon="components" color={focused ? colors.tint : undefined} size={30} />,
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              icon="components"
+              color={focused ? colors.tint : undefined}
+              size={30}
+            />
+          ),
         }}
       />
       <Tabs.Screen
@@ -625,7 +696,13 @@ export default observer(function Layout() {
           href: "/community",
           headerShown: false,
           tabBarLabel: translate("demoNavigator.communityTab"),
-          tabBarIcon: ({ focused }) => <Icon icon="community" color={focused ? colors.tint : undefined} size={30} />,
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              icon="community"
+              color={focused ? colors.tint : undefined}
+              size={30}
+            />
+          ),
         }}
       />
       <Tabs.Screen
@@ -635,7 +712,13 @@ export default observer(function Layout() {
           headerShown: false,
           tabBarAccessibilityLabel: translate("demoNavigator.podcastListTab"),
           tabBarLabel: translate("demoNavigator.podcastListTab"),
-          tabBarIcon: ({ focused }) => <Icon icon="podcast" color={focused ? colors.tint : undefined} size={30} />,
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              icon="podcast"
+              color={focused ? colors.tint : undefined}
+              size={30}
+            />
+          ),
         }}
       />
       <Tabs.Screen
@@ -644,7 +727,13 @@ export default observer(function Layout() {
           href: "/debug",
           headerShown: false,
           tabBarLabel: translate("demoNavigator.debugTab"),
-          tabBarIcon: ({ focused }) => <Icon icon="debug" color={focused ? colors.tint : undefined} size={30} />,
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              icon="debug"
+              color={focused ? colors.tint : undefined}
+              size={30}
+            />
+          ),
         }}
       />
     </Tabs>
@@ -692,7 +781,11 @@ const reactNativeNewsletterLogo = require("assets/images/demo/rnn-logo.png");
 
 export default function DemoCommunityScreen() {
   return (
-    <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
+    <Screen
+      preset="scroll"
+      contentContainerStyle={$container}
+      safeAreaEdges={["top"]}
+    >
       <Text preset="heading" tx="demoCommunityScreen.title" style={$title} />
       <Text tx="demoCommunityScreen.tagLine" style={$tagline} />
 
@@ -704,17 +797,33 @@ export default function DemoCommunityScreen() {
         rightIcon={isRTL ? "caretLeft" : "caretRight"}
         onPress={() => openLinkInBrowser("https://community.infinite.red/")}
       />
-      <Text preset="subheading" tx="demoCommunityScreen.makeIgniteEvenBetterTitle" style={$sectionTitle} />
-      <Text tx="demoCommunityScreen.makeIgniteEvenBetter" style={$description} />
+      <Text
+        preset="subheading"
+        tx="demoCommunityScreen.makeIgniteEvenBetterTitle"
+        style={$sectionTitle}
+      />
+      <Text
+        tx="demoCommunityScreen.makeIgniteEvenBetter"
+        style={$description}
+      />
       <ListItem
         tx="demoCommunityScreen.contributeToIgniteLink"
         leftIcon="github"
         rightIcon={isRTL ? "caretLeft" : "caretRight"}
-        onPress={() => openLinkInBrowser("https://github.com/infinitered/ignite")}
+        onPress={() =>
+          openLinkInBrowser("https://github.com/infinitered/ignite")
+        }
       />
 
-      <Text preset="subheading" tx="demoCommunityScreen.theLatestInReactNativeTitle" style={$sectionTitle} />
-      <Text tx="demoCommunityScreen.theLatestInReactNative" style={$description} />
+      <Text
+        preset="subheading"
+        tx="demoCommunityScreen.theLatestInReactNativeTitle"
+        style={$sectionTitle}
+      />
+      <Text
+        tx="demoCommunityScreen.theLatestInReactNative"
+        style={$description}
+      />
       <ListItem
         tx="demoCommunityScreen.reactNativeRadioLink"
         bottomSeparator
@@ -758,7 +867,11 @@ export default function DemoCommunityScreen() {
         }
         onPress={() => openLinkInBrowser("https://cr.infinite.red/")}
       />
-      <Text preset="subheading" tx="demoCommunityScreen.hireUsTitle" style={$sectionTitle} />
+      <Text
+        preset="subheading"
+        tx="demoCommunityScreen.hireUsTitle"
+        style={$sectionTitle}
+      />
       <Text tx="demoCommunityScreen.hireUs" style={$description} />
       <ListItem
         tx="demoCommunityScreen.hireUsLink"
@@ -832,7 +945,17 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import { Button, ButtonAccessoryProps, Card, EmptyState, Icon, ListView, Screen, Text, Toggle } from "src/components";
+import {
+  Button,
+  ButtonAccessoryProps,
+  Card,
+  EmptyState,
+  Icon,
+  ListView,
+  Screen,
+  Text,
+  Toggle,
+} from "src/components";
 import { isRTL, translate } from "src/i18n";
 import { useStores } from "src/models";
 import { Episode } from "src/models/Episode";
@@ -870,7 +993,11 @@ export default observer(function DemoPodcastListScreen(_props) {
   }
 
   return (
-    <Screen preset="fixed" safeAreaEdges={["top"]} contentContainerStyle={$screenContentContainer}>
+    <Screen
+      preset="fixed"
+      safeAreaEdges={["top"]}
+      contentContainerStyle={$screenContentContainer}
+    >
       <ListView<Episode>
         contentContainerStyle={$listContentContainer}
         data={episodeStore.episodesForList.slice()}
@@ -885,8 +1012,16 @@ export default observer(function DemoPodcastListScreen(_props) {
             <EmptyState
               preset="generic"
               style={$emptyState}
-              headingTx={episodeStore.favoritesOnly ? "demoPodcastListScreen.noFavoritesEmptyState.heading" : undefined}
-              contentTx={episodeStore.favoritesOnly ? "demoPodcastListScreen.noFavoritesEmptyState.content" : undefined}
+              headingTx={
+                episodeStore.favoritesOnly
+                  ? "demoPodcastListScreen.noFavoritesEmptyState.heading"
+                  : undefined
+              }
+              contentTx={
+                episodeStore.favoritesOnly
+                  ? "demoPodcastListScreen.noFavoritesEmptyState.content"
+                  : undefined
+              }
               button={episodeStore.favoritesOnly ? "" : undefined}
               buttonOnPress={manualRefresh}
               imageStyle={$emptyStateImage}
@@ -897,16 +1032,24 @@ export default observer(function DemoPodcastListScreen(_props) {
         ListHeaderComponent={
           <View style={$heading}>
             <Text preset="heading" tx="demoPodcastListScreen.title" />
-            {(episodeStore.favoritesOnly || episodeStore.episodesForList.length > 0) && (
+            {(episodeStore.favoritesOnly ||
+              episodeStore.episodesForList.length > 0) && (
               <View style={$toggle}>
                 <Toggle
                   value={episodeStore.favoritesOnly}
-                  onValueChange={() => episodeStore.setProp("favoritesOnly", !episodeStore.favoritesOnly)}
+                  onValueChange={() =>
+                    episodeStore.setProp(
+                      "favoritesOnly",
+                      !episodeStore.favoritesOnly
+                    )
+                  }
                   variant="switch"
                   labelTx="demoPodcastListScreen.onlyFavorites"
                   labelPosition="left"
                   labelStyle={$labelStyle}
-                  accessibilityLabel={translate("demoPodcastListScreen.accessibility.switch")}
+                  accessibilityLabel={translate(
+                    "demoPodcastListScreen.accessibility.switch"
+                  )}
                 />
               </View>
             )}
@@ -972,16 +1115,21 @@ const EpisodeCard = observer(function EpisodeCard({
       Platform.select<AccessibilityProps>({
         ios: {
           accessibilityLabel: episode.title,
-          accessibilityHint: translate("demoPodcastListScreen.accessibility.cardHint", {
-            action: isFavorite ? "unfavorite" : "favorite",
-          }),
+          accessibilityHint: translate(
+            "demoPodcastListScreen.accessibility.cardHint",
+            {
+              action: isFavorite ? "unfavorite" : "favorite",
+            }
+          ),
         },
         android: {
           accessibilityLabel: episode.title,
           accessibilityActions: [
             {
               name: "longpress",
-              label: translate("demoPodcastListScreen.accessibility.favoriteAction"),
+              label: translate(
+                "demoPodcastListScreen.accessibility.favoriteAction"
+              ),
             },
           ],
           onAccessibilityAction: ({ nativeEvent }) => {
@@ -1008,7 +1156,13 @@ const EpisodeCard = observer(function EpisodeCard({
       function ButtonLeftAccessory() {
         return (
           <View>
-            <Animated.View style={[$iconContainer, StyleSheet.absoluteFill, animatedLikeButtonStyles]}>
+            <Animated.View
+              style={[
+                $iconContainer,
+                StyleSheet.absoluteFill,
+                animatedLikeButtonStyles,
+              ]}
+            >
               <Icon
                 icon="heart"
                 size={ICON_SIZE}
@@ -1036,10 +1190,18 @@ const EpisodeCard = observer(function EpisodeCard({
       onLongPress={handlePressFavorite}
       HeadingComponent={
         <View style={$metadata}>
-          <Text style={$metadataText} size="xxs" accessibilityLabel={episode.datePublished.accessibilityLabel}>
+          <Text
+            style={$metadataText}
+            size="xxs"
+            accessibilityLabel={episode.datePublished.accessibilityLabel}
+          >
             {episode.datePublished.textLabel}
           </Text>
-          <Text style={$metadataText} size="xxs" accessibilityLabel={episode.duration.accessibilityLabel}>
+          <Text
+            style={$metadataText}
+            size="xxs"
+            accessibilityLabel={episode.duration.accessibilityLabel}
+          >
             {episode.duration.textLabel}
           </Text>
         </View>
@@ -1178,7 +1340,8 @@ export default function DemoDebugScreen() {
     authenticationStore: { logout },
   } = useStores();
 
-  const usingHermes = typeof HermesInternal === "object" && HermesInternal !== null;
+  const usingHermes =
+    typeof HermesInternal === "object" && HermesInternal !== null;
   // @ts-expect-error
   const usingFabric = global.nativeFabricUIManager != null;
 
@@ -1202,11 +1365,17 @@ export default function DemoDebugScreen() {
   );
 
   return (
-    <Screen preset="scroll" safeAreaEdges={["top"]} contentContainerStyle={$container}>
+    <Screen
+      preset="scroll"
+      safeAreaEdges={["top"]}
+      contentContainerStyle={$container}
+    >
       <Text
         style={$reportBugsLink}
         tx="demoDebugScreen.reportBugs"
-        onPress={() => openLinkInBrowser("https://github.com/infinitered/ignite/issues")}
+        onPress={() =>
+          openLinkInBrowser("https://github.com/infinitered/ignite/issues")
+        }
       />
       <Text style={$title} preset="heading" tx="demoDebugScreen.title" />
       <View style={$itemsContainer}>
@@ -1260,8 +1429,15 @@ export default function DemoDebugScreen() {
         />
       </View>
       <View style={$buttonContainer}>
-        <Button style={$button} tx="demoDebugScreen.reactotron" onPress={demoReactotron} />
-        <Text style={$hint} tx={`demoDebugScreen.${Platform.OS}ReactotronHint` as const} />
+        <Button
+          style={$button}
+          tx="demoDebugScreen.reactotron"
+          onPress={demoReactotron}
+        />
+        <Text
+          style={$hint}
+          tx={`demoDebugScreen.${Platform.OS}ReactotronHint` as const}
+        />
       </View>
       <View style={$buttonContainer}>
         <Button style={$button} tx="common.logOut" onPress={logout} />
@@ -1360,7 +1536,10 @@ const WebListItem: FC<DemoListItem> = ({ item, sectionIndex }) => {
         const itemSlug = slugify(u);
 
         return (
-          <Link key={`section${sectionIndex}-${u}`} to={`/showroom/${sectionSlug}/${itemSlug}`}>
+          <Link
+            key={`section${sectionIndex}-${u}`}
+            to={`/showroom/${sectionSlug}/${itemSlug}`}
+          >
             <Text>{u}</Text>
           </Link>
         );
@@ -1369,9 +1548,17 @@ const WebListItem: FC<DemoListItem> = ({ item, sectionIndex }) => {
   );
 };
 
-const NativeListItem: FC<DemoListItem> = ({ item, sectionIndex, handleScroll }) => (
+const NativeListItem: FC<DemoListItem> = ({
+  item,
+  sectionIndex,
+  handleScroll,
+}) => (
   <View>
-    <Text onPress={() => handleScroll?.(sectionIndex)} preset="bold" style={$menuContainer}>
+    <Text
+      onPress={() => handleScroll?.(sectionIndex)}
+      preset="bold"
+      style={$menuContainer}
+    >
       {item.name}
     </Text>
     {item.useCases.map((u, index) => (
@@ -1428,7 +1615,14 @@ The snippet below contains the entire file for reference:
 
 ```tsx
 import React, { FC, useEffect, useRef, useState } from "react";
-import { Image, ImageStyle, SectionList, TextStyle, View, ViewStyle } from "react-native";
+import {
+  Image,
+  ImageStyle,
+  SectionList,
+  TextStyle,
+  View,
+  ViewStyle,
+} from "react-native";
 import { Drawer } from "react-native-drawer-layout";
 import { type ContentStyle } from "@shopify/flash-list";
 import { ListItem, ListView, ListViewRef, Screen, Text } from "src/components";
@@ -1455,12 +1649,19 @@ const slugify = (str: string) =>
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-const ShowroomListItem: FC<DemoListItem> = ({ item, sectionIndex, onPress }) => {
+const ShowroomListItem: FC<DemoListItem> = ({
+  item,
+  sectionIndex,
+  onPress,
+}) => {
   const sectionSlug = item.name.toLowerCase();
 
   return (
     <View>
-      <Link href={{ pathname: "/showroom", params: { sectionSlug } }} onPress={onPress}>
+      <Link
+        href={{ pathname: "/showroom", params: { sectionSlug } }}
+        onPress={onPress}
+      >
         <Text preset="bold">{item.name}</Text>
       </Link>
       {item.useCases.map((u) => {
@@ -1495,12 +1696,16 @@ export default function DemoShowroomScreen() {
   React.useEffect(() => {
     if (Object.keys(params).length > 0) {
       const demoValues = Object.values(Demos);
-      const findSectionIndex = demoValues.findIndex((x) => x.name.toLowerCase() === params.sectionSlug);
+      const findSectionIndex = demoValues.findIndex(
+        (x) => x.name.toLowerCase() === params.sectionSlug
+      );
       let findItemIndex = 0;
       if (params.itemSlug) {
         try {
           findItemIndex =
-            demoValues[findSectionIndex].data.findIndex((u) => slugify(u.props.name) === params.itemSlug) + 1;
+            demoValues[findSectionIndex].data.findIndex(
+              (u) => slugify(u.props.name) === params.itemSlug
+            ) + 1;
         } catch (err) {
           console.error(err);
         }
@@ -1577,7 +1782,11 @@ export default function DemoShowroomScreen() {
         </View>
       )}
     >
-      <Screen preset="fixed" safeAreaEdges={["top"]} contentContainerStyle={$screenContainer}>
+      <Screen
+        preset="fixed"
+        safeAreaEdges={["top"]}
+        contentContainerStyle={$screenContainer}
+      >
         <DrawerIconButton onPress={toggleDrawer} {...{ open }} />
 
         <SectionList
@@ -1672,19 +1881,28 @@ We get that universal linking for free with `expo-router`!
 
 ## Code Cleanup
 
-Now that we have the boilerplate up and running again, let's clean some of the screen and navigation files that are no longer needed.
+Now that we have the boilerplate up and running again, let's clean some of the screen and navigation files that are no longer needed. We'll also remove the screen generator since there will not be one main directory for screens any longer
+
+:::note
+Currently the Ignite CLI doesn't have support for dynamic paths which would help generate screens in a filed-based routing system such as expo-router. We're currently looking into what it would take to support such functionality.
+:::
 
 ```bash
 rm src/app.tsx
 rm -rf src/screens
 rm -rf src/navigators
+rm -rf ignite/templates/screen
 ```
 
 In doing so, we'll need to fix some `Reactotron` code for custom commands. We'll drop the `resetNavigation` one (logging out is really the same thing) and update the `navigateTo` and `goBack`. Open up `src/devtools/ReactotronConfig.ts` to edit these.
 
 ```ts title="/src/devtools/ReactotronConfig.ts"
 // error-line
-import { goBack, resetRoot, navigate } from "src/navigators/navigationUtilities";
+import {
+  goBack,
+  resetRoot,
+  navigate,
+} from "src/navigators/navigationUtilities";
 // success-line
 import { router } from "expo-router";
 // ...
@@ -1736,12 +1954,12 @@ reactotron.onCustomCommand({
 ```
 
 When navigating to the showroom, you may notice an error in the console:
-  
+
 ```terminal
 ERROR  Warning: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
 ```
 
-This is because the `expo-router`'s `<Link>` component passes a ref to it's children. To address this we can update our `ListItem.tsx` to correctly handle the 
+This is because the `expo-router`'s `<Link>` component passes a ref to it's children. To address this we can update our `ListItem.tsx` to correctly handle the
 ref passed to it.
 
 <details>
@@ -1827,6 +2045,7 @@ ref passed to it.
 })
 
 ```
+
 </details>
 
 ## Summary
