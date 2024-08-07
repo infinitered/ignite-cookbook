@@ -5,7 +5,7 @@ tags:
   - MMKV
   - AsyncStorage
 last_update:
-  author: Frank Calise
+  author: Frank Calise, Mark Rickert
 publish_date: 2022-12-28
 ---
 
@@ -42,37 +42,24 @@ _Note: For more information on Continuous Native Generation (CNG), you can read 
 
 ## Code Changes
 
-Open `app/utils/storage.ts` and modify the imports:
+Open `app/utils/storage.ts` and modify the the file to use `MMKV` instead of `AsyncStorage`:
 
-```tsx
-// error-line
-import AsyncStorage from "@react-native-async-storage/async-storage";
-// success-line
+```tsx {1-10} show-lines
 import { MMKV } from "react-native-mmkv";
-// success-line
+
 export const storage = new MMKV();
-```
 
-Now we'll remove any reference to `AsyncStorage` and replace it with the proper API from `MMKV`
-
-```tsx
 /**
  * Loads a string from storage.
  *
  * @param key The key to fetch.
  */
-// error-line
-export async function loadString(key: string): Promise<string | null> {
-// success-line
-export function loadString(key: string): string | null {
+export function loadString(key: string): string | undefined {
   try {
-    // error-line
-    return await AsyncStorage.getItem(key);
-    // success-line
-    return storage.getString(key);
+    return storage.getString(key)
   } catch {
     // not sure why this would fail... even reading the RN docs I'm unclear
-    return null;
+    return undefined
   }
 }
 
@@ -82,18 +69,12 @@ export function loadString(key: string): string | null {
  * @param key The key to fetch.
  * @param value The value to store.
  */
-// error-line
-export async function saveString(key: string, value: string): Promise<boolean> {
-// success-line
 export function saveString(key: string, value: string): boolean {
   try {
-    // error-line
-    await AsyncStorage.setItem(key, value);
-    // success-line
-    storage.set(key, value);
-    return true;
+    storage.set(key, value)
+    return true
   } catch {
-    return false;
+    return false
   }
 }
 
@@ -102,18 +83,19 @@ export function saveString(key: string, value: string): boolean {
  *
  * @param key The key to fetch.
  */
-// error-line
-export async function load(key: string): Promise<unknown | null> {
-// success-line
-export function load(key: string): unknown | null {
+export function load(key: string): unknown | undefined {
   try {
-    // error-line
-    const almostThere = await AsyncStorage.getItem(key)
-    // success-line
-    const almostThere = storage.getString(key);
-    return JSON.parse(almostThere);
+    const almostThere = loadString(key)
+    if (almostThere) {
+      try {
+        return JSON.parse(almostThere)
+      } catch {
+        return almostThere // Return the string if it's not a valid JSON
+      }
+    }
+    return undefined
   } catch {
-    return null;
+    return undefined
   }
 }
 
@@ -123,18 +105,12 @@ export function load(key: string): unknown | null {
  * @param key The key to fetch.
  * @param value The value to store.
  */
-// error-line
-export async function save(key: string, value: unknown): Promise<boolean> {
-// success-line
 export function save(key: string, value: unknown): boolean {
   try {
-    // error-line
-    await AsyncStorage.setItem(key, JSON.stringify(value));
-    // success-line
-    saveString(key, JSON.stringify(value));
-    return true;
+    saveString(key, JSON.stringify(value))
+    return true
   } catch {
-    return false;
+    return false
   }
 }
 
@@ -143,30 +119,18 @@ export function save(key: string, value: unknown): boolean {
  *
  * @param key The key to kill.
  */
-// error-line
-export async function remove(key: string): Promise<void> {
-// success-line
 export function remove(key: string): void {
   try {
-    // error-line
-    await AsyncStorage.removeItem(key);
-    // success-line
-    storage.delete(key);
+    storage.delete(key)
   } catch {}
 }
 
 /**
  * Burn it all to the ground.
  */
-// error-line
-export async function clear(): Promise<void> {
-// success-line
 export function clear(): void {
   try {
-    // error-line
-    await AsyncStorage.clear();
-    // success-line
-    storage.clearAll();
+    storage.clearAll()
   } catch {}
 }
 ```
