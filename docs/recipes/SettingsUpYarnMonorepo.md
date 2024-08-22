@@ -53,8 +53,10 @@ yarn init
 2. Configure workspaces in `package.json`:
 
 ```json
-// success-line-start
 {
+  "name": "monorepo-example",
+  "packageManager": "yarn@3.8.4",
+  // success-line-start
   "private": true,
   "workspaces": {
     "packages": [
@@ -64,8 +66,8 @@ yarn init
       "apps/*"
     ]
   }
+  // success-line-end
 }
-// success-line-end
 ```
 
 :::info
