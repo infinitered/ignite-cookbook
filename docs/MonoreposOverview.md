@@ -1,6 +1,6 @@
 ---
 title: Choosing the right monorepo strategy for your project
-description: Choosing the right monorepo strategy for your project
+description: This document outlines the advantages and challenges of adopting a monorepo strategy for software development projects, particularly in the context of React Native and the Ignite framework. It provides guidance on when to use or avoid a monorepo, explores common monorepo tools, and discusses typical setups to help teams select the most suitable approach for their needs.
 tags:
   - Monorepo
   - Yarn
