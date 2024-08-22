@@ -47,7 +47,7 @@ Here's a quick recap:
 ```shell
 mkdir monorepo-example
 cd monorepo-example
-yarn init
+yarn init -y
 ```
 
 2. Configure workspaces in `package.json`:
@@ -55,17 +55,15 @@ yarn init
 ```json
 {
   "name": "monorepo-example",
-  "packageManager": "yarn@3.8.4",
+  // error-line
+  "packageManager": "yarn@3.8.4"
   // success-line-start
+  "packageManager": "yarn@3.8.4",
   "private": true,
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ],
-    "apps": [
-      "apps/*"
-    ]
-  }
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
   // success-line-end
 }
 ```
@@ -99,7 +97,7 @@ npx ignite-cli@latest
 
 ```shell
 cd apps
-ignite new mobile
+npx ignite-cli new mobile
 ```
 
 We suggest the following answers to the prompts:
@@ -172,8 +170,7 @@ Let's make sure all of our dependendencies are installed for the mobile app.
 
 ```shell
 cd ..
-cd ..
-yarn
+yarn install
 ```
 
 :::info
@@ -200,7 +197,7 @@ cd packages/eslint-config
 Initialize the package with a `package.json` file.
 
 ```shell
-yarn init
+yarn init -y
 ```
 
 3. Install ESLint and TypeScript dependencies:
@@ -456,7 +453,7 @@ cd ui-components
 Initialize the package with a `package.json` file.
 
 ```shell
-yarn init
+yarn init -y
 ```
 
 4. Install dependencies:
@@ -560,7 +557,7 @@ export * from "./Badge"
 Compile your TypeScript code to ensure it's ready for consumption by other packages.
 
 ```shell
-yarn tsc
+npx tsc
 ```
 
 ## Step 7: Use the shared UI package in the mobile app
@@ -579,9 +576,12 @@ cd apps/mobile
 
 ```json
     "react-native-screens": "3.31.1",
+    // error-line
+    "react-native-web": "~0.19.6"
+    // success-line-start
     "react-native-web": "~0.19.6",
-    // success-line
-    "ui-components": "workspace:^",
+    "ui-components": "workspace:^"
+    // success-line-end
   },
 ```
 
@@ -589,7 +589,7 @@ cd apps/mobile
 
 Now, decide where you'd like to display the Badge. For this example, let’s place in the login screen, below the heading and above the form fields to indicate the number of login attempts if they exceed a certain number.
 
-`apps/mobile/apps/screebs/LoginScreen.tsx`
+`apps/mobile/apps/screens/LoginScreen.tsx`
 
 ```tsx
 import type { ThemedStyle } from "app/theme"
