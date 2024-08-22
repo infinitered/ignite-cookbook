@@ -166,7 +166,7 @@ module.exports = config;
 
 ## Step 3: Install dependencies
 
-Let's make sure all of our dependendencies are installed for both apps.
+Let's make sure all of our dependendencies are installed for the mobile app.
 
 1. Run `yarn` at the root of the project
 
@@ -178,7 +178,7 @@ yarn
 
 :::info
 
-When you run yarn at the top of the monorepo with Yarn 3.x, Yarn installs all dependencies and links the packages. It places a single node_modules folder in each package’s directory, but shared dependencies are typically stored in a .yarn/cache folder at the root. Yarn uses Plug’n’Play (PnP) to resolve dependencies without the traditional node_modules structure, creating a more efficient setup. Each package or app is linked to the dependencies it needs through Yarn’s PnP system. For more details, you can check out [Yarn's documentation on Plug'n'Play](https://yarnpkg.com/features/pnp).
+When you run yarn at the top of the monorepo with Yarn 3.x, Yarn installs all dependencies and links the packages. It places a single `node_modules` folder in each package’s directory, but shared dependencies are typically stored in a `.yarn/cache` folder at the root. Yarn uses Plug’n’Play (PnP) to resolve dependencies without the traditional `node_modules` structure, creating a more efficient setup. Each package or app is linked to the dependencies it needs through Yarn’s PnP system. For more details, you can check out [Yarn's documentation on Plug'n'Play](https://yarnpkg.com/features/pnp).
 
 :::
 
@@ -200,7 +200,7 @@ cd packages/eslint-config
 Initialize the package with a `package.json` file.
 
 ```shell
-yarn init -y
+yarn init
 ```
 
 3. Install ESLint and TypeScript dependencies:
@@ -456,7 +456,7 @@ cd ui-components
 Initialize the package with a `package.json` file.
 
 ```shell
-yarn init -y
+yarn init
 ```
 
 4. Install dependencies:
