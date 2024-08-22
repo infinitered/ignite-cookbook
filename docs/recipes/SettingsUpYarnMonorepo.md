@@ -1,6 +1,6 @@
 ---
 title: Setting up a Yarn monorepo with Ignite
-description: How to set up a Yarn monorepo using Ignite with two extra utilities
+description: How to set up a Yarn monorepo using Ignite and two extra shared utilities
 tags:
   - Ignite
   - Monorepo
@@ -28,7 +28,7 @@ In a monorepo setup, multiple applications, such as a mobile app (using React Na
 
 :::info
 
-More information on whether you want to setup your app within a monorepo can be found [here](https://github.com/infinitered/ignite/blob/monorepo-setup-doc/docs/Monorepos-Overview.md).
+More information on whether you want to setup your app within a monorepo can be found [here](/docs/MonoreposOverview.md).
 
 :::
 
