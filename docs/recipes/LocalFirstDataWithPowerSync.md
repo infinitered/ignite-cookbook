@@ -789,7 +789,7 @@ Here is the schema we'll be using for our todo app:
 
 ```ts
 // app/services/database/schema.ts
-import { column, Schema, TableV2 } from '@powersync/web';
+import { column, Schema, TableV2 } from '@powersync/react-native';
 
 export const LISTS_TABLE = 'lists';
 export const TODOS_TABLE = 'todos';
