@@ -111,13 +111,13 @@ We suggest the following answers to the prompts:
 📝 Do you want to install dependencies?: No
 ```
 
-3. Open `metro.config.js` file
+3. Open the `metro.config.js` file:
 
 ```shell
 touch mobile/metro.config.js
 ```
 
-4. Replace the following lines in the Metro configuration file with the lines below
+4. Replace the following lines in the Metro configuration file with the lines below:
 
 ```js
 // Learn more https://docs.expo.io/guides/customizing-metro
@@ -166,7 +166,7 @@ module.exports = config;
 
 Let's make sure all of our dependendencies are installed for the mobile app.
 
-1. Run `yarn` at the root of the project
+1. Run `yarn` at the root of the project:
 
 ```shell
 cd ..
@@ -342,7 +342,7 @@ cd apps/mobile
  "eslint-config-prettier": "8.5.0",
 ```
 
-3. Replace the shared ESLint configuration in `package.json`
+3. Replace the shared ESLint configuration in `package.json`:
 
 `apps/mobile/package.json`
 
@@ -429,7 +429,7 @@ cd apps/mobile
 // success-line-end
 ```
 
-## Step 6: Create the shared UI components package:
+## Step 6: Create the shared UI components package
 
 Let's create a Badge component as a shared UI component that can be used across the monorepo apps. The Badge component is a simple, versatile element often used to display small bits of information, such as notifications, statuses, or labels.
 
@@ -587,27 +587,24 @@ cd apps/mobile
 
 3. Add the Badge component to the UI
 
-Now, decide where you'd like to display the Badge. For this example, let’s place in the login screen, below the heading and above the form fields to indicate the number of login attempts if they exceed a certain number.
+Now, let's use the Badge component. For this example, let’s place it in the login screen, below the heading and above the form fields to indicate the number of login attempts if they exceed a certain number.
 
 `apps/mobile/apps/screens/LoginScreen.tsx`
 
 ```tsx
-import type { ThemedStyle } from "app/theme"
-import { useAppTheme } from "app/utils/useAppTheme"
+import { AppStackScreenProps } from "../navigators"
+import { colors, spacing } from "../theme"
 // success-line
-import { Badge } from "@myworkspace/ui-components"
+import { Badge } from "ui-components"
 
 ...
 
 <Text testID="login-heading" tx="loginScreen.logIn" preset="heading" style={themed($logIn)} />
-
 // success-line-start
 {attemptsCount > 0 && (
   <Badge
     label={`Attempt ${attemptsCount}`}
     backgroundColor={attemptsCount > 2 ? "red" : "blue"}
-    style={themed($badge)}
-    textStyle={themed($badgeText)}
   />
 )}
 // success-line-end
@@ -646,7 +643,7 @@ yarn android
 
 ## Step 9: Add Yarn global scripts (optional)
 
-Yarn's workspaces feature allows you to define and run scripts globally across all packages in your monorepo. This simplifies your workflow by enabling you to execute tasks like testing, building, or linting from the root of your project, ensuring consistency across all packages. In this section, we’ll explore how to set up and use global scripts with Yarn in your monorepo.
+Yarn's workspaces feature allows you to define and run scripts globally across all packages in your monorepo. This simplifies your workflow by enabling you to execute tasks like testing, building, or linting from the root of your project, ensuring consistency across all packages. In this optional section, we’ll explore how to set up and use global scripts with Yarn in your monorepo.
 
 Let's add a global script for the mobile app to run iOS and Android projects.
 
