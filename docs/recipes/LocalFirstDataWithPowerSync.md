@@ -789,65 +789,41 @@ Here is the schema we'll be using for our todo app:
 
 ```ts
 // app/services/database/schema.ts
-import {
-  Column,
-  ColumnType,
-  Index,
-  IndexedColumn,
-  Schema,
-  Table
-} from '@powersync/react-native'
+import { column, Schema, TableV2 } from '@powersync/react-native';
 
-export const TODO_TABLE = 'todos'
-export const LIST_TABLE = 'lists'
+export const LISTS_TABLE = 'lists';
+export const TODOS_TABLE = 'todos';
 
-export interface ListRecord {
-  id: string
-  name: string
-  created_at: string
-  owner_id?: string
-}
+const todos = new TableV2(
+  {
+    list_id: column.text,
+    created_at: column.text,
+    completed_at: column.text,
+    description: column.text,
+    created_by: column.text,
+    completed_by: column.text,
+    completed: column.integer
+  },
+  { indexes: { list: ['list_id'] } }
+);
 
-export interface TodoRecord {
-  id: string
-  created_at: string
-  completed: boolean
-  description: string
-  completed_at?: string
-  created_by: string
-  completed_by?: string
-  list_id: string
-  photo_id?: string
-}
+const lists = new TableV2({
+  created_at: column.text,
+  name: column.text,
+  owner_id: column.text
+});
 
-export const AppSchema = new Schema([
-  new Table({
-    name: 'todos',
-    columns: [
-      new Column({ name: 'list_id', type: ColumnType.TEXT }),
-      new Column({ name: 'created_at', type: ColumnType.TEXT }),
-      new Column({ name: 'completed_at', type: ColumnType.TEXT }),
-      new Column({ name: 'description', type: ColumnType.TEXT }),
-      new Column({ name: 'completed', type: ColumnType.INTEGER }),
-      new Column({ name: 'created_by', type: ColumnType.TEXT }),
-      new Column({ name: 'completed_by', type: ColumnType.TEXT })
-    ],
-    indexes: [
-      new Index({
-        name: 'list',
-        columns: [new IndexedColumn({ name: 'list_id' })]
-      })
-    ]
-  }),
-  new Table({
-    name: 'lists',
-    columns: [
-      new Column({ name: 'created_at', type: ColumnType.TEXT }),
-      new Column({ name: 'name', type: ColumnType.TEXT }),
-      new Column({ name: 'owner_id', type: ColumnType.TEXT })
-    ]
-  }),
-])
+export const AppSchema = new Schema({
+  todos,
+  lists
+});
+
+export type Database = (typeof AppSchema)['types'];
+export type TodoRecord = Database['todos'];
+// OR:
+// export type Todo = RowType<typeof todos>;
+
+export type ListRecord = Database['lists'];
 
 ```
 
@@ -905,8 +881,10 @@ In `app/services/database/supabase.ts`, we'll add the two methods, and then expo
 // app/services/database/supabase.ts
 import {
   AbstractPowerSyncDatabase,
-  CrudEntry, PowerSyncBackendConnector,
-  UpdateType, PowerSyncCredentials
+  CrudEntry,
+  PowerSyncBackendConnector,
+  UpdateType,
+  PowerSyncCredentials
 } from "@powersync/react-native"
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { createClient } from "@supabase/supabase-js"
@@ -1033,7 +1011,7 @@ import React, { PropsWithChildren, useEffect } from "react"
 import {
   AbstractPowerSyncDatabase,
   PowerSyncContext,
-  RNQSPowerSyncDatabaseOpenFactory,
+  PowerSyncDatabase,
 } from "@powersync/react-native"
 import { supabase, supabaseConnector } from "./supabase" // Adjust the path as needed
 import { AppSchema } from "./schema" // Adjust the path as needed
@@ -1047,11 +1025,12 @@ export class Database {
    * Initialize the Database class with a new PowerSync instance
    */
   constructor() {
-    const factory = new RNQSPowerSyncDatabaseOpenFactory({
-      schema: AppSchema,
-      dbFilename: "sqlite.db",
+    this.powersync = new PowerSyncDatabase({
+      database: {
+        dbFilename: "sqlite.db"
+      },
+      schema: AppSchema
     })
-    this.powersync = factory.getInstance()
   }
 
   /**
