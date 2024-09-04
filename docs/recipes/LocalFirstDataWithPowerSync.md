@@ -584,7 +584,10 @@ import { ViewStyle } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { colors } from "../theme"
 
-export const WelcomeScreen: FC = observer(function WelcomeScreen() {
+interface WelcomeScreenProps
+  extends NativeStackScreenProps<SignedInNavigatorParamList, "Welcome"> {}
+
+export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen() {
   return (
     <SafeAreaView style={$container}>
       <SignOutButton />
