@@ -110,7 +110,7 @@ and we'll also need to install `@react-native-async-storage/async-storage` for p
 npx expo install @react-native-async-storage/async-storage
 ```
 
-### Metro configuration
+### Metro Configuration
 
 The default Metro configuration uses inline requires. The `@powersync/react-native` package does not work well with inline requires. Update the Metro config to not use inline requires for the PowerSync SDK.
 
@@ -632,6 +632,7 @@ const AppStack = observer(function AppStack() {
        * by wrapping the Welcome screen in a conditional, we ensure that
        * the user can only access it if they are signed in
        */ }
+      // success-line
       { signedIn
         // success-line
         ? <Stack.Screen name="Welcome" component={ Screens.WelcomeScreen }/>
