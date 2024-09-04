@@ -1034,7 +1034,7 @@ Remember that the DatabaseProvider needs access to the users authentication stat
 // success-line
 // Import the provider
 // success-line
-import { DatabaseProvider } from "./services/database/database"
+import { DatabaseProvider } from "app/services/database/database"
 
 // ...
 
@@ -1094,12 +1094,12 @@ We'll implement our own in a second, but Here's an example of what that looks li
 
 ```ts
 const lists = useQuery<ListItemRecord>(`
-    SELECT ${ LIST_TABLE }.*,
-         COUNT(${ TODO_TABLE }.id) AS total_tasks,
-         SUM(CASE WHEN ${ TODO_TABLE }.completed = true THEN 1 ELSE 0 END) AS completed_tasks
-    FROM ${ LIST_TABLE }
-         LEFT JOIN ${ TODO_TABLE } ON ${ LIST_TABLE }.id = ${ TODO_TABLE }.list_id
-    GROUP BY ${ LIST_TABLE }.id;
+    SELECT ${ LISTS_TABLE }.*,
+         COUNT(${ TODOS_TABLE }.id) AS total_tasks,
+         SUM(CASE WHEN ${ TODOS_TABLE }.completed = true THEN 1 ELSE 0 END) AS completed_tasks
+    FROM ${ LISTS_TABLE }
+         LEFT JOIN ${ TODOS_TABLE } ON ${ LISTS_TABLE }.id = ${ TODOS_TABLE }.list_id
+    GROUP BY ${ LISTS_TABLE }.id;
   `);
 ```
 
