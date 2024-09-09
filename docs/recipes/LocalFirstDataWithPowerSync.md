@@ -1097,7 +1097,7 @@ This hook is used to fetch data from the database and watch for changes. It will
 We'll implement our own in a second, but Here's an example of what that looks like:
 
 ```ts
-const lists = useQuery<ListItemRecord>(`
+const { data: lists } = useQuery<ListItemRecord>(`
     SELECT ${ LISTS_TABLE }.*,
          COUNT(${ TODOS_TABLE }.id) AS total_tasks,
          SUM(CASE WHEN ${ TODOS_TABLE }.completed = true THEN 1 ELSE 0 END) AS completed_tasks
@@ -1269,6 +1269,7 @@ interface WelcomeScreenProps
 export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen() {
   return (
     <SafeAreaView style={ $container }>
+      // success-line
       <Lists/>
       <SignOutButton/>
     </SafeAreaView>
