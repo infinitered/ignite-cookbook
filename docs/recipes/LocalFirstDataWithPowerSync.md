@@ -92,32 +92,6 @@ npx expo install \
   @journeyapps/react-native-quick-sqlite 
 ```
 
-PowerSync [requires polyfills](https://github.com/powersync-ja/powersync-js/blob/main/packages/react-native/README.md#install-polyfills)
-to replace browser-specific APIs with their React Native equivalents. These are listed as peer-dependencies so we need
-to install them ourselves.
-
-```shell
-npx expo install \
-  react-native-fetch-api \
-  react-native-polyfill-globals \
-  react-native-url-polyfill \
-  text-encoding \
-  web-streams-polyfill@^3.2.1 \
-  base-64 \
-  @azure/core-asynciterator-polyfill \
-  react-native-get-random-values
-```
-
-and install `@babel/plugin-transform-async-generator-functions` as a dev dependency:
-
-```shell
-yarn add -D @babel/plugin-transform-async-generator-functions
-```
-
-:::note
-At the time of writing the PowerSync SDK is not compatible with `web-streams-polyfill@4.0.0`, so be sure to specify version `^3.2.1`.
-:::
-
 :::note
 These dependencies include native modules so you'll need to rebuild your app after installing.
 :::
@@ -136,78 +110,43 @@ and we'll also need to install `@react-native-async-storage/async-storage` for p
 npx expo install @react-native-async-storage/async-storage
 ```
 
-### Configure Babel and Polyfills
+### Metro Configuration
 
-**1. Ensure polyfills are imported in your app's entry file, typically `App.tsx`:**
+The default Metro configuration uses inline requires. The `@powersync/react-native` package does not work well with inline requires. Update the Metro config to not use inline requires for the PowerSync SDK.
 
-    ```ts
-    import "react-native-polyfill-globals/auto"
-    import "@azure/core-asynciterator-polyfill"
-    ```
-    
-:::tip
-In a fresh Ignite app, this would be in `app/app.tsx`. and placed at the top of the list of imports, right after
-the Reactotron config.
-:::
+```js
+// `metro.config.js`:
+// Learn more https://docs.expo.io/guides/customizing-metro
+const { getDefaultConfig } = require("expo/metro-config")
 
-**2. Add Babel Plugin**
+/** @type {import('expo/metro-config').MetroConfig} */
+const config = getDefaultConfig(__dirname)
 
-    Update `babel.config.js` to include the `transform-async-generator-functions` plugin:
-    
-    ```js
-    /** @type {import('@babel/core').TransformOptions['plugins']} */
-    const plugins = [
-            //... other plugins
-            // success-line
-            '@babel/plugin-transform-async-generator-functions',  // <-- Add this
-            /** NOTE: This must be last in the plugins @see https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation/#babel-plugin */
-            "react-native-reanimated/plugin",
-        ]
-    
-    ```
+config.transformer.getTransformOptions = async () => ({
+  transform: {
+    // Inline requires are very useful for deferring loading of large dependencies/components.
+    // For example, we use it in app.tsx to conditionally load Reactotron.
+    // However, this comes with some gotchas.
+    // Read more here: https://reactnative.dev/docs/optimizing-javascript-loading
+    // And here: https://github.com/expo/expo/issues/27279#issuecomment-1971610698
+    inlineRequires: {
+      blockList: {
+        [require.resolve("@powersync/react-native")]: true,
 
-### Tell Expo to Disable the Expo Dev Client Network Inspector
+        // require() calls anywhere else will be inlined, unless they
+        // match any entry nonInlinedRequires.
+      },
+    },
+  },
+})
 
-The network inspector in the Expo Dev Client can [interfere with PowerSync's network requests](https://docs.powersync.com/client-sdk-references/react-native-and-expo#android).
+// This helps support certain popular third-party libraries
+// such as Firebase that use the extension cjs.
+config.resolver.sourceExts.push("cjs")
 
-Because our app uses [Expo CNG](https://docs.expo.dev/workflow/continuous-native-generation/) we shouldn't edit the project's native files directly.
+module.exports = config
 
-Instead we can use the `expo-build-properties` plugin to tell expo to disable the network inspector when building the android project.
-
-1. Open the project's `app.json`
-2. In `expo.plugins` find `expo-build-properties`
-3. In the config object for the plugin, set `android.networkInspector` to `false`
-4. Run `expo prebuild` to apply the changes to your android project
-
-```json
-{
-  "expo": {
-    "plugins": [
-      // ...
-      [
-        "expo-build-properties",
-        {
-          "ios": {
-            "newArchEnabled": false,
-            "flipper": false
-          },
-          "android": {
-            "newArchEnabled": false,
-            // success-line
-            "networkInspector": false
-          }
-        }
-      ]
-      //...
-    ]
-    //...
-  }
-}
 ```
-
-:::note
-If you are not using Expo CNG, you can manually edit `/android/gradle.properties` and set `EXPO_DEV_CLIENT_NETWORK_INSPECTOR=false` 
-:::
 
 ## Authenticating with Supabase
 
@@ -244,6 +183,9 @@ const BaseConfig: ConfigBaseProps = {
   // success-line
   supabaseAnonKey: '<<YOUR_SUPABASE_ANON_KEY>>',
 }
+
+export default BaseConfig;
+
 ```
 
 :::tip
@@ -258,7 +200,7 @@ Create `app/services/database/supabase.ts` and add the following code to initial
 // app/services/database/supabase.ts
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { createClient } from "@supabase/supabase-js"
-import { Config } from '../../config'
+import Config from '../../config'
 
 export const supabase = createClient(Config.supabaseUrl, Config.supabaseAnonKey, {
   auth: {
@@ -635,23 +577,21 @@ Right now we just want to confirm that our authentication is working, so lets cl
 
 ```tsx
 // app/screens/WelcomeScreen.tsx
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { Lists, SignOutButton } from "app/components"
-import { DatabaseProvider } from "app/services/database/database"
+import { SignOutButton } from "app/components"
 import { observer } from "mobx-react-lite"
 import React, { FC } from "react"
 import { ViewStyle } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { SignedInNavigatorParamList } from "../navigators"
 import { colors } from "../theme"
+
+interface WelcomeScreenProps
+  extends NativeStackScreenProps<SignedInNavigatorParamList, "Welcome"> {}
 
 export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen() {
   return (
-    <DatabaseProvider>
-      <SafeAreaView style={ $container }>
-        <SignOutButton/>
-      </SafeAreaView>
-    </DatabaseProvider>
+    <SafeAreaView style={$container}>
+      <SignOutButton />
+    </SafeAreaView>
   )
 })
 
@@ -673,6 +613,9 @@ We can ensure this by checking the user's authentication status in the `AppNavig
 
 ```tsx
 // app/navigators/AppNavigator.tsx
+
+// success-line
+import { useAuth } from "app/services/database/use-auth"
 
 //...
 
@@ -1093,7 +1036,7 @@ Remember that the DatabaseProvider needs access to the users authentication stat
 
 //... other imports
 // success-line
-// Import the provder
+// Import the provider
 // success-line
 import { DatabaseProvider } from "app/services/database/database"
 
@@ -1144,24 +1087,23 @@ The `useLists` hook will encapsulate the logic for fetching and managing the lis
 
 It will use:
 
-* `usePowerSyncWatchedQuery` to fetch the lists from the database and watch for changes
+* `useQuery` to fetch the lists from the database and watch for changes
 * `PowerSync.execute` to create and delete lists
-* `expo-crypto` to generate cryptographically secure random UUIDs
 
-#### usePowerSyncWatchedQuery
+#### useQuery
 
 This hook is used to fetch data from the database and watch for changes. It will automatically re-fetch the data when the database changes.
 
 We'll implement our own in a second, but Here's an example of what that looks like:
 
 ```ts
-const lists = usePowerSyncWatchedQuery<ListItemRecord>(`
-    SELECT ${ LIST_TABLE }.*,
-         COUNT(${ TODO_TABLE }.id) AS total_tasks,
-         SUM(CASE WHEN ${ TODO_TABLE }.completed = true THEN 1 ELSE 0 END) AS completed_tasks
-    FROM ${ LIST_TABLE }
-         LEFT JOIN ${ TODO_TABLE } ON ${ LIST_TABLE }.id = ${ TODO_TABLE }.list_id
-    GROUP BY ${ LIST_TABLE }.id;
+const { data: lists } = useQuery<ListItemRecord>(`
+    SELECT ${ LISTS_TABLE }.*,
+         COUNT(${ TODOS_TABLE }.id) AS total_tasks,
+         SUM(CASE WHEN ${ TODOS_TABLE }.completed = true THEN 1 ELSE 0 END) AS completed_tasks
+    FROM ${ LISTS_TABLE }
+         LEFT JOIN ${ TODOS_TABLE } ON ${ LISTS_TABLE }.id = ${ TODOS_TABLE }.list_id
+    GROUP BY ${ LISTS_TABLE }.id;
   `);
 ```
 
@@ -1227,18 +1169,8 @@ When we're offline, the server won't know how many items we've creating, or how 
 
 So in this situation, the app needs to be responsible for generating unique ids for items locally.
 
-We'll use the `randomUUID()` method from `expo-crypto` for this. It generates UUIDs using cryptographically secure
+We'll use the `uuid()` SQLite method for this. It generates UUIDs using cryptographically secure
 random values. This provides extra security and ensures that the generated UUIDs are unique.
-
-Install `expo-crypto` by running this command in your terminal:
-
-```shell
-npx expo add expo-crypto
-```
-
-:::note
-`expo-crypto` contains native modules, so you'll need to rebuild your app after installing it
-:::
 
 #### Implementing the `useLists` Hook
 
@@ -1246,12 +1178,11 @@ Now that we can generate random IDs, we can implement the `useLists` hook:
 
 ```ts
 // app/services/database/use-lists.ts
-import { usePowerSyncWatchedQuery } from "@powersync/react-native"
+import { useQuery } from "@powersync/react-native"
 import { useAuth } from "app/services/database/use-auth"
 import { useCallback } from "react"
 import { useDatabase } from "app/services/database/database"
-import { LIST_TABLE, ListRecord, TODO_TABLE } from "app/services/database/schema"
-import { randomUUID } from 'expo-crypto'
+import { LISTS_TABLE, ListRecord, TODOS_TABLE } from "app/services/database/schema"
 
 // Extend the base type with the calculated fields from our query  
 export type ListItemRecord = ListRecord & { total_tasks: number; completed_tasks: number }
@@ -1263,13 +1194,13 @@ export const useLists = () => {
   const { powersync } = useDatabase()
 
   // List fetching logic here. You can modify it as per your needs.
-  const lists = usePowerSyncWatchedQuery<ListItemRecord>(`
-      SELECT ${ LIST_TABLE }.*,
-             COUNT(${ TODO_TABLE }.id) AS total_tasks,
-             SUM(CASE WHEN ${ TODO_TABLE }.completed = true THEN 1 ELSE 0 END) as completed_tasks
-      FROM ${ LIST_TABLE }
-               LEFT JOIN ${ TODO_TABLE } ON ${ LIST_TABLE }.id = ${ TODO_TABLE }.list_id
-      GROUP BY ${ LIST_TABLE }.id
+  const { data: lists } = useQuery<ListItemRecord>(`
+      SELECT ${ LISTS_TABLE }.*,
+             COUNT(${ TODOS_TABLE }.id) AS total_tasks,
+             SUM(CASE WHEN ${ TODOS_TABLE }.completed = true THEN 1 ELSE 0 END) as completed_tasks
+      FROM ${ LISTS_TABLE }
+               LEFT JOIN ${ TODOS_TABLE } ON ${ LISTS_TABLE }.id = ${ TODOS_TABLE }.list_id
+      GROUP BY ${ LISTS_TABLE }.id
   `)
 
 
@@ -1279,17 +1210,17 @@ export const useLists = () => {
 
     return powersync.execute(
       `
-          INSERT INTO ${ LIST_TABLE }
+          INSERT INTO ${ LISTS_TABLE }
               (id, name, created_at, owner_id)
-          VALUES (?, ?, ?, ?)`,
-      [randomUUID(), name, new Date().toISOString(), user?.id],
+          VALUES (uuid(), ?, ?, ?)`,
+      [name, new Date().toISOString(), user?.id],
     )
   }, [user, powersync])
 
   const deleteList = useCallback(async (id: string) => {
     console.log('Deleting list', id)
     return powersync.execute(`DELETE
-                             FROM ${ LIST_TABLE }
+                             FROM ${ LISTS_TABLE }
                              WHERE id = ?`, [id])
   }, [powersync])
 
@@ -1338,6 +1269,7 @@ interface WelcomeScreenProps
 export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen() {
   return (
     <SafeAreaView style={ $container }>
+      // success-line
       <Lists/>
       <SignOutButton/>
     </SafeAreaView>
@@ -1723,12 +1655,11 @@ We are using `usePowerSyncQuery` to fetch the list and `usePowerSyncWatchedQuery
 ```tsx
 // app/services/database/use-list.ts
 
-import { usePowerSyncQuery, usePowerSyncWatchedQuery } from "@powersync/react-native"
+import { useQuery } from "@powersync/react-native"
 import { useDatabase } from "app/services/database/database"
-import { LIST_TABLE, ListRecord, TODO_TABLE, TodoRecord } from "app/services/database/schema"
+import { LISTS_TABLE, ListRecord, TODOS_TABLE, TodoRecord } from "app/services/database/schema"
 import { useAuth } from "app/services/database/use-auth"
 import { useCallback } from "react"
-import { randomUUID } from 'expo-crypto'
 
 
 export function useList(listId: string) {
@@ -1736,9 +1667,9 @@ export function useList(listId: string) {
   const { powersync } = useDatabase()
 
 
-  const listRecords = usePowerSyncQuery<ListRecord>(`
+  const { data: listRecords } = useQuery<ListRecord>(`
       SELECT *
-      FROM ${ LIST_TABLE }
+      FROM ${ LISTS_TABLE }
       WHERE id = ?
   `, [listId])
 
@@ -1746,9 +1677,9 @@ export function useList(listId: string) {
   const list = listRecords[0]
 
 
-  const todos = usePowerSyncWatchedQuery<TodoRecord>(`
+  const { data: todos } = useQuery<TodoRecord>(`
       SELECT *
-      FROM ${ TODO_TABLE }
+      FROM ${ TODOS_TABtLE }
       WHERE list_id = ?
   `, [listId])
 
@@ -1759,10 +1690,10 @@ export function useList(listId: string) {
     }
     try {
       await powersync.execute(
-        `INSERT INTO ${ TODO_TABLE }
+        `INSERT INTO ${ TODOS_TABLE }
              (id, description, created_at, list_id, created_by, completed)
-         VALUES (?, ?, ?, ?, ?, ?)`,
-        [randomUUID(), description, new Date().toISOString(), listId, user?.id, 0],
+         VALUES (uuid(), ?, ?, ?, ?, ?)`,
+        [description, new Date().toISOString(), listId, user?.id, 0],
       )
 
       return { error: null }
@@ -1774,7 +1705,7 @@ export function useList(listId: string) {
   const removeTodo = useCallback(async (id: string): Promise<{ error: string | null }> => {
     try {
       await powersync.execute(`DELETE
-                                FROM ${ TODO_TABLE }
+                                FROM ${ TODOS_TABLE }
                                 WHERE id = ?`, [id])
       return { error: null }
     } catch (error: any) {
@@ -1793,7 +1724,7 @@ export function useList(listId: string) {
 
     try {
       await powersync.execute(`
-            UPDATE ${ TODO_TABLE }
+            UPDATE ${ TODOS_TABLE }
             SET completed = ?, completed_at = ?, completed_by = ?
             WHERE id = ?
         `, [completed, completedAt, completedBy, id])
