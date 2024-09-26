@@ -38,12 +38,41 @@ When embarking on a software development project, particularly in the context of
 
 ## Common monorepo tools
 
-| Tool                          | Pro                                                                                                                                      | Cons                                                                                                                             |
+Existing monorepo tools can be divided in two types:
+* Dependency managers
+* Build systems
+
+Let's talk about each of them.
+
+### Dependency managers
+
+A dependency manager is a tool that automates the installation and management of a project's required libraries, ensuring compatibility and consistency.
+
+| Tool                          | Pros                                                                                                                                      | Cons                                                                                                                             |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| Yarn Workspaces [Recommended] | Built-in support for monorepos. <br />Simplifies dependency management across packages. <br />Excellent community support and documentation. | Can be complex to configure initially. <br />Some issues with peer dependencies.                                                   |
-| Nx                            | Focuses on improving performance with advanced caching and task scheduling. <br />Great for large-scale enterprise applications.           | Steeper learning curve. <br />May be overkill for smaller projects.                                                                |
-| Turborepo                     | High performance with built-in caching and parallel task execution. <br />Simplifies monorepo management with minimal configuration.       | Less mature ecosystem compared to Yarn or Lerna. <br />Limited tooling support for some workflows.                                 |
-| Pnpm                          | Efficient disk space usage with unique package storage. <br />Fast installation times. <br />Built-in support for monorepos.                 | Less mainstream adoption, leading to potential issues with community support. <br />Some tooling might not fully support Pnpm yet. |
+| [Yarn Workspaces](https://yarnpkg.com/features/workspaces) | Built-in support for monorepos. <br />Simplifies dependency management across packages. <br />Excellent community support and documentation. | Can be complex to configure initially. <br />Some issues with peer dependencies.                                                   |
+| [Pnpm](https://pnpm.io/)                          | Efficient disk space usage with unique package storage. <br />Fast installation times. <br />Built-in support for monorepos.                 | Less mainstream adoption, leading to potential issues with community support. <br />Some tooling might not fully support Pnpm yet. |
+| [Lerna](https://lerna.js.org/) | Great for managing multi-package repositories. <br/>Supports independent versioning of packages. <br/>Integrates well with Yarn Workspaces. | Stagnant for years, although [maintained by Nx now](https://www.google.com/url?q=https://blog.nrwl.io/lerna-5-1-new-website-new-guides-new-lerna-example-repo-distributed-caching-support-and-speed-64d66410bec7&sa=D&source=docs&ust=1727362999686773&usg=AOvVaw2QrLSkc_AY7zOgk7Sz_YQM). <br/> Slower for large codebases. <br/>Requires additional configuration for CI/CD. |
+
+:::info
+
+Based on our experience, simplicity and community support, **we recommend Yarn as a dependency manager**.
+
+:::
+
+
+### Build systems
+
+A build system automates tasks like compiling code, running tests, and bundling assets, optimizing the development process.
+
+| Tool                          | Pros                                                                                                                                      | Cons                                                                                                                             |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| [Nx](https://nx.dev/)                            | Focuses on improving performance with advanced caching and task scheduling. <br />Great for large-scale enterprise applications.           | Steeper learning curve. <br />May be overkill for smaller projects.                                                                |
+| [Turborepo](https://turbo.build/repo/docs/guides/tools)                     | High performance with built-in caching and parallel task execution. <br />Simplifies monorepo management with minimal configuration.       | Less mature ecosystem compared to Yarn or Lerna. <br />Limited tooling support for some workflows.                                 |
+
+---
+
+
 
 ## Common monorepo setups for software apps
 
