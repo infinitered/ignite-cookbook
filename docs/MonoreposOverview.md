@@ -82,16 +82,6 @@ Structure:
 
 Use case: Ideal for projects where the frontend and backend are tightly coupled and frequently share code, such as shared type definitions, utility functions, or API clients.
 
-### Multiple mobile apps in a single monorepo
-
-Structure:
-
-- `/app-ios`: Contains the iOS-specific code.
-- `/app-android`: Contains the Android-specific code.
-- `/shared`: Contains shared React Native components, utilities, and business logic.
-
-Use case: Best for projects with multiple mobile apps that need to share a significant amount of code, ensuring consistency across different platforms.
-
 ### Monorepo with multiple microservices
 
 Structure:
