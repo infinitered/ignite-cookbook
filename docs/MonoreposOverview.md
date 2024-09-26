@@ -70,10 +70,6 @@ A build system automates tasks like compiling code, running tests, and bundling 
 | [Nx](https://nx.dev/)                            | Focuses on improving performance with advanced caching and task scheduling. <br />Great for large-scale enterprise applications.           | Steeper learning curve. <br />May be overkill for smaller projects.                                                                |
 | [Turborepo](https://turbo.build/repo/docs/guides/tools)                     | High performance with built-in caching and parallel task execution. <br />Simplifies monorepo management with minimal configuration.       | Less mature ecosystem compared to Yarn or Lerna. <br />Limited tooling support for some workflows.                                 |
 
----
-
-
-
 ## Common monorepo setups for software apps
 
 ### Frontend and backend in a single monorepo

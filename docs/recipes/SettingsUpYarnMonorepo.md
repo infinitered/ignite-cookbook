@@ -342,6 +342,12 @@ cd apps/mobile
  "eslint-config-prettier": "8.5.0",
 ```
 
+:::info
+
+Although this guide focuses on private monorepos, it's important to address external publishing scenarios. For monorepos with some packages intended for public release, avoid using `workspace:^`. Instead, specify the exact version of each package to ensure proper consumption. To manage versioning and publishing of multiple packages within a monorepo, we recommend using the [changesets](https://github.com/changesets/changesets) tool.
+
+:::
+
 3. Replace the shared ESLint configuration in `package.json`:
 
 `apps/mobile/package.json`
