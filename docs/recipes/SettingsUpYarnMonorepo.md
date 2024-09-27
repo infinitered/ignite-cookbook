@@ -173,12 +173,6 @@ cd ..
 yarn install
 ```
 
-:::info
-
-When you run yarn at the top of the monorepo with Yarn 3.x, Yarn installs all dependencies and links the packages. It places a single `node_modules` folder in each package’s directory, but shared dependencies are typically stored in a `.yarn/cache` folder at the root. Yarn uses Plug’n’Play (PnP) to resolve dependencies without the traditional `node_modules` structure, creating a more efficient setup. Each package or app is linked to the dependencies it needs through Yarn’s PnP system. For more details, you can check out [Yarn's documentation on Plug'n'Play](https://yarnpkg.com/features/pnp).
-
-:::
-
 ## Step 4: Add a shared ESLint configuration with TypeScript
 
 In a monorepo setup, maintaining consistent code quality across TypeScript projects is essential. Sharing a single ESLint configuration file between these apps ensures consistent coding standards and streamlines the development process.
