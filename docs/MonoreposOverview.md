@@ -72,6 +72,13 @@ A build system automates tasks like compiling code, running tests, and bundling 
 
 ## Common monorepo setups for software apps
 
+### Frontend apps and packages
+
+- `/apps`: Contains a set of frontend apps (e.g. React, Electron, React Native).
+- `/packages`: Contains shared packages used by frontend apps.
+
+Use case: Ideal for projects that need to manage multiple frontend apps sharing a common set of utilities and packages.
+
 ### Frontend and backend in a single monorepo
 
 Structure:
