@@ -82,7 +82,7 @@ mkdir apps packages
 
 ## Step 2: Create mobile app using Ignite
 
-Ignite is a powerful tool for scaffolding React Native projects. In this step, we'll create your first app within the monorepo using Ignite.
+[Ignite](https://github.com/infinitered/ignite) is a battle-tested React Native boilerplate that Infinite Red uses every time we start a new project. In this step, we'll create a React Native app within the monorepo using Ignite's CLI.
 
 1. Install the [Ignite CLI](https://www.npmjs.com/package/ignite-cli) (if you haven't already):
 
@@ -115,7 +115,7 @@ We suggest the following answers to the prompts:
 touch mobile/metro.config.js
 ```
 
-4. Replace the following lines in the Metro configuration file with the lines below:
+4. Replace the following lines in the Metro configuration file with the lines below (this is taken from the [Expo guide](https://docs.expo.dev/guides/monorepos/)):
 
 ```js
 // Learn more https://docs.expo.io/guides/customizing-metro
@@ -173,7 +173,7 @@ yarn install
 
 ## Step 4: Add a shared ESLint configuration with TypeScript
 
-In a monorepo setup, maintaining consistent code quality across TypeScript projects is essential. Sharing a single ESLint configuration file between these apps ensures consistent coding standards and streamlines the development process.
+In our experience, maintaining consistent code quality across TypeScript projects within a monorepo is essential. Sharing a single ESLint configuration file between these apps ensures consistent coding standards and streamlines the development process. Let's go ahead and create an utility for that.
 
 1. Create a shared ESLint configuration package:
 
@@ -194,7 +194,7 @@ yarn init -y
 
 3. Install ESLint and TypeScript dependencies:
 
-Install ESLint, TypeScript, and any shared plugins or configurations that you want to use across the apps.
+Install ESLint, TypeScript, and any shared plugins or configurations that you want to use across the apps. We recommend the follow:
 
 ```shell
 yarn add eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-react eslint-plugin-react-native eslint-plugin-reactotron eslint-config-standard eslint-config-prettier --dev
@@ -222,7 +222,7 @@ yarn add eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslin
 
 5. Create the shared ESLint configuration file:
 
-Create an `index.ts` file in the root of your eslint-config package. We will reuse Ignite’s boilerplate ESLint configuration and then replace the original configuration with it.
+Create an `index.ts` file in the root of your `eslint-config` package. We will reuse Ignite’s boilerplate ESLint configuration and then replace the original configuration with it.
 
 `packages/eslint-config/index.ts`
 
@@ -303,7 +303,7 @@ module.exports = {
 // success-line-end
 ```
 
-This configuration (originally sourced from [Ignite](https://github.com/infinitered/ignite)) provides a strong foundation for TypeScript, React, React Native, and import order rules. You can adjust the rules according to your project's specific needs.
+This configuration (originally sourced from [Ignite](https://github.com/infinitered/ignite)) provides a strong foundation for TypeScript, React and React Native projects. You can also adjust the rules according to your project's specific needs.
 
 5. Compile the TypeScript configuration:
 
@@ -313,7 +313,7 @@ npx tsc
 
 This will generate a `index.js` file from your `index.ts` file.
 
-## Step 6: Use the shared ESLint configuration in your apps
+## Step 6: Use the shared ESLint configuration in the mobile app
 
 1. Navigate to the mobile app:
 
@@ -427,9 +427,11 @@ Although this guide focuses on private monorepos, it's important to address exte
 // success-line-end
 ```
 
-## Step 6: Create the shared UI components package
+In this guide, we use `@monorepo-example` as the placeholder name for the monorepo. Be sure to replace it with your actual monorepo name if it’s different.
 
-Let's create a Badge component as a shared UI component that can be used across the monorepo apps. The Badge component is a simple, versatile element often used to display small bits of information, such as notifications, statuses, or labels.
+## Step 7: Create the shared UI components package
+
+Let's create a Badge component as a shared UI component that can be used within the mobile app. For context, a Badge component is a simple and versatile element often used to display small bits of information, such as notifications, statuses, or labels.
 
 1. Navigate to the packages folder:
 
@@ -536,7 +538,7 @@ const styles = StyleSheet.create({
 // success-line-end
 ```
 
-The Badge component is a simple UI element that can display a label with customizable colors, making it versatile for use in different parts of your application, such as notification counts, statuses, or category labels.
+The way it's been defined above, a Badge component should be a simple UI element that can display a label with customizable colors, making it versatile for use in different parts of your application, such as notification counts, statuses, or category labels.
 
 7. Export the badge component:
 
@@ -558,9 +560,9 @@ Compile your TypeScript code to ensure it's ready for consumption by other packa
 npx tsc
 ```
 
-## Step 7: Use the shared UI package in the mobile app
+## Step 8: Use the shared UI package in the mobile app
 
-1. Navigate to the mobile app:
+1. Navigate now to the mobile app:
 
 ```shell
 cd ..
@@ -585,7 +587,7 @@ cd apps/mobile
 
 3. Add the Badge component to the UI
 
-Now, let's use the Badge component. For this example, let’s place it in the login screen, below the heading and above the form fields to indicate the number of login attempts if they exceed a certain number.
+Let's now use the Badge component within the app. For this example, let's place it in the login screen, below the heading and above the form fields to indicate the number of login attempts if they exceed a certain number.
 
 `apps/mobile/apps/screens/LoginScreen.tsx`
 
@@ -608,7 +610,7 @@ import { Badge } from "ui-components"
 // success-line-end
 ```
 
-## Step 8: Run mobile app to make sure logic was added
+## Step 9: Run mobile app to make sure logic was added
 
 1. Navigate to the root of the project:
 
@@ -623,7 +625,7 @@ cd ..
 yarn
 ```
 
-3. Run React Native app (make sure you have your [environment setup](https://reactnative.dev/docs/set-up-your-environment)):
+3. Run the React Native app (make sure you have your [environment setup](https://reactnative.dev/docs/set-up-your-environment)):
 
 For iOS:
 
@@ -639,7 +641,9 @@ cd apps/mobile
 yarn android
 ```
 
-## Step 9: Add Yarn global scripts (optional)
+You should be able to view the login screen with an instance of a badge element added between the heading and the form fields.
+
+## Step 10: Add Yarn global scripts (optional)
 
 Yarn's workspaces feature allows you to define and run scripts globally across all packages in your monorepo. This simplifies your workflow by enabling you to execute tasks like testing, building, or linting from the root of your project, ensuring consistency across all packages. In this optional section, we’ll explore how to set up and use global scripts with Yarn in your monorepo.
 
