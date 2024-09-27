@@ -649,31 +649,26 @@ Yarn's workspaces feature allows you to define and run scripts globally across a
 
 Let's add a global script for the mobile app to run iOS and Android projects.
 
-1. Navigate to the root of the project:
 
-```shell
-cd ..
-cd ..
-```
+1. Add a global script to the mobile app `package.json` file:
 
-2. Add a global script to the root `package.json` file:
-
-`package.json`
+`apps/mobile/package.json`
 
 ```json
-  "version": "1.0.0",
-  // success-line-start
   "scripts": {
+    ...
+    "serve:web": "npx server dist",
+    // error-line
+    "prebuild:clean": "npx expo prebuild --clean"
+    // success-line-start
+    "prebuild:clean": "npx expo prebuild --clean",
     "mobile:ios" : "yarn workspace mobile ios",
     "mobile:android" : "yarn workspace mobile android"
+    // success-line-end
   },
-  // success-line-end
-  "workspaces": [
-    "apps/*",
-    "utilities/*"
-  ]
 ```
 
+Even though this script is locally defined within the app's `package.json` file, it will available everywhere within the monorepo by running `yarn mobile:ios` or `yarn mobile:android`.
 
 For more information on Yarn's global scripts, check [this site](https://yarnpkg.com/features/workspaces#global-scripts).
 
