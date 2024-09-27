@@ -679,4 +679,8 @@ For more information on Yarn's global scripts, check [this site](https://yarnpkg
 
 ## Conclusion
 
-Congratulations on setting up your Yarn monorepo! By using the Ignite framework, and two shared packages, you've successfully integrated these together. This setup enables you to scale your projects efficiently by sharing code across multiple applications in a well-structured and organized manner.
+Congratulations on setting up your Yarn monorepo! By using the [Ignite](https://github.com/infinitered/ignite) framework, and two shared packages, you've successfully integrated these together. This setup enables you to scale your projects efficiently by sharing code across multiple applications in a well-structured and organized manner.
+
+For more information, you can check the following resources:
+* [Choosing the right monorepo strategy for your project](/docs/MonoreposOverview.md)
+* [Expo: Work with monorepos](https://docs.expo.dev/guides/monorepos/)
