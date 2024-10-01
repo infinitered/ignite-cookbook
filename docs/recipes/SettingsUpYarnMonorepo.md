@@ -529,11 +529,11 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 12,
     alignSelf: "flex-start",
-  } as ViewStyle,
+  } satisfies ViewStyle,
   text: {
     fontSize: 12,
     fontWeight: "bold",
-  } as TextStyle,
+  } satisfies TextStyle,
 })
 // success-line-end
 ```
