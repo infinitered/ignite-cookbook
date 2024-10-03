@@ -136,9 +136,16 @@ Should be changed to:
 translate("common:ok")
 ```
 
-## Step 7: Handle date localization
-
 ---
+
+Lastly, update the usage of `i18n`s `locale` method to `language` instead. For example in `app/utils/formatDate.ts`:
+
+```js
+// error-line
+const locale = i18n.locale.split("-")[0]
+// success-line
+const locale = i18n.language.split("-")[0]
+```
 
 For detailed code changes, including initialization updates, translation function updates, and testing, refer to the following PRs on the Ignite Github repo:
 
