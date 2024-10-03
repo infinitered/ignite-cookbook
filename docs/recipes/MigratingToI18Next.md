@@ -8,7 +8,7 @@ last_update:
 publish_date: 2024-09-25
 ---
 
-# Migrating from i18n-js to react-i18next within an Ignite
+# Migrating from i18n-js to react-i18next within an Ignite project
 
 ## Overview
 
@@ -115,10 +115,19 @@ import 'intl-pluralrules';
 The next step is to replace your old translate function with the one provided by `react-i18next`. This is located in `app/i18n/translate.ts`:
 
 ```js
-import { t } from 'i18next';
+// error-line
+import { TranslateOptions } from "i18n-js"
+// success-line
+import { TOptions } from "i18next"
 
+// error-line-start
+export function translate(key: TxKeyPath, options?: TranslateOptions): string {
+  return i18n.t(key, options)
+// error-line-end
+// success-line-start
 export function translate(key, options) {
   return i18n.isInitialized ? i18n.t(key, options) : key;
+// success-line-end
 }
 ```
 
@@ -152,4 +161,4 @@ For detailed code changes, including initialization updates, translation functio
 * [Swap out i18n-js for react-18next](https://github.com/infinitered/ignite/pull/2770)
 * [Fix language switching and update date-fns to v4](https://github.com/infinitered/ignite/pull/2778)
 
-By following this guide, you will be able to seamlessly transition your React Native app from `i18n-js` to `react-i18next`, ensuring improved localization features and support for modern internationalization practices.
+By following this guide, you will be able to seamlessly transition your React Native app from `i18n-js` to `react-i18next`, ensuring improved localization features and support for modern internationalization practices. Let us know if you have any questions!
