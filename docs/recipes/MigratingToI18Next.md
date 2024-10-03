@@ -1,6 +1,6 @@
 ---
-title: Migrating from i18n-js to i18next
-description: How to migrate from i18n-js to i18next
+title: Migrating from i18n-js to react-i18next
+description: How to migrate from i18n-js to react-i18next
 tags:
   - i18n
 last_update:
