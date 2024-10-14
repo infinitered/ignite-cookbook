@@ -1,0 +1,128 @@
+---
+title: Theming Ignite with styled-components
+description: Learn how to use different styling libraries to theme your Ignited app!
+tags:
+  - Theming
+  - iOS
+  - Android
+  - colors
+  - darkmode
+  - styled-components
+last_update:
+  author: Mark Rickert
+publish_date: 2024-12-02
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
+
+# Theming Ignite
+
+When it comes to styling we acknowledge the popularity and effectiveness of libraries like `styled-components`, `emotion.js` and `unistyles`. Our boilerplate is designed to work seamlessly with these styling solutions, offering you the flexibility to choose the one that aligns with your preferences and project requirements.
+
+The theming system in Ignite Boilerplate is crafted to be adaptable and easy to customize. By simply replacing colors and fonts through the designated theme files, you can tailor the look and feel of your application.
+
+## Using `styled-components`
+
+### 1. Add `styled-components` to your app:
+
+<Tabs groupId="operating-systems">
+  <TabItem value="yarn" label="Yarn">
+    <CodeBlock language="bash">yarn add styled-components</CodeBlock>
+  </TabItem>
+  <TabItem value="npm" label="npm">
+    <CodeBlock language="bash">npm install styled-components</CodeBlock>
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+    <CodeBlock language="bash">pnpm install styled-components</CodeBlock>
+  </TabItem>
+</Tabs>
+
+### 2. Add the `ThemeProvider` to your app:
+
+Find and open the `AppNavigator.tsx` file in your project and add the import:
+
+```ts
+import { ThemeProvider as StyledThemeProvider } from "styled-components";
+```
+
+Add the following functional component:
+
+```tsx
+const StyledComponentsThemeProvider = (props: React.PropsWithChildren) => {
+  const { theme } = useAppTheme();
+  return <StyledThemeProvider theme={theme} {...props} />;
+};
+```
+
+Add the new `StyledComponentsThemeProvider` component just inside the `<ThemeProvider>` component in the `AppNavigator`.
+
+```diff
+return (
+  <ThemeProvider value={{ themeScheme, setThemeContextOverride }}>
++    <StyledComponentsThemeProvider>
+      <NavigationContainer ref={navigationRef} theme={navigationTheme} {...props}>
+        <AppStack />
+      </NavigationContainer>
++    </StyledComponentsThemeProvider>
+  </ThemeProvider>
+);
+```
+
+### 3. Create and use your first styled-component using the new theme:
+
+```tsx
+import styled from "styled-components/native";
+
+const MyTextComponent = styled.Text`
+  margin: 10px;
+  color: ${({ theme }) => theme.colors.text};
+  background-color: ${({ theme }) => theme.colors.background};
+`;
+
+export const MyScreen = (props) => {
+  return (
+    <MyTextComponent>
+      This text color and background will change when changing themes.
+    </MyTextComponent>
+  );
+};
+```
+
+### 4. Tell `styled-components` about the shape of your theme:
+
+Create a new file in you Ignited app's `types` folder called `styled-components.d.ts` with the following content:
+
+```tsx
+// Override DefaultTheme to get accurate typings for your project.
+import type { Theme } from "app/theme";
+import "styled-components";
+import "styled-components/native";
+
+declare module "styled-components" {
+  export interface DefaultTheme extends Theme {}
+}
+
+declare module "styled-components/native" {
+  export interface DefaultTheme extends Theme {}
+}
+```
+
+## Complete!
+
+You can now use `styled-components` integrated into the Ignite theme engine. To swap themes provide the user a switch or toggle button:
+
+```tsx
+const { setThemeContextOverride, themeContext } = useAppTheme();
+
+return (
+  <Button
+    onPress={() => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut); // Animate the transition
+      setThemeContextOverride(themeContext === "dark" ? "light" : "dark");
+    }}
+    text={`Switch Theme: ${themeContext}`}
+  />
+);
+```

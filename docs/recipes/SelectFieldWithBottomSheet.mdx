@@ -60,10 +60,7 @@ import { View, TouchableOpacity } from "react-native";
 import { TextField, TextFieldProps } from "./TextField";
 
 export interface SelectFieldProps
-  extends Omit<
-    TextFieldProps,
-    "ref" | "onValueChange" | "onChange" | "value"
-  > {}
+  extends Omit<TextFieldProps, "ref" | "onValueChange" | "onChange" | "value"> {}
 export interface SelectFieldRef {}
 
 export const SelectField = forwardRef(function SelectField(
@@ -72,8 +69,7 @@ export const SelectField = forwardRef(function SelectField(
 ) {
   const { ...TextFieldProps } = props;
 
-  const disabled =
-    TextFieldProps.editable === false || TextFieldProps.status === "disabled";
+  const disabled = TextFieldProps.editable === false || TextFieldProps.status === "disabled";
 
   useImperativeHandle(ref, () => ({}));
 
@@ -121,9 +117,7 @@ Let's add an accessory to the input to make it look like a `SelectField`.
 ```tsx
 <TextField
   {...TextFieldProps}
-  RightAccessory={(props) => (
-    <Icon icon="caretRight" containerStyle={props.style} />
-  )}
+  RightAccessory={(props) => <Icon icon="caretRight" containerStyle={props.style} />}
 />
 ```
 
@@ -210,8 +204,7 @@ export const SelectField = forwardRef(function SelectField(
     ...TextFieldProps
   } = props;
 
-  const disabled =
-    TextFieldProps.editable === false || TextFieldProps.status === "disabled";
+  const disabled = TextFieldProps.editable === false || TextFieldProps.status === "disabled";
 
   useImperativeHandle(ref, () => ({}));
 
@@ -232,9 +225,7 @@ export const SelectField = forwardRef(function SelectField(
             {...TextFieldProps}
             // success-line-start
             value={valueString}
-            RightAccessory={(props) => (
-              <Icon icon="caretRight" containerStyle={props.style} />
-            )}
+            RightAccessory={(props) => <Icon icon="caretRight" containerStyle={props.style} />}
             // success-line-end
           />
         </View>
@@ -348,6 +339,8 @@ import {
 // success-line-end
 import React, { forwardRef, Ref, useImperativeHandle, useRef } from "react";
 import { TouchableOpacity, View, ViewStyle } from "react-native";
+import type { ThemedStyle } from "app/theme";
+import { useAppTheme } from "app/utils/useAppTheme";
 // success-line
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 // success-line
@@ -391,8 +384,9 @@ export const SelectField = forwardRef(function SelectField(
   const { bottom } = useSafeAreaInsets();
   // success-line-end
 
-  const disabled =
-    TextFieldProps.editable === false || TextFieldProps.status === "disabled";
+  const { themed } = useAppTheme();
+
+  const disabled = TextFieldProps.editable === false || TextFieldProps.status === "disabled";
 
   // success-line
   useImperativeHandle(ref, () => ({ presentOptions, dismissOptions }));
@@ -426,9 +420,7 @@ export const SelectField = forwardRef(function SelectField(
           <TextField
             {...TextFieldProps}
             value={valueString}
-            RightAccessory={(props) => (
-              <Icon icon="caretRight" containerStyle={props.style} />
-            )}
+            RightAccessory={(props) => <Icon icon="caretRight" containerStyle={props.style} />}
           />
         </View>
       </TouchableOpacity>
@@ -440,11 +432,7 @@ export const SelectField = forwardRef(function SelectField(
         stackBehavior="replace"
         enableDismissOnClose
         backdropComponent={(props) => (
-          <BottomSheetBackdrop
-            {...props}
-            appearsOnIndex={0}
-            disappearsOnIndex={-1}
-          />
+          <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />
         )}
         footerComponent={
           !multiple
@@ -452,14 +440,10 @@ export const SelectField = forwardRef(function SelectField(
             : (props) => (
                 <BottomSheetFooter
                   {...props}
-                  style={$bottomSheetFooter}
+                  style={themed($bottomSheetFooter)}
                   bottomInset={bottom}
                 >
-                  <Button
-                    text="Dismiss"
-                    preset="reversed"
-                    onPress={dismissOptions}
-                  />
+                  <Button text="Dismiss" preset="reversed" onPress={dismissOptions} />
                 </BottomSheetFooter>
               )
         }
@@ -469,11 +453,7 @@ export const SelectField = forwardRef(function SelectField(
           data={options}
           keyExtractor={(o) => o.value}
           renderItem={({ item, index }) => (
-            <ListItem
-              text={item.label}
-              topSeparator={index !== 0}
-              style={$listItem}
-            />
+            <ListItem text={item.label} topSeparator={index !== 0} style={themed($listItem)} />
           )}
         />
       </BottomSheetModal>
@@ -483,14 +463,14 @@ export const SelectField = forwardRef(function SelectField(
 });
 
 // success-line-start
-const $bottomSheetFooter: ViewStyle = {
+const $bottomSheetFooter: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   paddingHorizontal: spacing.lg,
   paddingBottom: spacing.xs,
-};
+});
 
-const $listItem: ViewStyle = {
+const $listItem: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   paddingHorizontal: spacing.lg,
-};
+});
 // success-line-end
 ```
 
@@ -515,8 +495,8 @@ import {
 import React, { forwardRef, Ref, useImperativeHandle, useRef } from "react";
 import { TouchableOpacity, View, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-// success-line
-import { colors, spacing } from "../theme";
+import type { ThemedStyle } from "app/theme";
+import { useAppTheme } from "app/utils/useAppTheme";
 import { Button } from "./Button";
 import { Icon } from "./Icon";
 import { ListItem } from "./ListItem";
@@ -555,9 +535,14 @@ export const SelectField = forwardRef(function SelectField(
   } = props;
   const sheet = useRef<BottomSheetModal>(null);
   const { bottom } = useSafeAreaInsets();
+  const {
+    themed,
+    // success-line-start
+    theme: { colors },
+    // success-line-end
+  } = useAppTheme();
 
-  const disabled =
-    TextFieldProps.editable === false || TextFieldProps.status === "disabled";
+  const disabled = TextFieldProps.editable === false || TextFieldProps.status === "disabled";
 
   useImperativeHandle(ref, () => ({ presentOptions, dismissOptions }));
 
@@ -596,9 +581,7 @@ export const SelectField = forwardRef(function SelectField(
           <TextField
             {...TextFieldProps}
             value={valueString}
-            RightAccessory={(props) => (
-              <Icon icon="caretRight" containerStyle={props.style} />
-            )}
+            RightAccessory={(props) => <Icon icon="caretRight" containerStyle={props.style} />}
           />
         </View>
       </TouchableOpacity>
@@ -609,11 +592,7 @@ export const SelectField = forwardRef(function SelectField(
         stackBehavior="replace"
         enableDismissOnClose
         backdropComponent={(props) => (
-          <BottomSheetBackdrop
-            {...props}
-            appearsOnIndex={0}
-            disappearsOnIndex={-1}
-          />
+          <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />
         )}
         footerComponent={
           !multiple
@@ -621,14 +600,10 @@ export const SelectField = forwardRef(function SelectField(
             : (props) => (
                 <BottomSheetFooter
                   {...props}
-                  style={$bottomSheetFooter}
+                  style={themed($bottomSheetFooter)}
                   bottomInset={bottom}
                 >
-                  <Button
-                    text="Dismiss"
-                    preset="reversed"
-                    onPress={dismissOptions}
-                  />
+                  <Button text="Dismiss" preset="reversed" onPress={dismissOptions} />
                 </BottomSheetFooter>
               )
         }
@@ -641,7 +616,7 @@ export const SelectField = forwardRef(function SelectField(
             <ListItem
               text={item.label}
               topSeparator={index !== 0}
-              style={$listItem}
+              style={themed($listItem)}
               // success-line-start
               rightIcon={value.includes(item.value) ? "check" : undefined}
               rightIconColor={colors.palette.angry500}
@@ -655,14 +630,14 @@ export const SelectField = forwardRef(function SelectField(
   );
 });
 
-const $bottomSheetFooter: ViewStyle = {
+const $bottomSheetFooter: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   paddingHorizontal: spacing.lg,
   paddingBottom: spacing.xs,
-};
+});
 
-const $listItem: ViewStyle = {
+const $listItem: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   paddingHorizontal: spacing.lg,
-};
+});
 ```
 
 And we're done!
