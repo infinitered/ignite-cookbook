@@ -113,10 +113,16 @@ export const i18n = new I18n(
 // success-line-start
 const resources = { ar, en, ko, es, fr, ja, hi }
 
+const pickSupportedLocale: () => Localization.Locale | undefined = () => {
+  return systemLocales.find((locale) => systemTagMatchesSupportedTags(locale.languageTag))
+}
+
+const locale = pickSupportedLocale()
+
 export const initI18n = async () => {
   await i18n.use(initReactI18next).init({
     resources,
-    lng: pickSupportedLocale()?.languageTag || fallbackLocale,
+    lng: locale?.languageTag ?? fallbackLocale,
     fallbackLng: fallbackLocale,
     interpolation: { escapeValue: false },
   });
