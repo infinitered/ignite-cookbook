@@ -189,6 +189,94 @@ Should be changed to:
 translate("common:ok")
 ```
 
+### Example
+
+Using Ignite’s boilerplate code, here’s an example of how to replace the separator in `i18next`. We’ll use the `WelcomeScreen` component as a reference:
+
+```js
+// error-line-start
+useHeader(
+  {
+    rightTx: "common.logOut",
+    onRightPress: logout,
+  },
+  [logout],
+)
+// error-line-end
+// success-line-start
+useHeader(
+  {
+    rightTx: "common:logOut",
+    onRightPress: logout,
+  },
+  [logout],
+)
+// success-line-end
+```
+
+Or from the return statement itself:
+
+```tsx
+// error-line-start
+return (
+  <View style={$container}>
+    <View style={$topContainer}>
+      <Image style={$welcomeLogo} source={welcomeLogo} resizeMode="contain" />
+      <Text
+        testID="welcome-heading"
+        style={$welcomeHeading}
+        tx="welcomeScreen.readyForLaunch"
+        preset="heading"
+      />
+      <Text tx="welcomeScreen.exciting" preset="subheading" />
+      <Image style={$welcomeFace} source={welcomeFace} resizeMode="contain" />
+    </View>
+
+    <View style={[$bottomContainer, $bottomContainerInsets]}>
+      <Text tx="welcomeScreen.postscript" size="md" />
+
+      <Button
+        testID="next-screen-button"
+        preset="reversed"
+        tx="welcomeScreen.letsGo"
+        onPress={goNext}
+      />
+    </View>
+  </View>
+)
+})
+// error-line-end
+// success-line-start
+return (
+  <View style={$container}>
+    <View style={$topContainer}>
+      <Image style={$welcomeLogo} source={welcomeLogo} resizeMode="contain" />
+      <Text
+        testID="welcome-heading"
+        style={$welcomeHeading}
+        tx="welcomeScreen:readyForLaunch"
+        preset="heading"
+      />
+      <Text tx="welcomeScreen:exciting" preset="subheading" />
+      <Image style={$welcomeFace} source={welcomeFace} resizeMode="contain" />
+    </View>
+
+    <View style={[$bottomContainer, $bottomContainerInsets]}>
+      <Text tx="welcomeScreen:postscript" size="md" />
+
+      <Button
+        testID="next-screen-button"
+        preset="reversed"
+        tx="welcomeScreen:letsGo"
+        onPress={goNext}
+      />
+    </View>
+  </View>
+)
+})
+// success-line-end
+```
+
 ## Step 8: Update types in i18n.ts
 
 To prevent errors related to the `tx` property and accommodate `i18next`'s use of `:` as the primary separator, we need to update the types in `app/i18n/i18n.ts`.
@@ -237,7 +325,7 @@ type RecursiveKeyOfHandleValue<
 
 ---
 
-Lastly, update the usage of `i18n`s `locale` method to `language` instead. For example in `app/utils/formatDate.ts`:
+Lastly, update the usage of `i18n`'s `locale` method to `language` instead. For example in `app/utils/formatDate.ts`:
 
 ```js
 // error-line
