@@ -18,21 +18,20 @@ In this guide, we will be going through the steps required to migrate your Ignit
 
 Finally, the steps outlined in this guide, are based on the changes outlined in the following two PRs:
 * [Swap out i18n-js for react-18next](https://github.com/infinitered/ignite/pull/2770)
-* [Fix language switching and update date-fns to v4](https://github.com/infinitered/ignite/pull/2778)
+* [Fix language switching and update date-fns to v4](https://github.com/infinitered/ignite/pull/2788)
 
 ## Step 1: Manage dependencies
 
 Remove the `i18n-js` package and its types:
 
 ```bash
-yarn remove i18n-js
-yarn remove @types/i18n-js
+yarn remove i18n-js @types/i18n-js@types/i18n-js
 ```
 
 Add the two new dependencies:
 
 ```bash
-yarn add react-i18nex i18next
+yarn add react-i18next i18next
 ```
 
 ## Step 2: Set up initialization logic in app.tsx
@@ -43,11 +42,21 @@ To ensure that `react-i18next` finishes initializing before your app proceeds, w
 2. Use the `useEffect` hook to set the state when initialization completes.
 
 ```js
+
+// error-line
+import "./i18n"
+// success-line
+import { initI18n } from "./i18n"
+
+// ...extra file logic
+
+// success-line-start
 const [isI18nInitialized, setIsI18nInitialized] = useState(false);
 
 useEffect(() => {
   initI18n().then(() => setIsI18nInitialized(true));
 }, []);
+// success-line-end
 ```
 
 Additionally, consider including the new state variable in the rendering condition for the app.
@@ -65,15 +74,46 @@ if (!rehydrated || !isNavigationStateRestored || !isI18nInitialized || (!areFont
 
 This ensures that your app will wait until `react-i18next` is fully initialized before continuing, preventing any issues with missing translations.
 
-## Step 3: Update the i18n initialization method
+## Step 3: Remove i18n-js from project
+
+In `app/i18n/i18n.ts`, delete the import line for i18n-js.
+
+```js
+// error-line
+import { I18n } from "i18n-js"
+```
+
+## Step 4: Update the i18n initialization method
 
 Next, update your i18n initialization to use `react-i18next`, which also includes RTL (right-to-left) language support and handles locale selection. In a Ingnite generated project, this is located in `app/i18n/i18n.ts`.
 
 ```js
 
+// success-line-start
 import * as i18next from "i18next"
+import { initReactI18next } from "react-i18next"
+import en from "./en"
+import ar from "./ar"
+import ko from "./ko"
+import es from "./es"
+import fr from "./fr"
+import ja from "./ja"
+import hi from "./hi"
+// success-line-end
 
-const initI18n = async () => {
+// ...extra file logic
+
+
+// error-line-start
+export const i18n = new I18n(
+  { ar, en, "en-US": en, ko, fr, ja, hi },
+  { locale: fallbackLocale, defaultLocale: fallbackLocale, enableFallback: true },
+)
+// error-line-end
+// success-line-start
+const resources = { ar, en, ko, es, fr, ja, hi }
+
+export const initI18n = async () => {
   await i18n.use(initReactI18next).init({
     resources,
     lng: pickSupportedLocale()?.languageTag || fallbackLocale,
@@ -92,11 +132,12 @@ const initI18n = async () => {
 
   return i18n;
 };
+// success-line-end
 ```
 
 This ensures that supported locales are chosen based on the device’s settings, and RTL is correctly applied when necessary. For more on detail on these changes, check the [this PR](https://github.com/infinitered/ignite/pull/2770).
 
-## Step 4: Add intl-pluralrules for react-i18next and JSON v4
+## Step 5: Add intl-pluralrules for react-i18next and JSON v4
 
 To support pluralization and `react-i18next`'s JSON v4 format, you’ll need to add the `intl-pluralrules` package:
 
@@ -107,31 +148,34 @@ yarn add intl-pluralrules
 Make sure to import this package into your i18n configuration file (`app/i18n/i18n.ts`):
 
 ```js
+// success-line
 import 'intl-pluralrules';
 ```
 
-## Step 5: Update the translate function
+## Step 6: Update the translate function
 
 The next step is to replace your old translate function with the one provided by `react-i18next`. This is located in `app/i18n/translate.ts`:
 
 ```js
 // error-line
 import { TranslateOptions } from "i18n-js"
-// success-line
+// success-line-start
 import { TOptions } from "i18next"
+import { TxKeyPath } from "./i18n"
+// success-line-end
 
 // error-line-start
 export function translate(key: TxKeyPath, options?: TranslateOptions): string {
   return i18n.t(key, options)
 // error-line-end
 // success-line-start
-export function translate(key, options) {
+export function translate(key: TxKeyPath, options?: TOptions) {
   return i18n.isInitialized ? i18n.t(key, options) : key;
 // success-line-end
 }
 ```
 
-## Step 6: Update translation keys from dots (.) to colons (:)
+## Step 7: Update translation keys from dots (.) to colons (:)
 
 `react-i18next` uses different types of separators for translation keys. Colons (:) are used for first-level translations within an object, while dots (.) are used for nested translations. As a result, you’ll need to update all translation keys in your app accordingly. For example:
 
@@ -145,20 +189,73 @@ Should be changed to:
 translate("common:ok")
 ```
 
+## Step 8: Update types in i18n.ts
+
+To prevent errors related to the `tx` property and accommodate `i18next`'s use of `:` as the primary separator, we need to update the types in `app/i18n/i18n.ts`.
+
+```js
+// error-line-start
+type RecursiveKeyOf<TObj extends object> = {
+  [TKey in keyof TObj & (string | number)]: RecursiveKeyOfHandleValue<TObj[TKey], `${TKey}`>
+}[keyof TObj & (string | number)]
+
+type RecursiveKeyOfInner<TObj extends object> = {
+  [TKey in keyof TObj & (string | number)]: RecursiveKeyOfHandleValue<
+    TObj[TKey],
+    `['${TKey}']` | `.${TKey}`
+  >
+}[keyof TObj & (string | number)]
+
+type RecursiveKeyOfHandleValue<TValue, Text extends string> = TValue extends any[]
+  ? Text
+  : TValue extends object
+  ? Text | `${Text}${RecursiveKeyOfInner<TValue>}`
+  : Text
+// error-line-end
+// success-line-start
+type RecursiveKeyOf<TObj extends object> = {
+  [TKey in keyof TObj & (string | number)]: RecursiveKeyOfHandleValue<TObj[TKey], `${TKey}`, true>
+}[keyof TObj & (string | number)]
+
+type RecursiveKeyOfInner<TObj extends object> = {
+  [TKey in keyof TObj & (string | number)]: RecursiveKeyOfHandleValue<TObj[TKey], `${TKey}`, false>
+}[keyof TObj & (string | number)]
+
+type RecursiveKeyOfHandleValue<
+  TValue,
+  Text extends string,
+  IsFirstLevel extends boolean,
+> = TValue extends any[]
+  ? Text
+  : TValue extends object
+    ? IsFirstLevel extends true
+      ? Text | `${Text}:${RecursiveKeyOfInner<TValue>}`
+      : Text | `${Text}.${RecursiveKeyOfInner<TValue>}`
+    : Text
+// success-line-end
+```
+
 ---
 
 Lastly, update the usage of `i18n`s `locale` method to `language` instead. For example in `app/utils/formatDate.ts`:
 
 ```js
 // error-line
+import { i18n } from "app/i18n"
+// success-line
+import i18next from "i18next"
+
+// ...extra file logic
+
+// error-line
 const locale = i18n.locale.split("-")[0]
 // success-line
-const locale = i18n.language.split("-")[0]
+const locale = i18next.language.split("-")[0]
 ```
 
 For detailed code changes, including initialization updates, translation function updates, and testing, refer to the following PRs on the Ignite Github repo:
 
 * [Swap out i18n-js for react-18next](https://github.com/infinitered/ignite/pull/2770)
-* [Fix language switching and update date-fns to v4](https://github.com/infinitered/ignite/pull/2778)
+* [Fix language switching and update date-fns to v4](https://github.com/infinitered/ignite/pull/2788)
 
 By following this guide, you will be able to seamlessly transition your React Native app from `i18n-js` to `react-i18next`, ensuring improved localization features and support for modern internationalization practices. Let us know if you have any questions!
