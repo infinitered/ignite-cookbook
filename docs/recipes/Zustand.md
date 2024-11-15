@@ -89,7 +89,7 @@ export interface AuthenticationStoreSnapshot extends SnapshotOut<typeof Authenti
 
 </details>
 
-MobX-State-Tree models declare the data type, initial values, derived values, and actions all in one.  
+MobX-State-Tree models declare the data type, initial values, derived values, and actions all in one.
 Zustand takes a "barebones" approach and defines a store as a basic state object with data and actions co-located.
 
 Create a new file `app/store/AuthenticationStore.ts` and convert the model to Zustand to look like this:
@@ -535,7 +535,19 @@ const episodeStore = useEpisodeStore();
 ```
 
 ```diff
-<Toggle
+useEffect(() => {
+      ;(async function load() {
+        setIsLoading(true)
+        await episodeStore.fetchEpisodes()
+        setIsLoading(false)
+      })()
+--    }, [episodeStore])
+++    }, [])
+
+```
+
+```diff
+<Switch
   value={episodeStore.favoritesOnly}
   onValueChange={() =>
 --  episodeStore.setProp("favoritesOnly", !episodeStore.favoritesOnly)
@@ -554,7 +566,7 @@ const parsedTitleAndSubtitle = getParsedTitleAndSubtitle(episode);
 
 ```diff
  <Text
-  style={$metadataText}
+  style={themed($metadataText)}
   size="xxs"
 --accessibilityLabel={episode.datePublished.accessibilityLabel}
 ++accessibilityLabel={datePublished.accessibilityLabel}
@@ -647,21 +659,19 @@ We added the `persist` middleware and created `_hasHydrated` property & action t
 
 ...
 
-const [areFontsLoaded] = useFonts(customFontsToLoad)
+const [areFontsLoaded, fontLoadError] = useFonts(customFontsToLoad)
 
--useEffect(() => {
--  hideSplashScreen()
--}, [])
+-const { rehydrated } = useInitialRootStore(() => {
+-   setTimeout(hideSplashScreen, 500)
+-})
 
-+const hasHydrated = useStore((state) => state._hasHydrated)
+
++const rehydrated = useStore((state) => state._hasHydrated)
 +useEffect(() => {
-+  if (hasHydrated) {
++  if (rehydrated) {
 +    setTimeout(hideSplashScreen, 500)
 +  }
-+}, [hasHydrated])
-
--if (!isNavigationStateRestored || !areFontsLoaded) return null
-+if (!hasHydrated || !isNavigationStateRestored || !areFontsLoaded) return null
++}, [rehydrated])
 
 ```
 
