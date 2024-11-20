@@ -6,7 +6,7 @@ tags:
   - VisionCamera
   - react-native-vision-camera
 last_update:
-  author: Frank Calise
+  author: Ellie Croce
 publish_date: 2023-10-23
 ---
 
