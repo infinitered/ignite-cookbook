@@ -12,23 +12,29 @@ publish_date: 2024-08-22
 
 # Setting up a Yarn monorepo with Ignite
 
-In this guide, we'll lead you through the process of setting up a Yarn monorepo for your [React Native](https://reactnative.dev/) projects using the [Ignite](https://github.com/infinitered/ignite) framework. We'll start by setting up the monorepo structure, then create a React Native app using the Ignite CLI, to end up creating two shared utilities (form-validator utility and UI library) that will be integrated into the app.
+👋 Hello and welcome to this monorepo guide! We know setting up a project using a monorepo structure can be sometimes challenging, therefore we created this guide to lead you through process. We'll be focusing on [React Native](https://reactnative.dev/) projects using the [Ignite](https://github.com/infinitered/ignite) framework and the [Yarn](https://yarnpkg.com) tool.
+
+This guide starts by setting up the monorepo structure, then create a React Native app using the Ignite CLI, to finally end up generating two shared utilities: a form-validator utility and a shared UI library, that we will be integrate into the app.
 
 ## Prerequisites
 
-Before you start, we want to ensure you have the following tools installed on your machine:
+Before we begin, we want to ensure you have these standard tools installed on your machine:
 
 - [Node.js](https://nodejs.org/en) (version 18 or later)
 - [Yarn](https://yarnpkg.com) (version 3.8 or later)
 
+Now, let’s dive into the specific use case this guide will address.
+
 ## Use case
 
-In a monorepo setup, multiple applications, such as a mobile app (using React Native) and a web app (using React), can share common functionalities. This guide will walk you through the process of setting up and utilizing shared utilities within a monorepo. For instance, if you have several apps that need to share an ESLint configuration or UI components, you can create reusable packages that can be integrated across all your apps.
+In a monorepo setup with multiple applications, like a React Native mobile app and a React web app, can share common functionalities.
+
+In this guide we will be focusing on that premise and creating/utilizing shared utilities within the monorepo. For instance, if you have several apps that need to share an ESLint configuration or UI components, you can create reusable packages that can be integrated across all your apps.
 
 
 :::info
 
-More information on monorepo tools and whether you want to setup your apps within a monorepo, can be found [here](/docs/MonoreposOverview.md).
+Wait! How do I even know if my project will benefit from a monorepo structure? No worries! We have more documentation on monorepo tools and whether you want to choose this way of organization. You can find it [here](/docs/recipes/MonoreposOverview).
 
 :::
 
