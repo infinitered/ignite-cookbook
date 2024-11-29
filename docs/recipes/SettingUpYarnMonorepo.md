@@ -38,13 +38,17 @@ Wait! How do I even know if my project will benefit from a monorepo structure? N
 
 :::
 
-By centralizing these utilities, you can reduce code duplication and simplify maintenance, ensuring that any updates or bug fixes are immediately available to all your apps.
+By centralizing these kind of utilities, you can reduce code duplication and simplify maintenance work, ensuring any updates or bug fixes are immediately available in all your apps within the monorepo.
 
-In this setup, we’ll create a React Native app along with two shared packages: one for holding a common ESLint configuration and another for shared UI components. Finally, we’ll integrate these packages into the mobile app.
+**So in summary we’ll create a React Native app along with two shared packages: one for holding a common ESLint configuration and another for shared UI components, to finally integrate those back into the app.**
+
+Let's begin!
 
 ## Step 1: Setting up the monorepo
 
-First, follow the [Expo documentation on setting up monorepos](https://docs.expo.dev/guides/monorepos/) to initialize your own monorepo. This will include setting up your `packages/` and `apps/` directories and configuring Yarn workspaces.
+First, read carefully what [Expo documentation on setting up monorepos](https://docs.expo.dev/guides/monorepos/) says.
+
+After this step, you'll get a folder with a `packages/` and `apps/` directories and a `package.json` file with basic workspace configuration.
 
 1. Initialize the monorepo:
 
@@ -74,9 +78,9 @@ yarn init -y
 
 :::info
 
-You can organize the folder structure of your Yarn monorepo however it best suits your project. While this guide suggests using `apps/` and `packages/`, you can rename or add directories like `services/` or `libs/` to fit your workflow.
+We recommend organizing your monorepo's folder structure in a way that best suits the needs of your project. While this guide suggests using `apps/` and `packages/`, you can rename or add directories like, for example, `services/` or `libs/` to fit your workflow.
 
-The key is to keep your monorepo clear and organized, ensuring that it’s easy to manage and navigate for your team.
+The key here is to keep your monorepo clear and organized, ensuring that it’s easy to manage and navigate for you and your team 🤜🏻.
 
 :::
 
@@ -88,7 +92,9 @@ mkdir apps packages
 
 ## Step 2: Create mobile app using Ignite
 
-[Ignite](https://github.com/infinitered/ignite) is a battle-tested React Native boilerplate that Infinite Red uses every time we start a new project. In this step, we'll create a React Native app within the monorepo using Ignite's CLI.
+[Ignite](https://github.com/infinitered/ignite) is Infinite's Red battle-tested React Native boilerplate. We're proud to say we use it every time we start a new project.
+
+In this step we'll take advantage of Ignite's CLI and create a React Native app within the monorepo.
 
 1. Install the [Ignite CLI](https://www.npmjs.com/package/ignite-cli) (if you haven't already):
 
@@ -97,14 +103,14 @@ npx ignite-cli@latest
 ```
 
 2. Generate a new app:
-   Navigate to the apps/ directory and run the following command to create a new app:
+   Navigate to the `apps/` directory and run the following command to create a new app:
 
 ```shell
 cd apps
 npx ignite-cli new mobile
 ```
 
-We suggest the following answers to the prompts:
+We recommned the following answers to the CLI prompts:
 
 ```
 📝 Do you want to use Expo?: Expo - Recommended for almost all apps [Default]
@@ -121,7 +127,7 @@ We suggest the following answers to the prompts:
 touch mobile/metro.config.js
 ```
 
-4. Replace the following lines in the Metro configuration file with the lines below (this is taken from the [Expo guide](https://docs.expo.dev/guides/monorepos/)):
+4. In order to fit a monorepo structurem we need to adjust the Metro configuration. Let's do that by updating these lines in the `metro.config.js` file (this changes are taken from the [Expo guide](https://docs.expo.dev/guides/monorepos/)):
 
 ```js
 // Learn more https://docs.expo.io/guides/customizing-metro
@@ -166,6 +172,8 @@ config.resolver.sourceExts.push("cjs")
 module.exports = config;
 ```
 
+Awesome! We have our mobile app created ⭐️.
+
 ## Step 3: Install dependencies
 
 Let's make sure all of our dependendencies are installed for the mobile app.
@@ -179,7 +187,11 @@ yarn install
 
 ## Step 4: Add a shared ESLint configuration with TypeScript
 
-In our experience, maintaining consistent code quality across TypeScript projects within a monorepo is essential. Sharing a single ESLint configuration file between these apps ensures consistent coding standards and streamlines the development process. Let's go ahead and create an utility for that.
+Maintaining consistent code quality across TypeScript and JavaScript projects within a monorepo is crucial for a project's long-term success.
+
+**A good first step we recommend is to share a single ESLint configuration file between apps to ensure consistency and streamline the development process.**
+
+Let's go ahead and create a shared utility for that purpose.
 
 1. Create a shared ESLint configuration package:
 
@@ -228,7 +240,9 @@ yarn add eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslin
 
 5. Create the shared ESLint configuration file:
 
-Create an `index.ts` file in the root of your `eslint-config` package. We will reuse Ignite’s boilerplate ESLint configuration and then replace the original configuration with it.
+Create an `index.ts` file in the root of your `eslint-config` package.
+
+For this guide we will reuse Ignite’s boilerplate ESLint configuration and then replace the original configuration with it.
 
 `packages/eslint-config/index.ts`
 
@@ -309,7 +323,7 @@ module.exports = {
 // success-line-end
 ```
 
-This configuration (originally sourced from [Ignite](https://github.com/infinitered/ignite)) provides a strong foundation for TypeScript, React and React Native projects. You can also adjust the rules according to your project's specific needs.
+This configuration (originally sourced from [Ignite](https://github.com/infinitered/ignite)) will provide a strong foundation for TypeScript, React and React Native projects. You can always refine the rules later to align with the specific requirements of your project.
 
 5. Compile the TypeScript configuration:
 
@@ -320,6 +334,8 @@ npx tsc
 This will generate a `index.js` file from your `index.ts` file.
 
 ## Step 6: Use the shared ESLint configuration in the mobile app
+
+Now we'll use the utility we just made and add it to the React Native app. Let’s get started!
 
 1. Navigate to the mobile app:
 
@@ -342,7 +358,7 @@ cd apps/mobile
 
 :::info
 
-Although this guide focuses on private monorepos, it's important to address external publishing scenarios. For monorepos with some packages intended for public release, avoid using `workspace:^`. Instead, specify the exact version of each package to ensure proper consumption. To manage versioning and publishing of multiple packages within a monorepo, we recommend using the [changesets](https://github.com/changesets/changesets) tool.
+This guide mainly focuses on a private monorepo, but let’s also talk about publishing packages publicly. If your monorepo includes packages meant for public release, avoid using `workspace:^` for dependencies. Instead, set specific package versions to make sure everything works as expected. To handle versioning and publishing for multiple packages, we recommend trying out [changesets](https://github.com/changesets/changesets) — it makes the process much easier!
 
 :::
 
@@ -433,11 +449,19 @@ Although this guide focuses on private monorepos, it's important to address exte
 // success-line-end
 ```
 
+:::warning
+
 In this guide, we use `@monorepo-example` as the placeholder name for the monorepo. Be sure to replace it with your actual monorepo name if it’s different.
 
-## Step 7: Create the shared UI components package
+:::
 
-Let's create a Badge component as a shared UI component that can be used within the mobile app. For context, a Badge component is a simple and versatile element often used to display small bits of information, such as notifications, statuses, or labels.
+By completing this step, you now have an app (and maybe more in the future) that benefits from a shared ESLint configuration. Great work!
+
+## Step 7: Create a shared UI components package
+
+Now that we are familiarized with the creation of shared package, let's go ahead and create another one.
+
+As we mentioned earlier, a common need in projects is sharing UI components across multiple apps. In this step, we’ll create a shared UI package featuring a Badge component. A Badge is a simple yet versatile element often used to show small pieces of information, like notifications, statuses, or labels.
 
 1. Navigate to the packages folder:
 
@@ -495,7 +519,7 @@ yarn add @types/react @types/react-native --dev
  // success-line-end
  ```
 
-5.  Create the badge component:
+5.  Now let's create the badge component:
 
 Inside the `packages/ui-components` directory, create a `src` folder and add your Badge component.
 
@@ -544,7 +568,7 @@ const styles = StyleSheet.create({
 // success-line-end
 ```
 
-The way it's been defined above, a Badge component should be a simple UI element that can display a label with customizable colors, making it versatile for use in different parts of your application, such as notification counts, statuses, or category labels.
+A `Badge` component, as defined above, is a simple UI element designed to display a label with customizable colors. This makes it versatile and useful in various parts of your app, like showing notification counts, statuses, or category labels.
 
 7. Export the badge component:
 
@@ -566,7 +590,11 @@ Compile your TypeScript code to ensure it's ready for consumption by other packa
 npx tsc
 ```
 
+Awesome! We have now a second package within our monorepo, and a UI component we can share across apps. Let's go ahead
+
 ## Step 8: Use the shared UI package in the mobile app
+
+To finish integrating our shared UI package, we also need to include it in the mobile app.
 
 1. Navigate now to the mobile app:
 
@@ -593,7 +621,7 @@ cd apps/mobile
 
 3. Add the Badge component to the UI
 
-Let's now use the Badge component within the app. For this example, let's place it in the login screen, below the heading and above the form fields to indicate the number of login attempts if they exceed a certain number.
+Now, let’s add the `Badge` component to the app! For this example, we’ll place it on the login screen—right below the heading and above the form fields—to show the number of login attempts if they go over a certain limit.
 
 `apps/mobile/apps/screens/LoginScreen.tsx`
 
@@ -616,7 +644,11 @@ import { Badge } from "ui-components"
 // success-line-end
 ```
 
+Great work! Now the mobile app is using the `Badge` component from the shared UI library.
+
 ## Step 9: Run mobile app to make sure logic was added
+
+Alright, we’re almost done! The final step is to make sure everything is set up correctly. Let’s do this by running the mobile app.
 
 1. Navigate to the root of the project:
 
@@ -647,13 +679,15 @@ cd apps/mobile
 yarn android
 ```
 
-You should be able to view the login screen with an instance of a badge element added between the heading and the form fields.
+You should now see the login screen with a `Badge` displayed between the heading and the form fields. Amazing! 🎉
 
 ## Step 10: Add Yarn global scripts (optional)
 
-Yarn's workspaces feature allows you to define and run scripts globally across all packages in your monorepo. This simplifies your workflow by enabling you to execute tasks like testing, building, or linting from the root of your project, ensuring consistency across all packages. In this optional section, we’ll explore how to set up and use global scripts with Yarn in your monorepo.
+Just when we thought we were done! If you're still with us, here's an extra step that can make your workflow even smoother.
 
-Let's add a global script for the mobile app to run iOS and Android projects.
+One of the great features of Yarn Workspaces is the ability to define and run scripts globally across all packages in your monorepo. This means you can handle tasks like testing, building, or linting right from the root of your project—no need to dive into individual packages.
+
+In this optional section, we’ll show you how to set up and use global scripts with Yarn. To start, let's add a global script for the mobile app to run both iOS and Android projects.
 
 
 1. Add a global script to the mobile app `package.json` file:
@@ -674,13 +708,17 @@ Let's add a global script for the mobile app to run iOS and Android projects.
   },
 ```
 
-Even though this script is locally defined within the app's `package.json` file, it will available everywhere within the monorepo by running `yarn mobile:ios` or `yarn mobile:android`.
+Even though this script is locally defined within the app's `package.json` file, it will available everywhere within the monorepo by running `yarn mobile:ios` or `yarn mobile:android`. Very neat!
 
-For more information on Yarn's global scripts, check [this site](https://yarnpkg.com/features/workspaces#global-scripts).
+:::info
+For more information on Yarn's global scripts, check [this link](https://yarnpkg.com/features/workspaces#global-scripts).
+:::
 
 ## Conclusion
 
-Congratulations on setting up your Yarn monorepo! By using the [Ignite](https://github.com/infinitered/ignite) framework, and two shared packages, you've successfully integrated these together. This setup enables you to scale your projects efficiently by sharing code across multiple applications in a well-structured and organized manner.
+🎉 Congratulations on reaching the end of this guide! You’ve set up a powerful monorepo with shared utilities, learned how to integrate them into a React Native app created using [Ignite](https://github.com/infinitered/ignite), and even explored optional enhancements to streamline your workflow.
+
+We hope this guide has been helpful and gives you more confidence when working with a monorepo setup!
 
 For more information, you can check the following resources:
 * [Choosing the right monorepo strategy for your project](/docs/MonoreposOverview.md)
