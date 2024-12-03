@@ -1,0 +1,123 @@
+---
+title: Theming Ignite with Emotion.js
+description: Learn how to use different styling libraries to theme your Ignited app!
+tags:
+  - Theming
+  - iOS
+  - Android
+  - colors
+  - darkmode
+  - emotion.js
+last_update:
+  author: Mark Rickert
+publish_date: 2024-10-02
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
+
+# Theming Ignite
+
+When it comes to styling we acknowledge the popularity and effectiveness of libraries like `styled-components`, `emotion.js` and `unistyles`. Our boilerplate is designed to work seamlessly with these styling solutions, offering you the flexibility to choose the one that aligns with your preferences and project requirements.
+
+The theming system in Ignite Boilerplate is crafted to be adaptable and easy to customize. By simply replacing colors and fonts through the designated theme files, you can tailor the look and feel of your application.
+
+## Using `Emotion`
+
+### 1. Add `Emotion` to your app:
+
+<Tabs groupId="operating-systems">
+  <TabItem value="yarn" label="Yarn">
+    <CodeBlock language="bash">yarn add @emotion/react @emotion/native</CodeBlock>
+  </TabItem>
+  <TabItem value="npm" label="npm">
+    <CodeBlock language="bash">npm install @emotion/react @emotion/native</CodeBlock>
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+    <CodeBlock language="bash">pnpm install @emotion/react @emotion/native</CodeBlock>
+  </TabItem>
+</Tabs>
+
+### 2. Add the Emotion `ThemeProvider`
+
+Find and open the `AppNavigator.tsx` file in your project and add the import:
+
+```ts
+import { ThemeProvider as EmotionThemeProvider } from "@emotion/react";
+```
+
+Add the following functional component:
+
+```tsx
+const EmotionJSThemeProvider = (props: React.PropsWithChildren) => {
+  const { theme } = useAppTheme();
+  return <EmotionThemeProvider theme={theme}>{props.children}</EmotionThemeProvider>;
+};
+```
+
+Add the new `EmotionJSThemeProvider` component just inside the `<ThemeProvider>` component in the `AppNavigator`.
+
+```diff
+return (
+  <ThemeProvider value={{ themeScheme, setThemeContextOverride }}>
++    <EmotionJSThemeProvider>
+      <NavigationContainer ref={navigationRef} theme={navigationTheme} {...props}>
+        <AppStack />
+      </NavigationContainer>
++    </EmotionJSThemeProvider>
+  </ThemeProvider>
+);
+```
+
+### 3. Create and use your first `Emotion` component using the new theme:
+
+```tsx
+import styled from "@emotion/native";
+
+const MyTextComponent = styled.Text`
+  margin: 10px;
+  color: ${({ theme }) => theme.colors.text};
+  background-color: ${({ theme }) => theme.colors.background};
+`;
+
+export const MyScreen = (props) => {
+  return (
+    <MyTextComponent>
+      This text color and background will change when changing themes.
+    </MyTextComponent>
+  );
+};
+```
+
+### 4. Tell Emotion.js about the shape of your theme:
+
+Create a new file in you Ignited app's `types` folder called `emotion.d.ts` with the following content:
+
+```tsx
+// Override Theme to get accurate typings for your project.
+import type { Theme as AppTheme } from "app/theme";
+import "@emotion/react";
+
+declare module "@emotion/react" {
+  export interface Theme extends AppTheme {}
+}
+```
+
+## Complete!
+
+You can now use `Emotion` integrated into the Ignite theme engine. To swap themes provide the user a switch or toggle button:
+
+```tsx
+const { setThemeContextOverride, themeContext } = useAppTheme();
+
+return (
+  <Button
+    onPress={() => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut); // Animate the transition
+      setThemeContextOverride(themeContext === "dark" ? "light" : "dark");
+    }}
+    text={`Switch Theme: ${themeContext}`}
+  />
+);
+```

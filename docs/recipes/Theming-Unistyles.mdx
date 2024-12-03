@@ -1,0 +1,142 @@
+---
+title: Theming Ignite with Unistyles
+description: Learn how to use different styling libraries to theme your Ignited app!
+tags:
+  - Theming
+  - iOS
+  - Android
+  - colors
+  - darkmode
+  - unistyles
+last_update:
+  author: Mark Rickert
+publish_date: 2024-10-02
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
+
+# Theming Ignite
+
+When it comes to styling we acknowledge the popularity and effectiveness of libraries like `styled-components`, `emotion.js` and `unistyles`. Our boilerplate is designed to work seamlessly with these styling solutions, offering you the flexibility to choose the one that aligns with your preferences and project requirements.
+
+The theming system in Ignite Boilerplate is crafted to be adaptable and easy to customize. By simply replacing colors and fonts through the designated theme files, you can tailor the look and feel of your application.
+
+## Using `Unistyles`
+
+:::warning
+
+Unistyles includes custom native code, which means it does not support Expo Go. You'll need to use expo CNG to build your app.
+
+To do this with an newly ignited app, run `yarn prebuild:clean` and then `yarn start`.
+
+:::
+
+### 1. Add `react-native-unistyles` to your app:
+
+<Tabs groupId="operating-systems">
+  <TabItem value="yarn" label="Yarn">
+    <CodeBlock language="bash">yarn add react-native-unistyles</CodeBlock>
+  </TabItem>
+  <TabItem value="npm" label="npm">
+    <CodeBlock language="bash">npm install react-native-unistyles</CodeBlock>
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+    <CodeBlock language="bash">pnpm install react-native-unistyles</CodeBlock>
+  </TabItem>
+</Tabs>
+
+### 2. Add define Unistyles theme types:
+
+Create a new file in you Ignited app's `types` folder called `react-native-unistyles.d.ts` with the following content:
+
+```tsx
+// Override UnistylesThemes to get accurate typings for your project.
+import type { Theme } from "app/theme";
+import "react-native-unistyles";
+
+type AppThemes = {
+  light: Theme;
+  dark: Theme;
+};
+
+declare module "react-native-unistyles" {
+  export interface UnistylesThemes extends AppThemes {}
+}
+```
+
+### 3. Configure unistyles to use the app's Theme:
+
+Add the following to your app's `app/App.tsx`:
+
+```diff
++import { UnistylesRegistry } from "react-native-unistyles"
++import { darkTheme, lightTheme } from "app/theme"
+
+SplashScreen.preventAutoHideAsync()
+
++UnistylesRegistry.addThemes({
++  light: lightTheme,
++  dark: darkTheme,
++}).addConfig({
++  // adaptiveThemes: true,
++  initialTheme: "light",
++})
++
+
+function IgniteApp() {
+  return <App hideSplashScreen={SplashScreen.hideAsync} />
+}
+```
+
+### 4. Ensure that Unistyles knows when we want to change the theme:
+
+Open the `app/utils/useAppTheme.ts` and make the following changes:
+
+```diff
+  const setThemeContextOverride = useCallback((newTheme: ThemeContexts) => {
+    setTheme(newTheme)
++    UnistylesRuntime.setTheme(newTheme || "light")
+  }, [])
+```
+
+### 5. Create and use your first Unistyles component using the new theme:
+
+```tsx
+import { createStyleSheet, useStyles } from "react-native-unistyles";
+
+export const MyScreen = (props) => {
+  const { styles } = useStyles($uniStyles);
+  return (
+    <Text style={styles.text}>
+      This text color and background will change when changing themes.
+    </Text>
+  );
+};
+
+const $uniStyles = createStyleSheet((theme) => ({
+  text: {
+    color: theme.colors.text,
+    backgroundColor: theme.colors.background,
+  },
+}));
+```
+
+## Complete!
+
+You can now use Unistyles integrated into the Ignite theme engine. To swap themes provide the user a switch or toggle button:
+
+```tsx
+const { setThemeContextOverride, themeContext } = useAppTheme();
+
+return (
+  <Button
+    onPress={() => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut); // Animate the transition
+      setThemeContextOverride(themeContext === "dark" ? "light" : "dark");
+    }}
+    text={`Switch Theme: ${themeContext}`}
+  />
+);
+```
