@@ -590,7 +590,7 @@ Compile your TypeScript code to ensure it's ready for consumption by other packa
 npx tsc
 ```
 
-Awesome! We have now a second package within our monorepo, and a UI component we can share across apps. Let's go ahead
+Awesome! We have now a second package within our monorepo and a UI component we can share across apps. Onward!
 
 ## Step 8: Use the shared UI package in the mobile app
 
