@@ -530,7 +530,7 @@ touch src/Badge.tsx
 
 6. Build the badge component:
 
-`packages/ui-component/src/Badge.tsx`
+`packages/ui-components/src/Badge.tsx`
 
 ```tsx
 // success-line-start
