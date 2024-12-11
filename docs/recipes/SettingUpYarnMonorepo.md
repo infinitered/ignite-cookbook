@@ -191,7 +191,7 @@ Maintaining consistent code quality across TypeScript and JavaScript projects wi
 
 **A good first step we recommend is to share a single ESLint configuration file between apps to ensure consistency and streamline the development process.**
 
-Let's go ahead and create a shared utility for that purpose.
+Let's create a shared utility for that purpose.
 
 1. Create a shared ESLint configuration package:
 
