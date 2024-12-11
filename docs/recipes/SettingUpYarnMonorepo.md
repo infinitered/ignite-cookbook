@@ -176,7 +176,7 @@ Awesome! We have our mobile app created ⭐️.
 
 ## Step 3: Install dependencies
 
-Let's make sure all of our dependendencies are installed for the mobile app.
+Let's make sure all of our dependencies are installed for the mobile app.
 
 1. Run `yarn` at the root of the project:
 
