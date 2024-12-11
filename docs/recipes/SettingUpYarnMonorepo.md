@@ -574,7 +574,7 @@ A `Badge` component, as defined above, is a simple UI element designed to displa
 
 Ensure that your component is exported in the package's main entry file.
 
-`packages/ui-component/src/index.ts`
+`packages/ui-components/src/index.ts`
 
 ```ts
 // success-line-start
