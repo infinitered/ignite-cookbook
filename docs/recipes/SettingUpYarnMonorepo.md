@@ -110,7 +110,7 @@ cd apps
 npx ignite-cli new mobile
 ```
 
-We recommned the following answers to the CLI prompts:
+We recommend the following answers to the CLI prompts:
 
 ```
 📝 Do you want to use Expo?: Expo - Recommended for almost all apps [Default]
