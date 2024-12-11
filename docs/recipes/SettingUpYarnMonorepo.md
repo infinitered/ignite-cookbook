@@ -34,7 +34,7 @@ In this guide we will be focusing on that premise and creating/utilizing shared 
 
 :::info
 
-Wait! How do I even know if my project will benefit from a monorepo structure? No worries! We have more documentation on monorepo tools and whether you want to choose this way of organization. You can find it [here](/docs/recipes/MonoreposOverview).
+Wait! How do I even know if my project will benefit from a monorepo structure? No worries! We have more documentation on monorepo tools and whether you want to choose this way of organization. You can find it [here](MonoreposOverview).
 
 :::
 
@@ -721,5 +721,5 @@ For more information on Yarn's global scripts, check [this link](https://yarnpkg
 We hope this guide has been helpful and gives you more confidence when working with a monorepo setup!
 
 For more information, you can check the following resources:
-* [Choosing the right monorepo strategy for your project](/docs/MonoreposOverview.md)
+* [Choosing the right monorepo strategy for your project](MonoreposOverview.md)
 * [Expo: Work with monorepos](https://docs.expo.dev/guides/monorepos/)
