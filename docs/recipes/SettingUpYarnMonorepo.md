@@ -110,7 +110,7 @@ cd apps
 npx ignite-cli new mobile
 ```
 
-We recommned the following answers to the CLI prompts:
+We recommend the following answers to the CLI prompts:
 
 ```
 📝 Do you want to use Expo?: Expo - Recommended for almost all apps [Default]
@@ -176,7 +176,7 @@ Awesome! We have our mobile app created ⭐️.
 
 ## Step 3: Install dependencies
 
-Let's make sure all of our dependendencies are installed for the mobile app.
+Let's make sure all of our dependencies are installed for the mobile app.
 
 1. Run `yarn` at the root of the project:
 
@@ -191,7 +191,7 @@ Maintaining consistent code quality across TypeScript and JavaScript projects wi
 
 **A good first step we recommend is to share a single ESLint configuration file between apps to ensure consistency and streamline the development process.**
 
-Let's go ahead and create a shared utility for that purpose.
+Let's create a shared utility for that purpose.
 
 1. Create a shared ESLint configuration package:
 
@@ -459,7 +459,7 @@ By completing this step, you now have an app (and maybe more in the future) that
 
 ## Step 7: Create a shared UI components package
 
-Now that we are familiarized with the creation of shared package, let's go ahead and create another one.
+Now that we are familiar with the creation of a shared package, let's create another one.
 
 As we mentioned earlier, a common need in projects is sharing UI components across multiple apps. In this step, we’ll create a shared UI package featuring a Badge component. A Badge is a simple yet versatile element often used to show small pieces of information, like notifications, statuses, or labels.
 
@@ -530,7 +530,7 @@ touch src/Badge.tsx
 
 6. Build the badge component:
 
-`packages/ui-component/src/Badge.tsx`
+`packages/ui-components/src/Badge.tsx`
 
 ```tsx
 // success-line-start
@@ -574,7 +574,7 @@ A `Badge` component, as defined above, is a simple UI element designed to displa
 
 Ensure that your component is exported in the package's main entry file.
 
-`packages/ui-component/src/index.ts`
+`packages/ui-components/src/index.ts`
 
 ```ts
 // success-line-start
@@ -590,7 +590,7 @@ Compile your TypeScript code to ensure it's ready for consumption by other packa
 npx tsc
 ```
 
-Awesome! We have now a second package within our monorepo, and a UI component we can share across apps. Let's go ahead
+Awesome! We have now a second package within our monorepo and a UI component we can share across apps. Onward!
 
 ## Step 8: Use the shared UI package in the mobile app
 
