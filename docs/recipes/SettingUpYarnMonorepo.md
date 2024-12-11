@@ -459,7 +459,7 @@ By completing this step, you now have an app (and maybe more in the future) that
 
 ## Step 7: Create a shared UI components package
 
-Now that we are familiarized with the creation of shared package, let's go ahead and create another one.
+Now that we are familiar with the creation of a shared package, let's create another one.
 
 As we mentioned earlier, a common need in projects is sharing UI components across multiple apps. In this step, we’ll create a shared UI package featuring a Badge component. A Badge is a simple yet versatile element often used to show small pieces of information, like notifications, statuses, or labels.
 
