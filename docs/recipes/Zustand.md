@@ -6,7 +6,7 @@ tags:
   - MobX
   - State Management
 last_update:
-  author: Justin Poliachik
+  author: Ellie Croce
 publish_date: 2024-02-05
 ---
 
