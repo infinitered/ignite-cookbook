@@ -6,7 +6,7 @@ tags:
   - VisionCamera
   - react-native-vision-camera
 last_update:
-  author: Frank Calise
+  author: Ellie Croce
 publish_date: 2023-10-23
 ---
 
@@ -75,60 +75,49 @@ Since the simulators do not offer a good way of testing the camera for this reci
 Before we can get to using the camera on the device, we must get permission from the user to do so. Let's edit the Welcome screen in Ignite to reflect the current permission status and a way to prompt the user.
 
 ```tsx
-import { observer } from "mobx-react-lite";
-import React, { FC } from "react";
-import { AppStackScreenProps } from "../navigators";
-import { Camera, CameraPermissionStatus } from "react-native-vision-camera";
-import { Linking, View, ViewStyle } from "react-native";
-import { Button, Screen, Text } from "app/components";
+import { observer } from "mobx-react-lite"
+import { FC, useCallback, useEffect, useState } from "react"
+import { AppStackScreenProps } from "../navigators"
+import { useCameraPermission } from "react-native-vision-camera"
+import { Linking, View, ViewStyle } from "react-native"
+import { Button, Screen, Text } from "app/components"
 
 interface WelcomeScreenProps extends AppStackScreenProps<"Welcome"> {}
 
-export const WelcomeScreen: FC<WelcomeScreenProps> = observer(
-  function WelcomeScreen(_props) {
-    const [cameraPermission, setCameraPermission] =
-      React.useState<CameraPermissionStatus>();
+export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen(_props) {
+  const [cameraPermission, setCameraPermission] = useState<boolean>()
 
-    React.useEffect(() => {
-      Camera.getCameraPermissionStatus().then(setCameraPermission);
-    }, []);
+  const { hasPermission, requestPermission } = useCameraPermission()
 
-    const promptForCameraPermissions = React.useCallback(async () => {
-      const permission = await Camera.requestCameraPermission();
-      Camera.getCameraPermissionStatus().then(setCameraPermission);
+  useEffect(() => {
+    setCameraPermission(hasPermission)
+  }, [])
 
-      if (permission === "denied") await Linking.openSettings();
-    }, [cameraPermission]);
+  const promptForCameraPermissions = useCallback(async () => {
+    if (hasPermission) return
+    const permission = await requestPermission()
+    setCameraPermission(permission)
 
-    if (cameraPermission == null) {
-      // still loading
-      return null;
-    }
+    if (!permission) await Linking.openSettings()
+  }, [hasPermission, requestPermission])
 
-    return (
-      <Screen contentContainerStyle={$container}>
-        <View>
-          <Text>
-            Camera Permission:{" "}
-            {cameraPermission === null ? "Loading..." : cameraPermission}
-          </Text>
-          {cameraPermission !== "granted" && (
-            <Button
-              onPress={promptForCameraPermissions}
-              text="Request Camera Permission"
-            />
-          )}
-        </View>
-      </Screen>
-    );
-  }
-);
+  return (
+    <Screen contentContainerStyle={$container}>
+      <View>
+         <Text text={`Camera Permission: ${!cameraPermission ? "Loading..." : cameraPermission}`} />
+        {!cameraPermission && (
+          <Button onPress={promptForCameraPermissions} text="Request Camera Permission" />
+        )}
+      </View>
+    </Screen>
+  )
+})
 
 const $container: ViewStyle = {
   flex: 1,
   padding: 20,
   justifyContent: "space-evenly",
-};
+}
 ```
 
 <details>
@@ -237,162 +226,143 @@ const $container: ViewStyle = {
 We have the dough prepped, we added the sauce - now it's time for the pizza toppings! Back in `screens/Welcome.tsx`, we'll begin adding more of the camera code by adding the `Camera` component and wire it up to the `useCodeScanner` hook, both of which are provided by `react-native-vision-camera`.
 
 ```tsx
-import { observer } from "mobx-react-lite";
-import React, { FC } from "react";
-import { AppStackScreenProps } from "../navigators";
+import { observer } from "mobx-react-lite"
+import { FC, useCallback, useEffect, useState } from "react"
+import { AppStackScreenProps } from "../navigators"
 // success-line-start
 import {
   Camera,
-  CameraPermissionStatus,
   useCameraDevice,
+  useCameraPermission,
   useCodeScanner,
-} from "react-native-vision-camera";
-import {
-  Alert,
-  Linking,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from "react-native";
-import { Button, Icon, Screen, Text } from "app/components";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useStores } from "app/models";
-import { spacing } from "app/theme";
+} from "react-native-vision-camera"
+import { Alert, Linking, TouchableOpacity, View, ViewStyle, StyleSheet } from "react-native"
+import { Button, Icon, Screen, Text } from "app/components"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { spacing } from "@/theme"
+import { useStores } from "@/models"
 // success-line-end
 
 interface WelcomeScreenProps extends AppStackScreenProps<"Welcome"> {}
 
-export const WelcomeScreen: FC<WelcomeScreenProps> = observer(
-  function WelcomeScreen(_props) {
-    const [cameraPermission, setCameraPermission] =
-      React.useState<CameraPermissionStatus>();
-    // success-line-start
-    const [showScanner, setShowScanner] = React.useState(false);
-    const [isActive, setIsActive] = React.useState(false);
+export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeScreen(_props) {
+  const [cameraPermission, setCameraPermission] = useState<boolean | null>(null)
+// success-line-start
+  const [showScanner, setShowScanner] = useState(false)
+  const [isActive, setIsActive] = useState(false)
 
-    const { codeStore } = useStores();
-    // success-line-end
+  const { codeStore } = useStores()
+// success-line-end
 
-    React.useEffect(() => {
-      Camera.getCameraPermissionStatus().then(setCameraPermission);
-    }, []);
+  const { hasPermission, requestPermission } = useCameraPermission()
 
-    const promptForCameraPermissions = React.useCallback(async () => {
-      const permission = await Camera.requestCameraPermission();
-      Camera.getCameraPermissionStatus().then(setCameraPermission);
+  useEffect(() => {
+    setCameraPermission(hasPermission)
+  }, [])
 
-      if (permission === "denied") await Linking.openSettings();
-    }, [cameraPermission]);
+  const promptForCameraPermissions = useCallback(async () => {
+    if (hasPermission) return
+    const permission = await requestPermission()
+    setCameraPermission(permission)
 
-    // success-line-start
-    const codeScanner = useCodeScanner({
-      codeTypes: ["qr", "ean-13"],
-      onCodeScanned: (codes) => {
-        setIsActive(false);
+    if (!permission) await Linking.openSettings()
+  }, [hasPermission, requestPermission])
 
-        codes.every((code) => {
-          if (code.value) {
-            codeStore.addCode(code.value);
-          }
-          return true;
-        });
+// success-line-start
+  const codeScanner = useCodeScanner({
+    codeTypes: ["qr", "ean-13"],
+    onCodeScanned: (codes) => {
+      setIsActive(false)
 
-        setShowScanner(false);
-        Alert.alert("Code scanned!");
-      },
-    });
+      codes.every((code) => {
+        if (code.value) {
+          codeStore.addCode(code.value)
+        }
+        return true
+      })
 
-    const device = useCameraDevice("back");
+      setShowScanner(false)
+      Alert.alert("Code scanned!")
+    },
+  })
 
-    const { right, top } = useSafeAreaInsets();
-    // success-line-end
+  const device = useCameraDevice("back")
 
-    if (cameraPermission == null) {
-      // still loading
-      return null;
-    }
+  const { right, top } = useSafeAreaInsets()
+// success-line-end
 
-    // success-line-start
-    if (showScanner && device) {
-      return (
-        <View style={$cameraContainer}>
-          <Camera
-            isActive={isActive}
-            device={device}
-            codeScanner={codeScanner}
-            style={StyleSheet.absoluteFill}
-            photo
-            video
-          />
-          <View
-            style={[
-              $cameraButtons,
-              { right: right + spacing.md, top: top + spacing.md },
-            ]}
-          >
-            <TouchableOpacity
-              style={$closeCamera}
-              onPress={() => setShowScanner(false)}
-            >
-              <Icon icon="x" size={50} />
-            </TouchableOpacity>
-          </View>
-        </View>
-      );
-    }
-    // success-line-end
-
-    return (
-      <Screen contentContainerStyle={$container}>
-        <View>
-          <Text>
-            Camera Permission:{" "}
-            {cameraPermission === null ? "Loading..." : cameraPermission}
-          </Text>
-          {cameraPermission !== "granted" && (
-            <Button
-              onPress={promptForCameraPermissions}
-              text="Request Camera Permission"
-            />
-          )}
-        </View>
-        // success-line-start
-        <View>
-          <Button
-            onPress={() => {
-              setIsActive(true);
-              setShowScanner(true);
-            }}
-            text="Scan Barcodes"
-          />
-        </View>
-        <View>
-          <Button
-            onPress={() => _props.navigation.navigate("Codes")}
-            text={`View Scans (${codeStore.codes.length})`}
-          />
-          // success-line-end
-        </View>
-      </Screen>
-    );
+  if (cameraPermission == null) {
+    // still loading
+    return null
   }
-);
+
+// success-line-start
+  if (showScanner && device) {
+    return (
+      <View style={$cameraContainer}>
+        <Camera
+          isActive={isActive}
+          device={device}
+          codeScanner={codeScanner}
+          style={StyleSheet.absoluteFill}
+          photo
+          video
+        />
+        <View style={[$cameraButtons, { right: right + spacing.md, top: top + spacing.md }]}>
+          <TouchableOpacity style={$closeCamera} onPress={() => setShowScanner(false)}>
+            <Icon icon="x" size={50} />
+          </TouchableOpacity>
+        </View>
+      </View>
+    )
+  }
+// success-line-end
+
+  return (
+    <Screen contentContainerStyle={$container}>
+      <View>
+        <Text>
+          Camera Permission: {cameraPermission === null ? "Loading..." : cameraPermission}
+        </Text>
+        {!cameraPermission && (
+          <Button onPress={promptForCameraPermissions} text="Request Camera Permission" />
+        )}
+      </View>
+      // success-line-start
+      <View>
+        <Button
+          onPress={() => {
+            setIsActive(true)
+            setShowScanner(true)
+          }}
+          text="Scan Barcodes"
+        />
+      </View>
+      <View>
+        <Button
+          onPress={() => _props.navigation.navigate("Codes")}
+          text={`View Scans (${codeStore.codes.length})`}
+        />
+      </View>
+       // success-line-end
+    </Screen>
+  )
+})
 
 const $container: ViewStyle = {
   flex: 1,
   padding: 20,
   justifyContent: "space-evenly",
-};
+}
 
 // success-line-start
 const $cameraContainer: ViewStyle = {
   flex: 1,
-};
+}
 
 const $cameraButtons: ViewStyle = {
   position: "absolute",
-};
+}
 
 const $closeCamera: ViewStyle = {
   marginBottom: spacing.md,
@@ -402,7 +372,7 @@ const $closeCamera: ViewStyle = {
   backgroundColor: "rgba(140, 140, 140, 0.3)",
   justifyContent: "center",
   alignItems: "center",
-};
+}
 // success-line-end
 ```
 
