@@ -697,7 +697,7 @@ In this optional section, we’ll show you how to set up and use global scripts 
 }
 ```
 
-Even though this script is locally defined within the `apps/mobile/package.json` file, it will available everywhere within the monorepo by running `yarn mobile:ios` or `yarn mobile:android`. Very neat!
+Even though this script is locally defined within the root `package.json` file, it will available everywhere within the monorepo by running `yarn mobile:ios` or `yarn mobile:android`. Very neat!
 
 :::info
 For more information on Yarn's global scripts, check [this link](https://yarnpkg.com/features/workspaces#global-scripts).
