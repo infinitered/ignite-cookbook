@@ -31,7 +31,6 @@ In a monorepo setup with multiple applications, like a React Native mobile app a
 
 In this guide we will be focusing on that premise and creating/utilizing shared utilities within the monorepo. For instance, if you have several apps that need to share an ESLint configuration or UI components, you can create reusable packages that can be integrated across all your apps.
 
-
 :::info
 
 Wait! How do I even know if my project will benefit from a monorepo structure? No worries! We have more documentation on monorepo tools and whether you want to choose this way of organization. You can find it [here](MonoreposOverview).
@@ -113,8 +112,7 @@ npx ignite-cli new mobile
 We recommend the following answers to the CLI prompts:
 
 ```
-📝 Do you want to use Expo?: Expo - Recommended for almost all apps [Default]
-📝 Which Expo workflow?: Expo Go - For simple apps that don't need custom native code [Default]
+📝 How do you want to manage Native code?: cng [Default]
 📝 Do you want to initialize a git repository?: No
 📝 Remove demo code? We recommend leaving it in if it's your first time using Ignite: No
 📝 Which package manager do you want to use?: yarn
@@ -127,21 +125,24 @@ We recommend the following answers to the CLI prompts:
 touch mobile/metro.config.js
 ```
 
-4. In order to fit a monorepo structurem we need to adjust the Metro configuration. Let's do that by updating these lines in the `metro.config.js` file (this changes are taken from the [Expo guide](https://docs.expo.dev/guides/monorepos/)):
+4. In order to fit a monorepo structure we need to adjust the Metro configuration. Let's do that by updating these lines in the `metro.config.js` file (this changes are taken from the [Expo guide](https://docs.expo.dev/guides/monorepos/)):
 
 ```js
 // Learn more https://docs.expo.io/guides/customizing-metro
-const { getDefaultConfig } = require('expo/metro-config');
+const { getDefaultConfig } = require("expo/metro-config");
+// success-line
+const path = require("path");
 
 // success-line-start
 // Get monorepo root folder
-const monorepoRoot = path.resolve(projectRoot, '../..');
+const monorepoRoot = path.resolve(projectRoot, "../..");
 // success-line-end
 
 /** @type {import('expo/metro-config').MetroConfig} */
 // error-line
 const config = getDefaultConfig(__dirname);
 // success-line
+const projectRoot = __dirname;
 const config = getDefaultConfig(projectRoot);
 
 config.transformer.getTransformOptions = async () => ({
@@ -160,14 +161,14 @@ config.transformer.getTransformOptions = async () => ({
 config.watchFolders = [monorepoRoot];
 // 2. Let Metro know where to resolve packages and in what order
 config.resolver.nodeModulesPaths = [
-  path.resolve(projectRoot, 'node_modules'),
-  path.resolve(monorepoRoot, 'node_modules'),
+  path.resolve(projectRoot, "node_modules"),
+  path.resolve(monorepoRoot, "node_modules"),
 ];
 // success-line-end
 
 // This helps support certain popular third-party libraries
 // such as Firebase that use the extension cjs.
-config.resolver.sourceExts.push("cjs")
+config.resolver.sourceExts.push("cjs");
 
 module.exports = config;
 ```
@@ -234,9 +235,9 @@ yarn add eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslin
     "esModuleInterop": true,
     "skipLibCheck": true
   }
- }
- // success-line-end
- ```
+}
+// success-line-end
+```
 
 5. Create the shared ESLint configuration file:
 
@@ -257,12 +258,7 @@ module.exports = {
     "standard",
     "prettier",
   ],
-  plugins: [
-    "@typescript-eslint",
-    "react",
-    "react-native",
-    "reactotron",
-  ],
+  plugins: ["@typescript-eslint", "react", "react-native", "reactotron"],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -340,9 +336,7 @@ Now we'll use the utility we just made and add it to the React Native app. Let�
 1. Navigate to the mobile app:
 
 ```shell
-cd ..
-cd ..
-cd apps/mobile
+cd ../../apps/mobile
 ```
 
 2. Add the ESLint shared package to the `package.json` file:
@@ -466,9 +460,7 @@ As we mentioned earlier, a common need in projects is sharing UI components acro
 1. Navigate to the packages folder:
 
 ```shell
-cd ..
-cd ..
-cd packages
+cd ../../packages
 ```
 
 2. Create the package directory:
@@ -516,8 +508,8 @@ yarn add @types/react @types/react-native --dev
   "include": ["src"],
   "exclude": ["node_modules"]
 }
- // success-line-end
- ```
+// success-line-end
+```
 
 5.  Now let's create the badge component:
 
@@ -599,9 +591,7 @@ To finish integrating our shared UI package, we also need to include it in the m
 1. Navigate now to the mobile app:
 
 ```shell
-cd ..
-cd ..
-cd apps/mobile
+cd ../../apps/mobile
 ```
 
 2. Add the shared UI package to the `package.json` file:
@@ -653,8 +643,7 @@ Alright, we’re almost done! The final step is to make sure everything is set u
 1. Navigate to the root of the project:
 
 ```shell
-cd ..
-cd ..
+cd ../..
 ```
 
 2. Make sure dependencies are installed:
@@ -689,26 +678,26 @@ One of the great features of Yarn Workspaces is the ability to define and run sc
 
 In this optional section, we’ll show you how to set up and use global scripts with Yarn. To start, let's add a global script for the mobile app to run both iOS and Android projects.
 
+1. Add a global script to the root `package.json` file:
 
-1. Add a global script to the mobile app `package.json` file:
-
-`apps/mobile/package.json`
+`package.json`
 
 ```json
+{
+  "name": "monorepo-example",
+  "packageManager": "yarn@3.8.4",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  // success-line-start
   "scripts": {
-    ...
-    "serve:web": "npx server dist",
-    // error-line
-    "prebuild:clean": "npx expo prebuild --clean"
-    // success-line-start
-    "prebuild:clean": "npx expo prebuild --clean",
-    "mobile:ios" : "yarn workspace mobile ios",
-    "mobile:android" : "yarn workspace mobile android"
-    // success-line-end
-  },
+    "mobile:ios": "yarn workspace mobile ios",
+    "mobile:android": "yarn workspace mobile android"
+  }
+  // success-line-end
+}
 ```
 
-Even though this script is locally defined within the app's `package.json` file, it will available everywhere within the monorepo by running `yarn mobile:ios` or `yarn mobile:android`. Very neat!
+Even though this script is locally defined within the root `package.json` file, it will available everywhere within the monorepo by running `yarn mobile:ios` or `yarn mobile:android`. Very neat!
 
 :::info
 For more information on Yarn's global scripts, check [this link](https://yarnpkg.com/features/workspaces#global-scripts).
@@ -721,5 +710,6 @@ For more information on Yarn's global scripts, check [this link](https://yarnpkg
 We hope this guide has been helpful and gives you more confidence when working with a monorepo setup!
 
 For more information, you can check the following resources:
-* [Choosing the right monorepo strategy for your project](MonoreposOverview.md)
-* [Expo: Work with monorepos](https://docs.expo.dev/guides/monorepos/)
+
+- [Choosing the right monorepo strategy for your project](MonoreposOverview.md)
+- [Expo: Work with monorepos](https://docs.expo.dev/guides/monorepos/)
