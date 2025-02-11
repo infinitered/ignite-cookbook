@@ -16,11 +16,15 @@ So we all know that writing UI E2E tests suck right? It's hard to know if an ass
 
 But they can also be too useful to ignore. A lot of bad deployments have been stopped by a single E2E test that caught a critical bug. So how can we make maintaining them less painful?
 
-This recipe uses a boring but common design pattern, called the Page Object Model. If you give it [a Google search](https://www.google.com/search?q=page+object+model), you will find that most testing tool have a documentation page dedicated to this pattern. We can leverage this fact to write our tests so that multiple testing frameworks can run the same test files, so we can re-use our tests across iOS, Android, and web.
+This recipe uses a boring but easy to understand design pattern, called the Page Object Model. If you give it [a Google search](https://www.google.com/search?q=page+object+model), you will find that most testing tool have a documentation page dedicated to this pattern. We can leverage this fact to write our tests so that multiple testing frameworks can run the same test files, so we can re-use our tests across iOS, Android, and web.
 
-This recipe shows us how to use Playwright and Detox together in the same Ignite project. We’ll add an `e2e` folder containing shared page-object models and test fixtures. Then we’ll configure our test files so we can run the same test code in **iOS** and **Android** (Detox) or **Web** (Playwright). In the end, you’ll have a flexible, cohesive setup for E2E tests across all target platforms.
+In order to accomplish this, we are going to setup Playwright and Detox to co-exist in the same Ignite project. We’ll add an `e2e` folder containing shared page-object models and test fixtures. Then we’ll configure our test files so we can run the same test code in **iOS** and **Android** (Detox) or **Web** (Playwright). After we are done, we will be left with some basic tests and a clear architecture for writing new tests and page object models.
 
-> This guide assumes that you will use yarn 1 as your package manager. But if don't use that, you can use ChatGPT or your brain to convert the commands to your package manager of choice.
+:::note
+
+This guide assumes that you will use yarn 1 as your package manager. But if don't use that, you can use ChatGPT or your brain to convert the commands to your package manager of choice.
+
+:::
 
 ## Who should use this?
 
@@ -29,6 +33,7 @@ This recipe is for you if:
 - You have tests for one platform using page object models and you want to re-use them on another platform
 - You are starting to add tests to a new project and both web and mobile are critical flows for your users.
 - You have a large team and want to use an simple testing architecture that is familiar to many developers.
+- You want to write all your tests for each platforms in a single language (JavaScript / TypeScript).
 
 # 1. Install Detox
 
@@ -65,15 +70,13 @@ e2e
 ├─ detox
 │  ├─ screens
 │  │  ├─ LoginScreen.ts
-│  │  ├─ WelcomeScreen.ts
-│  │  └─ ...
+│  │  └─ WelcomeScreen.ts
 │  ├─ entry.ts
 │  └─ setup.ts
 ├─ playwright
 │  ├─ screens
 │  │  ├─ LoginScreen.ts
-│  │  ├─ WelcomeScreen.ts
-│  │  └─ ...
+│  │  └─ WelcomeScreen.ts
 │  ├─ entry.ts
 │  └─ setup.ts
 ├─ tests
@@ -87,7 +90,7 @@ e2e
 
 Notice how there aren't a lot of imports here, instead our page object model "imports" are provided to the test function as an object. This is the secret sauce to using the same test files across multiple environments. More on that later!
 
-```ts
+```ts title="e2e/tests/Login.test.ts"
 import { test } from "../entry"
 
 test("Open up our app and use the default credentials to login and navigate to the demo screen", async ({
@@ -105,20 +108,18 @@ test("Open up our app and use the default credentials to login and navigate to t
 
 A single entry point chooses which environment to load. It has a utility `test` that’s either Detox’s or Playwright’s “test” function:
 
-```ts
-// e2e/entry.ts
+```ts title="e2e/entry.ts"
 import type { Fixtures } from "./screens"
 
 /** Check for runtime globals that we are in a detox environment  */
-export function isDetoxTestEnv() {
-  return typeof device !== "undefined"
-}
+export const isDetoxTestEnv = () =>
+  // @ts-ignore
+  typeof device !== "undefined"
 
 /** Check for runtime globals that we are in a playwright environment */
-export function isPlaywrightTestEnv() {
+export const isPlaywrightTestEnv = () =>
   // @ts-ignore
-  return globalThis._playwrightInstance !== undefined
-}
+  globalThis._playwrightInstance !== undefined
 
 /** Our library-agnostic test function */
 export type Test = (name: string, fn: (fixtures: Fixtures) => Promise<void>) => void
@@ -128,13 +129,24 @@ export type Test = (name: string, fn: (fixtures: Fixtures) => Promise<void>) => 
  * import playwright code into a detox environment, or vice versa.
  */
 export const test: Test = (() => {
+  const testEnvsLoaded = [isDetoxTestEnv(), isPlaywrightTestEnv()].filter(Boolean).length
+
+  if (testEnvsLoaded !== 1) {
+    throw new Error(
+      `${testEnvsLoaded} test environments loaded. Only one is allowed. Check the isTestEnv functions to make sure they check for globals that are specific only to their test environment`,
+    )
+  }
+
   if (isDetoxTestEnv()) {
     return require("./detox/entry").test
-  } else if (isPlaywrightTestEnv()) {
-    return require("./playwright/entry").test
-  } else {
-    throw new Error("Unknown test env")
   }
+  if (isPlaywrightTestEnv()) {
+    return require("./playwright/entry").test
+  }
+
+  throw new Error(
+    "Unknown test environment. Check the isTestEnv functions to make sure they check for globals that are specific only to their test environment",
+  )
 })()
 ```
 
@@ -142,8 +154,7 @@ export const test: Test = (() => {
 
 Define your “agnostic” page objects as TypeScript interfaces. You should eventually have a page object model interface for each screen in your app, but for now we just have a login screen and a welcome screen.
 
-```ts
-// e2e/screens.ts
+```ts title="e2e/screens.ts"
 export interface ILoginScreen {
   login(): Promise<void>
 }
@@ -165,8 +176,7 @@ export type Fixtures = {
 
 Behold! An implementation! This is where we implement the actual logic of our page object model. Because we are in the detox directory and we are careful loading only one test environment at a time in our `e2e/entry.ts` file, we can import Detox specific code here.
 
-```ts
-// e2e/detox/screens/LoginScreen.ts
+```ts title="e2e/detox/screens/LoginScreen.ts"
 import { expect, element, by } from "detox"
 import type { ILoginScreen } from "../../screens"
 
@@ -182,8 +192,7 @@ export class DetoxLoginScreen implements ILoginScreen {
 
 Behold! Another implementation!
 
-```ts
-// e2e/detox/screens/WelcomeScreen.ts
+```ts title="e2e/detox/screens/WelcomeScreen.ts"
 import { expect, element, by } from "detox"
 import type { IWelcomeScreen } from "../../screens"
 
@@ -200,8 +209,7 @@ export class DetoxWelcomeScreen implements IWelcomeScreen {
 
 This file has a lot of logic, but this is where we load the app in a way that is compatible with both debug and release builds. You can customize this to your liking, but this is a good starting point.
 
-```ts
-// e2e/detox/setup.ts
+```ts title="e2e/detox/setup.ts"
 import { device } from "detox"
 import { resolveConfig } from "detox/internals"
 import type { AppJSONConfig } from "@expo/config"
@@ -267,7 +275,7 @@ const sleep = (t: number) => new Promise((res) => setTimeout(res, t))
 
 This is the magic for how to run the test files in Detox! We create a "fixture" of all the page objects that our tests can use and provides them to the test function. Since Detox uses Jest as the test runner, we want to use the global test function and then wrap it to provide the fixtures.
 
-```ts
+```ts title="e2e/detox/entry.ts"
 import { DetoxWelcomeScreen } from "./screens/WelcomeScreen"
 import { DetoxLoginScreen } from "./screens/LoginScreen"
 import type { Fixtures } from "../screens"
@@ -292,8 +300,7 @@ export const test: Test = (name, fn) =>
 
 Our detox code is setup! If you like, you can skip to `Run Detox Tests` section to make sure your tests run and come back to Playwright later. But if you want to see how the other half lives, read on!
 
-```ts
-// e2e/playwright/screens/LoginScreen.ts
+```ts title="e2e/playwright/screens/LoginScreen.ts"
 import { expect, Page } from "@playwright/test"
 import type { ILoginScreen } from "../../screens"
 
@@ -309,12 +316,15 @@ export class PlaywrightLoginScreen implements ILoginScreen {
 
 ### Playwright Implementation – `e2e/playwright/screens/WelcomeScreen.ts`
 
-Again, this is pretty similar to the Detox implementation, but we are using Playwright specific code.
+This is pretty similar to the Detox implementation, but we are using Playwright specific code.
 
-> Pro-tip: if you use AI tool to help with coding, they are often pretty good at translating one page object implementation to another. `Please translate this Detox page object to Playwright` is a good prompt to start with.
+:::tip
 
-```ts
-// e2e/playwright/screens/WelcomeScreen.ts
+Pro-tip: if you use AI tool to help with coding, they are often pretty good at translating one page object implementation to another. `Please translate this Detox page object to Playwright` is a good prompt to start with.
+
+:::
+
+```ts title="e2e/playwright/screens/WelcomeScreen.ts"
 import { expect, Page } from "@playwright/test"
 import type { IWelcomeScreen } from "../../screens"
 
@@ -333,7 +343,7 @@ export class PlaywrightWelcomeScreen implements IWelcomeScreen {
 
 Now let's wrap it all together into a fixture! Playwright can do a **lot** with fixtures. You can [read more about it in their documentation](https://playwright.dev/docs/test-fixtures). But we are going to keep it pretty simple for now.
 
-```ts
+```ts title="e2e/playwright/entry.ts"
 import { test as base } from "@playwright/test"
 import { playwrightLoadApp } from "./setup"
 import { PlaywrightLoginScreen } from "./screens/LoginScreen"
@@ -357,8 +367,7 @@ export const test = base.extend<Fixtures>({
 
 Wow! This is easy. But it's pretty easy to navigate to a web page, so we don't need to do anything fancy here.
 
-```ts
-// e2e/playwright/setup.ts
+```ts title="e2e/playwright/setup.ts"
 import type { Page } from "@playwright/test"
 
 export async function playwrightLoadApp(page: Page) {
@@ -389,7 +398,11 @@ yarn start
 yarn detox:test:debug
 ```
 
-> If you have any issues, check [the environment setup guide for Detox](https://wix.github.io/Detox/docs/introduction/environment-setup).
+:::note
+
+If you have any issues, check [the environment setup](https://wix.github.io/Detox/docs/introduction/environment-setup) or the [How to Debug](https://wix.github.io/Detox/docs/introduction/debugging) articles in the Detox docs.
+
+:::
 
 # 5. Run Playwright Tests
 
@@ -419,6 +432,12 @@ If you want to use a test runner with a nice UI, you can run:
 yarn playwright:test --ui
 ```
 
+:::note
+
+If you have any issues, check the [Installation](https://playwright.dev/docs/intro) or [Running and debugging tests](https://playwright.dev/docs/test-intro) articles in the Playwright docs.
+
+:::
+
 # 6. Gotchas to look out for
 
 The `jest.config.js` for your unit tests may get a little eager and start running the tests in the `e2e` folder. You can add this to your `jest.config.js` to ignore the `e2e` folder:
@@ -442,4 +461,4 @@ export default {
 
 # 7. That's it! Write more tests!
 
-You now have an E2E test architecture that runs on **iOS** and **Android** devices with Detox and also covers **Web** with Playwright. The same test files and page-object patterns can be reused across all target platforms.
+That wasn't so bad, was it? You now have an E2E test architecture that runs on iOS, Android, and Web! You can add more tests to the `e2e/tests` folder and more page object models to the `e2e/detox/screens` and `e2e/playwright/screens` folders.
