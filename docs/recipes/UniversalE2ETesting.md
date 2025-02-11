@@ -290,7 +290,7 @@ export const test: Test = (name, fn) =>
 
 ### Playwright Implementation – `e2e/playwright/screens/LoginScreen.ts`
 
-Our detox code is setup! If you like, you can skip to [Run Detox Tests](#4-run-detox-tests) to make sure your tests run and come back to Playwright later. But if you want to see how the other half lives, read on!
+Our detox code is setup! If you like, you can skip to `Run Detox Tests` section to make sure your tests run and come back to Playwright later. But if you want to see how the other half lives, read on!
 
 ```ts
 // e2e/playwright/screens/LoginScreen.ts
