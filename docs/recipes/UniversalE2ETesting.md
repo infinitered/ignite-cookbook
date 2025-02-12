@@ -18,7 +18,16 @@ But they can also be too useful to ignore. A lot of bad deployments have been st
 
 This recipe uses a boring but easy to understand design pattern, called the Page Object Model. If you give it [a Google search](https://www.google.com/search?q=page+object+model), you will find that most testing tool have a documentation page dedicated to this pattern. We can leverage this fact to write our tests so that multiple testing frameworks can run the same test files, so we can re-use our tests across iOS, Android, and web.
 
-In order to accomplish this, we are going to setup Playwright and Detox to co-exist in the same Ignite project. We’ll add an `e2e` folder containing shared page-object models and test fixtures. Then we’ll configure our test files so we can run the same test code in **iOS** and **Android** (Detox) or **Web** (Playwright). After we are done, we will be left with some basic tests and a clear architecture for writing new tests and page object models.
+## Getting Started
+
+You can start with an existing Ignite project, or create a new one using:
+
+```bash
+npx ignite-cli@latest new PizzaApp
+cd PizzaApp
+```
+
+In order to accomplish this, we are going to setup Playwright and Detox to co-exist in the same Ignite project. We'll add an `e2e` folder containing shared page-object models and test fixtures. Then we'll configure our test files so we can run the same test code in **iOS** and **Android** (Detox) or **Web** (Playwright). After we are done, we will be left with some basic tests and a clear architecture for writing new tests and page object models.
 
 :::note
 
@@ -91,85 +100,90 @@ e2e
 Notice how there aren't a lot of imports here, instead our page object model "imports" are provided to the test function as an object. This is the secret sauce to using the same test files across multiple environments. More on that later!
 
 ```ts title="e2e/tests/Login.test.ts"
-import { test } from "../entry"
+import { test } from "../entry";
 
 test("Open up our app and use the default credentials to login and navigate to the demo screen", async ({
   loadApp,
   loginScreen,
   welcomeScreen,
 }) => {
-  await loadApp()
-  await loginScreen.login()
-  await welcomeScreen.launch()
-})
+  await loadApp();
+  await loginScreen.login();
+  await welcomeScreen.launch();
+});
 ```
 
 ### Shared Test Entry – `e2e/entry.ts`
 
-A single entry point chooses which environment to load. It has a utility `test` that’s either Detox’s or Playwright’s “test” function:
+A single entry point chooses which environment to load. It has a utility `test` that's either Detox's or Playwright's "test" function:
 
 ```ts title="e2e/entry.ts"
-import type { Fixtures } from "./screens"
+import type { Fixtures } from "./screens";
 
 /** Check for runtime globals that we are in a detox environment  */
 export const isDetoxTestEnv = () =>
   // @ts-ignore
-  typeof device !== "undefined"
+  typeof device !== "undefined";
 
 /** Check for runtime globals that we are in a playwright environment */
 export const isPlaywrightTestEnv = () =>
   // @ts-ignore
-  globalThis._playwrightInstance !== undefined
+  globalThis._playwrightInstance !== undefined;
 
 /** Our library-agnostic test function */
-export type Test = (name: string, fn: (fixtures: Fixtures) => Promise<void>) => void
+export type Test = (
+  name: string,
+  fn: (fixtures: Fixtures) => Promise<void>
+) => void;
 
 /**
  * This test function is a little funky, but it ensures that we don't accidentally
  * import playwright code into a detox environment, or vice versa.
  */
 export const test: Test = (() => {
-  const testEnvsLoaded = [isDetoxTestEnv(), isPlaywrightTestEnv()].filter(Boolean).length
+  const testEnvsLoaded = [isDetoxTestEnv(), isPlaywrightTestEnv()].filter(
+    Boolean
+  ).length;
 
   if (testEnvsLoaded !== 1) {
     throw new Error(
-      `${testEnvsLoaded} test environments loaded. Only one is allowed. Check the isTestEnv functions to make sure they check for globals that are specific only to their test environment`,
-    )
+      `${testEnvsLoaded} test environments loaded. Only one is allowed. Check the isTestEnv functions to make sure they check for globals that are specific only to their test environment`
+    );
   }
 
   if (isDetoxTestEnv()) {
-    return require("./detox/entry").test
+    return require("./detox/entry").test;
   }
   if (isPlaywrightTestEnv()) {
-    return require("./playwright/entry").test
+    return require("./playwright/entry").test;
   }
 
   throw new Error(
-    "Unknown test environment. Check the isTestEnv functions to make sure they check for globals that are specific only to their test environment",
-  )
-})()
+    "Unknown test environment. Check the isTestEnv functions to make sure they check for globals that are specific only to their test environment"
+  );
+})();
 ```
 
 ### Page Object Interfaces – `e2e/screens.ts`
 
-Define your “agnostic” page objects as TypeScript interfaces. You should eventually have a page object model interface for each screen in your app, but for now we just have a login screen and a welcome screen.
+Define your "agnostic" page objects as TypeScript interfaces. You should eventually have a page object model interface for each screen in your app, but for now we just have a login screen and a welcome screen.
 
 ```ts title="e2e/screens.ts"
 export interface ILoginScreen {
-  login(): Promise<void>
+  login(): Promise<void>;
 }
 
 export interface IWelcomeScreen {
-  launch(): Promise<void>
+  launch(): Promise<void>;
 }
 
 /** A fixture of all the page object models we can use in our tests */
 export type Fixtures = {
-  loadApp: () => Promise<void>
-  loginScreen: ILoginScreen
-  welcomeScreen: IWelcomeScreen
+  loadApp: () => Promise<void>;
+  loginScreen: ILoginScreen;
+  welcomeScreen: IWelcomeScreen;
   // ... you can add more as needed
-}
+};
 ```
 
 ### Detox Implementation – `e2e/detox/screens/LoginScreen.ts`
@@ -177,13 +191,13 @@ export type Fixtures = {
 Behold! An implementation! This is where we implement the actual logic of our page object model. Because we are in the detox directory and we are careful loading only one test environment at a time in our `e2e/entry.ts` file, we can import Detox specific code here.
 
 ```ts title="e2e/detox/screens/LoginScreen.ts"
-import { expect, element, by } from "detox"
-import type { ILoginScreen } from "../../screens"
+import { expect, element, by } from "detox";
+import type { ILoginScreen } from "../../screens";
 
 export class DetoxLoginScreen implements ILoginScreen {
   async login() {
-    await expect(element(by.text("Log In"))).toBeVisible()
-    await element(by.text("Tap to log in!")).tap()
+    await expect(element(by.text("Log In"))).toBeVisible();
+    await element(by.text("Tap to log in!")).tap();
   }
 }
 ```
@@ -193,14 +207,18 @@ export class DetoxLoginScreen implements ILoginScreen {
 Behold! Another implementation!
 
 ```ts title="e2e/detox/screens/WelcomeScreen.ts"
-import { expect, element, by } from "detox"
-import type { IWelcomeScreen } from "../../screens"
+import { expect, element, by } from "detox";
+import type { IWelcomeScreen } from "../../screens";
 
 export class DetoxWelcomeScreen implements IWelcomeScreen {
   async launch() {
-    await expect(element(by.text("Your app, almost ready for launch!"))).toBeVisible()
-    await element(by.text("Let's go!")).tap()
-    await expect(element(by.text("Components to jump start your project!"))).toBeVisible()
+    await expect(
+      element(by.text("Your app, almost ready for launch!"))
+    ).toBeVisible();
+    await element(by.text("Let's go!")).tap();
+    await expect(
+      element(by.text("Components to jump start your project!"))
+    ).toBeVisible();
   }
 }
 ```
@@ -210,23 +228,23 @@ export class DetoxWelcomeScreen implements IWelcomeScreen {
 This file has a lot of logic, but this is where we load the app in a way that is compatible with both debug and release builds. You can customize this to your liking, but this is a good starting point.
 
 ```ts title="e2e/detox/setup.ts"
-import { device } from "detox"
-import { resolveConfig } from "detox/internals"
-import type { AppJSONConfig } from "@expo/config"
-const appConfig: AppJSONConfig = require("../../app.json")
+import { device } from "detox";
+import { resolveConfig } from "detox/internals";
+import type { AppJSONConfig } from "@expo/config";
+const appConfig: AppJSONConfig = require("../../app.json");
 
-type Platform = ReturnType<typeof device.getPlatform>
+type Platform = ReturnType<typeof device.getPlatform>;
 
 export async function detoxLoadApp() {
-  const config = await resolveConfig()
-  const platform = device.getPlatform()
-  const isDebugConfig = config.configurationName.split(".").at(-1) === "debug"
+  const config = await resolveConfig();
+  const platform = device.getPlatform();
+  const isDebugConfig = config.configurationName.split(".").at(-1) === "debug";
   if (isDebugConfig) {
-    return await openAppForDebugBuild(platform)
+    return await openAppForDebugBuild(platform);
   } else {
     return await device.launchApp({
       newInstance: true,
-    })
+    });
   }
 }
 
@@ -235,40 +253,42 @@ async function openAppForDebugBuild(platform: Platform) {
     ? // Testing latest published EAS update for the test_debug channel
       getDeepLinkUrl(getLatestUpdateUrl())
     : // Local testing with packager
-      getDeepLinkUrl(getDevLauncherPackagerUrl(platform))
+      getDeepLinkUrl(getDevLauncherPackagerUrl(platform));
 
   if (platform === "ios") {
     await device.launchApp({
       newInstance: true,
-    })
-    await sleep(1000)
+    });
+    await sleep(1000);
     await device.openURL({
       url: deepLinkUrl,
-    })
+    });
   } else {
     await device.launchApp({
       newInstance: true,
       url: deepLinkUrl,
-    })
+    });
   }
 
-  await sleep(1000)
+  await sleep(1000);
 }
 
-const getAppId = () => appConfig?.expo?.extra?.eas?.projectId ?? ""
+const getAppId = () => appConfig?.expo?.extra?.eas?.projectId ?? "";
 
-const getAppSchema = () => appConfig?.expo?.scheme ?? ""
+const getAppSchema = () => appConfig?.expo?.scheme ?? "";
 
 const getDeepLinkUrl = (url: string) =>
-  `exp+${getAppSchema()}://expo-development-client/?url=${encodeURIComponent(url)}`
+  `exp+${getAppSchema()}://expo-development-client/?url=${encodeURIComponent(
+    url
+  )}`;
 
 const getDevLauncherPackagerUrl = (platform: Platform) =>
-  `http://localhost:8081/index.bundle?platform=${platform}&dev=true&minify=false&disableOnboarding=1`
+  `http://localhost:8081/index.bundle?platform=${platform}&dev=true&minify=false&disableOnboarding=1`;
 
 const getLatestUpdateUrl = () =>
-  `https://u.expo.dev/${getAppId()}?channel-name=test_debug&disableOnboarding=1`
+  `https://u.expo.dev/${getAppId()}?channel-name=test_debug&disableOnboarding=1`;
 
-const sleep = (t: number) => new Promise((res) => setTimeout(res, t))
+const sleep = (t: number) => new Promise((res) => setTimeout(res, t));
 ```
 
 ### Detox Test Entry – `e2e/detox/entry.ts`
@@ -276,24 +296,24 @@ const sleep = (t: number) => new Promise((res) => setTimeout(res, t))
 This is the magic for how to run the test files in Detox! We create a "fixture" of all the page objects that our tests can use and provides them to the test function. Since Detox uses Jest as the test runner, we want to use the global test function and then wrap it to provide the fixtures.
 
 ```ts title="e2e/detox/entry.ts"
-import { DetoxWelcomeScreen } from "./screens/WelcomeScreen"
-import { DetoxLoginScreen } from "./screens/LoginScreen"
-import type { Fixtures } from "../screens"
-import type { Test } from "../entry"
-import { detoxLoadApp } from "./setup"
+import { DetoxWelcomeScreen } from "./screens/WelcomeScreen";
+import { DetoxLoginScreen } from "./screens/LoginScreen";
+import type { Fixtures } from "../screens";
+import type { Test } from "../entry";
+import { detoxLoadApp } from "./setup";
 
 const fixtures: Fixtures = {
   loadApp: detoxLoadApp,
   loginScreen: new DetoxLoginScreen(),
   welcomeScreen: new DetoxWelcomeScreen(),
-}
+};
 
 export const test: Test = (name, fn) =>
   globalThis.test(name, (done) => {
     fn(fixtures)
       .then(() => done())
-      .catch(done.fail)
-  })
+      .catch(done.fail);
+  });
 ```
 
 ### Playwright Implementation – `e2e/playwright/screens/LoginScreen.ts`
@@ -301,15 +321,17 @@ export const test: Test = (name, fn) =>
 Our detox code is setup! If you like, you can skip to `Run Detox Tests` section to make sure your tests run and come back to Playwright later. But if you want to see how the other half lives, read on!
 
 ```ts title="e2e/playwright/screens/LoginScreen.ts"
-import { expect, Page } from "@playwright/test"
-import type { ILoginScreen } from "../../screens"
+import { expect, Page } from "@playwright/test";
+import type { ILoginScreen } from "../../screens";
 
 export class PlaywrightLoginScreen implements ILoginScreen {
   constructor(private page: Page) {}
 
   async login() {
-    await expect(this.page.locator("[data-testid='login-heading']")).toHaveText("Log In")
-    await this.page.locator("[data-testid='login-button']").click()
+    await expect(this.page.locator("[data-testid='login-heading']")).toHaveText(
+      "Log In"
+    );
+    await this.page.locator("[data-testid='login-button']").click();
   }
 }
 ```
@@ -325,16 +347,20 @@ Pro-tip: if you use AI tool to help with coding, they are often pretty good at t
 :::
 
 ```ts title="e2e/playwright/screens/WelcomeScreen.ts"
-import { expect, Page } from "@playwright/test"
-import type { IWelcomeScreen } from "../../screens"
+import { expect, Page } from "@playwright/test";
+import type { IWelcomeScreen } from "../../screens";
 
 export class PlaywrightWelcomeScreen implements IWelcomeScreen {
   constructor(private page: Page) {}
 
   async launch() {
-    await expect(this.page.getByText("Your app, almost ready for launch!")).toBeVisible()
-    await this.page.getByText("Let's go!").click()
-    await expect(this.page.getByText("Components to jump start your project!")).toBeVisible()
+    await expect(
+      this.page.getByText("Your app, almost ready for launch!")
+    ).toBeVisible();
+    await this.page.getByText("Let's go!").click();
+    await expect(
+      this.page.getByText("Components to jump start your project!")
+    ).toBeVisible();
   }
 }
 ```
@@ -344,23 +370,23 @@ export class PlaywrightWelcomeScreen implements IWelcomeScreen {
 Now let's wrap it all together into a fixture! Playwright can do a **lot** with fixtures. You can [read more about it in their documentation](https://playwright.dev/docs/test-fixtures). But we are going to keep it pretty simple for now.
 
 ```ts title="e2e/playwright/entry.ts"
-import { test as base } from "@playwright/test"
-import { playwrightLoadApp } from "./setup"
-import { PlaywrightLoginScreen } from "./screens/LoginScreen"
-import { PlaywrightWelcomeScreen } from "./screens/WelcomeScreen"
-import type { Fixtures } from "../screens"
+import { test as base } from "@playwright/test";
+import { playwrightLoadApp } from "./setup";
+import { PlaywrightLoginScreen } from "./screens/LoginScreen";
+import { PlaywrightWelcomeScreen } from "./screens/WelcomeScreen";
+import type { Fixtures } from "../screens";
 
 export const test = base.extend<Fixtures>({
   loadApp: async ({ page }, use) => {
-    await use(() => playwrightLoadApp(page))
+    await use(() => playwrightLoadApp(page));
   },
   loginScreen: async ({ page }, use) => {
-    await use(new PlaywrightLoginScreen(page))
+    await use(new PlaywrightLoginScreen(page));
   },
   welcomeScreen: async ({ page }, use) => {
-    await use(new PlaywrightWelcomeScreen(page))
+    await use(new PlaywrightWelcomeScreen(page));
   },
-})
+});
 ```
 
 ### Playwright Setup – `e2e/playwright/setup.ts`
@@ -368,10 +394,10 @@ export const test = base.extend<Fixtures>({
 Wow! This is easy. But it's pretty easy to navigate to a web page, so we don't need to do anything fancy here.
 
 ```ts title="e2e/playwright/setup.ts"
-import type { Page } from "@playwright/test"
+import type { Page } from "@playwright/test";
 
 export async function playwrightLoadApp(page: Page) {
-  await page.goto("http://localhost:3000")
+  await page.goto("http://localhost:3000");
 }
 ```
 
