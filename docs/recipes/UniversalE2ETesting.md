@@ -225,7 +225,13 @@ export class DetoxWelcomeScreen implements IWelcomeScreen {
 
 ### Detox Setup – `e2e/detox/setup.ts`
 
-This file has a lot of logic, but this is where we load the app in a way that is compatible with both debug and release builds. You can customize this to your liking, but this is a good starting point.
+This file handles launching the app differently based on your build configuration:
+
+- For release builds: Simply launches the app normally
+- For debug builds: Handles launching through Expo Dev Client and deep linking
+  - For local development: Links to the local Metro bundler
+  - For testing EAS updates: Links to the published update URL
+  - Handles platform-specific launch requirements (iOS needs an extra step)
 
 ```ts title="e2e/detox/setup.ts"
 import { device } from "detox";
