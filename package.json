@@ -15,11 +15,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@docusaurus/core": "^3.1.1",
-    "@docusaurus/plugin-client-redirects": "^3.1.1",
-    "@docusaurus/plugin-content-docs": "^3.1.1",
-    "@docusaurus/preset-classic": "^3.1.1",
-    "@docusaurus/remark-plugin-npm2yarn": "^3.1.1",
+    "@babel/traverse": "^7.23.2",
+    "@docusaurus/core": "^3.7.0",
+    "@docusaurus/plugin-client-redirects": "^3.7.0",
+    "@docusaurus/plugin-content-docs": "^3.7.0",
+    "@docusaurus/preset-classic": "^3.7.0",
+    "@docusaurus/remark-plugin-npm2yarn": "^3.7.0",
     "@mdx-js/react": "^3.0.1",
     "clsx": "^2.0.0",
     "moment": "^2.29.4",
@@ -29,9 +30,9 @@
     "react-player": "^2.11.2"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.1.1",
-    "@docusaurus/tsconfig": "^3.1.1",
-    "@docusaurus/types": "^3.1.1",
+    "@docusaurus/module-type-aliases": "^3.7.0",
+    "@docusaurus/tsconfig": "^3.7.0",
+    "@docusaurus/types": "^3.7.0",
     "@types/gtag.js": "^0.0.18",
     "@types/react": "^18.2.55",
     "gitlog": "^4.0.4",
