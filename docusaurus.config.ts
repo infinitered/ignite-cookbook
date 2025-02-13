@@ -1,5 +1,5 @@
-import type { Config } from "@docusaurus/types";
-import type * as Preset from "@docusaurus/preset-classic";
+import type {Config} from '@docusaurus/types';
+import type * as Preset from '@docusaurus/preset-classic';
 const { themes } = require("prism-react-renderer");
 const lightCodeTheme = themes.github;
 const darkCodeTheme = themes.dracula;
@@ -145,52 +145,53 @@ const config: Config = {
     ],
   ],
 
-  themeConfig: {
-    // Disabling dark mode for now until we have a better dark mode theme
-    colorMode: {
-      defaultMode: "light",
-      disableSwitch: true,
-    },
-    navbar: {
-      hideOnScroll: true,
-      logo: {
-        alt: "React Native Cookbook Logo",
-        src: "img/logo.svg",
+  themeConfig:
+    {
+      // Disabling dark mode for now until we have a better dark mode theme
+      colorMode: {
+        defaultMode: "light",
+        disableSwitch: true,
       },
-      items: [
-        {
-          type: "search",
-          position: "right",
+      navbar: {
+        hideOnScroll: true,
+        logo: {
+          alt: "React Native Cookbook Logo",
+          src: "img/logo.svg",
         },
-        {
-          type: "doc",
-          docId: "intro",
-          position: "right",
-          html: '<div class="hover-underline">Recipes</div>',
-        },
-        {
-          position: "right",
-          html: '<div class="hover-underline">Ignite Boilerplate</div>',
-          to: "https://github.com/infinitered/ignite",
-        },
-        {
-          position: "right",
-          html: '<div class="hover-underline">Infinite Red</div>',
-          to: "https://infinite.red",
-        },
-        {
-          //override CSS only for this last item
-          style: { marginRight: "0px" },
-          type: "dropdown",
-          html: ` <div class="hover-underline">
+        items: [
+          {
+            type: "search",
+            position: "right",
+          },
+          {
+            type: "doc",
+            docId: "intro",
+            position: "right",
+            html: '<div class="hover-underline">Recipes</div>',
+          },
+          {
+            position: "right",
+            html: '<div class="hover-underline">Ignite Boilerplate</div>',
+            to: "https://github.com/infinitered/ignite",
+          },
+          {
+            position: "right",
+            html: '<div class="hover-underline">Infinite Red</div>',
+            to: "https://infinite.red",
+          },
+          {
+            //override CSS only for this last item
+            style: { marginRight: "0px" },
+            type: "dropdown",
+            html: ` <div class="hover-underline">
                       Community
                       <img src="/img/caret-down.svg" alt="dropdown" class="icon" />
                     </div>
                   `,
-          position: "right",
-          items: [
-            {
-              html: ` <div>
+            position: "right",
+            items: [
+              {
+                html: ` <div>
                           <div class="dropdown-item  hover-underline">
                             Slack community
                             <img src="/img/arrow.svg" alt="dropdown" class="icon" />
@@ -200,10 +201,10 @@ const config: Config = {
                           </div>
                         </div>
                       `,
-              to: "https://join.slack.com/t/infiniteredcommunity/shared_invite/zt-1e1gob8vn-pcFjKM~n1c~aXFsTnvHpdg",
-            },
-            {
-              html: ` <div>
+                to: "https://join.slack.com/t/infiniteredcommunity/shared_invite/zt-1e1gob8vn-pcFjKM~n1c~aXFsTnvHpdg",
+              },
+              {
+                html: ` <div>
                           <div class="dropdown-item  hover-underline">
                             Submit an idea
                             <img src="/img/arrow.svg" alt="dropdown" class="icon" />
@@ -213,115 +214,114 @@ const config: Config = {
                           </div>
                         </div>
                       `,
-              to: "https://github.com/infinitered/ignite-cookbook/issues/new?assignees=&labels=new+recipe&template=recipe_idea.yml",
-            },
-          ],
-        },
-      ],
-    },
-    footer: {
-      copyright:
-        'From the team at <a href="https://infinite.red/" target="_blank" rel="noopener noreferrer" class="ir-footer-link">Infinite Red</a> <img width="32" height="32" src="/img/ir-mark.svg" alt="dropdown" class="ir-mark" />',
-      style: "dark",
-      links: [
-        {
-          title: "Community",
-          items: [
-            {
-              html: '<a href="https://join.slack.com/t/infiniteredcommunity/shared_invite/zt-1e1gob8vn-pcFjKM~n1c~aXFsTnvHpdg" target="_blank" rel="noopener noreferrer" class="footer__link-item">Slack Community<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
-            },
-            {
-              html: '<a href="https://reactnativeradio.com/" target="_blank" rel="noopener noreferrer" class="footer__link-item">React Native Radio<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
-            },
-            {
-              html: '<a href="https://reactnativenewsletter.com/" target="_blank" rel="noopener noreferrer" class="footer__link-item">React Native Newsletter<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
-            },
-          ],
-        },
-        {
-          title: "Resources",
-          items: [
-            {
-              html: '<a href="https://github.com/infinitered/ignite-cookbook/issues" target="_blank" rel="noopener noreferrer" class="footer__link-item">Submit a Recipe<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
-            },
-            {
-              html: '<a href="https://github.com/infinitered/ignite-cookbook" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub - Ignite Cookbook<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
-            },
-            {
-              html: '<a href="https://github.com/infinitered/ignite" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub - Ignite Boilerplate<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
-            },
-            {
-              html: '<a href="https://shift.infinite.red/" target="_blank" rel="noopener noreferrer" class="footer__link-item">RedShift Blog <div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
-            },
-            {
-              html: '<a href="https://infinite.red/privacy-policy" target="_blank" rel="noopener noreferrer" class="footer__link-item">Privacy Policy<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
-            },
-          ],
-        },
-        {
-          title: "Infinite Red",
-          items: [
-            {
-              html: '<a href="https://infinite.red/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Website<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
-            },
-            {
-              html: '<a href="https://docs.infinite.red/" target="_blank" rel="noopener noreferrer" class="footer__link-item">IR Docs<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
-            },
-            {
-              html: '<a href="https://chainreactconf.com" target="_blank" rel="noopener noreferrer" class="footer__link-item">Chain React Conf<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
-            },
-          ],
-        },
-      ],
-    },
-    prism: {
-      theme: lightCodeTheme,
-      darkTheme: darkCodeTheme,
-      additionalLanguages: [
-        "bash",
-        "ruby",
-        "json",
-        "ejs",
-        "diff",
-        "markup-templating",
-      ],
-      magicComments: [
-        // Remember to extend the default highlight class name as well!
-        {
-          className: "theme-code-block-highlighted-line",
-          line: "highlight-next-line",
-          block: { start: "highlight-start", end: "highlight-end" },
-        },
-        {
-          className: "code-block-error-line",
-          line: "error-line",
-          block: { start: "error-line-start", end: "error-line-end" },
-        },
-        {
-          className: "code-block-success-line",
-          line: "success-line",
-          block: { start: "success-line-start", end: "success-line-end" },
-        },
-      ],
-    },
-    algolia: {
-      // The application ID provided by Algolia
-      appId: "MFHD60DIB5",
+                to: "https://github.com/infinitered/ignite-cookbook/issues/new?assignees=&labels=new+recipe&template=recipe_idea.yml",
+              },
+            ],
+          },
+        ],
+      },
+      footer: {
+        copyright: 'From the team at <a href="https://infinite.red/" target="_blank" rel="noopener noreferrer" class="ir-footer-link">Infinite Red</a> <img width="32" height="32" src="/img/ir-mark.svg" alt="dropdown" class="ir-mark" />',
+        style: "dark",
+        links: [
+          {
+            title: "Community",
+            items: [
+              {
+                html: '<a href="https://join.slack.com/t/infiniteredcommunity/shared_invite/zt-1e1gob8vn-pcFjKM~n1c~aXFsTnvHpdg" target="_blank" rel="noopener noreferrer" class="footer__link-item">Slack Community<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
+              },
+              {
+                html: '<a href="https://reactnativeradio.com/" target="_blank" rel="noopener noreferrer" class="footer__link-item">React Native Radio<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
+              },
+              {
+                html: '<a href="https://reactnativenewsletter.com/" target="_blank" rel="noopener noreferrer" class="footer__link-item">React Native Newsletter<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
+              },
+            ],
+          },
+          {
+            title: "Resources",
+            items: [
+              {
+                html: '<a href="https://github.com/infinitered/ignite-cookbook/issues" target="_blank" rel="noopener noreferrer" class="footer__link-item">Submit a Recipe<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
+              },
+              {
+                html: '<a href="https://github.com/infinitered/ignite-cookbook" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub - Ignite Cookbook<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
+              },
+              {
+                html: '<a href="https://github.com/infinitered/ignite" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub - Ignite Boilerplate<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
+              },
+              {
+                html: '<a href="https://shift.infinite.red/" target="_blank" rel="noopener noreferrer" class="footer__link-item">RedShift Blog <div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
+              },
+              {
+                html: '<a href="https://infinite.red/privacy-policy" target="_blank" rel="noopener noreferrer" class="footer__link-item">Privacy Policy<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
+              },
+            ],
+          },
+          {
+            title: "Infinite Red",
+            items: [
+              {
+                html: '<a href="https://infinite.red/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Website<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
+              },
+              {
+                html: '<a href="https://docs.infinite.red/" target="_blank" rel="noopener noreferrer" class="footer__link-item">IR Docs<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
+              },
+              {
+                html: '<a href="https://chainreactconf.com" target="_blank" rel="noopener noreferrer" class="footer__link-item">Chain React Conf<div class="footer__links__custom"><svg width="18" height="18" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg" class="" role="img"><g clip-path="url(#a)" stroke="#F4F2F1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.312 18.781 19.245 6.85M19.245 17.986V6.849H8.108"></path></g><defs><clipPath id="a"><path fill="#fff" transform="rotate(45 6.534 16.072)" d="M0 0h18v18H0z"></path></clipPath></defs></svg></div></a>',
+              }
+            ]
+          }
+        ],
+      },
+      prism: {
+        theme: lightCodeTheme,
+        darkTheme: darkCodeTheme,
+        additionalLanguages: [
+          "bash",
+          "ruby",
+          "json",
+          "ejs",
+          "diff",
+          "markup-templating",
+        ],
+        magicComments: [
+          // Remember to extend the default highlight class name as well!
+          {
+            className: "theme-code-block-highlighted-line",
+            line: "highlight-next-line",
+            block: { start: "highlight-start", end: "highlight-end" },
+          },
+          {
+            className: "code-block-error-line",
+            line: "error-line",
+            block: { start: "error-line-start", end: "error-line-end" },
+          },
+          {
+            className: "code-block-success-line",
+            line: "success-line",
+            block: { start: "success-line-start", end: "success-line-end" },
+          },
+        ],
+      },
+      algolia: {
+        // The application ID provided by Algolia
+        appId: 'MFHD60DIB5',
 
-      // Public API key: it is safe to commit it
-      apiKey: "4e924e740d603ec90f106067754ccf50",
+        // Public API key: it is safe to commit it
+        apiKey: '4e924e740d603ec90f106067754ccf50',
 
-      indexName: "ignite-cookbook",
+        indexName: 'ignite-cookbook',
 
-      // Optional: Algolia search parameters
-      searchParameters: {},
+        // Optional: Algolia search parameters
+        searchParameters: {},
 
-      // Optional: path for search page that enabled by default (`false` to disable it)
-      searchPagePath: "search",
+        // Optional: path for search page that enabled by default (`false` to disable it)
+        searchPagePath: 'search',
 
-      //... other Algolia params
-    },
-  } satisfies Preset.ThemeConfig,
+        //... other Algolia params
+      },
+    } satisfies Preset.ThemeConfig,
 };
 
 module.exports = config;
