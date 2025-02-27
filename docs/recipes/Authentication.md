@@ -828,6 +828,7 @@ interface WelcomeScreenProps extends AppStackScreenProps<"Welcome"> {}
 export const WelcomeScreen: FC<WelcomeScreenProps> = observer(
   function WelcomeScreen() {
     const $bottomContainerInsets = useSafeAreaInsetsStyle(["bottom"])
+    // success-line
     const { signOut } = useAuth()
 
     return (
