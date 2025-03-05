@@ -351,9 +351,6 @@ const storage = new MMKV({
   id: "session",
 })
 
-// TODO: Remove this workaround for encryption: https://github.com/mrousavy/react-native-mmkv/issues/665
-storage.set("workaround", true)
-
 /**
  * A simple wrapper around MMKV that provides a base API
  * that matches AsyncStorage for use with Supabase.
