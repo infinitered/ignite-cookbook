@@ -19,6 +19,8 @@ This guide walks you through setting up your app with both i18next and Translate
 
 ## Installation
 
+If you're starting a new project, you can clone the [ignite boilerplate with translatesheet baked in](https://github.com/TranslateSheet/ignite/tree/master/boilerplate) or the [vanilla expo/TranslateSheet example](https://github.com/TranslateSheet/translatesheet-examples)
+
 
 We'll start by installing the translate-sheet package and it's peer dependencies
 
