@@ -11,9 +11,30 @@ publish_date: 2024-02-05
 
 # Remove Mobx-State-Tree
 
-By default, Ignite uses [MobX-State-Tree](https://mobx-state-tree.js.org/) as the default state management solution. While we love [MobX-State-Tree at Infinite Red](https://docs.infinite.red/ignite-cli/concept/MobX-State-Tree/), we understand the landscape is rich with great alternatives that you may want to use instead.
+Historically, Ignite used [MobX-State-Tree](https://mobx-state-tree.js.org/) as the
+default state management solution. Starting with
+[Ignite 11](https://github.com/infinitered/ignite/releases/tag/v11.0.0) and the new
+boilerplate architecture described in the
+[_Announcing Ignite 11: Bison_ blog post](https://shift.infinite.red/announcing-ignite-11-bison-f2802a85f94d),
+new projects use React Context instead, and MST is now an opt‑in choice.
 
-This guide will show you how to remove Mobx-State-Tree from an Ignite-generated project and get to a "blank slate" with no state management at all.
+We still love MobX-State-Tree at Infinite Red and continue to use it on many projects,
+but if you're migrating away from MST this recipe will help you get to a "blank slate"
+app with no global state management.
+
+:::info Ignite 11+ vs older projects
+
+- This recipe is intended for apps that **already have MobX-State-Tree wired in**
+  (typically older Ignite projects created before Ignite 11, or apps that followed the
+  [Adding MobX-State-Tree to your Ignite app](./AddingMobxStateTree.md) recipe).
+- If you are starting from a current Ignite 11+ app that does **not** include MST by
+  default and you want to add it back, use the
+  [Adding MobX-State-Tree to your Ignite app](./AddingMobxStateTree.md) recipe instead.
+
+:::
+
+This guide will show you how to remove Mobx-State-Tree from an Ignite-generated project
+and get to a "blank slate" with no state management at all.
 
 ## Steps
 
