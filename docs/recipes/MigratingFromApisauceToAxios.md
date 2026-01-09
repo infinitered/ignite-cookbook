@@ -270,18 +270,18 @@ export class Api {
     this.axios.interceptors.request.use((config) => {
       // Use baseURL to build a helpful message
       const base = config.baseURL ?? ""
-      console.log(`🚀 API Request: ${config.method?.toUpperCase()} ${base}${config.url}`)
+      console.log(`API Request: ${config.method?.toUpperCase()} ${base}${config.url}`)
       return config
     })
 
     this.axios.interceptors.response.use(
       (response) => {
-        console.log(`✅ API Response: ${response.status} ${response.config.url}`)
+        console.log(`API Response: ${response.status} ${response.config.url}`)
         return response
       },
       (error) => {
         const status = axios.isAxiosError(error) ? error.response?.status : undefined
-        console.log(`❌ API Error: ${status ?? "unknown"} ${error?.config?.url ?? ""}`)
+        console.log(`API Error: ${status ?? "unknown"} ${error?.config?.url ?? ""}`)
         return Promise.reject(error)
       },
     )
