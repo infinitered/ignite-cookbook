@@ -32,82 +32,17 @@ npx expo install msw fast-text-encoding react-native-url-polyfill
 
 ## Step 2: Polyfill Hermes for MSW Compatibility
 
-**Why this is needed:** MSW assumes a browser-like environment. On Hermes, `globalThis.fetch` is non-writable and `BroadcastChannel`, `EventTarget`, `Event`, `MessageEvent`, and `XMLHttpRequestUpload` are all missing, causing MSW to crash at runtime. See the [MSW #2367 discussion](https://github.com/mswjs/msw/issues/2367#issuecomment-4311536712) for background.
+**Why this is needed:** MSW assumes a browser-like environment. On Hermes, `BroadcastChannel`, `EventTarget`, `Event`, `MessageEvent`, and `XMLHttpRequestUpload` are all missing, causing MSW to crash at runtime. See the [MSW #2367 discussion](https://github.com/mswjs/msw/issues/2367#issuecomment-4311536712) for background.
 
-The polyfill file below handles six things:
+The polyfill file below handles these things:
 
-1. Imports `fast-text-encoding` and `react-native-url-polyfill` for `TextEncoder`/`URL` support
-2. Deletes and re-defines `globalThis.fetch` as writable so MSW can replace it
-3. Stubs `Event` with enough of the interface for MSW's internal event dispatching
-4. Stubs `EventTarget` with `addEventListener`/`removeEventListener`/`dispatchEvent`
-5. Stubs `MessageEvent`, `XMLHttpRequestUpload`, and `BroadcastChannel`
-6. Wraps `XMLHttpRequest.getAllResponseHeaders()` to never return `null` (Hermes quirk that causes MSW to crash on `.split()`)
+1. Imports `fast-text-encoding`, `react-native-url-polyfill` and `web-streams-polyfill` to handle missing polyfills
+2. Stubs `MessageEvent`, and `BroadcastChannel`
 
 ```js title="msw.polyfills.js"
 import "fast-text-encoding"
 import "react-native-url-polyfill/auto"
-
-// Issue 1: globalThis.fetch is non-writable in Hermes.
-// MSW's FetchInterceptor does `globalThis.fetch = interceptedFetch`, but Hermes
-// exposes fetch as a non-configurable native binding. The assignment silently
-// fails — no error thrown, MSW reports it's listening, but no requests are
-// intercepted. We must delete and re-define the property as writable/configurable
-// before MSW is imported.
-const nativeFetch = globalThis.fetch
-try {
-  delete globalThis.fetch
-  globalThis.fetch = nativeFetch
-  Object.defineProperty(globalThis, "fetch", {
-    value: nativeFetch,
-    writable: true,
-    configurable: true,
-  })
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-} catch (error) {
-  if (typeof globalThis.fetch === "undefined") {
-    globalThis.fetch = nativeFetch
-  }
-}
-
-// Issue 2: Missing Web APIs at import time.
-// MSW's core module (ws.js, sse.js) references BroadcastChannel, EventTarget,
-// Event, and MessageEvent at module evaluation time (not inside functions).
-// Hermes doesn't provide these. They must be polyfilled before any MSW import.
-
-if (typeof globalThis.Event === "undefined") {
-  globalThis.Event = class Event {
-    constructor(type, init) {
-      this.type = type
-      this.bubbles = init?.bubbles ?? false
-      this.cancelable = init?.cancelable ?? false
-      this.defaultPrevented = false
-    }
-    preventDefault() {
-      this.defaultPrevented = true
-    }
-    stopPropagation() {}
-    stopImmediatePropagation() {}
-  }
-}
-
-if (typeof globalThis.EventTarget === "undefined") {
-  globalThis.EventTarget = class EventTarget {
-    constructor() {
-      this._listeners = {}
-    }
-    addEventListener(type, listener) {
-      ;(this._listeners[type] ??= []).push(listener)
-    }
-    removeEventListener(type, listener) {
-      const list = this._listeners[type]
-      if (list) this._listeners[type] = list.filter((l) => l !== listener)
-    }
-    dispatchEvent(event) {
-      for (const listener of this._listeners[event.type] ?? []) listener(event)
-      return true
-    }
-  }
-}
+import "web-streams-polyfill/dist/polyfill"
 
 if (typeof globalThis.MessageEvent === "undefined") {
   globalThis.MessageEvent = class MessageEvent {
@@ -118,27 +53,6 @@ if (typeof globalThis.MessageEvent === "undefined") {
       this.lastEventId = init?.lastEventId ?? ""
       this.source = init?.source ?? null
       this.ports = init?.ports ?? []
-    }
-  }
-}
-
-// MSW's XMLHttpRequest interceptor uses `target instanceof XMLHttpRequestUpload`
-// at runtime. Hermes doesn't expose XMLHttpRequestUpload as a global, causing a
-// ReferenceError. Provide a stub class so the instanceof check resolves to false
-// instead of throwing.
-if (typeof globalThis.XMLHttpRequestUpload === "undefined") {
-  globalThis.XMLHttpRequestUpload = class XMLHttpRequestUpload {}
-}
-
-// Hermes's XMLHttpRequest.getAllResponseHeaders() can return null instead of an
-// empty string when no headers are available. MSW's interceptor calls .split()
-// on the result, which throws "Cannot read property 'split' of null".
-// Wrap the method so it always returns a string.
-if (typeof globalThis.XMLHttpRequest !== "undefined") {
-  const origGetAllResponseHeaders = globalThis.XMLHttpRequest.prototype.getAllResponseHeaders
-  if (origGetAllResponseHeaders) {
-    globalThis.XMLHttpRequest.prototype.getAllResponseHeaders = function () {
-      return origGetAllResponseHeaders.call(this) ?? ""
     }
   }
 }
@@ -155,6 +69,7 @@ if (typeof globalThis.BroadcastChannel === "undefined") {
     }
   }
 }
+
 ```
 
 ## Step 3: Patch `@mswjs/interceptors` for `whatwg-fetch` Compatibility
