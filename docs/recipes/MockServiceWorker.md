@@ -18,7 +18,7 @@ publish_date: 2026-07-13
 
 Unfortunately, the [MSW React Native integration](https://mswjs.io/docs/integrations/react-native) doesn't work as written (as of July 2026). The main issues is that Mock Service Worker has to override fetch behavior and some other global JavaScript objects, which are different in Hermes as compared to the environments it expects to be using. This recipe walks through each problem and its fix in an Ignite app.
 
-For the complete working example, see the [reference PR on GitHub](https://github.com/infinitered/mswtest/pull/2).
+For the complete working example, see the [reference PR on GitHub](https://github.com/infinitered/mswtest/pull/3).
 
 ## Prerequisites
 
@@ -27,17 +27,17 @@ For the complete working example, see the [reference PR on GitHub](https://githu
 ## Step 1: Install Dependencies
 
 ```bash
-npx expo install msw fast-text-encoding react-native-url-polyfill
+npx expo install msw fast-text-encoding react-native-url-polyfill web-streams-polyfill
 ```
 
-## Step 2: Polyfill Hermes for MSW Compatibility
+## Step 2: Polyfill for MSW Compatibility
 
 **Why this is needed:** MSW assumes a browser-like environment. On Hermes, `BroadcastChannel`, `EventTarget`, `Event`, `MessageEvent`, and `XMLHttpRequestUpload` are all missing, causing MSW to crash at runtime. See the [MSW #2367 discussion](https://github.com/mswjs/msw/issues/2367#issuecomment-4311536712) for background.
 
 The polyfill file below handles these things:
 
 1. Imports `fast-text-encoding`, `react-native-url-polyfill` and `web-streams-polyfill` to handle missing polyfills
-2. Stubs `MessageEvent`, and `BroadcastChannel`
+2. Stubs `MessageEvent`, and `BroadcastChannel` since none of the prior polyfills provide those either
 
 ```js title="msw.polyfills.js"
 import "fast-text-encoding"
@@ -130,16 +130,6 @@ pnpm install
 
 The rest of this guide comes from the [MSW quick start docs](https://mswjs.io/docs/quick-start).
 
-**Server setup** — create the MSW server using the `msw/native` entry point (not `msw/node`):
-
-```ts title="app/mocks/server.ts"
-import { setupServer } from "msw/native"
-
-import { handlers } from "./handlers"
-
-export const server = setupServer(...handlers)
-```
-
 **Request handlers** — define which requests to intercept and what to return:
 
 ```ts title="app/mocks/handlers.ts"
@@ -205,47 +195,33 @@ export const mockFeedResponse: ApiFeedResponse = {
 }
 ```
 
-## Step 5: Enable Mocking in `app.tsx`
+## Step 5: Enable Mocking in `index.tsx`
 
-**Why the mocking gate matters:** The dynamic `import()` calls keep MSW and its polyfills out of production bundles entirely — Metro's tree shaker eliminates the `__DEV__` branch. The `isMockingReady` state prevents the app from rendering before MSW is listening, which would let real requests slip through before interception is active.
+**Why the mocking gate matters:** The dynamic `require()` calls keep MSW and its polyfills out of production bundles entirely. Metro's tree shaker eliminates the `__DEV__` branch. The `isMockingReady` state prevents the app from rendering before MSW is listening, which would let real requests slip through before interception is active.
 
 :::warning
-The MSW docs suggest wrapping `registerRootComponent` in a promise and awaiting the setup. However, [we found](https://github.com/infinitered/mswtest/pull/2#:~:text=Do%20not%20register%20root%20component%20after%20a%20delay) that this caused `registerRootComponent` not to fire. So our recommendation is to wire up the mocking logic to your app initialization. 
+The MSW docs suggest wrapping `registerRootComponent` in a promise and awaiting the setup. However, [we found](https://github.com/infinitered/mswtest/pull/2#:~:text=Do%20not%20register%20root%20component%20after%20a%20delay) that this caused `registerRootComponent` not to fire. You will want to slightly modify the instructions until [the docs are updated](https://github.com/mswjs/mswjs.io/pull/529)
 :::
 
-Add the following to your `App` component in `app/app.tsx`:
+Update `index.tsx` to look like this:
 
-```tsx title="app/app.tsx"
-// success-line
-const [isMockingReady, setIsMockingReady] = useState(!__DEV__)
+```ts title="index.tsx"
+import "@expo/metro-runtime" // this is for fast refresh on web w/o expo-router
+import { registerRootComponent } from "expo"
 
-// success-line-start
-useEffect(() => {
+import { App } from "@/app"
+
+async function enableMocking() {
   if (!__DEV__) return
 
-  async function enableMocking() {
-    // @ts-ignore
-    await import("../msw.polyfills")
-    const { server } = await import("./mocks/server")
-    server.listen()
-    setIsMockingReady(true)
-  }
-
-  enableMocking()
-}, [])
-// success-line-end
-
-// ...
-
-if (
-  // success-line
-  !isMockingReady ||
-  !isNavigationStateRestored ||
-  !isI18nInitialized ||
-  (!areFontsLoaded && !fontLoadError)
-) {
-  return null
+  require("./msw.polyfills")
+  const { setupServer } = require("msw/native")
+  const { handlers } = require("./app/mocks/handlers")
+  const server = setupServer(...handlers)
+  server.listen()
 }
+
+enableMocking().then(() => registerRootComponent(App))
 ```
 
 ## Step 6: Configure Axios to Use the Fetch Adapter
@@ -280,4 +256,4 @@ this.apiSauce = create({
 - [MSW #2367 — Hermes compatibility discussion](https://github.com/mswjs/msw/issues/2367#issuecomment-4311536712)
 - [whatwg-fetch #1454 — missing `body` getter](https://github.com/JakeChampion/fetch/issues/1454)
 - [Axios fetch adapter docs](https://axios.rest/pages/advanced/fetch-adapter)
-- [Reference PR: Full working example](https://github.com/infinitered/mswtest/pull/2)
+- [Reference PR: Full working example](https://github.com/infinitered/mswtest/pull/3)
