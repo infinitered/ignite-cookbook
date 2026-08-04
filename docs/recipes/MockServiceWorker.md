@@ -16,7 +16,7 @@ publish_date: 2026-07-13
 
 [Mock Service Worker](https://mswjs.io/) (MSW) intercepts network activity, letting you mock API responses without changing your application code. It can be useful for QA testing different network states, running end-to-end tests against mock data, and even running Jest tests without having to mock in Jest. 
 
-Unfortunately, the [MSW React Native integration](https://mswjs.io/docs/integrations/react-native) doesn't work as written (as of July 2026). The main issues is that Mock Service Worker has to override fetch behavior and some other global JavaScript objects, which are different in Hermes as compared to the environments it expects to be using. This recipe walks through each problem and its fix in an Ignite app.
+Unfortunately, the [MSW React Native integration](https://mswjs.io/docs/integrations/react-native) doesn't work as written (as of July 2026). The main issue is that Mock Service Worker has to override fetch behavior and some other global JavaScript objects, which are different in Hermes as compared to the environments it expects to be using. This recipe walks through each problem and its fix in an Ignite app.
 
 For the complete working example, see the [reference PR on GitHub](https://github.com/infinitered/mswtest/pull/3).
 
