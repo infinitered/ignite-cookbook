@@ -107,9 +107,9 @@ index ff7e15e2e4b6d91614f01fd4e5439f67ed72ea70..be355a7e1f1c6b14f2e7763bc0d580b7
  						statusText: rawResponse.statusText,
 ```
 
-Register the patch in your `package.json`:
+If you're using pnpm, register the patch in your `package.json`:
 
-```json title="package.json"
+~~~json title="package.json"
 {
   "pnpm": {
     "patchedDependencies": {
@@ -118,14 +118,15 @@ Register the patch in your `package.json`:
     }
   }
 }
-```
+~~~
 
 Then reinstall to apply it:
 
-```bash
+~~~bash
 pnpm install
-```
+~~~
 
+If you're using npm or yarn instead of pnpm, apply the same diff using your package manager's patching workflow (for example, `patch-package` or `yarn patch`).
 ## Step 4: Create Mock Handlers and Server
 
 The rest of this guide comes from the [MSW quick start docs](https://mswjs.io/docs/quick-start).
