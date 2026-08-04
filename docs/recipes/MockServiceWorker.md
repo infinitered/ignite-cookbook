@@ -1,6 +1,6 @@
 ---
 title: Mock Service Worker (MSW)
-description: How to integrate Mock Service Worker with Ignite 
+description: How to integrate Mock Service Worker with Ignite
 tags:
   - MSW
   - Testing
