@@ -11,7 +11,7 @@ const { gitlogPromise } = require("gitlog");
 const config: Config = {
   title: "Ignite Cookbook for React Native",
   tagline: "Cooking up some cool recipes in Ignite for React Native!",
-  url: "https://infinitered.github.io",
+  url: "https://ignitecookbook.com",
   baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
@@ -147,6 +147,7 @@ const config: Config = {
 
   themeConfig:
     {
+      image: "img/ignite.png",
       // Disabling dark mode for now until we have a better dark mode theme
       colorMode: {
         defaultMode: "light",

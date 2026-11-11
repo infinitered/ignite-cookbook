@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "@docusaurus/Link";
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
 import HomepageFeatures from "@site/src/components/HomepageFeatures";
 import moment from "moment";
@@ -147,10 +146,8 @@ function FreshRecipes() {
 }
 
 export default function Home(): JSX.Element {
-  const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title={siteConfig.title}
       description="Cooking up some great Ignite Recipes for React Native."
     >
       <NewSection />
