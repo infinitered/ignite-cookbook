@@ -4,8 +4,8 @@
   <ShortName>Ignite Cookbook for React Native</ShortName>
   <Description>Search Ignite Cookbook for React Native</Description>
   <InputEncoding>UTF-8</InputEncoding>
-  <Image width="16" height="16" type="image/x-icon">https://infinitered.github.io/img/favicon.ico</Image>
-  <Url type="text/html" method="get" template="https://infinitered.github.io/search?q={searchTerms}"/>
-  <Url type="application/opensearchdescription+xml" rel="self" template="https://infinitered.github.io/opensearch.xml" />
-  <moz:SearchForm>https://infinitered.github.io/</moz:SearchForm>
+  <Image width="16" height="16" type="image/x-icon">https://ignitecookbook.com/img/favicon.ico</Image>
+  <Url type="text/html" method="get" template="https://ignitecookbook.com/search?q={searchTerms}"/>
+  <Url type="application/opensearchdescription+xml" rel="self" template="https://ignitecookbook.com/opensearch.xml" />
+  <moz:SearchForm>https://ignitecookbook.com/</moz:SearchForm>
 </OpenSearchDescription>
